@@ -1,0 +1,34 @@
+@import '../../../variables.scss';
+
+#maplegend {
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    img {
+        width: 100%;
+    }
+    svg {
+        .bl-name,
+        .land-name{
+            font-family: 'Oswald', sans-serif;
+            font-weight: 300;
+            text-transform:uppercase;
+            letter-spacing:0.3em;
+            fill: rgb(165, 165, 165);
+        }
+        .bl-border{
+            stroke: #d8d8d8;
+            fill: none;
+        }
+        #hamburg-border,
+        #schleswig-holstein-border,
+        #niedersachsen-border-nord,
+        #bremen-border {
+            stroke: #c7c7c7;
+        }
+    }
+}

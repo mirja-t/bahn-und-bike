@@ -1,0 +1,27 @@
+@import '../../../variables.scss';
+
+#header {
+    width: 100%;
+    padding: $padding-l $padding-l;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+    position: relative;
+}
+#logo {
+    background-image: url('../../../assets/images/bahnundbike_logo.svg');
+    width: calc( 7.5em + #{$scalefactor} );
+    height: 3em;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.home {
+    #header {
+        #language-picker {
+            left: 50%;
+            transform: translate(-50%, 1em);
+            position: absolute;
+            width: auto;
+        }
+    }
+}

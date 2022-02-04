@@ -1,0 +1,23 @@
+@import '../../../variables.scss';
+
+.pin {
+    filter: drop-shadow( 2px 2px 4px rgba(0,0,0, 0.1));
+    width: 4em;
+    height: 4em;
+    margin-left: -10px;
+    flex-shrink: 0;
+    position: relative;
+    .pinicon{
+        position: absolute;
+        left: 24%;
+        top: 18%;
+        width: 44%;
+        .train-icon .bg {
+            fill: $primary-hover;
+        }
+        .velo-icon .bg {
+            fill: $veloroute-hover;
+        }
+    }
+    
+}

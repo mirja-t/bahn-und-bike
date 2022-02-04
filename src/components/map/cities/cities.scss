@@ -1,0 +1,28 @@
+@import '../../../variables.scss';
+
+#cities {
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    img {
+        width: 100%;
+    }
+    svg {
+        .city-name{
+            font-family:'Oswald';
+            fill: rgb(165, 165, 165);
+            &.stadtstaat{
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+            }
+        }
+        .city-dot{
+            fill: rgb(165, 165, 165);
+        }
+    }
+}

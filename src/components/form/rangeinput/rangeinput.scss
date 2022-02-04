@@ -1,0 +1,107 @@
+@import '../../../variables.scss';
+
+/* Range Slider */
+
+$slider-height: 3px;
+$sliderborder-width: 6px;
+$sliderthumb-height: 18px;
+
+.range-slider {
+  flex-grow: 1;
+  margin-top: 1em;
+  border-top: 1px solid $lightgray;
+}
+
+input[type="range"] {
+    display: block;
+    -webkit-appearance: none;
+    width: 100%;
+    height: $slider-height;
+    background-color: transparent;  
+    background-image: linear-gradient($primary, $primary);
+    margin-top: -2px;
+    background-repeat: no-repeat;
+
+    &::-webkit-slider-thumb
+    {
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      height: $sliderthumb-height;
+      width: $sliderthumb-height;
+      border-radius: 50%;
+      background: $primary;
+      border: $sliderborder-width solid $xlightgray;
+      cursor: pointer;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+      transition: background-color .3s ease-in-out;
+      margin-top: -($sliderthumb-height - $slider-height) / 2;
+      }
+    &::-moz-range-thumb
+    {
+        box-sizing: border-box;
+        -webkit-appearance: none;
+        height: $sliderthumb-height;
+        width: $sliderthumb-height;
+        border-radius: 50%;
+        background: $primary;
+        border: $sliderborder-width solid white;
+        cursor: pointer;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.25);
+        transition: background-color .3s ease-in-out;
+        margin-top: -($sliderthumb-height - $slider-height) / 2;
+      }
+      
+      &::-webkit-slider-runnable-track  {
+        -webkit-appearance: none;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+        height: $slider-height;
+        border-radius: $slider-height / 2;
+      }
+  }
+  .rangeInputWrapper {
+    margin-top: 1.15em;
+  }
+  ul.steps {
+    display: flex;
+    padding: 0 $sliderthumb-height/2;
+
+    li {
+      flex-basis: 0px;
+      position: relative;
+      list-style-type: none;
+      font-size: 0.65em;
+      flex-grow: 1;
+      color: $gray;
+      text-align: center;
+      span {
+        display: inline-block;
+        width: 100%;
+        transform: translateX(-50%);
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: -5px;
+        height: 5px;
+        width: 1px;
+        background-color: $gray;
+      }
+      &:last-child{
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: -5px;
+          height: 5px;
+          width: 1px;
+          background-color: $gray;
+        }
+        .end {
+          position: absolute;
+        }
+      }
+    }
+  }

@@ -1,0 +1,126 @@
+@import '../../variables.scss';
+
+$iconsize: calc( #{$scalefactor} + 1.3em);
+
+#destination.details {
+    color: $primary-hover;
+    h1, h2, h3, h4, h5, h6 {
+        color: $primary-hover;
+    }
+    .veloroute-section-details {
+        h1, h2, h3, h4, h5, h6 {
+            color: $primary-hover;
+        }
+    }
+}
+.details{
+    width: 25vw;
+    pointer-events: all;
+    .details-headline{
+        display: flex;
+        gap: .15em;
+    
+        h2 {
+            margin-top: .5em;
+        }
+    }
+    h5{
+        margin-bottom: .75em;
+        margin-top: 1em;
+    }
+    h5 + p {
+        margin-top: -.5em;
+    }
+    position: relative;
+    padding: 0 $padding-l;
+    .devider{
+        margin-left: 2px;
+        color: #999;
+    }
+    
+    .icon {
+        width: 22px;
+        height: 22px;
+        padding: 3px;
+        background: $background-dark;
+        border-radius: 3px;
+        margin-right: 5px;
+        img {
+            vertical-align: top;
+        }
+    }
+}
+#destination.details {
+    .destinationslist {
+        li {
+            //border-bottom: 1px dashed $lightgray;
+            position: relative;
+            background: white;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.1); 
+            padding: $padding-xs;
+            margin: $padding-xs 0;
+            transition: all .35s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: $padding-s;
+            .velo-icon{
+                width: $iconsize;
+                height: $iconsize;
+                rect.bg{
+                    fill: #ccc;
+                    transition: all .35s ease;
+                }
+            }
+            h4.veloroute {
+                font-family: 'Source Sans Pro', sans-serif;
+                font-weight: 300;
+                color: $gray;
+            }
+            &:before {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                border-bottom: 10px solid transparent;
+                border-top: 10px solid transparent;
+                border-left: 0em solid white;
+                transition: all .35s ease;
+            }
+            &.active,
+            &:hover {
+                transition: all .35s ease;
+                background: white;
+                box-shadow: 5px 3px 10px rgba(0,0,0,0.15); 
+                h4 {
+                    color: $veloroute-hover;
+                }
+                
+                .velo-icon{
+                    rect.bg{
+                        fill: $veloroute;
+                        transition: all .35s ease;
+                    }
+                }
+            }
+            &.active {
+                &:before {
+                    width: 0; 
+                    height: 0; 
+                    right: -.5em;
+                    border-top: .5em solid transparent;
+                    border-bottom: 10px solid transparent;
+                    border-left: .5em solid white;
+                    transition: all .35s ease;
+                }
+                
+            }
+        }
+        
+        .stations {
+            display: flex;
+            font-size: .85em;
+        }
+    }
+}

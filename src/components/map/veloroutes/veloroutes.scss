@@ -1,0 +1,47 @@
+@import '../../../variables.scss';
+
+.veloroute {
+    path,
+    circle,
+    g {
+        cursor: pointer;
+    }
+    .veloroute-stop{
+        fill: $veloroute;
+        transform: scale(1);
+        //transition: all .5s ease;
+        &.hover {
+            transform: scale(1.5);
+            //transition: all .5s ease;
+        }
+    }
+    path.veloroute-section {
+        stroke: $veloroute;
+        stroke-dasharray: 2;
+        fill: none;
+        &.active {
+            stroke-dasharray: 0;
+            stroke: $veloroute-hover;
+        }
+    }
+    path.veloroute-section-large {
+        stroke: transparent;
+        fill: none;
+    }
+    circle.veloroute-station {
+        stroke: $veloroute;
+        fill: rgba(255,255,255,0.66);
+    }
+}
+.veloroute-details {
+    display: block;
+    padding: 0;
+    .veloroute-stops{
+        font-size: 80%;
+    }
+}
+.veloroute.destinationLabel{
+    tspan {
+        fill: $veloroute; 
+    }
+}

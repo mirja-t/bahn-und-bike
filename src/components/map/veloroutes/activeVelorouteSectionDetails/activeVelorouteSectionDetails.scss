@@ -1,0 +1,14 @@
+@import '../../../../variables.scss';
+
+.veloroute-pin-inner{
+    fill: $veloroute-hover;
+}
+.veloroute-pin-text {
+    fill: white;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+}
+.veloroute-pin-outer {
+    filter: drop-shadow( 1px 1px 2px rgba(0,0,0, 0.15));
+}

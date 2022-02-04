@@ -1,0 +1,23 @@
+@import '../../variables.scss';
+
+
+#fahrtzeit label {
+    display: block;
+}
+
+
+fieldset {
+    border: none;
+    margin-bottom: $mainpadding;
+    &.duration {
+        flex-grow: 1;
+        display: flex;
+        .duration-label {
+            min-width: 10em;
+        }
+    }
+}
+
+
+
+

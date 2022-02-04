@@ -1,0 +1,38 @@
+@import '../../../variables.scss';
+
+.scrollcontent-wrapper {
+    touch-action: none;
+    position: relative;
+    * {
+        touch-action: none;
+    }
+    .scrollcontent {
+        overflow: hidden;
+        //width: calc(100% + 2rem);
+    
+        > div {
+            overflow: hidden;
+            > div {
+                height: auto;
+            }
+        }
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    .scroll {
+        padding-right: 1em;
+        //overflow-y: scroll !important;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    .scrollbar {
+        position: absolute;
+        right: 0.5em;
+        top: 0;
+        width: 1px;
+        background: $primary;
+        height: 100%;
+    }
+}
