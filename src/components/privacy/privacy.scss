@@ -1,0 +1,19 @@
+@import '../../variables.scss';
+
+#privacy.container {
+    overflow: scroll;
+
+    .wrapper {
+        max-width: 80%;
+        margin: auto;
+        padding: $mainpadding;
+        text-align: left;
+        .seal {
+            width: 100px;
+            img {
+                width: 100%;
+                height: auto;
+            }
+        }
+    }
+}

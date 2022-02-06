@@ -13,7 +13,7 @@ form#language-picker fieldset {
     justify-content: flex-end;
     position: relative;
     margin: 0;
-    box-shadow: 2px 2px 5em rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 5em rgba(0, 0, 0, 0.2);
     border-radius: $langBorderradius;
 }   
 .inputRadiowrapper {
@@ -47,6 +47,7 @@ form#language-picker fieldset {
         cursor: pointer;
         color: $lightgray;
         z-index: 1;
+        font-family: $font-family-display;
     }
     
     &:first-child{

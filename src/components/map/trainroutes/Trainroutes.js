@@ -20,7 +20,8 @@ import {
     loadVeloroutes
 } from '../veloroutes/VeloroutesSlice';
 import {
-    selectActiveDestinationId,
+    selectDestinationList,
+    selectActiveDestination,
     setActiveDestination
 } from '../../destinationDetails/DestinationDetailsSlice';
 import { ActiveDestination } from './activeDestination/ActiveDestination';
@@ -36,10 +37,11 @@ export const Trainroutes = ({
     }) => {
 
     const dispatch = useDispatch();
+    const destinations = useSelector(selectDestinationList);
     const journeys = useSelector(selectCurrentTrainroutes);
     const activeSpot = useSelector(selectActiveSpot);
     const activeSection = useSelector(selectActiveSection)
-    const activeDestination = useSelector(selectActiveDestinationId);
+    const activeDestination = useSelector(selectActiveDestination);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
@@ -48,14 +50,15 @@ export const Trainroutes = ({
     const additionalTrainLines = useJourney(trainlinesAlongVeloroute);
 
     useEffect(() => {
-        const activeIds = activeSection?.stopIds || [activeDestination]
+        const activeIds = activeSection?.stopIds || [activeDestination?.stop_id]
         dispatch(loadVeloroutes(activeIds))
     },[dispatch, activeSection, activeDestination]);
 
-    const setDestinationActive = (id) => {
+    const setDestinationActive = (dest) => {
+        const destination = destinations[dest.stop_id]
         dispatch(setTrainLinesAlongVeloroute([]))
         dispatch(setActiveSection(null))
-        dispatch(setActiveDestination(id))
+        dispatch(setActiveDestination(destination))
     }
 
     const setSectionActive = (line) => {
@@ -149,12 +152,12 @@ export const Trainroutes = ({
                 .map((item, idx) => (
                     <g 
                         key={idx}
-                        className={`destination ${activeDestination===item.stop_id ? 'active' : ''}`}>
+                        className={`destination ${activeDestination?.stop_id===item.stop_id ? 'active' : ''}`}>
                         <g 
                             onMouseEnter={(e) => {hoverSpot(e, item.stop_id)}}
                             onMouseLeave={hoverSpot}
-                            onClick={e => setDestinationActive(item.stop_id)}
-                            className={`spotgroup veloroutestop ${activeSpot===item.stop_id ? 'hover' : ''} ${activeDestination === item.stop_id ? 'active' : ''}`}
+                            onClick={e => setDestinationActive(item)}
+                            className={`spotgroup veloroutestop ${activeSpot===item.stop_id ? 'hover' : ''} ${activeDestination?.stop_id === item.stop_id ? 'active' : ''}`}
                             >
                             <animated.rect
                                 className="spot spot-large"
@@ -185,7 +188,7 @@ export const Trainroutes = ({
 
             {spotTransitions((styles, item, t, i) => (
                 <g 
-                    className={`destination ${activeDestination===item.lastStation.stop_id ? 'active' : ''}`}
+                    className={`destination ${activeDestination?.stop_id===item.lastStation.stop_id ? 'active' : ''}`}
                     key={i}>
                     { activeSpot===item.lastStation.stop_id && (<>
                             <text className="destinationLabel"
@@ -196,18 +199,18 @@ export const Trainroutes = ({
                             </text>
                         </>)}
                     <g 
-                        onClick={e => setDestinationActive(item.lastStation.stop_id)}
+                        onClick={e => setDestinationActive(item.lastStation)}
                         onMouseEnter={(e) => {hoverSpot(e, item.lastStation.stop_id)}}
                         onMouseLeave={hoverSpot}
                         className={'spotgroup' + 
                             `${activeSpot===item.lastStation.stop_id ? ' hover' : ''}` +
-                            `${activeDestination && activeDestination===item.lastStation.stop_id ? ' active' : ''}` +
-                            `${(activeSection && activeSpot!==item.lastStation.stop_id) || (activeDestination && activeDestination !== item.lastStation.stop_id) ? ' inactive' : ''}` +
+                            `${activeDestination?.stop_id && activeDestination?.stop_id===item.lastStation.stop_id ? ' active' : ''}` +
+                            `${(activeSection && activeSpot!==item.lastStation.stop_id) || (activeDestination?.stop_id && activeDestination?.stop_id !== item.lastStation.stop_id) ? ' inactive' : ''}` +
                             `${((activeSection && activeSection.lastStation.stop_id === item.lastStation.stop_id)) ? ' sectionstop' : ''}` +
                             `${(activeVelorouteSection && [activeVelorouteSection[0].stop_id, activeVelorouteSection[activeVelorouteSection.length-1].stop_id].includes(item.lastStation.stop_id)) ? ' velosectionstop' : ''}`
                         }>
                         <ActiveDestination 
-                            activeDestination={activeDestination}
+                            activeDestination={activeDestination?.stop_id}
                             item={item}
                             zoom={zoom}/>
                         <animated.rect

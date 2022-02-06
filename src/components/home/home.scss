@@ -1,12 +1,7 @@
 @import '../../variables.scss';
 
 #home {
-    text-align: center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
+    
     .wrapper{
         max-width: calc( 35em + 0.5vw );
         margin: auto;

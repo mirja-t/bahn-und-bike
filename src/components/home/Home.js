@@ -7,7 +7,7 @@ import img from '../../assets/images/germany-startscreen.svg';
 export const Home = ({lang}) => {
     const labels = useSelector(selectLang);
 
-    return (<div id="home">
+    return (<div id="home" className="container">
         <div className="wrapper">
             <h1>{labels.home_headline[lang]}</h1>
             <h3>{labels.home_subheadline[lang]}</h3>

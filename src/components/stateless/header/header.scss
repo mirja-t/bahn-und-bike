@@ -10,7 +10,7 @@
 }
 #logo {
     background-image: url('../../../assets/images/bahnundbike_logo.svg');
-    width: calc( 7.5em + #{$scalefactor} );
+    width: calc( 7.5em + 1.5vw );
     height: 3em;
     background-repeat: no-repeat;
     background-size: contain;

@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&family=Oswald:wght@300;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&family=Oswald:wght@300;700&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;700&display=swap');
+@import './webfonts.css';
 @import './variables.scss';
 
 * {
@@ -14,11 +15,6 @@ body,
   height: 100%;
 }
 body{
-  font-family: $base-heading-font-family;
-  font-weight: 300;
-  line-height: $base-line-height;
-}
-p, li {
   font-family: $global-font-family;
   font-size: $global-font-size;
   font-weight: 400;
@@ -44,11 +40,13 @@ h3 {
 }
 
 h5 {
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.01em;
   color: $gray;
   font-size: $h5-font-size;
+  margin-bottom: .75em;
+  margin-top: 1em;
 }
 
 h6 {
@@ -58,7 +56,7 @@ h6 {
 }
 
 header {
-  margin-bottom: $padding-l;
+  margin-bottom: $padding-xs;
 }
 .section{
   margin-bottom: $mainpadding;
@@ -76,11 +74,23 @@ header {
 } 
 
 a {
+  color: $lightgray;
   text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .margintop {
   margin-top: 2em;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
 }
 
 span.train {
@@ -89,7 +99,7 @@ span.train {
   border-radius: $borderradius / 2;
   padding: 2px 6px;
   font-family: $global-font-family;
-  font-weight: 600;
+  font-weight: 700;
   color: $gray;
   font-size: .8rem;
   margin: 0 5px 0 0;
@@ -102,7 +112,6 @@ button {
     background-color: rgba(230,230,230,.5);
     padding: $padding-s $padding-xl;
     border-radius: 1.5em;
-    margin-top: -.5em;
     font-family: 'Oswald', sans-serif;
     letter-spacing: 0.01em;
     transition: all .25s ease;

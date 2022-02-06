@@ -66,6 +66,7 @@ export const selectVelorouteList = (state) => state.veloroutes.velorouteList;
 export const selectActiveVeloroute = (state) => state.veloroutes.activeVeloroute;
 export const selectActiveVelorouteSection = (state) => state.veloroutes.activeVelorouteSection;
 export const selectActiveVelorouteStop = (state) => state.veloroutes.activeVelorouteStop;
+export const selectVeloroutesLoading = (state) => state.veloroutes.isLoading;
 
 export const {
     setActiveVeloroute,

@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { setDestinations } from '../../destinationDetails/DestinationDetailsSlice';
-import { getJourneys } from '../../../utils/getJourneys';
-import { splitJourney } from '../../../utils/splitJourney';
-import { removeDuplicates } from '../../../utils/removeDuplicates';
 import { headers, url } from '../../../config/config';
+import { distributeTrainlines } from '../../../utils/distributeTrainlines';
+import { allocateTrainstopsToRoute } from '../../../utils/allocateTrainstopsToRoute';
+import { processDestinationData } from '../../../utils/processDestinationData';
+import { setDestinations } from '../../destinationDetails/DestinationDetailsSlice';
 
 export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
@@ -23,21 +23,18 @@ export const loadTrainroutes = createAsyncThunk(
       const trainstops = await fetch(`${url}${trainroutesQuery}`, {'headers': headers})
       .then(response => response.json());
 
-      const journeys = getJourneys(trainlineIds, trainstops).filter(el => el.route.length > 1);
-      
-      let splitRoutes = journeys.map(journey => splitJourney(start, journey)).reduce((acc, el)=>{
-        return acc.concat(el)
-      },[]);
+      distributeTrainlines(trainstops);
 
-      splitRoutes = removeDuplicates(splitRoutes);
-      ThunkAPI.dispatch(setDestinations(trainstops));
-      return splitRoutes
+      const trainroutes = allocateTrainstopsToRoute(trainlineIds, trainstops, start);
+      const destinations = processDestinationData(trainstops);
+      ThunkAPI.dispatch(setDestinations(destinations));
+      return trainroutes
 });
 
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: [8011306, 8011113, 8011118, 8011160, 8098160, 8011102, 8011162, 8010036],
+        startPos: [8011160, 8098160, 8011306, 8011118, 8011113, 8011102, 8011162, 8010036],
         travelInterval: 30,
         trainrouteList: [],
         currentTrainroutes: [],

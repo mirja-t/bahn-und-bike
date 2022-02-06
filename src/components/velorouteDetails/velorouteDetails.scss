@@ -38,6 +38,7 @@ ul.veloroute-stops {
 }
 .veloroute-trainstops {
     padding: 0;
+    display: flex;
     span.train {
         transform: scale(.85);
         margin: 0 1px 1px 0;

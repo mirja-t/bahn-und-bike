@@ -1,14 +1,28 @@
 @import '../../variables.scss';
 
+#travelduration {
+    position: relative;
+    width: 100%;
+    padding: $mainpadding $padding-l 0;
+    z-index: 15;
+    width: 100%;
+    > * {
+        display: flex;
+        align-items: flex-start;
+        gap: $padding-l;
+    }
+    h5 {
+        margin: 0;
+        padding: 0;
+    }
+}
 
 #fahrtzeit label {
     display: block;
 }
 
-
 fieldset {
     border: none;
-    margin-bottom: $mainpadding;
     &.duration {
         flex-grow: 1;
         display: flex;

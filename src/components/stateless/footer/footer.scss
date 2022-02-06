@@ -1,15 +1,9 @@
 @import '../../../variables.scss';
 
 #footer {
-    position: relative;
-    width: 100%;
-    //max-width: calc(100vw - #{$sidebarwidth});
-    padding: $mainpadding $padding-l;
-    z-index: 15;
-    width: 100%;
-    > * {
-        display: flex;
-        align-items: flex-start;
-        gap: $padding-l;
+    padding: $padding-xs $padding-l;
+    z-index: 3;
+    a {
+        font-size: 85%;
     }
 }

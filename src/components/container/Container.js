@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useSpring, animated } from 'react-spring';
 import { selectLang } from '../../AppSlice';
 import { Map } from '../map/Map';
-import { Footer } from '../stateless/footer/Footer';
 import { TravelDuration } from '../form/TravelDuration';
 import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
@@ -14,7 +13,8 @@ import {
     selectActiveSection,
     setActiveSection,
     setCurrentTrainroutes,
-    selectCurrentTrainroutes
+    selectCurrentTrainroutes,
+    setTrainLinesAlongVeloroute
 } from '../map/trainroutes/TrainroutesSlice';
 import { 
     selectActiveVeloroute,
@@ -23,7 +23,7 @@ import {
 } from '../map/veloroutes/VeloroutesSlice';
 import {
     setActiveDestination,
-    selectActiveDestinationId
+    selectActiveDestination
 } from '../destinationDetails/DestinationDetailsSlice';
 import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
 
@@ -33,7 +33,7 @@ export const Container = ({lang}) => {
     const labels = useSelector(selectLang);
     const trainrouteList = useSelector(selectTrainrouteList);
     const isLoading = useSelector(selectTrainrouteListLoading);
-    const activeDestination = useSelector(selectActiveDestinationId);
+    const activeDestination = useSelector(selectActiveDestination);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const currentTrainRoutes = useSelector(selectCurrentTrainroutes);
@@ -63,7 +63,7 @@ export const Container = ({lang}) => {
         width: (activeDestination || activeSection) ? asideWidth : '150vw',
         onRest: () => { handleDetailsState() }
     });
-
+    
     const handleInputChange = ({target}) => {
         const val = target.value;
         setValue(val);
@@ -79,6 +79,7 @@ export const Container = ({lang}) => {
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        dispatch(setTrainLinesAlongVeloroute([]));
     }
 
     useEffect(()=>{
@@ -127,7 +128,7 @@ export const Container = ({lang}) => {
     }, []);
 
     return (<>
-        {(parseInt(value)===0 && currentTrainRoutes.length===0 && !isLoading) && (<div className="instructions">
+        {(parseInt(submitVal)===0 && currentTrainRoutes.length===0 && !isLoading) && (<div className="instructions">
             <p>{labels.instruction[lang]}</p>
         </div>)}
         <animated.div 
@@ -156,11 +157,9 @@ export const Container = ({lang}) => {
                 </div>
             </main>
         </animated.div>
-        <Footer>
-            <TravelDuration
+        <TravelDuration
                 handleSubmit={handleSubmit}
                 rangeValue={value}
                 handleInputChange={handleInputChange}
-                lang={lang}/>
-        </Footer></>)
+                lang={lang}/></>)
 }

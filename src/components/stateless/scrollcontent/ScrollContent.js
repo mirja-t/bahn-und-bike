@@ -60,6 +60,11 @@ export const ScrollContent = ({ children, parentEl, transitionComplete, id }) =>
             window.removeEventListener('resize', resetClipHeight);
         }
     },[transitionComplete, clipRef]);
+    
+    useEffect(()=>{
+        setTouchScrollPos(0);
+        setScrollOffset(0)
+    },[scrollbarHeight]);
 
     const bind = useGesture({
         

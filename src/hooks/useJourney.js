@@ -9,7 +9,7 @@ export const useJourney = (positions) => {
     useEffect(()=>{
 
         const p = positions.map(el => {
-            
+
             return {
                 pathLength: el.pathLength,
                 route: el.route.map(stop => `${(stop.pos[0] * xFactor + xOffset)}, ${( - stop.pos[1] * yFactor + yOffset)} `),

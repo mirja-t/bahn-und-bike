@@ -67,20 +67,24 @@ export const VelorouteDetails = ({
                             <h5>{`${labels.leg[lang]}`}</h5>
                             <h3 className="veloroute-trainstops">
                                 <ActiveVelorouteSectionIcon num={1}/>
-                                {`${labels.from[lang]} ${activeVelorouteSection[0].stop_name}`} 
-                                { activeVelorouteSection[0].train_list.map((s, i) => (
-                                    <span 
-                                        key ={i} 
-                                        className="train">{s}</span>
-                                ))}
+                                <span>
+                                    {`${labels.from[lang]} ${activeVelorouteSection[0].stop_name}`} 
+                                    { activeVelorouteSection[0].train_list.map((s, i) => (
+                                        <span 
+                                            key ={i} 
+                                            className="train">{s}</span>
+                                    ))}
+                                </span>
                             </h3>
                             <h3 className="veloroute-trainstops">
                                 <ActiveVelorouteSectionIcon num={2}/>
-                                {`${labels.to[lang]} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
-                                { activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
-                                    <span 
-                                        key={i}
-                                        className="train">{s}</span>))}
+                                <span>
+                                    {`${labels.to[lang]} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
+                                    { activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
+                                        <span 
+                                            key={i}
+                                            className="train">{s}</span>))}
+                                </span>
                             </h3>
                             { activeVelorouteSection.length > 2 && (<>
                                 <h6>{`${labels.via[lang]}`}</h6>
