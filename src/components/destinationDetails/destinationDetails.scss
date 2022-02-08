@@ -15,7 +15,7 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
 }
 .details{
     width: 25vw;
-    @media (min-width: $breakpoint-xl) {
+    @media (min-width: $breakpoint-l) {
         width: 20vw;
     }
     pointer-events: all;

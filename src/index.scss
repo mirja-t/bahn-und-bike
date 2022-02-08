@@ -3,11 +3,8 @@
 
 html{
   font-size: 16px;
-  @media (min-width: $breakpoint-l) {
-    font-size: 18px;
-  }
   @media (min-width: $breakpoint-xl) {
-    font-size: 21px;
+    font-size: 18px;
   }
 }
 
