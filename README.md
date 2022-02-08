@@ -34,3 +34,6 @@ The map clipping is calculated in a custom hook that takes in the longest trainl
 + Optimize for mobile devices
 + Add data for other cities
 + Add train connections that include a change
+
+# Frontend URL
+https://bahn-und-bike.eu
