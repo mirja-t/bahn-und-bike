@@ -29,7 +29,8 @@ The map clipping is calculated in a custom hook that takes in the longest trainl
 
 ## To Dos
 
-+ Add interactive functionality like activation of more veloroute sections
++ Add interactive functionality like activation of more than one veloroute section
 + Improve performance by rendering trainlines from queues rather than arrays
 + Optimize for mobile devices
-
++ Add data for other cities
++ Add train connections that include a change
