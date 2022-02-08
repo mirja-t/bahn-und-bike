@@ -27,4 +27,9 @@ If a cycling route is clicked, it is rendered as an svg path with beziers to the
 
 The map clipping is calculated in a custom hook that takes in the longest trainline distance from the starting point.
 
+## To Dos
+
++ Add interactive functionality like activation of more veloroute sections
++ Improve performance by rendering trainlines from queues rather than arrays
++ Optimize for mobile devices
 
