@@ -1,11 +1,11 @@
 import {useTransition, animated} from 'react-spring';
 
-export const ActiveDestination = ({activeDestination, item, zoom}) => {
+export const ActiveDestination = ({activeDestination, item, strokeScale}) => {
 
     const transitions = useTransition(activeDestination===item.lastStation.stop_id ? item : [], {
-        from: { opacity: 0, scale: 0, x: item.lastStation.x - 1/zoom.scale, y: item.lastStation.y - 1/zoom.scale },
-        enter: { opacity: 1, scale: 3/zoom.scale, x: item.lastStation.x - 45/zoom.scale, y: item.lastStation.y - 110/zoom.scale },
-        leave: { opacity: 0, scale: 0, x: item.lastStation.x - 1/zoom.scale, y: item.lastStation.y - 1/zoom.scale }
+        from: { opacity: 0, scale: 0, x: item.lastStation.x - 1/strokeScale, y: item.lastStation.y - 1/strokeScale },
+        enter: { opacity: 1, scale: 1/strokeScale, x: item.lastStation.x - 15/strokeScale, y: item.lastStation.y - 36/strokeScale },
+        leave: { opacity: 0, scale: 0, x: item.lastStation.x - 1/strokeScale, y: item.lastStation.y - 1/strokeScale }
       })
 
       return transitions(

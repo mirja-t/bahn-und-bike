@@ -46,6 +46,8 @@ export const Trainroutes = ({
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
 
+    const strokeScale = (zoom.containerHeight / 1080) / 2;
+
     const journey = useJourney(journeys);
     const additionalTrainLines = useJourney(trainlinesAlongVeloroute);
 
@@ -118,12 +120,12 @@ export const Trainroutes = ({
                     >
                     <animated.polyline 
                         className="route-bg"
-                        strokeWidth={12 / zoom.scale}
+                        strokeWidth={5 / strokeScale}
                         points={item.route}
                         style={styles} />
                     <animated.polyline 
                         className="route"
-                        strokeWidth={3 / zoom.scale}
+                        strokeWidth={1 / strokeScale}
                         points={item.route}
                         style={styles} />
                 </g>))}
@@ -135,17 +137,17 @@ export const Trainroutes = ({
                     >
                     <animated.polyline 
                         className="route"
-                        strokeWidth={activeSection || activeDestination ? 5 / zoom.scale : 3 / zoom.scale}
+                        strokeWidth={activeSection || activeDestination ? 1.5 / strokeScale : 1 / strokeScale}
                         points={item.route} />
                     <animated.polyline 
                         className="route-bg"
-                        strokeWidth={9 / zoom.scale}
+                        strokeWidth={9 / strokeScale}
                         points={item.route}
                         onClick={() => setSectionActive(item)} />
             </g>))}
 
-                { activeSection && <TrainrouteSection zoom={zoom} /> }
-                { activeVeloroute && <Veloroutes zoom={zoom} /> }
+                { activeSection && <TrainrouteSection strokeScale={strokeScale} /> }
+                { activeVeloroute && <Veloroutes strokeScale={strokeScale} /> }
 
                 { activeVelorouteSection && 
                 [activeVelorouteSection[0], activeVelorouteSection[activeVelorouteSection.length-1]]
@@ -161,26 +163,26 @@ export const Trainroutes = ({
                             >
                             <animated.rect
                                 className="spot spot-large"
-                                x={(item.pos[0] * xFactor + xOffset) - (5 / zoom.scale )} 
-                                y={ - item.pos[1] * yFactor + yOffset - (5 / zoom.scale )}
-                                width={10 / zoom.scale}
-                                height={10 / zoom.scale}
+                                x={(item.pos[0] * xFactor + xOffset) - (2 / strokeScale )} 
+                                y={ - item.pos[1] * yFactor + yOffset - (2 / strokeScale )}
+                                width={4 / strokeScale}
+                                height={4 / strokeScale}
                                 style={{ 
                                     transformOrigin: `${item.pos[0] * xFactor + xOffset }px ${ - item.pos[1] * yFactor + yOffset}px`
                                 }}/>
                             <animated.rect
                                 className="spot spot-small"
-                                x={(item.pos[0] * xFactor + xOffset) -  (5 / zoom.scale )} 
-                                y={ - item.pos[1] * yFactor + yOffset -  (5 / zoom.scale )}
-                                width={10 / zoom.scale}
-                                height={10 / zoom.scale}
+                                x={(item.pos[0] * xFactor + xOffset) -  (2 / strokeScale )} 
+                                y={ - item.pos[1] * yFactor + yOffset -  (2 / strokeScale )}
+                                width={4 / strokeScale}
+                                height={4 / strokeScale}
                                 style={{ 
                                     transformOrigin: `${item.pos[0] * xFactor + xOffset }px ${ - item.pos[1] * yFactor + yOffset}px`
                                 }}/>
                             
                             <circle
                                 className="spot-bg"
-                                r={12 / zoom.scale}
+                                r={6 / strokeScale}
                                 cx={item.pos[0] * xFactor + xOffset } 
                                 cy={ - item.pos[1] * yFactor + yOffset} />
                         </g>
@@ -192,9 +194,9 @@ export const Trainroutes = ({
                     key={i}>
                     { activeSpot===item.lastStation.stop_id && (<>
                             <text className="destinationLabel"
-                                x={item.lastStation.x + 20 / zoom.scale } 
-                                y={item.lastStation.y + 8 / zoom.scale }
-                                style={{ fontSize: `${21 * 1 / zoom.scale}px` }}>
+                                x={item.lastStation.x + 6 / strokeScale } 
+                                y={item.lastStation.y + 2 / strokeScale }
+                                style={{ fontSize: `${7 / strokeScale}px` }}>
                                 <tspan>{item.lastStation.stop_name}</tspan>
                             </text>
                         </>)}
@@ -212,30 +214,30 @@ export const Trainroutes = ({
                         <ActiveDestination 
                             activeDestination={activeDestination?.stop_id}
                             item={item}
-                            zoom={zoom}/>
+                            strokeScale={strokeScale}/>
                         <animated.rect
                             className="spot spot-large"
-                            x={ item.lastStation.x - 5 / zoom.scale}
-                            y={ item.lastStation.y - 5 / zoom.scale}
-                            width={10 / zoom.scale}
-                            height={10 / zoom.scale}
+                            x={ item.lastStation.x - 1.5 / strokeScale}
+                            y={ item.lastStation.y - 1.5 / strokeScale}
+                            width={3 / strokeScale}
+                            height={3 / strokeScale}
                             style={{ 
                                 scale: styles.scale,
                                 transformOrigin: `${item.lastStation.x}px ${item.lastStation.y}px`
                             }}/>
                         <animated.rect
                             className="spot spot-small"
-                            x={ item.lastStation.x - 5 / zoom.scale}
-                            y={ item.lastStation.y - 5 / zoom.scale}
-                            width={10 / zoom.scale}
-                            height={10 / zoom.scale}
+                            x={ item.lastStation.x - 1.5 / strokeScale}
+                            y={ item.lastStation.y - 1.5 / strokeScale}
+                            width={3 / strokeScale}
+                            height={3 / strokeScale}
                             style={{ 
                                 scale: styles.scale,
                                 transformOrigin: `${item.lastStation.x}px ${item.lastStation.y}px`
                             }}/>
                         <circle
                             className="spot-bg"
-                            r={12 / zoom.scale}
+                            r={6 / strokeScale}
                             cx={item.lastStation.x}
                             cy={item.lastStation.y} />
                     </g>

@@ -50,7 +50,7 @@ export const Map = ({
 
     useEffect(()=>{
         if(isLoading) return
-        const timer = setTimeout(() => { dispatch(setLoadingSequenceActive(false)) }, 3000);
+        const timer = setTimeout(() => { dispatch(setLoadingSequenceActive(false)) }, 2000);
         return () => { clearTimeout(timer) }
     },[dispatch, isLoading]);
 
@@ -69,8 +69,7 @@ export const Map = ({
                         <p>{labels.instruction[lang]}</p>
                     </div>)}
                     <Trainroutes 
-                        zoom={zoom}
-                        mapcontainerRef={mapcontainerRef.current} />
+                        zoom={zoom} />
                     </>)
                 }
                 <Germany/>

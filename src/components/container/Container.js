@@ -44,7 +44,7 @@ export const Container = ({lang}) => {
     const container = useRef(null);
     const prevValue = useRef(0);
     const direction = useRef(1);
-    
+
     const handleInputChange = ({target}) => {
         const val = target.value;
         setValue(val);

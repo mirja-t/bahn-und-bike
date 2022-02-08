@@ -3,6 +3,7 @@ import { useTransition, animated } from 'react-spring';
 
 
 export const Cities = ({zoom, value}) => {
+    
     const transition = useTransition(value > 0, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
@@ -13,9 +14,9 @@ export const Cities = ({zoom, value}) => {
     <animated.div id="cities">
         <svg xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 1080" xmlSpace="preserve">
         <g id="stadtstaaten">
-            <text transform="matrix(1 0 0 1 898.4815 240.849)" className="city-name stadtstaat" style={{ fontSize: `${14 / zoom.scale}px`}}>Hamburg</text>
-            <text transform="matrix(1 0 0 1 775.4852 296.3399)" className="city-name stadtstaat" style={{ fontSize: `${14 / zoom.scale}px`}}>Bremen</text>
-            <text transform="matrix(1 0 0 1 1252.1469 379.5518)" className="city-name stadtstaat" style={{ fontSize: `${14 / zoom.scale}px`}}>Berlin</text>
+            <text transform="matrix(1 0 0 1 898.4815 240.849)" className="city-name stadtstaat" style={{ fontSize: `${16 / zoom.scale}px`}}>Hamburg</text>
+            <text transform="matrix(1 0 0 1 775.4852 296.3399)" className="city-name stadtstaat" style={{ fontSize: `${16 / zoom.scale}px`}}>Bremen</text>
+            <text transform="matrix(1 0 0 1 1252.1469 379.5518)" className="city-name stadtstaat" style={{ fontSize: `${16 / zoom.scale}px`}}>Berlin</text>
         </g>
         {/*
         <g id="staedte">

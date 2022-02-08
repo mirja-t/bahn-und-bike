@@ -4,13 +4,13 @@ import { svg_scale } from '../../../../data/svg_scale';
 const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
 
 export const ActiveVelorouteSectionDetails = ({
-    zoom,
+    strokeScale,
     section
 }) => {
 
     const transitions = useTransition([section[0], section[section.length-1]], {
         from: (item) => ({ opacity: 0, scale: 0, x: item.pos[0] * xFactor + xOffset, y: - item.pos[1] * yFactor + yOffset }),
-        enter: (item) =>({ opacity: 1, scale: 1.6/zoom.scale, x: item.pos[0] * xFactor + xOffset - 24/zoom.scale, y: - item.pos[1] * yFactor + yOffset - 70/zoom.scale }),
+        enter: (item) =>({ opacity: 1, scale: .45/strokeScale, x: item.pos[0] * xFactor + xOffset -7/strokeScale, y: - item.pos[1] * yFactor + yOffset - 20/strokeScale }),
         leave: (item) =>({ opacity: 0, scale: 0, x: item.pos[0] * xFactor + xOffset, y: - item.pos[1] * yFactor + yOffset })
     });
 

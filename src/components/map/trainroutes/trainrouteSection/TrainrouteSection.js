@@ -3,7 +3,7 @@ import {
     selectActiveSection
 } from '../TrainroutesSlice';
 
-export const TrainrouteSection = ({zoom}) => {
+export const TrainrouteSection = ({strokeScale}) => {
 
     const activeSection = useSelector(selectActiveSection);
 
@@ -13,11 +13,11 @@ export const TrainrouteSection = ({zoom}) => {
             >
             <polyline 
                 className="route"
-                strokeWidth={5 / zoom.scale}
+                strokeWidth={1.5 / strokeScale}
                 points={activeSection.route} />
             <polyline 
                 className="route-bg"
-                strokeWidth={9 / zoom.scale}
+                strokeWidth={9 / strokeScale}
                 points={activeSection.route} />
         </g>
     </g>)

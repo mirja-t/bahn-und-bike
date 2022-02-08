@@ -21,6 +21,7 @@ index.php
 
 #database
 /api
+/api_dev
 
 # misc
 .DS_Store
