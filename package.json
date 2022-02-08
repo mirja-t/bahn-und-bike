@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@lottiefiles/lottie-player": "^1.4.3",
     "@lottiefiles/react-lottie-player": "^3.4.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.14.1",

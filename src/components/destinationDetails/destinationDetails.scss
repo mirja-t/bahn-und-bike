@@ -15,6 +15,9 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
 }
 .details{
     width: 25vw;
+    @media (min-width: $breakpoint-xl) {
+        width: 20vw;
+    }
     pointer-events: all;
     .details-headline{
         display: flex;
@@ -49,7 +52,6 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
 #destination.details {
     .destinationslist {
         li {
-            //border-bottom: 1px dashed $lightgray;
             position: relative;
             background: white;
             box-shadow: 3px 3px 8px rgba(0,0,0,0.1); 

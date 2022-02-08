@@ -30,11 +30,12 @@ export const Veloroutes = ({zoom}) => {
     const routePaths = useRoutePath(activeVeloroute.route);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
+
     const setVelorouteSectionActive = idx => {
         const activeVRoute = activeVeloroute.route[idx];
-        dispatch(setActiveVelorouteSection(activeVRoute))        
-        const stops = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
-        const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stops);
+        dispatch(setActiveVelorouteSection(activeVRoute))  
+        const stopIds = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
+        const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
         dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute))
     }
 

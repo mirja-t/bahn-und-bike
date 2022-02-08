@@ -3,11 +3,15 @@ import { useSelector } from 'react-redux';
 import { useTimeFormat } from '../../hooks/useTimeFormat';
 import { RangeInput } from './rangeinput/RangeInput';
 import { selectLang } from '../../AppSlice';
+import { 
+    selectLoadingSequenceActive 
+} from '../../AppSlice';
 
 export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lang}) => {
 
     const time = useTimeFormat(rangeValue * 30, lang);
     const labels = useSelector(selectLang);
+    const loadingSequenceActive = useSelector(selectLoadingSequenceActive);
 
     return (<div id="travelduration">
         <form id="fahrtzeit" onSubmit={handleSubmit}>
@@ -23,10 +27,11 @@ export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lan
                     max="7" 
                     value={rangeValue} 
                     step="1"
-                    handleInputChange={handleInputChange}/>
+                    handleInputChange={handleInputChange}
+                    loadingSequenceActive={loadingSequenceActive}/>
                 
             </fieldset>
-            <input type="submit" value={labels.search[lang]}/>
+            <input type="submit" value={labels.search[lang]} className={loadingSequenceActive ? 'disabled' : ''}/>
         </form>
     </div>)
 }

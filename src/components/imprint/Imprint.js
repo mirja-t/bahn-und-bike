@@ -1,7 +1,8 @@
 import { selectLang } from '../../AppSlice';
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 
-export const Imprint = ({lang}) => {
+export const Imprint = ({lang, resetState}) => {
 
     const labels = useSelector(selectLang);
 
@@ -16,5 +17,14 @@ export const Imprint = ({lang}) => {
             <p><span>{labels.email[lang]}</span> mirja.t@bahn-und-bike.eu</p>
             <p><span>{labels.phone[lang]}</span> 017667594878</p>
         </div>
+        <p className="margintop">
+        <Link 
+            className="button" 
+            to="/" 
+            title={labels.backtostart[lang]}
+            onClick={resetState}>
+                {labels.backtostart[lang]}
+        </Link>
+        </p>
     </div>)
 }

@@ -1,19 +1,27 @@
 export const removeDuplicates = (trainRoutes) => {
-    trainRoutes.sort((a, b) => b.route.length - a.route.length);
 
-    const reducer = arr => arr.reduce((acc, el)=> acc.concat(el),[]);
-    const trainLineStopIdsArrCopy = [...new Set(trainRoutes
-        .map(trainLineObj => trainLineObj.route.map(trainStop => trainStop.stop_id))
-        .reduce(reducer, []))];
+    const trainRouteStopIds = trainRoutes
+        .map(trainLineObj => trainLineObj.route.map(trainStop => trainStop.destination_id))
+        .sort((a, b) => b.length - a.length)
+        .map(arr => arr.join(', '));
+        
 
-    const returnArrayOfTrainStopIds = arr => arr.map(trainStop => trainStop.destination_id);
-    const trainlineMatch = trainRoutes.filter((trainLineObj, index) => 
-        !(returnArrayOfTrainStopIds(trainLineObj.route).every(trainLineStop => 
-            trainLineStopIdsArrCopy.slice(0, index).find(trainLineStopArrCopy => 
-                {
-                    return trainLineStopArrCopy.includes(trainLineStop)
-                })
-            )));
-    
-    return trainlineMatch
+    const duplicateIndexes = []
+    for(let i = 0; i < trainRouteStopIds.length; i++){
+        if(i===0) continue;
+        let duplicate = false;
+        for(let j = 0; j < i; j++){
+            if(duplicate) continue;
+            if(trainRouteStopIds[j].includes(trainRouteStopIds[i])) {
+                duplicateIndexes.push(i);
+                duplicate = true;
+            }
+        }
+    }
+
+    for(let i = duplicateIndexes.length-1; i >= 0; i--){
+        trainRoutes.splice(i, 1)
+    }
+
+    return trainRoutes
 }

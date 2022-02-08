@@ -9,10 +9,23 @@
     overflow: hidden;
 }
 #container {
+    width: 150vw;
     position: relative;
     display: flex;
     justify-content: right;
     flex-grow: 1;
+    transition: width .5s ease;
+    &[class*='width-'] {
+        transition: width .5s ease;
+    }
+    &.width-1 {width: 100vw}
+    &.width-2 {width: 125vw}
+    &.width-3 {width: 150vw}
+    @media (min-width: $breakpoint-l) {
+        &.width-1 {width: 100vw}
+        &.width-2 {width: 120vw}
+        &.width-3 {width: 140vw}
+    }
 }
 main {
     position: relative;

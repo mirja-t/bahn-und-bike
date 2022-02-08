@@ -7,7 +7,8 @@ export const RangeInput = ({
     max,
     value,
     step,
-    handleInputChange
+    handleInputChange,
+    loadingSequenceActive
 }) => {
 
     const ref = useRef(null);
@@ -31,8 +32,9 @@ export const RangeInput = ({
         return rangeSkala
     }
 
-    return (<div className="range-slider">
+    return (<div className={loadingSequenceActive ? 'range-slider disabled' : 'range-slider'}>
         <input 
+            disabled={loadingSequenceActive ? true : false}
             ref={ref}
             type="range" 
             id={id} 

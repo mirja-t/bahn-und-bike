@@ -1,8 +1,9 @@
 import './privacy.scss';
 import { selectLang } from '../../AppSlice';
 import { useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
 
-export const Privacy = ({lang}) => {
+export const Privacy = ({lang, resetState}) => {
 
     const labels = useSelector(selectLang);
 
@@ -33,6 +34,15 @@ export const Privacy = ({lang}) => {
                 </li>
             </ul>
             <div className="seal"><a href="https://datenschutz-generator.de/" title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." target="_blank" rel="noreferrer"><img src="https://datenschutz-generator.de/wp-content/plugins/ts-dsg/images/dsg-seal/dsg-seal-pp-de.png" alt="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." width="250" height="250"/></a></div>
+            <p className="margintop">
+                <Link 
+                    className="button" 
+                    to="/" 
+                    title={labels.backtostart[lang]}
+                    onClick={resetState}>
+                        {labels.backtostart[lang]}
+                </Link>
+            </p>
         </div>
     </div>)
 }

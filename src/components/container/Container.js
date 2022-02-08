@@ -1,19 +1,15 @@
 import './container.scss';
 import { useRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSpring, animated } from 'react-spring';
-import { selectLang } from '../../AppSlice';
 import { Map } from '../map/Map';
 import { TravelDuration } from '../form/TravelDuration';
 import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
 import { 
     selectTrainrouteList,
-    selectTrainrouteListLoading,
     selectActiveSection,
     setActiveSection,
     setCurrentTrainroutes,
-    selectCurrentTrainroutes,
     setTrainLinesAlongVeloroute
 } from '../map/trainroutes/TrainroutesSlice';
 import { 
@@ -30,19 +26,17 @@ import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines
 export const Container = ({lang}) => {
 
     const dispatch = useDispatch();
-    const labels = useSelector(selectLang);
     const trainrouteList = useSelector(selectTrainrouteList);
-    const isLoading = useSelector(selectTrainrouteListLoading);
     const activeDestination = useSelector(selectActiveDestination);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const currentTrainRoutes = useSelector(selectCurrentTrainroutes);
 
     const [value, setValue] = useState(0);
     const [submitVal, setSubmitVal] = useState(0);
     const [dimensions, setDimensions] = useState([0, 0]);
     const [containerHeight, setContainerHeight] = useState(0);
     const [wrapper, setWrapper] = useState(null);
+    const [containerClass, setContainerClass] = useState('width-3');
 
     const [destDetailsActive, setDestDetailsActive] = useState(false);
     const [veloDetailsActive, setVeloDetailsActive] = useState(false);
@@ -50,19 +44,6 @@ export const Container = ({lang}) => {
     const container = useRef(null);
     const prevValue = useRef(0);
     const direction = useRef(1);
-
-    const asideWidth = activeVeloroute ? '100vw' : '125vw';
-
-    const handleDetailsState = () => {
-        const destDetailsState = (activeDestination || activeSection) ? true : false;
-        setDestDetailsActive(destDetailsState);
-        const veloDetailsState = (activeVeloroute) ? true : false;
-        setVeloDetailsActive(veloDetailsState);
-    }
-    const containerStyles = useSpring({
-        width: (activeDestination || activeSection) ? asideWidth : '150vw',
-        onRest: () => { handleDetailsState() }
-    });
     
     const handleInputChange = ({target}) => {
         const val = target.value;
@@ -81,6 +62,21 @@ export const Container = ({lang}) => {
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainLinesAlongVeloroute([]));
     }
+
+    useEffect(()=>{
+        const asideWidth = activeVeloroute ? 'width-1' : 'width-2';
+        const destDetailsState = (activeDestination || activeSection) ? true : false;
+        const veloDetailsState = (activeVeloroute) ? true : false;
+        const classes = (activeDestination || activeSection) ? asideWidth : 'width-3';
+
+        setContainerClass(classes);
+        const timer = setTimeout(()=>{
+            setDestDetailsActive(destDetailsState);
+            setVeloDetailsActive(veloDetailsState);
+        },500);
+
+        return ()=> clearTimeout(timer)
+    },[activeVeloroute, activeDestination, activeSection]);
 
     useEffect(()=>{
         let dir = direction.current;
@@ -128,13 +124,11 @@ export const Container = ({lang}) => {
     }, []);
 
     return (<>
-        {(parseInt(submitVal)===0 && currentTrainRoutes.length===0 && !isLoading) && (<div className="instructions">
-            <p>{labels.instruction[lang]}</p>
-        </div>)}
-        <animated.div 
+        <div 
             id="container" 
             ref={container} 
-            style={{...containerStyles, height: containerHeight}}
+            style={{height: containerHeight}}
+            className={containerClass}
             >
             <aside
                 className="destination-details-container">
@@ -153,13 +147,15 @@ export const Container = ({lang}) => {
                         value={submitVal}
                         wrapper={wrapper}
                         dimensions={dimensions}
+                        lang={lang}
                         />
                 </div>
             </main>
-        </animated.div>
+        </div>
         <TravelDuration
-                handleSubmit={handleSubmit}
-                rangeValue={value}
-                handleInputChange={handleInputChange}
-                lang={lang}/></>)
+            handleSubmit={handleSubmit}
+            rangeValue={value}
+            handleInputChange={handleInputChange}
+            lang={lang}/>
+    </>)
 }

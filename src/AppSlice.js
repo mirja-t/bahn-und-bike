@@ -30,7 +30,13 @@ export const appSlice = createSlice({
     initialState: {
         lang: {},
         langLoading: true,
-        langError: false
+        langError: false,
+        loadingSequenceActive: true
+    },
+    reducers: {
+      setLoadingSequenceActive: (state, action) => {
+        state.loadingSequenceActive = action.payload;
+      }
     },
     extraReducers: {
         [loadLang.pending]: (state, action) => {
@@ -50,9 +56,14 @@ export const appSlice = createSlice({
       }
   });
 
+export const {
+  setLoadingSequenceActive
+} = appSlice.actions;
+
 export const selectLang = (state) => state.app.lang;
-export const langLoading = (state) => state.app.langLoading;
-export const langError = (state) => state.app.langError;
+export const selectLangLoading = (state) => state.app.langLoading;
+export const selectLangError = (state) => state.app.langError;
+export const selectLoadingSequenceActive = (state) => state.app.loadingSequenceActive;
 
 
 export default appSlice.reducer;

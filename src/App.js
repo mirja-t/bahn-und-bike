@@ -8,9 +8,10 @@ import { Privacy } from './components/privacy/Privacy';
 import { Container } from './components/container/Container';
 import { Header } from './components/stateless/header/Header';
 import { Footer } from './components/stateless/footer/Footer';
+import { Error } from './components/stateless/error/Error';
 import { LanguagePicker } from './components/form/languagepicker/LanguagePicker';
 import { loadTrainroutes, selectStartPos } from './components/map/trainroutes/TrainroutesSlice';
-import { loadLang, langLoading, langError } from './AppSlice';
+import { loadLang, selectLangLoading, selectLangError } from './AppSlice';
 import { 
   setActiveSection,
   setCurrentTrainroutes,
@@ -29,8 +30,8 @@ function App() {
   const [lang, setLang] = useState('de');
   const [classes, setClasses] = useState('');
   const dispatch = useDispatch();
-  const languagesLoading = useSelector(langLoading);
-  const languagesError = useSelector(langError);
+  const languagesLoading = useSelector(selectLangLoading);
+  const languagesError = useSelector(selectLangError);
   const start = useSelector(selectStartPos);
   const location = useLocation();
 
@@ -61,12 +62,12 @@ function App() {
   }
 
   if(languagesLoading) return <div/>;
-  if(languagesError) return <div>'loading error'</div>;
+  if(languagesError) return <Error/>;
   return (
     <div className="App">
       <div id="wrapper" className={classes}>
         <Header>
-          <Link to="/"><div id="logo" onClick={resetState}/></Link>
+          <Link to="/" title={lang==='de' ? 'Zur Startseite' : 'Back to Homepage'}><div id="logo" onClick={resetState}/></Link>
           <LanguagePicker
               setLanguage={setLanguage}
               lang={lang}/>
@@ -74,8 +75,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home lang={lang}/>} />
           <Route path="routefinder" element={<Container lang={lang} />} />
-          <Route path="datenschutz" element={<Privacy lang={lang} />} />
-          <Route path="impressum" element={<Imprint lang={lang} />} />
+          <Route path="datenschutz" element={<Privacy lang={lang} resetState={resetState} />} />
+          <Route path="impressum" element={<Imprint lang={lang} resetState={resetState} />} />
         </Routes>
         <Footer>
           <Link to="datenschutz">{lang==='de' ? 'Datenschutz' : 'Privacy'}</Link>&nbsp;&nbsp;

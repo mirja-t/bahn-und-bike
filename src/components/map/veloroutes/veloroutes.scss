@@ -9,10 +9,8 @@
     .veloroute-stop{
         fill: $veloroute;
         transform: scale(1);
-        //transition: all .5s ease;
         &.hover {
             transform: scale(1.5);
-            //transition: all .5s ease;
         }
     }
     path.veloroute-section {

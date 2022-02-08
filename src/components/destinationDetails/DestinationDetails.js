@@ -86,8 +86,8 @@ export const DestinationDetails = ({
                 
                 <section className="section">
                     <h5>{labels.veloroutes[lang]}</h5>
-                    {veloroutesLoading && labels.loading[lang]}
-                    <ul className="destinationslist">
+                    {veloroutesLoading ? labels.loading[lang] :
+                    (<ul className="destinationslist">
                         {veloroutes.length < 1 && (<li className="route">{`${labels.nomatch[lang]}`}</li>)}
                         {springs.map((styles, i) => (
                             <animated.li 
@@ -102,7 +102,7 @@ export const DestinationDetails = ({
                                 </h4>
                             </animated.li>
                         ))}
-                    </ul>
+                    </ul>)}
                 </section>
         </div>
     </ScrollContent>)

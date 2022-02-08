@@ -21,7 +21,7 @@ export const Home = ({lang}) => {
                 <li>{labels.home_l4[lang]}</li>
             </ol>
             <p className="margintop">
-                <Link to="/routefinder"><button>{labels.start[lang]}</button></Link>
+                <Link to="/routefinder" title={labels.start[lang]}><button>{labels.start[lang]}</button></Link>
             </p>
         </div>
         <div id="germany">

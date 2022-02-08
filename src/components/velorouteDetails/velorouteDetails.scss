@@ -28,9 +28,10 @@ ul.veloroute-stops {
         display: inline;
         span {
             cursor: pointer;
-            text-decoration: underline;
+            
             &:hover,
             &.hover{
+                text-decoration: underline;
                 color: $veloroute-hover;
             }
         }
