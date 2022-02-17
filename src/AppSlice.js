@@ -6,7 +6,6 @@ export const loadLang = createAsyncThunk(
     async () => {
 
       const query = 'lang';
-
       const lang = await fetch(`${url}${query}`, {'headers': headers})
       .then(response => {
         if (response.status !== 200) { throw new Error("Bad Server Response"); }
