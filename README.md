@@ -27,6 +27,14 @@ If a cycling route is clicked, it is rendered as an svg path with beziers to the
 
 The map clipping is calculated in a custom hook that takes in the longest trainline distance from the starting point.
 
+## Features
+
++ Show all direct trains from Berlin within the chosen time 
++ Show all cycling routes that cross the chosen train line
++ Show available train stations along a chosen cycling route when a leg of the cycling route was clicked
++ Show possible cycling route combinations when a leg of the cycling route was clicked
+
+
 ## To Dos
 
 + Add interactive functionality like activation of more than one veloroute section
@@ -35,5 +43,14 @@ The map clipping is calculated in a custom hook that takes in the longest trainl
 + Add data for other cities
 + Add train connections that include a change
 
-# Frontend URL
+## Change Log
+
+#### 2022-02-10
+
+![dynamically rendered polylines](./assets/images/combined-routes.png "Trainlines rendered dynamically")
+
++ Add combined veloroute feature 
+When a leg of a chosen cycling path is clicked, possible cycling route combinations are shown, if any exist. If clicked, alternative train stations as start and end point of the trip are listed.
+
+# Live Site
 https://bahn-und-bike.eu

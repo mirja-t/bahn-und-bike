@@ -92,7 +92,7 @@ export const VelorouteDetails = ({
                                 </span>
                             </h3>
                             { combinedVeloroute && (<>
-                                    <h6>Kombinierter Radweg</h6>
+                                    <h6>{labels.combined_veloroute[lang]}</h6>
                                     <p>{combinedVeloroute}</p>
                                 </>)}
                             { activeVelorouteSection.length > 2 && (<>
