@@ -22,6 +22,15 @@
             stroke: $veloroute-hover;
         }
     }
+    path.crossing-veloroute-section {
+        stroke: $lightgray;
+        stroke-dasharray: 2;
+        fill: none;
+        &.active {
+            stroke-dasharray: 0;
+            stroke: $veloroute-hover;
+        }
+    }
     path.veloroute-section-large {
         stroke: transparent;
         fill: none;

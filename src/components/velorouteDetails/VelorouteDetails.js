@@ -7,12 +7,14 @@ import {
     selectActiveVeloroute, 
     selectActiveVelorouteSection,
     setActiveVelorouteStop,
-    selectActiveVelorouteStop
+    selectActiveVelorouteStop,
+    selectCombinedVeloroute
 } from '../map/veloroutes/VeloroutesSlice';
 import { useDistance } from '../../hooks/useDistance';
 import { ActiveVelorouteSectionIcon } from './activeVelorouteSectionIcon/ActiveVelorouteSectionIcon';
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { VelorouteIcon } from '../stateless/icons/VelorouteIcon';
+import { Collapse } from '../stateless/collapse/Collapse';
 
 export const VelorouteDetails = ({
     parent, 
@@ -26,6 +28,8 @@ export const VelorouteDetails = ({
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
+    const combinedVeloroute = useSelector(selectCombinedVeloroute);
+
     const dist = useDistance(activeVelorouteSection);
 
     const hoverVeloStop = ({type}, id) => {
@@ -45,25 +49,26 @@ export const VelorouteDetails = ({
                             <h2>{`${activeVeloroute.name}`}</h2>
                         </div>
                     </header>
-                    <div className="veloroute-details">
+                    <section className="veloroute-details">
                         <h5>{`${labels.totaldistance[lang]}`}</h5>
                         <p>{activeVeloroute.len}km</p>
-                        <h5>{`${labels.tourroute[lang]}`}</h5>
-                        <ul className="veloroute-stops">
-                            {activeVeloroute.route.map((arr, idx) => arr.map((s, i) =>
-                                (<li key={(idx+1)*i+100}>
-                                    <span 
-                                        className={activeVelorouteStop && activeVelorouteStop.stop_id===s.stop_id ? 'hover' : ''}
-                                        onMouseEnter={e => hoverVeloStop(e, s)}
-                                        onMouseLeave={hoverVeloStop}>
-                                            {((idx===0 && i === 0) || (i > 0)) && s.stop_name}</span>
-                                    {(((idx===0 && i === 0) || (i > 0)) && !(activeVeloroute.route.length-1===idx && arr.length-1===i)) && `, `}
-                                </li>)
-                            ))}
-                        </ul>
-                    </div>
-                    { activeVelorouteSection && (
-                        <div className="veloroute-section-details">
+                        <Collapse title={ `${labels.tourroute[lang]}` }>
+                            <ul className="veloroute-stops">
+                                {activeVeloroute.route.map((arr, idx) => arr.map((s, i) =>
+                                    (<li key={(idx+1)*i+100}>
+                                        <span 
+                                            className={activeVelorouteStop && activeVelorouteStop.stop_id===s.stop_id ? 'hover' : ''}
+                                            onMouseEnter={e => hoverVeloStop(e, s)}
+                                            onMouseLeave={hoverVeloStop}>
+                                                {((idx===0 && i === 0) || (i > 0)) && s.stop_name}</span>
+                                        {(((idx===0 && i === 0) || (i > 0)) && !(activeVeloroute.route.length-1===idx && arr.length-1===i)) && `, `}
+                                    </li>)
+                                ))}
+                            </ul>
+                        </Collapse>
+                    </section>
+                    { activeVelorouteSection ? (
+                        <section className="veloroute-details veloroute-section-details">
                             <h5>{`${labels.leg[lang]}`}</h5>
                             <h3 className="veloroute-trainstops">
                                 <ActiveVelorouteSectionIcon num={1}/>
@@ -86,8 +91,12 @@ export const VelorouteDetails = ({
                                             className="train">{s}</span>))}
                                 </span>
                             </h3>
+                            { combinedVeloroute && (<>
+                                    <h6>Kombinierter Radweg</h6>
+                                    <p>{combinedVeloroute}</p>
+                                </>)}
                             { activeVelorouteSection.length > 2 && (<>
-                                <h6>{`${labels.via[lang]}`}</h6>
+                                <h6>{labels.via[lang]}</h6>
                                 <ul className="veloroute-stops">
                                     {activeVelorouteSection.slice(1,activeVelorouteSection.length-1).map((s, idx) => 
                                         (<li key={idx}>
@@ -102,7 +111,8 @@ export const VelorouteDetails = ({
                             </>)}
                             <h6>{`${labels.distance[lang]} (${labels.airline[lang]})`}</h6>
                             <p>{dist} km</p>
-                        </div>)}
+                            
+                        </section>) : (labels.nolegchosen[lang])}
                 </div>
             )}
         </div>

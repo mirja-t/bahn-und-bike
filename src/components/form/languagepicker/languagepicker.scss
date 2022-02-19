@@ -8,6 +8,9 @@ $langSwitcherColor: rgba(250,250,250,0.2);
 $langSwitcherPadding: 0.5em;
 $langBorderradius: .4em;
 
+form#language-picker {
+    pointer-events: all;
+}
 form#language-picker fieldset {
     display: flex;
     justify-content: flex-end;

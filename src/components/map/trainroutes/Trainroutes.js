@@ -71,6 +71,10 @@ export const Trainroutes = ({
         dispatch(setActiveSection(line));
     }
 
+    const setAdditionalTrainlineActive = (line) => {
+        dispatch(setActiveSection(line));
+    }
+
     const hoverSpot = ({type}, spot) => {
         if(type === 'mouseenter') dispatch(setActiveSpot(spot))
         else if(type === 'mouseleave') dispatch(setActiveSpot(null))
@@ -143,7 +147,7 @@ export const Trainroutes = ({
                         className="route-bg"
                         strokeWidth={9 / strokeScale}
                         points={item.route}
-                        onClick={() => setSectionActive(item)} />
+                        onClick={() => setAdditionalTrainlineActive(item)} />
             </g>))}
 
                 { activeSection && <TrainrouteSection strokeScale={strokeScale} /> }

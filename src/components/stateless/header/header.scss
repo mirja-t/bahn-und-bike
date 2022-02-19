@@ -7,6 +7,7 @@
     justify-content: space-between;
     z-index: 2;
     position: relative;
+    pointer-events: none;
 }
 #logo {
     background-image: url('../../../assets/images/bahnundbike_logo.svg');
@@ -14,6 +15,7 @@
     height: 3em;
     background-repeat: no-repeat;
     background-size: contain;
+    pointer-events: all;
 }
 .home {
     #header {

@@ -16,6 +16,10 @@ php-errors.log
 /src/data
 index.php
 
+# utils 
+/utils/tree
+/utils/_generateCrossingVelorouteTree.js
+
 # config
 /src/config
 
