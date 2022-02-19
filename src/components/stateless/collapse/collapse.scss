@@ -1,0 +1,38 @@
+@import '../../../variables.scss';
+
+.caret {
+    width: 0; 
+    height: 0; 
+    border-left: .35em solid transparent;
+    border-right: .35em solid transparent;
+    border-top: .35em solid $veloroute;
+  }
+.collapse {
+    .toggle {
+        cursor: pointer;
+        position: relative;
+        &:after {
+            content: '';
+            position: absolute;
+            margin-left: $padding-xs;
+            @extend .caret;
+            top: 50%;
+        }
+        &.on {
+            &:after {
+                transform: translateY(-50%) rotate(0deg);
+            }
+        }
+        &.off {
+            &:after {
+                transform: translateY(-50%) rotate(270deg);
+            }
+        }
+    }
+    .toggle-container {
+        overflow: hidden;
+        &.off {
+            height: 0;
+        }
+    }
+}

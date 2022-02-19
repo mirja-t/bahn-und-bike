@@ -1,5 +1,13 @@
 @import '../../variables.scss';
 
+.caret {
+    width: 0; 
+    height: 0; 
+    border-left: .5em solid transparent;
+    border-right: .5em solid transparent;
+    border-top: .5em solid $primary;
+  }
+
 #wrapper {
     display: flex;
     flex-direction: column;
@@ -58,10 +66,6 @@ aside {
         bottom: -0.75em;
         left: 50%;
         transform: translateX(-50%);
-        width: 0; 
-        height: 0; 
-        border-left: .5em solid transparent;
-        border-right: .5em solid transparent;
-        border-top: .5em solid $primary;
+        @extend .caret
     }
 }

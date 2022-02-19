@@ -1,0 +1,20 @@
+@import '../../../../variables.scss';
+
+.alternativeVeloroute {
+    stroke: $veloroute;
+    stroke-dasharray: 1px;
+    fill: none;
+}
+.alternativeVeloroute-bg {
+    fill: none;
+    stroke: transparent;
+    stroke-width: 4px;
+}
+.active {
+    .alternativeVeloroute {
+        stroke-width: 2px;
+        stroke: $veloroute;
+        stroke-dasharray: 0;
+        fill: none;
+    }
+}

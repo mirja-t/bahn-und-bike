@@ -4,12 +4,14 @@ import {
     useDispatch,
     useSelector 
 } from 'react-redux';
-import { 
+import {     
+    loadCrossingVeloroutes,
     setActiveVelorouteSection,
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     setActiveVelorouteStop,
-    selectActiveVelorouteStop
+    selectActiveVelorouteStop,
+    setCombinedVeloroute
 } from './VeloroutesSlice';
 import {
     selectTrainrouteList,
@@ -18,6 +20,7 @@ import {
 import { useRoutePath } from '../../../hooks/useRoutePath';
 import { ActiveVelorouteSectionDetails } from './activeVelorouteSectionDetails/ActiveVelorouteSectionDetails';
 import { generateTrainlinesAlongVeloroute } from '../../../utils/generateTrainlinesAlongVeloroute';
+import { AlternativeRoutes } from './alternativeroutes/AlternativeRoutes';
 
 import { svg_scale } from '../../../data/svg_scale';
 const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
@@ -33,10 +36,13 @@ export const Veloroutes = ({strokeScale}) => {
 
     const setVelorouteSectionActive = idx => {
         const activeVRoute = activeVeloroute.route[idx];
+        const routeIds = activeVRoute.map(stop => stop.stop_id);
         dispatch(setActiveVelorouteSection(activeVRoute))  
         const stopIds = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
         const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
         dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute))
+        dispatch(loadCrossingVeloroutes(routeIds))
+        dispatch(setCombinedVeloroute(null))
     }
 
     const hoverVeloStop = ({type}, id) => {
@@ -53,6 +59,7 @@ export const Veloroutes = ({strokeScale}) => {
 
     return (<g 
         className="veloroute" > 
+        
         { routePaths.map((path, idx) => (
             <g key={idx}
             onClick={() => {setVelorouteSectionActive(idx)}}>
@@ -102,9 +109,11 @@ export const Veloroutes = ({strokeScale}) => {
                 <tspan>{activeVelorouteStop.stop_name}</tspan>
             </text>
         </>)}
-        { activeVelorouteSection && <ActiveVelorouteSectionDetails 
-            strokeScale={strokeScale}
-            section={activeVelorouteSection}
-        />}
+        { activeVelorouteSection && (<>
+            <AlternativeRoutes />
+            <ActiveVelorouteSectionDetails 
+                strokeScale={strokeScale}
+                section={activeVelorouteSection}/>
+        </>)}
     </g>)
 }

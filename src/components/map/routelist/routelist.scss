@@ -1,0 +1,81 @@
+@import '../../../variables.scss';
+
+$iconsize: calc( #{$scalefactor} + 1.3em);
+
+.destinationslist {
+    li {
+        position: relative;
+        background: white;
+        box-shadow: 3px 3px 8px rgba(0,0,0,0.1); 
+        padding: $padding-xs;
+        margin: $padding-xs 0;
+        transition: all .35s ease;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: $padding-s;
+        .velo-icon{
+            width: $iconsize;
+            height: $iconsize;
+            rect.bg{
+                fill: #ccc;
+                transition: all .35s ease;
+            }
+        }
+        h4.veloroute {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: 300;
+            color: $gray !important;
+            line-height: 1.2;
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-bottom: 10px solid transparent;
+            border-top: 10px solid transparent;
+            border-left: 0em solid white;
+            transition: all .35s ease;
+        }
+        &.active,
+        &:hover {
+            transition: all .35s ease;
+            background: white;
+            box-shadow: 5px 3px 10px rgba(0,0,0,0.15); 
+            h4 {
+                color: $veloroute-hover;
+            }
+            
+            .velo-icon{
+                rect.bg{
+                    fill: $veloroute;
+                    transition: all .35s ease;
+                }
+            }
+        }
+        &.active {
+            &:before {
+                width: 0; 
+                height: 0; 
+                right: -.5em;
+                border-top: .5em solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: .5em solid white;
+                transition: all .35s ease;
+            }
+        }
+        &.nomatch {
+            padding: 0;
+            background: transparent;
+            box-shadow: none; 
+            cursor: default;
+        }
+    }
+    
+    .stations {
+        display: flex;
+        font-size: .85em;
+    }
+}
