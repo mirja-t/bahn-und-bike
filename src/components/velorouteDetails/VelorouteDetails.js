@@ -112,7 +112,7 @@ export const VelorouteDetails = ({
                             <h6>{`${labels.distance[lang]} (${labels.airline[lang]})`}</h6>
                             <p>{dist} km</p>
                             
-                        </section>) : (labels.nolegchosen[lang])}
+                        </section>) : labels.nolegchosen[lang]}
                 </div>
             )}
         </div>

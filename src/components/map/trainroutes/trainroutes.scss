@@ -61,6 +61,11 @@ svg#routes{
                 fill: none;
             }
         }
+        &:hover {
+            .route {
+                stroke: $primary-hover;
+            }
+        }
     }
     
     .spot{
@@ -88,6 +93,7 @@ svg#routes{
                 }
                 &.spot-small{
                     transform: scale(1.2);
+                    fill: $primary-hover;
                 }
             }
         }
