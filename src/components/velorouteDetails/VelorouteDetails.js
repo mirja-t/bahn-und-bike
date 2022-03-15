@@ -77,7 +77,7 @@ export const VelorouteDetails = ({
                     <section className="veloroute-details">
                         <h5>{`${labels.totaldistance[lang]}`}</h5>
                         <p>{activeVeloroute.len}km</p>
-                        <Collapse title='Streckenabschnitte'>
+                        <Collapse title={`${labels.cyclingroutelegs[lang]}`}>
                             <ol className="veloroute-stops">
                                 {activeVeloroute.route
                                 .slice(0, activeVeloroute.route[0][0].stop_id === activeVeloroute.route[activeVeloroute.route.length-1][activeVeloroute.route[activeVeloroute.route.length-1].length-1].stop_id ? activeVeloroute.route.length-1 : activeVeloroute.route.length)
