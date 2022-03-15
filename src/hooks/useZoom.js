@@ -32,14 +32,14 @@ export const useZoom = (mapcontainerRef, positions, value, wrapper, dimensions) 
         const initScale = wrapper?.offsetWidth / wrapper?.offsetHeight > 16/9 ? wrapper?.offsetWidth / 1920 : wrapper?.offsetHeight / 1080;
 
         const devider = positions.length > 0 ? positions.length : 1;
-        const startPosX = positions.map(el => el.route[0].pos[0]).reduce((acc, el) => acc + parseFloat(el), 0) / devider;
-        const startPosY = positions.map(el => el.route[0].pos[1]).reduce((acc, el) => acc + parseFloat(el), 0) / devider;
+        const startPosX = positions.map(el => el.route[0].x).reduce((acc, el) => acc + parseFloat(el), 0) / devider;
+        const startPosY = positions.map(el => el.route[0].y).reduce((acc, el) => acc + parseFloat(el), 0) / devider;
 
         // get the farthest distance to the starting point by direction
-        let distX = positions.map(el => el.route[el.route.length-1].pos[0]).reduce((acc, el) => {
+        let distX = positions.map(el => el.route[el.route.length-1].x).reduce((acc, el) => {
             return Math.max(Math.abs(el - startPosX), acc)
         }, 0);
-        let distY = positions.map(el => el.route[el.route.length-1].pos[1]).reduce((acc, el) => {
+        let distY = positions.map(el => el.route[el.route.length-1].y).reduce((acc, el) => {
             return Math.max(Math.abs(el - startPosY), acc)
         }, 0);
         distX = distX < 0.1 ? 0.1 : distX;

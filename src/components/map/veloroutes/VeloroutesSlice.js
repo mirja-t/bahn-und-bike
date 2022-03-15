@@ -64,6 +64,7 @@ export const veloroutesSlice = createSlice({
         crossingRoutesError: false,
         activeVeloroute: null,
         activeVelorouteSection: null,
+        hoveredVelorouteSection: null,
         activeVelorouteStop: null
     },
     reducers: {
@@ -72,6 +73,9 @@ export const veloroutesSlice = createSlice({
       },
       setActiveVelorouteSection: (state, action) => {
         state.activeVelorouteSection = action.payload
+      },
+      setHoveredVelorouteSection: (state, action) => {
+        state.hoveredVelorouteSection = action.payload
       },
       setActiveVelorouteStop: (state, action) => {
         state.activeVelorouteStop = action.payload
@@ -121,11 +125,12 @@ export const selectActiveVelorouteStop = (state) => state.veloroutes.activeVelor
 export const selectVeloroutesLoading = (state) => state.veloroutes.isLoading;
 export const selectCrossingVeloroutesLoading = (state) => state.veloroutes.crossingRoutesLoading;
 export const selectCombinedVeloroute = (state) => state.veloroutes.combinedVeloroute;
-
+export const selectHoveredVelorouteSection = (state) => state.veloroutes.hoveredVelorouteSection;
 
 export const {
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setHoveredVelorouteSection,
     setActiveVelorouteStop,
     setCrossingVelorouteSection,
     setCombinedVeloroute

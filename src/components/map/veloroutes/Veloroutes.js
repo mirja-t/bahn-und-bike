@@ -1,4 +1,5 @@
 import './veloroutes.scss';
+import { v4 as uuidv4 } from 'uuid';
 import { animated, useTransition } from 'react-spring';
 import { 
     useDispatch,
@@ -11,11 +12,13 @@ import {
     selectActiveVelorouteSection,
     setActiveVelorouteStop,
     selectActiveVelorouteStop,
-    setCombinedVeloroute
+    setCombinedVeloroute,
+    selectHoveredVelorouteSection
 } from './VeloroutesSlice';
 import {
     selectTrainrouteList,
-    setTrainLinesAlongVeloroute
+    setTrainLinesAlongVeloroute,
+    setActiveSection
 } from '../trainroutes/TrainroutesSlice';
 import { useRoutePath } from '../../../hooks/useRoutePath';
 import { ActiveVelorouteSectionDetails } from './activeVelorouteSectionDetails/ActiveVelorouteSectionDetails';
@@ -33,6 +36,7 @@ export const Veloroutes = ({strokeScale}) => {
     const routePaths = useRoutePath(activeVeloroute.route);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
+    const hoveredVrouteSection = useSelector(selectHoveredVelorouteSection);
 
     const setVelorouteSectionActive = idx => {
         const activeVRoute = activeVeloroute.route[idx];
@@ -42,7 +46,8 @@ export const Veloroutes = ({strokeScale}) => {
         const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
         dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute))
         dispatch(loadCrossingVeloroutes(routeIds))
-        dispatch(setCombinedVeloroute(null))
+        dispatch(setCombinedVeloroute(null));
+        dispatch(setActiveSection(null));
     }
 
     const hoverVeloStop = ({type}, id) => {
@@ -62,49 +67,62 @@ export const Veloroutes = ({strokeScale}) => {
         
         { routePaths.map((path, idx) => (
             <g key={idx}
-            onClick={() => {setVelorouteSectionActive(idx)}}>
-            <path 
-                strokeWidth={activeVelorouteSection===activeVeloroute.route[idx] ? 1.35 / strokeScale : 1 / strokeScale}
-                className={activeVelorouteSection===activeVeloroute.route[idx] ? 'veloroute-section active' : 'veloroute-section'}
-                d={path} />
-            <path 
-                strokeWidth={12 / strokeScale}
-                className="veloroute-section-large"
-                d={path} />
+                className={idx===hoveredVrouteSection ? 'hover' : ''}
+                onClick={() => {setVelorouteSectionActive(idx)}}>
+                <path 
+                    strokeWidth={activeVelorouteSection===activeVeloroute.route[idx] ? 1.35 / strokeScale : 1 / strokeScale}
+                    className={activeVelorouteSection===activeVeloroute.route[idx] ? 'veloroute-section active' : 'veloroute-section'}
+                    d={path} />
+                <path 
+                    strokeWidth={12 / strokeScale}
+                    className="veloroute-section-large"
+                    d={path} />
             </g>
         
         ))}
-        { spotTransitions((styles, stop, t, idx) => (
+        { spotTransitions((styles, stop, _, idx) => (
             <animated.circle
                 key={idx}
                 strokeWidth={1 / strokeScale}
                 className="veloroute-station"
-                cx={stop.pos[0] * xFactor + xOffset}
-                cy={ - stop.pos[1] * yFactor + yOffset}
+                cx={stop.x * xFactor + xOffset}
+                cy={ - stop.y * yFactor + yOffset}
                 r={4 / strokeScale}
                 style={{ 
                     ...styles,
-                    transformOrigin: `${stop.pos[0] * xFactor + xOffset}px ${ - stop.pos[1] * yFactor + yOffset}px`
+                    transformOrigin: `${stop.x * xFactor + xOffset}px ${ - stop.y * yFactor + yOffset}px`
                 }}/>
             ))}
-        {activeVeloroute.route.map((s,i) => s.map((stop,idx) => (
-            <animated.circle
-                key={idx*(i+1)}
-                strokeWidth={1 / strokeScale}
-                className={activeVelorouteStop && activeVelorouteStop.stop_id===stop.stop_id ? 'veloroute-stop hover' : 'veloroute-stop'}
-                cx={stop.pos[0] * xFactor + xOffset}
-                cy={ - stop.pos[1] * yFactor + yOffset}
-                r={1.3 / strokeScale}
-                onMouseEnter={e => hoverVeloStop(e, stop)}
-                onMouseLeave={hoverVeloStop}
+        {activeVeloroute.route.map(s => 
+            (<circle
+                key={uuidv4()}
+                className='veloroute-stop hover'
+                cx={s[0].x * xFactor + xOffset}
+                cy={ - s[0].y * yFactor + yOffset}
+                r={0.8 / strokeScale}
                 style={{ 
-                    transformOrigin: `${stop.pos[0] * xFactor + xOffset}px ${ - stop.pos[1] * yFactor + yOffset}px`
-                }}/>)
-            ))}
+                    transformOrigin: `${s[0].x * xFactor + xOffset}px ${ - s[0].y * yFactor + yOffset}px`
+                }}
+            />)
+        )}
+        {activeVeloroute.route.map(s => s.map(stop => (
+                <circle
+                    key={uuidv4()}
+                    strokeWidth={1 / strokeScale}
+                    className={activeVelorouteStop && activeVelorouteStop.stop_id===stop.stop_id ? 'veloroute-stop hover' : 'veloroute-stop'}
+                    cx={stop.x * xFactor + xOffset}
+                    cy={ - stop.y * yFactor + yOffset}
+                    r={0.8 / strokeScale}
+                    onMouseEnter={e => hoverVeloStop(e, stop)}
+                    onMouseLeave={hoverVeloStop}
+                    style={{ 
+                        transformOrigin: `${stop.x * xFactor + xOffset}px ${ - stop.y * yFactor + yOffset}px`
+                    }}/>)))}
+
         { activeVelorouteStop && (<>
             <text className="destinationLabel veloroute"
-                x={(activeVelorouteStop.pos[0] * xFactor + xOffset) + 6 / strokeScale } 
-                y={(- activeVelorouteStop.pos[1] * yFactor + yOffset) + 2 / strokeScale }
+                x={(activeVelorouteStop.x * xFactor + xOffset) + 6 / strokeScale } 
+                y={(- activeVelorouteStop.y * yFactor + yOffset) + 2 / strokeScale }
                 style={{ fontSize: `${7 * 1 / strokeScale}px` }}>
                 <tspan>{activeVelorouteStop.stop_name}</tspan>
             </text>

@@ -20,7 +20,6 @@ import { RouteList } from '../map/routelist/RouteList';
 
 export const DestinationDetails = ({
     parent,
-    detailsActive,
     lang
 }) => {  
 
@@ -38,23 +37,24 @@ export const DestinationDetails = ({
     const train = activeSection && <span className="train">{activeSection.line}</span>;
     const trainList = train ? train : trains;
     
-
-    return (<ScrollContent parentEl={parent} transitionComplete={detailsActive}>
+    return (<ScrollContent parentEl={parent} transitionComplete={true} >
+        
         <div 
             id="destination"
             className="details">
-            <header>
-                <div className="details-headline">
-                    <PinIcon><TrainIcon/></PinIcon>
-                    <h2>{`${headline}  `}{trainList}</h2>
-                </div>
-            </header>
-            
-            {activeSection && <section className="section d-flex">
-                <div className="duration-label">
-                    <h5>{labels.traveltime[lang]}</h5>
-                    {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
-                </div>
+            {(activeDestination || activeSection) && (<>
+                <header>
+                    <div className="details-headline">
+                        <PinIcon><TrainIcon/></PinIcon>
+                        <h2>{`${headline}  `}{trainList}</h2>
+                    </div>
+                </header>
+                
+                {activeSection && <section className="section d-flex">
+                    <div className="duration-label">
+                        <h5>{labels.traveltime[lang]}</h5>
+                        {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
+                    </div>
                 </section>}
                 
                 <section className="section">
@@ -66,6 +66,7 @@ export const DestinationDetails = ({
                             lang={lang}/>
                     }
                 </section>
+            </>)}
         </div>
     </ScrollContent>)
 }

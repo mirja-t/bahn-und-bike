@@ -9,7 +9,7 @@ export const useRoutePath = arr => {
 
     useEffect(()=>{
         if(!arr.length) return []
-        const getPos = stop => [stop.pos[0] * xFactor + xOffset, - stop.pos[1] * yFactor + yOffset]
+        const getPos = stop => [stop.x * xFactor + xOffset, - stop.y * yFactor + yOffset]
 
         const getSegmentPath = path => {
             if(path.length < 1) return ''

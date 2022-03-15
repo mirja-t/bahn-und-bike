@@ -49,7 +49,8 @@ export const useRouteTree = (activeVelorouteSection, crossingVeloroutes) => {
                             const stopData = {
                                 stop_id: s.stop_id,
                                 stop_name: s.stop_name,
-                                pos: s.pos,
+                                x: s.x,
+                                y: s.y,
                                 train_list: s.train_list,
                                 path: [leaf.data.pos, s.pos],
                                 name: route.name

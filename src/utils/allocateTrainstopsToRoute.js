@@ -4,7 +4,8 @@ const getStopData = arr => {
     return arr.map(stop => {
         return {
             destination_id: stop.destination_id, 
-            pos: [stop.lon, stop.lat],
+            x: stop.lon,
+            y: stop.lat,
             dur: getDur(stop.dur),
             stop_name: stop.dest_name,
             trainlines: stop.trainlines

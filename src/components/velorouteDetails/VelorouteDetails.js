@@ -1,5 +1,5 @@
 import './velorouteDetails.scss';
-
+import { v4 as uuidv4 } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux';
 import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
 import { selectLang } from '../../AppSlice';
@@ -8,8 +8,18 @@ import {
     selectActiveVelorouteSection,
     setActiveVelorouteStop,
     selectActiveVelorouteStop,
-    selectCombinedVeloroute
+    selectCombinedVeloroute,
+    setActiveVelorouteSection,
+    loadCrossingVeloroutes,
+    setCombinedVeloroute,
+    setHoveredVelorouteSection
 } from '../map/veloroutes/VeloroutesSlice';
+import { 
+    selectTrainrouteList,
+    setTrainLinesAlongVeloroute,
+    setActiveSection
+} from '../map/trainroutes/TrainroutesSlice';
+import { generateTrainlinesAlongVeloroute } from '../../utils/generateTrainlinesAlongVeloroute';
 import { useDistance } from '../../hooks/useDistance';
 import { ActiveVelorouteSectionIcon } from './activeVelorouteSectionIcon/ActiveVelorouteSectionIcon';
 import { PinIcon } from '../stateless/icons/PinIcon';
@@ -18,10 +28,9 @@ import { Collapse } from '../stateless/collapse/Collapse';
 
 export const VelorouteDetails = ({
     parent, 
-    detailsActive,
     lang
 }) => {
-    
+
     const dispatch = useDispatch();
 
     const labels = useSelector(selectLang);
@@ -29,14 +38,30 @@ export const VelorouteDetails = ({
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
-
+    const trainrouteList = useSelector(selectTrainrouteList);
     const dist = useDistance(activeVelorouteSection);
 
     const hoverVeloStop = ({type}, id) => {
         type==='mouseenter' ? dispatch(setActiveVelorouteStop(id)) : dispatch(setActiveVelorouteStop(null))
     }
-    
-    return (<ScrollContent parentEl={parent} transitionComplete={detailsActive}>
+
+    const setVelorouteSectionActive = idx => {
+        const activeVRoute = activeVeloroute.route[idx];
+        const routeIds = activeVRoute.map(stop => stop.stop_id);
+        dispatch(setActiveVelorouteSection(activeVRoute))  
+        const stopIds = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
+        const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
+        dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute))
+        dispatch(loadCrossingVeloroutes(routeIds))
+        dispatch(setCombinedVeloroute(null));
+        dispatch(setActiveSection(null));
+    }
+
+    const hoverVelorouteSection = ({type}, idx) => {
+        type==='mouseenter' ? dispatch(setHoveredVelorouteSection(idx)) : dispatch(setHoveredVelorouteSection(null))  
+    }
+
+    return (<ScrollContent parentEl={parent} transitionComplete={true}>
             <div 
                 id="veloroute"
                 className="details"
@@ -52,19 +77,19 @@ export const VelorouteDetails = ({
                     <section className="veloroute-details">
                         <h5>{`${labels.totaldistance[lang]}`}</h5>
                         <p>{activeVeloroute.len}km</p>
-                        <Collapse title={ `${labels.tourroute[lang]}` }>
-                            <ul className="veloroute-stops">
-                                {activeVeloroute.route.map((arr, idx) => arr.map((s, i) =>
-                                    (<li key={(idx+1)*i+100}>
-                                        <span 
-                                            className={activeVelorouteStop && activeVelorouteStop.stop_id===s.stop_id ? 'hover' : ''}
-                                            onMouseEnter={e => hoverVeloStop(e, s)}
-                                            onMouseLeave={hoverVeloStop}>
-                                                {((idx===0 && i === 0) || (i > 0)) && s.stop_name}</span>
-                                        {(((idx===0 && i === 0) || (i > 0)) && !(activeVeloroute.route.length-1===idx && arr.length-1===i)) && `, `}
-                                    </li>)
-                                ))}
-                            </ul>
+                        <Collapse title='Streckenabschnitte'>
+                            <ol className="veloroute-stops">
+                                {activeVeloroute.route
+                                .slice(0, activeVeloroute.route[0][0].stop_id === activeVeloroute.route[activeVeloroute.route.length-1][activeVeloroute.route[activeVeloroute.route.length-1].length-1].stop_id ? activeVeloroute.route.length-1 : activeVeloroute.route.length)
+                                .map((arr, idx) =>
+                                    (<li 
+                                        key={uuidv4()}
+                                        onClick={() => setVelorouteSectionActive(idx)}
+                                        onMouseEnter={e => hoverVelorouteSection(e, idx)}
+                                        onMouseLeave={e => hoverVelorouteSection(e)}>
+                                        <div>{`${arr[0].stop_name} to ${arr[arr.length-1].stop_name}`}</div>
+                                    </li>))}
+                            </ol>
                         </Collapse>
                     </section>
                     { activeVelorouteSection ? (
