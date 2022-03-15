@@ -9,9 +9,9 @@ export const ActiveVelorouteSectionDetails = ({
 }) => {
 
     const transitions = useTransition([section[0], section[section.length-1]], {
-        from: (item) => ({ opacity: 0, scale: 0, x: item.pos[0] * xFactor + xOffset, y: - item.pos[1] * yFactor + yOffset }),
-        enter: (item) =>({ opacity: 1, scale: .45/strokeScale, x: item.pos[0] * xFactor + xOffset -7/strokeScale, y: - item.pos[1] * yFactor + yOffset - 20/strokeScale }),
-        leave: (item) =>({ opacity: 0, scale: 0, x: item.pos[0] * xFactor + xOffset, y: - item.pos[1] * yFactor + yOffset })
+        from: (item) => ({ opacity: 0, scale: 0, x: item.x * xFactor + xOffset, y: - item.y * yFactor + yOffset }),
+        enter: (item) =>({ opacity: 1, scale: .45/strokeScale, x: item.x * xFactor + xOffset -7/strokeScale, y: - item.y * yFactor + yOffset - 20/strokeScale }),
+        leave: (item) =>({ opacity: 0, scale: 0, x: item.x * xFactor + xOffset, y: - item.y * yFactor + yOffset })
     });
 
     if(!section) return <g/>

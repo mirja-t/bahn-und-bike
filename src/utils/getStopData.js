@@ -15,7 +15,8 @@ export const getStopData = async(route) => {
     const getRoutePositions = async() => {
         for (let stop of route) {
             let pos = await addStopPos(stop.stop_id);
-            stop.pos = pos;
+            stop.x = pos[0];
+            stop.y = pos[1];
             routeWithPos.push(stop)
         }
     }

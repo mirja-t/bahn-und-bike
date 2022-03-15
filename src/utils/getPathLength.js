@@ -4,7 +4,7 @@ const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
 // get PathLength for getDistance
 export const getPathLength = (route) => {
     if(!route) return 0 
-    const path = route.map(el => [el.pos[0] * xFactor + xOffset, - el.pos[1] * yFactor + yOffset])
+    const path = route.map(el => [el.x * xFactor + xOffset, - el.y * yFactor + yOffset])
     const reducer = (acc, n) => acc + n;
     return path.map((el, idx) => {
         const prev = idx > 0 ? path[idx-1] : el;

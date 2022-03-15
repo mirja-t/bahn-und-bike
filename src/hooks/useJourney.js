@@ -12,7 +12,7 @@ export const useJourney = (positions) => {
 
             return {
                 pathLength: el.pathLength,
-                route: el.route.map(stop => `${(stop.pos[0] * xFactor + xOffset)}, ${( - stop.pos[1] * yFactor + yOffset)} `),
+                route: el.route.map(stop => `${(stop.x * xFactor + xOffset)}, ${( - stop.y * yFactor + yOffset)} `),
                 line: el.line,
                 dur: el.dur,
                 stopIds: el.route.map(el => el.destination_id),
@@ -23,8 +23,8 @@ export const useJourney = (positions) => {
                 lastStation: {
                     stop_name: el.route[el.route.length-1].stop_name,
                     stop_id: el.route[el.route.length-1].destination_id,
-                    x: el.route[el.route.length-1].pos[0] * xFactor + xOffset,
-                    y: - el.route[el.route.length-1].pos[1] * yFactor + yOffset,
+                    x: el.route[el.route.length-1].x * xFactor + xOffset,
+                    y: - el.route[el.route.length-1].y * yFactor + yOffset,
                 }
             }
         })

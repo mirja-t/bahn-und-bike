@@ -8,7 +8,8 @@ export const refactorVeloroutes = (journeys, destinations) => {
         stop_name: s.dest_name,
         stop_id: s.dest_id,
         train_list: destinations[s.dest_id] ? destinations[s.dest_id]?.trainlines : [],
-        pos: [s.lon, s.lat]
+        x: s.lon,
+        y: s.lat
       }
       const currentRoute = stateArr.find(obj => obj.id === s.veloroute_id);
   

@@ -38,9 +38,6 @@ export const Container = ({lang}) => {
     const [wrapper, setWrapper] = useState(null);
     const [containerClass, setContainerClass] = useState('width-3');
 
-    const [destDetailsActive, setDestDetailsActive] = useState(false);
-    const [veloDetailsActive, setVeloDetailsActive] = useState(false);
-
     const container = useRef(null);
     const prevValue = useRef(0);
     const direction = useRef(1);
@@ -64,18 +61,17 @@ export const Container = ({lang}) => {
     }
 
     useEffect(()=>{
-        const asideWidth = activeVeloroute ? 'width-1' : 'width-2';
-        const destDetailsState = (activeDestination || activeSection) ? true : false;
-        const veloDetailsState = (activeVeloroute) ? true : false;
-        const classes = (activeDestination || activeSection) ? asideWidth : 'width-3';
 
-        setContainerClass(classes);
-        const timer = setTimeout(()=>{
-            setDestDetailsActive(destDetailsState);
-            setVeloDetailsActive(veloDetailsState);
-        },500);
+        if(activeVeloroute){
+            setContainerClass('width-1');
+        }
+        else if(activeDestination || activeSection){
+            setContainerClass('width-2');
+        }
+        else {
+            setContainerClass('width-3');
+        }
 
-        return ()=> clearTimeout(timer)
     },[activeVeloroute, activeDestination, activeSection]);
 
     useEffect(()=>{
@@ -134,11 +130,9 @@ export const Container = ({lang}) => {
                 className="destination-details-container">
                 <DestinationDetails
                     parent={container.current}
-                    detailsActive={destDetailsActive}
                     lang={lang}/>
                 <VelorouteDetails
                     parent={container.current}
-                    detailsActive={veloDetailsActive}
                     lang={lang}/>
             </aside>
             <main>

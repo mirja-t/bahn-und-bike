@@ -5,12 +5,19 @@
     circle,
     g {
         cursor: pointer;
+        &:hover,
+        &.hover {
+            path.veloroute-section {
+                stroke-dasharray: 0;
+                stroke: $veloroute-hover;
+            }
+        }
     }
     .veloroute-stop{
         fill: $veloroute;
         transform: scale(1);
         &.hover {
-            transform: scale(1.5);
+            transform: scale(1.8);
         }
     }
     path.veloroute-section {

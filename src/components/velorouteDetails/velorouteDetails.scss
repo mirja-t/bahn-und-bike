@@ -37,6 +37,18 @@ ul.veloroute-stops {
         }
     }
 }
+ol.veloroute-stops{
+    padding-left: 1em;
+    div {
+        cursor: pointer;
+        
+        &:hover,
+        &.hover{
+            text-decoration: underline;
+            color: $veloroute-hover;
+        }
+    }
+}
 .veloroute-trainstops {
     padding: 0;
     display: flex;
