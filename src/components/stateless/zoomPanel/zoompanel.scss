@@ -1,0 +1,16 @@
+@import '../../../variables.scss';
+
+#zoompanel {
+    position: absolute;
+    z-index: 9;
+    bottom: 0;
+    left: $padding-l;
+    button {
+        height: $padding-xl;
+        width: $padding-xl;
+        padding: 0;
+        display: block;
+        margin-bottom: $padding-xs;
+        font-size: 1.25em;
+    }
+}

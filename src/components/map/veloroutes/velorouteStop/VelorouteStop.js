@@ -3,7 +3,7 @@ const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
 
 export const VelorouteStop = ({activeSpot, item, fn}) => {
     const strokeScale = 1;
-    console.log(activeSpot, item.stop_id)
+
     return (<g>
         { activeSpot===item.stop_id && (
                 <text className="veloroute destinationLabel"
