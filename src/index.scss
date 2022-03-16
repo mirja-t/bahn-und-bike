@@ -143,6 +143,7 @@ button,
         box-shadow: -1px -1px 3px white, inset 1px 1px 1px white, inset -1px -1px 1px rgba(0,0,0,0.15), 1px 1px 3px rgba(0,0,0,0.15);
         transition: all .3s ease;
         text-decoration: none;
+        color: $primary-hover;
     }
     &:active{
         box-shadow: -1px -1px 3px rgba(0,0,0,0.15), inset 1px 1px 1px rgba(0,0,0,0.15), inset -1px -1px 1px white, 1px 1px 3px white;

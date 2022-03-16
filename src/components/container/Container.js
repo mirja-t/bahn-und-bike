@@ -5,6 +5,7 @@ import { Map } from '../map/Map';
 import { TravelDuration } from '../form/TravelDuration';
 import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
+import { setUserScale } from '../../AppSlice';
 import { 
     selectTrainrouteList,
     selectActiveSection,
@@ -58,6 +59,7 @@ export const Container = ({lang}) => {
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainLinesAlongVeloroute([]));
+        dispatch(setUserScale(1));
     }
 
     useEffect(()=>{
