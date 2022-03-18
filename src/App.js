@@ -11,7 +11,12 @@ import { Footer } from './components/stateless/footer/Footer';
 import { Error } from './components/stateless/error/Error';
 import { LanguagePicker } from './components/form/languagepicker/LanguagePicker';
 import { loadTrainroutes, selectStartPos } from './components/map/trainroutes/TrainroutesSlice';
-import { loadLang, selectLangLoading, selectLangError } from './AppSlice';
+import { 
+  loadLang, 
+  selectLangLoading, 
+  selectLangError,
+  setUserScale 
+} from './AppSlice';
 import { 
   setActiveSection,
   setCurrentTrainroutes,
@@ -22,7 +27,7 @@ import {
   setActiveVelorouteSection
 } from './components/map/veloroutes/VeloroutesSlice';
 import {
-  setActiveDestination,
+  setActiveDestination
 } from './components/destinationDetails/DestinationDetailsSlice';
 
 function App() {
@@ -40,6 +45,13 @@ function App() {
   }
 
   useEffect(()=>{
+    dispatch(setCurrentTrainroutes([]));
+    dispatch(setActiveDestination(null));
+    dispatch(setActiveSection(null));
+    dispatch(setActiveVeloroute(null));
+    dispatch(setActiveVelorouteSection(null));
+    dispatch(setTrainLinesAlongVeloroute([]));
+    dispatch(setUserScale(1));
     dispatch(loadTrainroutes({start}));
   },[dispatch, start]);
 

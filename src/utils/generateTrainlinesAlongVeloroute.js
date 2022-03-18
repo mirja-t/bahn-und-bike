@@ -1,7 +1,6 @@
 import { getPathLength } from './getPathLength';
 
 export const generateTrainlinesAlongVeloroute = (trainlines, stopIds) => {
-    stopIds = stopIds.map(id => parseInt(id));
 
     const trains = [];
     stopIds.forEach(s => {

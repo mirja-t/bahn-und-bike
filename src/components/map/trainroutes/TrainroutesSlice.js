@@ -8,9 +8,7 @@ import { setDestinations } from '../../destinationDetails/DestinationDetailsSlic
 export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
     async ({start}, ThunkAPI) => {
-
       const trainlinesQuery = 'trainlines/ids[]=' + start.join('&ids[]=');
-
       const trainlines = await fetch(`${url}${trainlinesQuery}`, {'headers': headers})
       .then(response => {
         if (response.status !== 200) { throw new Error("Bad Server Response"); }
@@ -24,7 +22,6 @@ export const loadTrainroutes = createAsyncThunk(
       .then(response => response.json());
 
       distributeTrainlines(trainstops);
-
       const trainroutes = allocateTrainstopsToRoute(trainlineIds, trainstops, start);
       const destinations = processDestinationData(trainstops);
       ThunkAPI.dispatch(setDestinations(destinations));
@@ -34,11 +31,11 @@ export const loadTrainroutes = createAsyncThunk(
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: [8011160, 8098160, 8011306, 8011118, 8011113, 8011102, 8011162, 8010036],
+        startPos: ['8011160', '8098160', '8011306', '8011118', '8011113', '8011102', '8011162', '8010036'],
         travelInterval: 30,
         trainrouteList: [],
+        trainrouteListLoading: false,
         currentTrainroutes: [],
-        isLoading: false,
         hasError: false,
         activeSpot: null,
         activeSection: null,
@@ -66,16 +63,16 @@ export const trainroutesSlice = createSlice({
     },
     extraReducers: {
         [loadTrainroutes.pending]: (state, action) => {
-          state.isLoading = true;
+          state.trainrouteListLoading = true;
           state.hasError = false;
         },
         [loadTrainroutes.fulfilled]: (state, action) => {
           state.trainrouteList = action.payload;
-          state.isLoading = false;
+          state.trainrouteListLoading = false;
           state.hasError = false;
         },
         [loadTrainroutes.rejected]: (state, action) => {
-          state.isLoading = false;
+          state.trainrouteListLoading = false;
           state.hasError = true;
         }
         
@@ -86,7 +83,7 @@ export const selectTrainrouteList = (state) => state.trainroutes.trainrouteList;
 export const selectActiveSpot = (state) => state.trainroutes.activeSpot;
 export const selectActiveSection = (state) => state.trainroutes.activeSection;
 export const selectTrainlinesAlongVeloroute = (state) => state.trainroutes.trainlinesAlongVeloroute;
-export const selectTrainrouteListLoading = (state) => state.trainroutes.isLoading;
+export const selectTrainrouteListLoading = (state) => state.trainroutes.trainrouteListLoading;
 export const selectTrainlinesAlongVelorouteLoading = (state) => state.trainroutes.trainlinesAlongVelorouteLoading;
 export const selectStartPos = (state) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state) => state.trainroutes.currentTrainroutes;
@@ -96,7 +93,8 @@ export const {
     setActiveSpot,
     setActiveSection,
     setTrainLinesAlongVeloroute,
-    setCurrentTrainroutes
+    setCurrentTrainroutes,
+    setStartPos
 } = trainroutesSlice.actions;
 
  export default trainroutesSlice.reducer;
