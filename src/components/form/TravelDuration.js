@@ -1,37 +1,32 @@
 import './travelduration.scss';
 import { useSelector } from 'react-redux';
-import { useTimeFormat } from '../../hooks/useTimeFormat';
 import { RangeInput } from './rangeinput/RangeInput';
-import { selectLang } from '../../AppSlice';
+import { DestinationPicker } from './destinationPicker/DestinationPicker';
 import { 
+    selectLang,
     selectLoadingSequenceActive 
 } from '../../AppSlice';
+import { selectStartPos } from '../map/trainroutes/TrainroutesSlice';
 
 export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lang}) => {
 
-    const time = useTimeFormat(rangeValue * 30, lang);
     const labels = useSelector(selectLang);
+    const startPos = useSelector(selectStartPos);
     const loadingSequenceActive = useSelector(selectLoadingSequenceActive);
 
-    return (<div id="travelduration">
-        <form id="fahrtzeit" onSubmit={handleSubmit}>
-            <fieldset className="duration">
-                <div className="duration-label">
-                    <h5 htmlFor="fahrtzeit">{labels.traveltime[lang]}:</h5>
-                    <p className="val">{rangeValue < 7 ? `${labels.upto[lang]} ${time}` : `${time} ${labels.andmore[lang]}`}</p>
-                </div>
+    return (
+        <form id="travelduration" onSubmit={handleSubmit}>
+                <DestinationPicker lang={lang}/>            
                 <RangeInput 
+                    lang={lang}
                     type="range" 
-                    id="fahrtzeit" 
                     min="0" 
                     max="7" 
                     value={rangeValue} 
                     step="1"
                     handleInputChange={handleInputChange}
-                    loadingSequenceActive={loadingSequenceActive}/>
-                
-            </fieldset>
+                    loadingSequenceActive={loadingSequenceActive}
+                    reset={startPos}/>
             <input type="submit" value={labels.search[lang]} className={loadingSequenceActive ? 'disabled' : ''}/>
-        </form>
-    </div>)
+        </form>)
 }

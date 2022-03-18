@@ -37,7 +37,6 @@ const AlternativeRoute = ({altroute}) => {
     }
 
     const hoverVeloStop = ({type}, spot) => {
-        console.log(spot)
         type === 'mouseenter' ? setHoverDest(spot) : setHoverDest(null);
     }
 

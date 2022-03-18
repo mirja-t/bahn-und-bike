@@ -1,6 +1,5 @@
 export const distributeTrainlines = stops => {
     stops.forEach(stop => {
-        stop.destination_id = parseInt(stop.destination_id);
         stop.stop_number = parseInt(stop.stop_number);
         stop.lat = parseFloat(stop.lat);
         stop.lon = parseFloat(stop.lon);

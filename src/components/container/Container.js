@@ -5,13 +5,16 @@ import { Map } from '../map/Map';
 import { TravelDuration } from '../form/TravelDuration';
 import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
-import { setUserScale } from '../../AppSlice';
+import { 
+    setUserScale
+} from '../../AppSlice';
 import { 
     selectTrainrouteList,
     selectActiveSection,
     setActiveSection,
     setCurrentTrainroutes,
-    setTrainLinesAlongVeloroute
+    setTrainLinesAlongVeloroute,
+    selectStartPos
 } from '../map/trainroutes/TrainroutesSlice';
 import { 
     selectActiveVeloroute,
@@ -23,6 +26,7 @@ import {
     selectActiveDestination
 } from '../destinationDetails/DestinationDetailsSlice';
 import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
+import { weserLippe } from '../../data/veloroutes';
 
 export const Container = ({lang}) => {
 
@@ -31,7 +35,7 @@ export const Container = ({lang}) => {
     const activeDestination = useSelector(selectActiveDestination);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-
+    const startPos = useSelector(selectStartPos);
     const [value, setValue] = useState(0);
     const [submitVal, setSubmitVal] = useState(0);
     const [dimensions, setDimensions] = useState([0, 0]);
@@ -61,6 +65,25 @@ export const Container = ({lang}) => {
         dispatch(setTrainLinesAlongVeloroute([]));
         dispatch(setUserScale(1));
     }
+
+    useEffect(()=>{
+        const r1 = [];
+        weserLippe.forEach((s, i) =>{
+            let idxstr = i.toString()
+            r1.push({
+                id: parseInt('20' + idxstr.padStart(4, 0)),
+                destination_id: s.stop_id,
+                veloroute_id: 20,
+                stop_number: i
+            })
+        })
+        console.log(r1)
+    },[]);
+
+    useEffect(()=>{
+        setSubmitVal(0);
+        setValue(0);
+    },[startPos]);
 
     useEffect(()=>{
 

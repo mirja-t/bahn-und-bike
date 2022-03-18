@@ -1,0 +1,36 @@
+@import '../../../variables.scss';
+@import '../../../assets/mixins/caret.scss';
+
+.startdestination {
+    .selectwrapper {
+        position: relative;
+        margin-top: $padding-xs;
+        
+        &::before {
+            @extend .caret;
+
+            content: '';
+            border-top-color: #666;
+            pointer-events: none;
+            position: absolute;
+            top: 40%;
+            right: 0.35em;
+            transform: scale(0.55) translateX(-50%);
+        }
+    }
+    select#startdest {
+        cursor: pointer;
+        background: linear-gradient(0deg, #ccc, transparent);
+        width: 100%;
+        appearance: none;
+        border-radius: $borderradius;
+        min-width: calc( 3em + 0.5vw );
+        padding: $padding-xs $padding-xl $padding-xs $padding-l;
+        border: none;
+        box-shadow: inset -1px -1px 2px rgba(0,0,0,0.15), 
+            1px 1px 0 rgba(255,255,255,0.5), 
+            -1px -1px 1px rgba(0, 0, 0, 0.1), 
+            inset 1px 1px 2px rgba(255,255,255,0.8),
+            9px 9px 30px rgba(0,0,0,0.05);
+    }
+}

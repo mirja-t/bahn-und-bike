@@ -3,7 +3,7 @@
 #zoompanel {
     position: absolute;
     z-index: 9;
-    bottom: 0;
+    bottom: $mainpadding;
     left: $padding-l;
     button {
         height: $padding-xl;
