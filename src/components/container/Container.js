@@ -28,7 +28,6 @@ import {
     selectActiveDestination
 } from '../destinationDetails/DestinationDetailsSlice';
 import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
-import { uckermaerkischerRadrundweg } from '../../data/veloroutes';
 
 export const Container = ({lang}) => {
 
@@ -68,20 +67,6 @@ export const Container = ({lang}) => {
         dispatch(setTrainLinesAlongVeloroute([]));
         dispatch(setUserScale(1));
     }
-
-    useEffect(()=>{
-        const r1 = [];
-        uckermaerkischerRadrundweg.forEach((s, i) =>{
-            let idxstr = i.toString()
-            r1.push({
-                id: parseInt('14' + idxstr.padStart(4, 0)),
-                destination_id: s.stop_id,
-                veloroute_id: 14,
-                stop_number: i
-            })
-        })
-        //console.log(r1)
-    },[]);
 
     useEffect(()=>{
         setSubmitVal(0);
