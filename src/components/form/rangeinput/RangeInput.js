@@ -37,8 +37,8 @@ export const RangeInput = ({
     }
 
     return (<fieldset className={loadingSequenceActive ? 'range-slider disabled' : 'range-slider'}>
-        <label htmlFor="fahrtzeit">{labels.traveltime[lang]}:</label>
-        <span> {labels.upto[lang]} {getTime(value*30, lang)}</span>
+        <label htmlFor="fahrtzeit">{labels[lang].traveltime}:</label>
+        <span> {labels[lang].upto} {getTime(value*30, lang)}</span>
         <div>
         <input 
             disabled={loadingSequenceActive ? true : false}

@@ -102,7 +102,7 @@ export const Map = ({
                 { loadingSpring((styles, item) => item && (<animated.div className="loading" style={styles}><Loading lang={lang}/></animated.div>) )}
                 { !isLoading && !loadingSequence && (<>
                     {(parseInt(value)===0 && journeys.length===0 && !isLoading) && (<div className="instructions">
-                        <p>{labels.instruction[lang]}</p>
+                        <p>{labels[lang].instruction}</p>
                     </div>)}
                     <Trainroutes 
                         zoom={zoom} />

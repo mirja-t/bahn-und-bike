@@ -12,12 +12,13 @@ export const loadLang = createAsyncThunk(
         return response.json()
       })
       .then(JSONresponse => {
-        const obj = {};
+        const obj = {
+          de: {},
+          en: {}
+        };
         JSONresponse.forEach(el => {
-          obj[el.id] = {
-              en: el.en,
-              de: el.de
-          }
+          obj.de[el.id] = el.de 
+          obj.en[el.id] = el.en
         })
         return obj
       });

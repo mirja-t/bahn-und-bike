@@ -70,9 +70,9 @@ export const VelorouteDetails = ({
                         </div>
                     </header>
                     <section className="veloroute-details">
-                        <h5>{`${labels.totaldistance[lang]}`}</h5>
+                        <h5>{`${labels[lang].totaldistance}`}</h5>
                         <p>{activeVeloroute.len}km</p>
-                        <Collapse title={`${labels.cyclingroutelegs[lang]}`}>
+                        <Collapse title={`${labels[lang].cyclingroutelegs}`}>
                             <ol className="veloroute-stops">
                                 {activeVeloroute.route
                                 .slice(0, activeVeloroute.route[0][0].stop_id === activeVeloroute.route[activeVeloroute.route.length-1][activeVeloroute.route[activeVeloroute.route.length-1].length-1].stop_id ? activeVeloroute.route.length-1 : activeVeloroute.route.length)
@@ -89,7 +89,7 @@ export const VelorouteDetails = ({
                     </section>
                     { activeVelorouteSection && 
                         (<section className="section">
-                            <h5>{labels.alternativeveloroutes[lang]}</h5>
+                            <h5>{labels[lang].alternativeveloroutes}</h5>
                             { crossingVeloroutes && !crossingVeloroutesLoading &&
                                 <ItemList
                                     items={crossingVeloroutes}
@@ -98,7 +98,7 @@ export const VelorouteDetails = ({
                                     fn={setCurrentCombinedVeloroute} />}
                         </section>)
                     }
-                    {!activeVelorouteSection && labels.nolegchosen[lang]}
+                    {!activeVelorouteSection && labels[lang].nolegchosen}
                 </div>
             )}
         </div>

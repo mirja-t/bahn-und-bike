@@ -31,7 +31,7 @@ export const ItemList = ({
       );
 
     return (<ul className="destinationslist">
-        {items.length < 1 && (<li className="route nomatch">{`${labels.nomatch[lang]}`}</li>)}
+        {items.length < 1 && (<li className="route nomatch">{`${labels[lang].nomatch}`}</li>)}
         {springs.map((styles, i) => (
             <animated.li 
                 style={styles}

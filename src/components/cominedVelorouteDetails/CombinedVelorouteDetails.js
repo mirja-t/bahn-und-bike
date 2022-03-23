@@ -36,11 +36,11 @@ export const CombinedVelorouteDetails = ({
         >
         { activeVelorouteSection && (
             <section className="veloroute-details veloroute-section-details">
-                <h5>{`${labels.leg[lang]}`}</h5>
+                <h5>{`${labels[lang].leg}`}</h5>
                 <h3 className="veloroute-trainstops">
                     <ActiveVelorouteSectionIcon num={1}/>
                     <span>
-                        {`${labels.from[lang]} ${activeVelorouteSection[0].stop_name}`} 
+                        {`${labels[lang].from} ${activeVelorouteSection[0].stop_name}`} 
                         { activeVelorouteSection[0].train_list.map((s, i) => (
                             <span 
                                 key ={i} 
@@ -51,7 +51,7 @@ export const CombinedVelorouteDetails = ({
                 <h3 className="veloroute-trainstops">
                     <ActiveVelorouteSectionIcon num={2}/>
                     <span>
-                        {`${labels.to[lang]} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
+                        {`${labels[lang].to} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
                         { activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
                             <span 
                                 key={i}
@@ -60,7 +60,7 @@ export const CombinedVelorouteDetails = ({
                 </h3>
                 
                 { activeVelorouteSection.length > 2 && (<>
-                    <h6>{labels.via[lang]}</h6>
+                    <h6>{labels[lang].via}</h6>
                     <ul className="veloroute-stops">
                         {activeVelorouteSection.slice(1,activeVelorouteSection.length-1)
                             .filter((s, idx, arr) => s.stop_name !== arr[idx-1]?.stop_name)
@@ -75,13 +75,13 @@ export const CombinedVelorouteDetails = ({
                         )}
                     </ul>
                 </>)}
-                <h6>{`${labels.distance[lang]} (${labels.airline[lang]})`}</h6>
+                <h6>{`${labels[lang].distance} (${labels[lang].airline})`}</h6>
                 <p>{dist} km</p>
             </section>)}
             
             {combinedVeloroute && (
                 <section>
-                    <h5>{labels.combined_veloroute[lang]}</h5>
+                    <h5>{labels[lang].combined_veloroute}</h5>
                     <header>
                         <div className="details-headline">
                             <PinIcon size="small"><VelorouteIcon/></PinIcon>

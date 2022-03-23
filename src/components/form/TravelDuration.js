@@ -25,6 +25,6 @@ export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lan
                     handleInputChange={handleInputChange}
                     loadingSequenceActive={loadingSequenceActive}
                     reset={startPos}/>
-            <input type="submit" value={labels.search[lang]} className={loadingSequenceActive ? 'disabled' : ''}/>
+            <input type="submit" value={labels[lang].search} className={loadingSequenceActive ? 'disabled' : ''}/>
         </form>)
 }
