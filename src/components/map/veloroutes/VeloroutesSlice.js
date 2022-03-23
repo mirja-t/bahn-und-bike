@@ -58,7 +58,6 @@ export const setVelorouteSectionActiveThunk = ({trainrouteList, activeVeloroute,
     const activeVelorouteIds = activeVRoute.map(stop => stop.stop_id);
     const stopIds = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
     const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
-    console.log(activeVelorouteIds)
     dispatch(setActiveVelorouteSection(activeVRoute));
     dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute));
     dispatch(loadCrossingVeloroutes(activeVelorouteIds));

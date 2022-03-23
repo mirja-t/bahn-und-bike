@@ -25,7 +25,6 @@ export const CombinedVelorouteDetails = ({
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
 
     const hoverVeloStop = ({type}, id) => {
-        console.log(activeVelorouteSection, id)
         type==='mouseenter' ? dispatch(setActiveVelorouteStop(id)) : dispatch(setActiveVelorouteStop(null))
     }
 
