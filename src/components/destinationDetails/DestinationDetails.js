@@ -1,22 +1,26 @@
 import './destinationDetails.scss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getTime } from '../../utils/getTime';
 import { ScrollContent } from '../stateless/scrollcontent/ScrollContent';
 import { selectLang } from '../../AppSlice';
 import { 
     selectVelorouteList,
     selectActiveVeloroute,
-    selectVeloroutesLoading
+    selectVeloroutesLoading,
+    setActiveVelorouteSection,
+    setActiveVeloroute,
+    setCombinedVeloroute
 } from '../map/veloroutes/VeloroutesSlice';
 import { 
-    selectActiveSection
+    selectActiveSection,
+    setTrainLinesAlongVeloroute
 } from '../map/trainroutes/TrainroutesSlice';
 import { 
     selectActiveDestination
 } from './DestinationDetailsSlice';
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { TrainIcon } from '../stateless/icons/TrainIcon';
-import { RouteList } from '../map/routelist/RouteList';
+import { ItemList } from '../stateless/itemlist/ItemList';
 
 export const DestinationDetails = ({
     parent,
@@ -36,7 +40,16 @@ export const DestinationDetails = ({
     const trains = activeDestination?.trainlines.map((t, i) => (<span className="train" key={i}>{t}</span>));
     const train = activeSection && <span className="train">{activeSection.line}</span>;
     const trainList = train ? train : trains;
-    
+
+    const dispatch = useDispatch();
+
+    const setVelorouteActive = vroute => {
+        dispatch(setTrainLinesAlongVeloroute([]))
+        dispatch(setActiveVelorouteSection(null))
+        dispatch(setActiveVeloroute(vroute))
+        dispatch(setCombinedVeloroute(null))
+    }
+
     return (<ScrollContent parentEl={parent} transitionComplete={true} >
         
         <div 
@@ -50,20 +63,23 @@ export const DestinationDetails = ({
                     </div>
                 </header>
                 
-                {activeSection && <section className="section d-flex">
-                    <div className="duration-label">
-                        <h5>{labels.traveltime[lang]}</h5>
-                        {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
-                    </div>
-                </section>}
-                
+                {activeSection && 
+                    <section className="section d-flex">
+                        <div className="duration-label">
+                            <h5>{labels.traveltime[lang]}</h5>
+                            {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
+                        </div>
+                    </section>
+                }
+
                 <section className="section">
                     <h5>{labels.veloroutes[lang]}</h5>
                     {veloroutesLoading ? labels.loading[lang] :
-                        <RouteList 
-                            veloroutes={veloroutes} 
-                            activeVeloroute={activeVeloroute}
-                            lang={lang}/>
+                        <ItemList
+                            items={veloroutes}
+                            lang={lang}
+                            activeItem={activeVeloroute}
+                            fn={setVelorouteActive} />
                     }
                 </section>
             </>)}

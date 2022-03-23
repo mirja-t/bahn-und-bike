@@ -15,7 +15,8 @@ import {
     selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
-    loadVeloroutes
+    loadVeloroutes,
+    setCombinedVeloroute
 } from '../veloroutes/VeloroutesSlice';
 import {
     selectActiveDestination,
@@ -53,6 +54,7 @@ export const Trainroutes = ({
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
+        dispatch(setCombinedVeloroute(null))
     }
 
     const setAdditionalTrainlineActive = (line) => {

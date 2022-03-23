@@ -1,7 +1,7 @@
 import './pins.scss';
 
-export const PinIcon = ({children}) => {
-    return (<div className="pin">
+export const PinIcon = ({children, size}) => {
+    return (<div className={size==='small' ? 'pin small' : 'pin'}>
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 44 44" xmlSpace="preserve">
         <g transform="translate(5 5)"
             className="icon-train">

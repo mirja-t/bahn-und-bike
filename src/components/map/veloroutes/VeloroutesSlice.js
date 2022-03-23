@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { refactorVeloroutes } from '../../../utils/refactorVeloroutes';
 import { headers, url } from '../../../config/config';
 import { generateCrossingVeloroutes } from '../../../utils/generateCrossingVeloroutes';
+import { generateTrainlinesAlongVeloroute } from '../../../utils/generateTrainlinesAlongVeloroute';
+import { setTrainLinesAlongVeloroute, setActiveSection } from '../trainroutes/TrainroutesSlice';
 
 export const loadVeloroutes = createAsyncThunk(
   "veloroutes/setVelorouteList",
@@ -27,14 +29,13 @@ export const loadVeloroutes = createAsyncThunk(
 
 export const loadCrossingVeloroutes = createAsyncThunk(
   "veloroutes/setCrossingVelorouteList",
-  async (activeIds, thunkAPI) => {
-
+  async (activeVelorouteIds, thunkAPI) => {
     const state = thunkAPI.getState()
     const destinations = state.destinationDetails.destinationList;
     const activeVeloroute = state.veloroutes.activeVeloroute;
     const activeVelorouteSection = state.veloroutes.activeVelorouteSection;
 
-    const veloroutesQuery = 'veloroutes/ids[]=' + activeIds.join('&ids[]=');
+    const veloroutesQuery = 'veloroutes/ids[]=' + activeVelorouteIds.join('&ids[]=');
       
     const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
     .then(response => response.json());
@@ -44,13 +45,27 @@ export const loadCrossingVeloroutes = createAsyncThunk(
 
     const journeys = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
     .then(response => response.json());
-
     let refactoredJourneys = refactorVeloroutes(journeys, destinations).filter(route => route.id !== activeVeloroute.id);
     refactoredJourneys = generateCrossingVeloroutes(activeVelorouteSection, refactoredJourneys);
 
     return refactoredJourneys
   }
 );
+
+export const setVelorouteSectionActiveThunk = ({trainrouteList, activeVeloroute, idx}) => {
+  return (dispatch) => {
+    const activeVRoute = activeVeloroute.route[idx];
+    const activeVelorouteIds = activeVRoute.map(stop => stop.stop_id);
+    const stopIds = [activeVRoute[0].stop_id, activeVRoute[activeVRoute.length-1].stop_id];
+    const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
+    console.log(activeVelorouteIds)
+    dispatch(setActiveVelorouteSection(activeVRoute));
+    dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute));
+    dispatch(loadCrossingVeloroutes(activeVelorouteIds));
+    dispatch(setCombinedVeloroute(null));
+    dispatch(setActiveSection(null));
+  };
+};
 
 export const veloroutesSlice = createSlice({
     name: "veloroutes",
@@ -65,7 +80,8 @@ export const veloroutesSlice = createSlice({
         activeVeloroute: null,
         activeVelorouteSection: null,
         hoveredVelorouteSection: null,
-        activeVelorouteStop: null
+        activeVelorouteStop: null,
+        combinedVelorouteActive: null
     },
     reducers: {
       setActiveVeloroute: (state, action) => {
