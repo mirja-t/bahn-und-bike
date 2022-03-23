@@ -15,6 +15,6 @@ export const Loading = ({lang}) => {
             style={{ height: '12em', width: '12em' }}
             >
         </Player>
-        <p>{labels.loading[lang]}</p>
+        <p>{labels[lang].loading}</p>
     </div>
 }

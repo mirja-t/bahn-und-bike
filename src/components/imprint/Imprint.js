@@ -8,22 +8,22 @@ export const Imprint = ({lang, resetState}) => {
 
     return (<div className="container">
         <div className="wrapper">
-            <h1>{labels.imprint[lang]}</h1>
-            <h5>{labels.siteowner[lang]}</h5>
+            <h1>{labels[lang].imprint}</h1>
+            <h5>{labels[lang].siteowner}</h5>
             <p>Mirja Tschakarov</p>
             <p>Friedrichsberger Straße 5</p>
             <p>10243 Berlin</p>
-            <h5>{labels.contact[lang]}</h5>
-            <p><span>{labels.email[lang]}</span> mirja.t@bahn-und-bike.eu</p>
-            <p><span>{labels.phone[lang]}</span> 017667594878</p>
+            <h5>{labels[lang].contact}</h5>
+            <p><span>{labels[lang].email}</span> mirja.t@bahn-und-bike.eu</p>
+            <p><span>{labels[lang].phone}</span> 017667594878</p>
         </div>
         <p className="margintop">
         <Link 
             className="button" 
             to="/" 
-            title={labels.backtostart[lang]}
+            title={labels[lang].backtostart}
             onClick={resetState}>
-                {labels.backtostart[lang]}
+                {labels[lang].backtostart}
         </Link>
         </p>
     </div>)

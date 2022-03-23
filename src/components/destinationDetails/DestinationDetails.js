@@ -35,7 +35,7 @@ export const DestinationDetails = ({
     const veloroutesLoading =  useSelector(selectVeloroutesLoading);
     const veloroutes = useSelector(selectVelorouteList);
 
-    const tripName = activeSection ? `${labels.from[lang]} ${activeSection?.firstStation.stop_name} ${labels.to[lang]} ${activeSection?.lastStation.stop_name}` : null;
+    const tripName = activeSection ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}` : null;
     const headline = activeSection ? tripName : activeDestination?.stop_name;
     const trains = activeDestination?.trainlines.map((t, i) => (<span className="train" key={i}>{t}</span>));
     const train = activeSection && <span className="train">{activeSection.line}</span>;
@@ -66,15 +66,15 @@ export const DestinationDetails = ({
                 {activeSection && 
                     <section className="section d-flex">
                         <div className="duration-label">
-                            <h5>{labels.traveltime[lang]}</h5>
+                            <h5>{labels[lang].traveltime}</h5>
                             {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
                         </div>
                     </section>
                 }
 
                 <section className="section">
-                    <h5>{labels.veloroutes[lang]}</h5>
-                    {veloroutesLoading ? labels.loading[lang] :
+                    <h5>{labels[lang].veloroutes}</h5>
+                    {veloroutesLoading ? labels[lang].loading :
                         <ItemList
                             items={veloroutes}
                             lang={lang}

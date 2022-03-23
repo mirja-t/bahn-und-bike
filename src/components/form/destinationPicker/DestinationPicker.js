@@ -22,7 +22,7 @@ export const DestinationPicker = ({lang}) => {
 
     return (
     <fieldset className="startdestination">
-        <label htmlFor="startdest">{labels.startdest[lang]}:</label>
+        <label htmlFor="startdest">{labels[lang].startdest}:</label>
         <div className="selectwrapper">
             <select 
                 name="dest" 

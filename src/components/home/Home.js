@@ -9,19 +9,19 @@ export const Home = ({lang}) => {
 
     return (<div id="home" className="container">
         <div className="wrapper">
-            <h1>{labels.home_headline[lang]}</h1>
-            <h3>{labels.home_subheadline[lang]}</h3>
+            <h1>{labels[lang].home_headline}</h1>
+            <h3>{labels[lang].home_subheadline}</h3>
             <p className="margintop">
-                {labels.home_p1[lang]}
+                {labels[lang].home_p1}
             </p>
             <ol>
-                <li>{labels.home_l1[lang]}</li>
-                <li>{labels.home_l2[lang]}</li>
-                <li>{labels.home_l3[lang]}</li>
-                <li>{labels.home_l4[lang]}</li>
+                <li>{labels[lang].home_l1}</li>
+                <li>{labels[lang].home_l2}</li>
+                <li>{labels[lang].home_l3}</li>
+                <li>{labels[lang].home_l4}</li>
             </ol>
             <p className="margintop">
-                <Link to="/routefinder" title={labels.start[lang]}><button>{labels.start[lang]}</button></Link>
+                <Link to="/routefinder" title={labels[lang].start}><button>{labels[lang].start}</button></Link>
             </p>
         </div>
         <div id="germany">
