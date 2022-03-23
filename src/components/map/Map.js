@@ -58,7 +58,7 @@ export const Map = ({
     // set min time for loading animation
     useEffect(()=>{
         if(isLoading) return
-        const timer = setTimeout(() => { dispatch(setLoadingSequenceActive(false)) }, 2000);
+        const timer = setTimeout(() => { dispatch(setLoadingSequenceActive(false)) }, 200);
         return () => { clearTimeout(timer) }
     },[dispatch, isLoading]);
 

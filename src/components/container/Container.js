@@ -5,6 +5,7 @@ import { Map } from '../map/Map';
 import { TravelDuration } from '../form/TravelDuration';
 import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
+import { CombinedVelorouteDetails } from '../cominedVelorouteDetails/CombinedVelorouteDetails';
 import { 
     setUserScale
 } from '../../AppSlice';
@@ -19,14 +20,15 @@ import {
 import { 
     selectActiveVeloroute,
     setActiveVeloroute,
-    setActiveVelorouteSection
+    setActiveVelorouteSection,
+    selectActiveVelorouteSection
 } from '../map/veloroutes/VeloroutesSlice';
 import {
     setActiveDestination,
     selectActiveDestination
 } from '../destinationDetails/DestinationDetailsSlice';
 import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
-import { weserLippe } from '../../data/veloroutes';
+import { uckermaerkischerRadrundweg } from '../../data/veloroutes';
 
 export const Container = ({lang}) => {
 
@@ -36,6 +38,7 @@ export const Container = ({lang}) => {
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const startPos = useSelector(selectStartPos);
+    const velorouteSectionActive = useSelector(selectActiveVelorouteSection);
     const [value, setValue] = useState(0);
     const [submitVal, setSubmitVal] = useState(0);
     const [dimensions, setDimensions] = useState([0, 0]);
@@ -68,16 +71,16 @@ export const Container = ({lang}) => {
 
     useEffect(()=>{
         const r1 = [];
-        weserLippe.forEach((s, i) =>{
+        uckermaerkischerRadrundweg.forEach((s, i) =>{
             let idxstr = i.toString()
             r1.push({
-                id: parseInt('20' + idxstr.padStart(4, 0)),
+                id: parseInt('14' + idxstr.padStart(4, 0)),
                 destination_id: s.stop_id,
-                veloroute_id: 20,
+                veloroute_id: 14,
                 stop_number: i
             })
         })
-        console.log(r1)
+        //console.log(r1)
     },[]);
 
     useEffect(()=>{
@@ -97,7 +100,11 @@ export const Container = ({lang}) => {
             setContainerClass('width-3');
         }
 
-    },[activeVeloroute, activeDestination, activeSection]);
+        if(velorouteSectionActive && !activeSection) {
+            setContainerClass(prev => `${prev} shift`);
+        }
+
+    },[activeVeloroute, activeDestination, activeSection, velorouteSectionActive]);
 
     useEffect(()=>{
         let dir = direction.current;
@@ -157,6 +164,9 @@ export const Container = ({lang}) => {
                     parent={container.current}
                     lang={lang}/>
                 <VelorouteDetails
+                    parent={container.current}
+                    lang={lang}/>
+                <CombinedVelorouteDetails
                     parent={container.current}
                     lang={lang}/>
             </aside>

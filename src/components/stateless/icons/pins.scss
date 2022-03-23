@@ -19,5 +19,8 @@
             fill: $veloroute-hover;
         }
     }
-    
+    &.small {
+        width: 3em;
+        height: 3em;
+    }
 }

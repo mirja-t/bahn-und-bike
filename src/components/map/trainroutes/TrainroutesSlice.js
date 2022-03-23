@@ -31,7 +31,7 @@ export const loadTrainroutes = createAsyncThunk(
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: ['8011160', '8098160', '8011306', '8011118', '8011113', '8011102', '8011162', '8010036'],
+        startPos: ['8011160', '8011306', '8011118', '8011113', '8011102', '8011162', '8010036'],
         travelInterval: 30,
         trainrouteList: [],
         trainrouteListLoading: false,

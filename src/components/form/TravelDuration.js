@@ -1,7 +1,6 @@
 import './travelduration.scss';
 import { useSelector } from 'react-redux';
 import { RangeInput } from './rangeinput/RangeInput';
-import { DestinationPicker } from './destinationPicker/DestinationPicker';
 import { 
     selectLang,
     selectLoadingSequenceActive 
@@ -16,7 +15,6 @@ export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lan
 
     return (
         <form id="travelduration" onSubmit={handleSubmit}>
-                <DestinationPicker lang={lang}/>            
                 <RangeInput 
                     lang={lang}
                     type="range" 

@@ -1,27 +1,31 @@
 
 export const generateCrossingVeloroutes = (activeVelorouteSection, crossingVeloroutes) => {
-
-    const alternativeRoutes = [];
+    const crossingVRoutes = [];
 
     activeVelorouteSection.forEach((stop, idx) => {
         if(idx === 0 || idx === activeVelorouteSection.length - 1) return
-        const altRoutes = crossingVeloroutes.map(route => {
+
+        // find crossing section of crossing veloroute
+        const crossingRoutes = crossingVeloroutes.map(route => {
             const segment = route.route.find(segment => segment.map(s => s.stop_id).includes(stop.stop_id))
             return {
                 id: route.id,
                 name: route.name,
                 route: segment
             }
-        }).filter(segment => segment.route)
-        altRoutes.forEach(alternativeRoute => {
-            const index = alternativeRoute.route.map(s => s.stop_id).indexOf(stop.stop_id);
-            let segments = alternativeRoute.route;
+        })
+        .filter(segment => segment.route); // removes elements with route: undefined
 
-            if(index !== 0 || index !== segments.length-1){
-                segments = [segments.slice(index), segments.slice(0, index + 1).reverse()]
+        crossingRoutes.forEach(crossingRoute => {
+            // find junction stop for current velosection stop
+            const indexOfJunction = crossingRoute.route.map(s => s.stop_id).indexOf(stop.stop_id);
+            let segments = crossingRoute.route;
+
+            if((indexOfJunction !== 0 || indexOfJunction !== segments.length-1) && segments.length > 2){
+                segments = [segments.slice(indexOfJunction), segments.slice(0, indexOfJunction + 1).reverse()]
             }
             else {
-                if(index===0){
+                if(indexOfJunction===0){
                     segments = [segments]
                 }
                 else{
@@ -29,17 +33,19 @@ export const generateCrossingVeloroutes = (activeVelorouteSection, crossingVelor
                     segments = [segments]
                 }
             }
-           
+
             segments.forEach(segment => {
-                const route = [activeVelorouteSection.slice(0, idx+1), segment];
-                const altRoute = {
-                    id: alternativeRoute.id,
-                    name: alternativeRoute.name,
-                    route: route
-                }
-                alternativeRoutes.push(altRoute)
+                const routes = [[activeVelorouteSection.slice(0, idx+1), segment],[activeVelorouteSection.slice(idx).reverse(), segment]];
+                routes.forEach(r => {
+                    if(r[0][0].stop_id !== r[1][r[1].length-1].stop_id) crossingVRoutes.push({
+                        id: crossingRoute.id,
+                        veloroute_name: crossingRoute.name,
+                        name: `${r[0][0].stop_name} – ${r[1][r[1].length-1].stop_name}`,
+                        route: r
+                    })
+                })
             })
         })
     })
-    return alternativeRoutes
+    return crossingVRoutes
 }

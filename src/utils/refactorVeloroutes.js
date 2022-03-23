@@ -3,9 +3,11 @@ export const refactorVeloroutes = (journeys, destinations) => {
 
   const stateArr = [];
     journeys.forEach((s, idx) => {
+      // destination name w/o 'Bahnhof'
+      const indexEnd = s.dest_name.indexOf(', Bahnhof') > 0 ? s.dest_name.indexOf(', Bahnhof') : s.dest_name.length;
 
       const stop = {
-        stop_name: s.dest_name,
+        stop_name: s.dest_name.slice(0, indexEnd),
         stop_id: s.dest_id,
         train_list: destinations[s.dest_id] ? destinations[s.dest_id]?.trainlines : [],
         x: s.lon,

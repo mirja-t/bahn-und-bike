@@ -1,6 +1,10 @@
 @import '../../variables.scss';
 @import '../../assets/mixins/caret.scss';
 
+$sidebarwidth: 25;
+$sidebarwidth-xl: 20;
+$transition: width .5s ease;
+
 #wrapper {
     display: flex;
     flex-direction: column;
@@ -10,22 +14,29 @@
     overflow: hidden;
 }
 #container {
-    width: 150vw;
+    width: 3*$sidebarwidth + 100vw;
     position: relative;
     display: flex;
     justify-content: right;
     flex-grow: 1;
-    transition: width .5s ease;
+    transition: $transition;
     &[class*='width-'] {
-        transition: width .5s ease;
+        transition: $transition;
     }
-    &.width-1 {width: 100vw}
-    &.width-2 {width: 125vw}
-    &.width-3 {width: 150vw}
+    &.width-1 {width: 1*$sidebarwidth + 100vw}
+    &.width-2 {width: 2*$sidebarwidth + 100vw}
+    &.width-3 {width: 3*$sidebarwidth + 100vw}
     @media (min-width: $breakpoint-l) {
-        &.width-1 {width: 100vw}
-        &.width-2 {width: 120vw}
-        &.width-3 {width: 140vw}
+        &.width-1 {width: 1*$sidebarwidth-xl + 100vw}
+        &.width-2 {width: 2*$sidebarwidth-xl + 100vw}
+        &.width-3 {width: 3*$sidebarwidth-xl + 100vw}
+    }
+
+    &.shift {
+        aside > div:first-child {
+            width: 0vw;
+            transition: $transition;
+        }
     }
 }
 main {
@@ -45,6 +56,14 @@ aside {
     pointer-events: none;
     position: relative;
     display: flex;
+    width: 3*$sidebarwidth + 0vw;
+    @media (min-width: $breakpoint-l) {
+        width: 3*$sidebarwidth-xl + 0vw;
+    }
+    > div {
+        width: $sidebarwidth + 0vw;
+        transition: $transition;
+    }
 }
 .instructions {
     position: absolute;

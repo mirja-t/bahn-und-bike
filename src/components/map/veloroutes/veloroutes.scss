@@ -9,15 +9,8 @@
         &.hover {
             path.veloroute-section {
                 stroke-dasharray: 0;
-                stroke: $veloroute-hover;
+                stroke: $veloroute;
             }
-        }
-    }
-    .veloroute-stop{
-        fill: $veloroute;
-        transform: scale(1);
-        &.hover {
-            transform: scale(1.8);
         }
     }
     path.veloroute-section {
@@ -42,10 +35,6 @@
         stroke: transparent;
         fill: none;
     }
-    circle.veloroute-station {
-        stroke: $veloroute;
-        fill: rgba(255,255,255,0.66);
-    }
 }
 .veloroute-details {
     display: block;
@@ -54,8 +43,4 @@
         font-size: 80%;
     }
 }
-.veloroute.destinationLabel{
-    tspan {
-        fill: $veloroute; 
-    }
-}
+

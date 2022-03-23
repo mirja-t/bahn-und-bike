@@ -17,6 +17,7 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
         .velo-icon{
             width: $iconsize;
             height: $iconsize;
+            flex-shrink: 0;
             rect.bg{
                 fill: #ccc;
                 transition: all .35s ease;
