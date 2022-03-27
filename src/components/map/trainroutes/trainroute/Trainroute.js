@@ -35,12 +35,12 @@ export const Trainroute = ({
         <animated.polyline 
             className="route-bg"
             strokeWidth={5 / strokeScale}
-            points={item.route}
+            points={item.points}
             style={styles} />
         <animated.polyline 
             className="route"
             strokeWidth={1 / strokeScale}
-            points={item.route}
+            points={item.points}
             style={{...styles}} />
         <Trainstop 
             key={uuidv4()}

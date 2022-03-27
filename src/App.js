@@ -52,7 +52,7 @@ function App() {
     dispatch(setActiveVelorouteSection(null));
     dispatch(setTrainLinesAlongVeloroute([]));
     dispatch(setUserScale(1));
-    dispatch(loadTrainroutes({start}));
+    dispatch(loadTrainroutes(start));
   },[dispatch, start]);
 
   useEffect(()=>{

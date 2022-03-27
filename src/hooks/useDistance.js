@@ -20,7 +20,7 @@ export const useDistance = (section) => {
 
         const setDistance = (s) => {
             const distances = s.slice(1).map((p, idx) => {
-                return measure(s[idx].y, s[idx].x, p.y, p.x)
+                return measure(s[idx].lat, s[idx].lon, p.lat, p.lon)
             });
             return distances.reduce((acc, d) => acc + d)
         }

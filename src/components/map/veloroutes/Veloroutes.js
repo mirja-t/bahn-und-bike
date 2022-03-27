@@ -8,7 +8,6 @@ import {
     selectActiveVelorouteStop,
     selectCombinedVeloroute
 } from './VeloroutesSlice';
-import { useRoutePath } from '../../../hooks/useRoutePath';
 import { AlternativeRoute } from './alternativeroute/AlternativeRoute';
 import { VelorouteStop } from './velorouteStop/VelorouteStop';
 import { VeloroutePath } from './veloroutePath/veloroutePath';
@@ -17,7 +16,6 @@ import { ActiveVelorouteSectionDetails } from './activeVelorouteSectionDetails/A
 export const Veloroutes = ({strokeScale}) => {
 
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const routePaths = useRoutePath(activeVeloroute.route);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
@@ -29,7 +27,7 @@ export const Veloroutes = ({strokeScale}) => {
     return (<g 
         className="veloroute" > 
         
-        { routePaths.map((path, idx) => (
+        { activeVeloroute.path.map((path, idx) => (
             <VeloroutePath
                 key={idx}
                 idx={idx}

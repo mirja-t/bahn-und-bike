@@ -4,13 +4,15 @@ import { headers, url } from '../../../config/config';
 import { generateCrossingVeloroutes } from '../../../utils/generateCrossingVeloroutes';
 import { generateTrainlinesAlongVeloroute } from '../../../utils/generateTrainlinesAlongVeloroute';
 import { setTrainLinesAlongVeloroute, setActiveSection } from '../trainroutes/TrainroutesSlice';
+import { distributeTrainlines } from '../../../utils/distributeTrainlines';
 
 export const loadVeloroutes = createAsyncThunk(
   "veloroutes/setVelorouteList",
   async (activeIds, thunkAPI) => {
     const destinations = thunkAPI.getState().destinationDetails.destinationList;
+    const startDestinations = thunkAPI.getState().trainroutes.startPos;
 
-    const veloroutesQuery = 'veloroutes/ids[]=' + activeIds.join('&ids[]=');
+    const veloroutesQuery = 'veloroutes/ids[]=' + activeIds.filter(s => !startDestinations.includes(s)).join('&ids[]=');
       
     const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
     .then(response => response.json());
@@ -18,10 +20,12 @@ export const loadVeloroutes = createAsyncThunk(
     const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))];
     const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
 
-    const journeys = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
+    const velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
     .then(response => response.json());
 
-    const refactoredJourneys = refactorVeloroutes(journeys, destinations)
+    // add trainline list to veloroute stops
+    distributeTrainlines(velorouteStops, destinations);
+    const refactoredJourneys = refactorVeloroutes(velorouteStops);
 
     return refactoredJourneys
   }
@@ -43,9 +47,12 @@ export const loadCrossingVeloroutes = createAsyncThunk(
     const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))];
     const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
 
-    const journeys = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
+    const velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
     .then(response => response.json());
-    let refactoredJourneys = refactorVeloroutes(journeys, destinations).filter(route => route.id !== activeVeloroute.id);
+
+    // add trainline list to veloroute stops
+    distributeTrainlines(velorouteStops, destinations);
+    let refactoredJourneys = refactorVeloroutes(velorouteStops, destinations).filter(route => route.id !== activeVeloroute.id);
     refactoredJourneys = generateCrossingVeloroutes(activeVelorouteSection, refactoredJourneys);
 
     return refactoredJourneys
