@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { headers, url } from '../../../config/config';
-import { refactorTrainstops } from '../../../utils/refactorTrainstops';
+import { refactorStopData } from '../../../utils/refactorStopData';
 import { allocateTrainstopsToRoute } from '../../../utils/allocateTrainstopsToRoute';
-import { processDestinationData } from '../../../utils/processDestinationData';
-import { setDestinations } from '../../destinationDetails/DestinationDetailsSlice';
+import { setDestinationList } from '../../destinationDetails/destinationDetailsSlice';
 
 export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
-    async (start, ThunkAPI) => {
+    async (start, thunkAPI) => {
       const trainlinesQuery = 'trainlines/ids[]=' + start.join('&ids[]=');
       const trainlines = await fetch(`${url}${trainlinesQuery}`, {'headers': headers})
       .then(response => {
@@ -17,16 +16,13 @@ export const loadTrainroutes = createAsyncThunk(
 
       const trainlineIds = [...new Set(trainlines.map(s => s.trainline_id))];
       const trainroutesQuery = 'trainroutes/ids[]=' + trainlineIds.join('&ids[]=');
-
-      const trainstops = await fetch(`${url}${trainroutesQuery}`, {'headers': headers})
+      let trainstops = await fetch(`${url}${trainroutesQuery}`, {'headers': headers})
       .then(response => response.json());
+
+      thunkAPI.dispatch(setDestinationList(trainstops));
       
-      refactorTrainstops(trainstops);
-
+      trainstops = refactorStopData(trainstops);
       const trainroutes = allocateTrainstopsToRoute(trainlineIds, trainstops, start);
-
-      const destinations = processDestinationData(trainstops);
-      ThunkAPI.dispatch(setDestinations({destinations}));
       return trainroutes
 });
 

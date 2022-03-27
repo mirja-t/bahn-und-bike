@@ -17,14 +17,12 @@ export const useDistance = (section) => {
             const d = R * c;
             return d
         }
-
         const setDistance = (s) => {
             const distances = s.slice(1).map((p, idx) => {
                 return measure(s[idx].lat, s[idx].lon, p.lat, p.lon)
             });
-            return distances.reduce((acc, d) => acc + d)
+            return distances.reduce((acc, d) => acc + d, 0)
         }
-       
         const d = Math.round(setDistance(section));
         if(typeof d !== 'number') console.log("typeof d !== 'number'", d)
         setDist(d);

@@ -23,17 +23,12 @@ import {
     setActiveVelorouteSection,
     selectActiveVelorouteSection
 } from '../map/veloroutes/VeloroutesSlice';
-import {
-    setActiveDestination,
-    selectActiveDestination
-} from '../destinationDetails/DestinationDetailsSlice';
 import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
 
 export const Container = ({lang}) => {
 
     const dispatch = useDispatch();
     const trainrouteList = useSelector(selectTrainrouteList);
-    const activeDestination = useSelector(selectActiveDestination);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const startPos = useSelector(selectStartPos);
@@ -60,7 +55,6 @@ export const Container = ({lang}) => {
         const currTrains = generateCurrentTrainlines(trainrouteList, value);
         setSubmitVal(value);
         dispatch(setCurrentTrainroutes(currTrains));
-        dispatch(setActiveDestination(null));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
@@ -78,7 +72,7 @@ export const Container = ({lang}) => {
         if(activeVeloroute){
             setContainerClass('width-1');
         }
-        else if(activeDestination || activeSection){
+        else if(activeSection){
             setContainerClass('width-2');
         }
         else {
@@ -89,7 +83,7 @@ export const Container = ({lang}) => {
             setContainerClass(prev => `${prev} shift`);
         }
 
-    },[activeVeloroute, activeDestination, activeSection, velorouteSectionActive]);
+    },[activeVeloroute, activeSection, velorouteSectionActive]);
 
     useEffect(()=>{
         let dir = direction.current;

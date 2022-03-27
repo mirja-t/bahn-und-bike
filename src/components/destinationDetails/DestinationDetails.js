@@ -15,9 +15,6 @@ import {
     selectActiveSection,
     setTrainLinesAlongVeloroute
 } from '../map/trainroutes/TrainroutesSlice';
-import { 
-    selectActiveDestination
-} from './DestinationDetailsSlice';
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { TrainIcon } from '../stateless/icons/TrainIcon';
 import { ItemList } from '../stateless/itemlist/ItemList';
@@ -29,17 +26,13 @@ export const DestinationDetails = ({
 
     
     const labels = useSelector(selectLang);
-    const activeDestination = useSelector(selectActiveDestination);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutesLoading =  useSelector(selectVeloroutesLoading);
     const veloroutes = useSelector(selectVelorouteList);
 
-    const tripName = activeSection ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}` : null;
-    const headline = activeSection ? tripName : activeDestination?.stop_name;
-    const trains = activeDestination?.trainlines.map((t, i) => (<span className="train" key={i}>{t}</span>));
+    const headline = activeSection ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}` : null;
     const train = activeSection && <span className="train">{activeSection.line}</span>;
-    const trainList = train ? train : trains;
 
     const dispatch = useDispatch();
 
@@ -55,22 +48,20 @@ export const DestinationDetails = ({
         <div 
             id="destination"
             className="details">
-            {(activeDestination || activeSection) && (<>
+            {activeSection && (<>
                 <header>
                     <div className="details-headline">
                         <PinIcon><TrainIcon/></PinIcon>
-                        <h2>{`${headline}  `}{trainList}</h2>
+                        <h2>{`${headline}  `}{train}</h2>
                     </div>
                 </header>
                 
-                {activeSection && 
-                    <section className="section d-flex">
-                        <div className="duration-label">
-                            <h5>{labels[lang].traveltime}</h5>
-                            {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
-                        </div>
-                    </section>
-                }
+                <section className="section d-flex">
+                    <div className="duration-label">
+                        <h5>{labels[lang].traveltime}</h5>
+                        {activeSection && <p>{getTime(activeSection.dur, lang)}</p>}
+                    </div>
+                </section>
 
                 <section className="section">
                     <h5>{labels[lang].veloroutes}</h5>

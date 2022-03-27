@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { refactorVeloroutes } from '../../../utils/refactorVeloroutes';
+import { allocateVeloroutestopsToRoute } from '../../../utils/allocateVeloroutestopsToRoute';
 import { headers, url } from '../../../config/config';
 import { generateCrossingVeloroutes } from '../../../utils/generateCrossingVeloroutes';
 import { generateTrainlinesAlongVeloroute } from '../../../utils/generateTrainlinesAlongVeloroute';
 import { setTrainLinesAlongVeloroute, setActiveSection } from '../trainroutes/TrainroutesSlice';
-import { distributeTrainlines } from '../../../utils/distributeTrainlines';
+import { refactorStopData } from '../../../utils/refactorStopData';
 
 export const loadVeloroutes = createAsyncThunk(
   "veloroutes/setVelorouteList",
   async (activeIds, thunkAPI) => {
-    const destinations = thunkAPI.getState().destinationDetails.destinationList;
     const startDestinations = thunkAPI.getState().trainroutes.startPos;
+    const destinations = thunkAPI.getState().destinations.destinationList;
 
     const veloroutesQuery = 'veloroutes/ids[]=' + activeIds.filter(s => !startDestinations.includes(s)).join('&ids[]=');
       
@@ -20,12 +20,11 @@ export const loadVeloroutes = createAsyncThunk(
     const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))];
     const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
 
-    const velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
+    let velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
     .then(response => response.json());
+    velorouteStops = refactorStopData(velorouteStops);
 
-    // add trainline list to veloroute stops
-    distributeTrainlines(velorouteStops, destinations);
-    const refactoredJourneys = refactorVeloroutes(velorouteStops);
+    const refactoredJourneys = allocateVeloroutestopsToRoute(velorouteStops, destinations);
 
     return refactoredJourneys
   }
@@ -35,8 +34,8 @@ export const loadCrossingVeloroutes = createAsyncThunk(
   "veloroutes/setCrossingVelorouteList",
   async (activeVelorouteIds, thunkAPI) => {
     const state = thunkAPI.getState()
-    const destinations = state.destinationDetails.destinationList;
-    const activeVeloroute = state.veloroutes.activeVeloroute;
+
+    const destinations = thunkAPI.getState().destinations.destinationList;
     const activeVelorouteSection = state.veloroutes.activeVelorouteSection;
 
     const veloroutesQuery = 'veloroutes/ids[]=' + activeVelorouteIds.join('&ids[]=');
@@ -44,15 +43,15 @@ export const loadCrossingVeloroutes = createAsyncThunk(
     const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
     .then(response => response.json());
 
-    const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))];
+    const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))].filter(id => id !== activeVelorouteSection[0].veloroute_id);
+
     const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
 
-    const velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
+    let velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
     .then(response => response.json());
 
-    // add trainline list to veloroute stops
-    distributeTrainlines(velorouteStops, destinations);
-    let refactoredJourneys = refactorVeloroutes(velorouteStops, destinations).filter(route => route.id !== activeVeloroute.id);
+    velorouteStops = refactorStopData(velorouteStops);
+    let refactoredJourneys = allocateVeloroutestopsToRoute(velorouteStops, destinations);
     refactoredJourneys = generateCrossingVeloroutes(activeVelorouteSection, refactoredJourneys);
 
     return refactoredJourneys

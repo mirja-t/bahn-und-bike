@@ -26,9 +26,6 @@ import {
   setActiveVeloroute,
   setActiveVelorouteSection
 } from './components/map/veloroutes/VeloroutesSlice';
-import {
-  setActiveDestination
-} from './components/destinationDetails/DestinationDetailsSlice';
 
 function App() {
 
@@ -46,7 +43,6 @@ function App() {
 
   useEffect(()=>{
     dispatch(setCurrentTrainroutes([]));
-    dispatch(setActiveDestination(null));
     dispatch(setActiveSection(null));
     dispatch(setActiveVeloroute(null));
     dispatch(setActiveVelorouteSection(null));
@@ -66,7 +62,6 @@ function App() {
 
   const resetState = () => {
     dispatch(setCurrentTrainroutes([]));
-    dispatch(setActiveDestination(null));
     dispatch(setActiveSection(null));
     dispatch(setActiveVeloroute(null));
     dispatch(setActiveVelorouteSection(null));
