@@ -1,5 +1,5 @@
 export const removeDuplicates = (trainRoutes) => {
-
+    console.log(trainRoutes)
     const trainRouteStopIds = trainRoutes
         .map(trainLineObj => trainLineObj.route.map(trainStop => trainStop.destination_id))
         .sort((a, b) => b.length - a.length)

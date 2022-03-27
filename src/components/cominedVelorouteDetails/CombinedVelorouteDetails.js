@@ -28,7 +28,6 @@ export const CombinedVelorouteDetails = ({
         type==='mouseenter' ? dispatch(setActiveVelorouteStop(id)) : dispatch(setActiveVelorouteStop(null))
     }
 
-
     return (<ScrollContent parentEl={parent} transitionComplete={true}>
         <div 
             id="veloroute"
@@ -41,7 +40,7 @@ export const CombinedVelorouteDetails = ({
                     <ActiveVelorouteSectionIcon num={1}/>
                     <span>
                         {`${labels[lang].from} ${activeVelorouteSection[0].stop_name}`} 
-                        { activeVelorouteSection[0].train_list.map((s, i) => (
+                        { activeVelorouteSection[0].train_list && activeVelorouteSection[0].train_list.map((s, i) => (
                             <span 
                                 key ={i} 
                                 className="train">{s}</span>
@@ -52,7 +51,8 @@ export const CombinedVelorouteDetails = ({
                     <ActiveVelorouteSectionIcon num={2}/>
                     <span>
                         {`${labels[lang].to} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
-                        { activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
+                        { activeVelorouteSection[activeVelorouteSection.length - 1].train_list && 
+                            activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
                             <span 
                                 key={i}
                                 className="train">{s}</span>))}

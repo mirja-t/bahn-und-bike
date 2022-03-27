@@ -1,24 +1,21 @@
-import { getPathLength } from './getPathLength';
-import { removeDuplicates } from './removeDuplicates';
+import { trainlineData } from './trainlineData';
 
 export const generateCurrentTrainlines = (trainlines, value) => {
         
     if(parseInt(value)===0) return [];
-
     const maxDur = value * 30;
-    let routes = trainlines.map(journey => {
-      const nextStop = journey.route.find(s => s.dur > maxDur)
-      let nextStopIndex = journey.route.indexOf(nextStop);
-      if (nextStopIndex < 0) nextStopIndex = journey.route.length;
+    let routes = trainlines.map(train => {
+      const nextStop = train.route.find(s => s.dur > maxDur);
+      let nextStopIndex = train.route.indexOf(nextStop);
+      if (nextStopIndex < 0) nextStopIndex = train.route.length;
 
-      return {
-        dur: journey.route[nextStopIndex-1].dur,
-        line: journey.line,
-        pathLength: getPathLength(journey.route),
-        route: journey.route.slice(0, nextStopIndex)
-      }
+      return trainlineData(train, nextStopIndex);
     })
-    routes = removeDuplicates(routes);
-
+    .sort((a,b) => b.stopIds.length - a.stopIds.length)
+    .filter((route, idx, arr) => {
+      const prevIds = arr.slice(0, idx).map(r => r.stopIds.join());
+      const currentIds = route.stopIds.join();
+      return !(prevIds.find(r => r.includes(currentIds)) !== undefined)
+    })
     return routes;
 }

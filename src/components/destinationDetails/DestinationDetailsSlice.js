@@ -8,7 +8,14 @@ export const destinationDetailsSlice = createSlice({
     },
     reducers: {
         setDestinations: (state, action) => {
-            state.destinationList = action.payload;
+            if(action.payload.add){
+                for(let d in action.payload.destinations) {
+                    state.destinationList[d] = action.payload.destinations[d]
+                }
+            }
+            else {
+                state.destinationList = action.payload.destinations;
+            }
         },
         setActiveDestination: (state, action) => {
             state.activeDestination = action.payload;

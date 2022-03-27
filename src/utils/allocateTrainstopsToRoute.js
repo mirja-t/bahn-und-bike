@@ -1,14 +1,13 @@
-const getStopData = arr => { 
+const getStopData = (arr) => { 
     let duracc = 0;
     let getDur = dur => duracc += dur;
     return arr.map(stop => {
         // destination name w/o 'Bahnhof'
         const indexEnd = stop.dest_name.indexOf(', Bahnhof') > 0 ? stop.dest_name.indexOf(', Bahnhof') : stop.dest_name.length;
-
         return {
             destination_id: stop.destination_id, 
-            x: stop.lon,
-            y: stop.lat,
+            lon: stop.lon,
+            lat: stop.lat,
             dur: getDur(stop.dur),
             stop_name: stop.dest_name.slice(0, indexEnd),
             trainlines: stop.trainlines
@@ -17,8 +16,8 @@ const getStopData = arr => {
 }
 
 export const allocateTrainstopsToRoute = (trainlineIds, trainstops, start) => {
-
     const trainlineStartingPoints = [];
+
     trainlineIds.forEach(id => {
         const startPos = trainstops.filter(stop => start.includes(stop.destination_id))
             .find(stop => stop.trainline_id === id)
@@ -60,5 +59,5 @@ export const allocateTrainstopsToRoute = (trainlineIds, trainstops, start) => {
         }
         
     }
-    return trainlines
+    return trainlines.filter(l => l.route.length > 1)
 }

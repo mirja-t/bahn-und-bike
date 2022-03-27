@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import { svg_scale } from '../data/svg_scale';
-const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
-
 export const useRoutePath = arr => {
 
     const [routepath, setRoutepath] = useState([]);
 
     useEffect(()=>{
         if(!arr.length) return []
-        const getPos = stop => [stop.x * xFactor + xOffset, - stop.y * yFactor + yOffset]
+        const getPos = stop => [stop.x, stop.y]
 
         const getSegmentPath = path => {
             if(path.length < 1) return ''

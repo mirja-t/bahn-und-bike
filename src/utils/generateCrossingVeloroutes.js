@@ -1,3 +1,4 @@
+import { getRoutePath } from "./getRoutePath";
 
 export const generateCrossingVeloroutes = (activeVelorouteSection, crossingVeloroutes) => {
     const crossingVRoutes = [];
@@ -41,7 +42,8 @@ export const generateCrossingVeloroutes = (activeVelorouteSection, crossingVelor
                         id: crossingRoute.id,
                         veloroute_name: crossingRoute.name,
                         name: `${r[0][0].stop_name} – ${r[1][r[1].length-1].stop_name}`,
-                        route: r
+                        route: r,
+                        path: getRoutePath(r)
                     })
                 })
             })

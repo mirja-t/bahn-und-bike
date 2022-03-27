@@ -24,25 +24,20 @@ import {
 } from '../../destinationDetails/DestinationDetailsSlice';
 import { Trainroute } from './trainroute/Trainroute';
 import { Veloroutes } from '../veloroutes/Veloroutes';
-import { useJourney } from '../../../hooks/useJourney';
-
 
 export const Trainroutes = ({
         zoom
     }) => {
 
     const dispatch = useDispatch();
-    const journeys = useSelector(selectCurrentTrainroutes);
+    const journey = useSelector(selectCurrentTrainroutes);
     const activeSection = useSelector(selectActiveSection);
     const activeDestination = useSelector(selectActiveDestination);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
 
     const strokeScale = (zoom.containerHeight / 1080) / 2;
-
-    const journey = useJourney(journeys);
-    const additionalTrainLines = useJourney(trainlinesAlongVeloroute);
-
+    
     useEffect(() => {
         const activeIds = activeSection?.stopIds || [activeDestination?.stop_id]
         dispatch(loadVeloroutes(activeIds))
@@ -86,7 +81,7 @@ export const Trainroutes = ({
             y="0px" 
             viewBox="0 0 1920 1080" 
             xmlSpace="preserve">
-                                       
+
             { pathTransitions((styles, item) => (
                 <Trainroute 
                     key={uuidv4()}
@@ -97,7 +92,7 @@ export const Trainroutes = ({
                     styles={styles}/>
             ))}
 
-            { additionalTrainLines.map(item => (
+            { trainlinesAlongVeloroute.map(item => (
                 <Trainroute 
                     key={uuidv4()}
                     item={item}
@@ -110,7 +105,6 @@ export const Trainroutes = ({
                     classes='active'
                     item={activeSection}
                     strokeScale={strokeScale}/> }
-                
             { activeVeloroute && <Veloroutes strokeScale={strokeScale} /> }   
         </svg>)
     }
