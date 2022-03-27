@@ -9,19 +9,19 @@ export const trainlineData = (train, nextStopIndex) => {
         pathLength: getPathLength(train.route),
         stopIds: train.route
             .slice(0, nextStopIndex)
-            .map(stop => stop.destination_id),
+            .map(stop => stop.stop_id),
         points: train.route
             .slice(0, nextStopIndex)
             .map(stop => [stop.lon * xFactor + xOffset, - stop.lat * yFactor + yOffset]).join(' '),
         firstStation: {
             stop_name: train.route[0].stop_name,
-            stop_id: train.route[0].destination_id,
+            stop_id: train.route[0].stop_id,
             x: train.route[0].lon * xFactor + xOffset,
             y: - train.route[0].lat * yFactor + yOffset,
         },
         lastStation: {
             stop_name: train.route[nextStopIndex-1].stop_name,
-            stop_id: train.route[nextStopIndex-1].destination_id,
+            stop_id: train.route[nextStopIndex-1].stop_id,
             x: train.route[nextStopIndex-1].lon * xFactor + xOffset,
             y: - train.route[nextStopIndex-1].lat * yFactor + yOffset
         }

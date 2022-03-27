@@ -1,16 +1,10 @@
-const getStopData = (arr) => { 
+const getDuration = (arr) => { 
     let duracc = 0;
     let getDur = dur => duracc += dur;
     return arr.map(stop => {
-        // destination name w/o 'Bahnhof'
-        const indexEnd = stop.dest_name.indexOf(', Bahnhof') > 0 ? stop.dest_name.indexOf(', Bahnhof') : stop.dest_name.length;
-        return {
-            destination_id: stop.destination_id, 
-            lon: stop.lon,
-            lat: stop.lat,
-            dur: getDur(stop.dur),
-            stop_name: stop.dest_name.slice(0, indexEnd),
-            trainlines: stop.trainlines
+        return { 
+            ...stop,
+            dur: getDur(stop.dur)
         }
     }) 
 }
@@ -19,45 +13,36 @@ export const allocateTrainstopsToRoute = (trainlineIds, trainstops, start) => {
     const trainlineStartingPoints = [];
 
     trainlineIds.forEach(id => {
-        const startPos = trainstops.filter(stop => start.includes(stop.destination_id))
+        const startPos = trainstops.filter(stop => start.includes(stop.stop_id))
             .find(stop => stop.trainline_id === id)
         if(startPos) trainlineStartingPoints.push(startPos)
     });
 
     const trainlines = [];
-
     for(let startingPoint of trainlineStartingPoints) {
 
         let currentTrainline = trainstops.filter(stop => stop.trainline_id === startingPoint.trainline_id);
         currentTrainline = currentTrainline.sort((a,b) => a.stop_number - b.stop_number);
 
+        // if start is in the middle of route route is splitted and 1st section reversed
         if(startingPoint.stop_number !== 0 && startingPoint.stop_number !== currentTrainline.length - 1){
-            const section1 = currentTrainline.slice(0, startingPoint.stop_number + 1);
-            section1.reverse();
-            trainlines.push({
-                line: startingPoint.trainline_id,
-                route: getStopData(section1)
-            })
-            const section2 = currentTrainline.slice(startingPoint.stop_number);
-            trainlines.push({
-                line: startingPoint.trainline_id,
-                route: getStopData(section2)
-            })
+            currentTrainline = [
+                currentTrainline.slice(0, startingPoint.stop_number + 1).reverse(), 
+                currentTrainline.slice(startingPoint.stop_number)
+            ];            
         }
         else if(startingPoint.stop_number === currentTrainline.length - 1){
-            currentTrainline.reverse();
-            trainlines.push({
-                line: startingPoint.trainline_id,
-                route: getStopData(currentTrainline)
-            })
+            currentTrainline = [currentTrainline.reverse()];
         }
         else {
-            trainlines.push({
-                line: startingPoint.trainline_id,
-                route: getStopData(currentTrainline)
-            })
+            currentTrainline = [currentTrainline];
         }
-        
+        currentTrainline.forEach(section => {
+            trainlines.push({
+                line: startingPoint.name,
+                route: getDuration(section)
+            })
+        })
     }
     return trainlines.filter(l => l.route.length > 1)
 }

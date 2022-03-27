@@ -1,14 +1,10 @@
 import './trainstop.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTransition, animated } from 'react-spring';
-import { ActiveDestination } from '../activeDestination/ActiveDestination';
 import { 
     selectActiveSpot, 
     setActiveSpot
 } from '../TrainroutesSlice';
-import {
-    selectActiveDestination
-} from '../../../destinationDetails/DestinationDetailsSlice';
 
 export const Trainstop = ({
     item,
@@ -17,7 +13,6 @@ export const Trainstop = ({
 }) => {
 
     const dispatch = useDispatch();
-    const activeDestination = useSelector(selectActiveDestination);
     const activeSpot = useSelector(selectActiveSpot);
 
     const hoverSpot = ({type}, spot) => {
@@ -52,10 +47,6 @@ export const Trainstop = ({
             onMouseLeave={hoverSpot}
             
             className="spotgroup">
-            {activeDestination && <ActiveDestination 
-                activeDestination={activeDestination.stop_id}
-                item={item}
-                strokeScale={strokeScale}/>}
 
             <animated.rect
                 className="spot spot-large"

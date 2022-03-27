@@ -7,9 +7,6 @@ import {
 import {
     selectActiveVelorouteSection
 } from '../../veloroutes/VeloroutesSlice';
-import {
-    selectActiveDestination
-} from '../../../destinationDetails/DestinationDetailsSlice';
 import { Trainstop } from '../trainstop/Trainstop';
 
 export const Trainroute = ({
@@ -21,7 +18,6 @@ export const Trainroute = ({
 }) => {
 
     const activeSection = useSelector(selectActiveSection)
-    const activeDestination = useSelector(selectActiveDestination);
     const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
 
     const handleClick = () => {
@@ -29,7 +25,7 @@ export const Trainroute = ({
     }
 
     return (<g 
-        className={activeSection || activeDestination || activeVelorouteSection ? `routegroup ${classes && classes}` : `routegroup`}
+        className={activeSection || activeVelorouteSection ? `routegroup ${classes && classes}` : `routegroup`}
         onClick={handleClick}
         >
         <animated.polyline 

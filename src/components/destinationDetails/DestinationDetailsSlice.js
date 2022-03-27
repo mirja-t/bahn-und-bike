@@ -3,22 +3,17 @@ import { createSlice } from '@reduxjs/toolkit';
 export const destinationDetailsSlice = createSlice({
     name: "destinationDetails",
     initialState: {
-        destinationList: {},
-        activeDestination: null
+        destinationList: {}
     },
     reducers: {
-        setDestinations: (state, action) => {
-            if(action.payload.add){
-                for(let d in action.payload.destinations) {
-                    state.destinationList[d] = action.payload.destinations[d]
+        setDestinationList: (state, action) => {
+            action.payload.forEach(s => {
+                if(!state.destinationList[s.destination_id]) {
+                    state.destinationList[s.destination_id] = {};
+                    state.destinationList[s.destination_id].trainlineList = []
                 }
-            }
-            else {
-                state.destinationList = action.payload.destinations;
-            }
-        },
-        setActiveDestination: (state, action) => {
-            state.activeDestination = action.payload;
+                state.destinationList[s.destination_id].trainlineList.push(s.trainline_id);
+            });
         }
     }
 });
@@ -27,7 +22,7 @@ export const selectDestinationList = (state) => state.destinationDetails.destina
 export const selectActiveDestination = (state) => state.destinationDetails.activeDestination;
 
 export const {
-    setDestinations,
+    setDestinationList,
     setActiveDestination
 } = destinationDetailsSlice.actions;
 

@@ -18,10 +18,6 @@ import {
     loadVeloroutes,
     setCombinedVeloroute
 } from '../veloroutes/VeloroutesSlice';
-import {
-    selectActiveDestination,
-    setActiveDestination
-} from '../../destinationDetails/DestinationDetailsSlice';
 import { Trainroute } from './trainroute/Trainroute';
 import { Veloroutes } from '../veloroutes/Veloroutes';
 
@@ -32,20 +28,18 @@ export const Trainroutes = ({
     const dispatch = useDispatch();
     const journey = useSelector(selectCurrentTrainroutes);
     const activeSection = useSelector(selectActiveSection);
-    const activeDestination = useSelector(selectActiveDestination);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
 
     const strokeScale = (zoom.containerHeight / 1080) / 2;
     
     useEffect(() => {
-        const activeIds = activeSection?.stopIds || [activeDestination?.stop_id]
-        dispatch(loadVeloroutes(activeIds))
-    },[dispatch, activeSection, activeDestination]);
+        if(!activeSection?.stopIds) return
+        dispatch(loadVeloroutes(activeSection?.stopIds))
+    },[dispatch, activeSection]);
 
     const setSectionActive = (line) => {
         dispatch(setTrainLinesAlongVeloroute([]))
-        dispatch(setActiveDestination(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));

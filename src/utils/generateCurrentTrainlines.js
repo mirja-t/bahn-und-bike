@@ -1,7 +1,6 @@
 import { trainlineData } from './trainlineData';
 
 export const generateCurrentTrainlines = (trainlines, value) => {
-        
     if(parseInt(value)===0) return [];
     const maxDur = value * 30;
     let routes = trainlines.map(train => {
