@@ -4,14 +4,13 @@ import { getRoutePath } from './getRoutePath';
 
 export const allocateVeloroutestopsToRoute = (velorouteStops, destinations) => {
   const veloroutes = [];
-  velorouteStops.forEach((stop, idx) => {
+  velorouteStops.forEach(stop => {
     const currentRoute = veloroutes.find(obj => obj.id === stop.veloroute_id);
 
-    const trainlineList = (
-      stop.trainstops &&
-      destinations[stop.stop_id]?.trainlineList) ? destinations[stop.stop_id]?.trainlineList : null;
-
-    stop.trainstops = trainlineList;
+    if(stop.trainstops) {
+      // replace string with single trainstop stop_id with array of available trainstops
+      stop.trainstops = destinations[stop.stop_id]?.trainlineList ? destinations[stop.stop_id]?.trainlineList : [];
+    }
 
     if(!currentRoute) {
       const newroute = {
@@ -25,7 +24,7 @@ export const allocateVeloroutestopsToRoute = (velorouteStops, destinations) => {
     else { 
       currentRoute.route[currentRoute.route.length-1].push(stop)
       // new route section if trainstop array not empty and stop is not last/second last stop
-      if(trainlineList) currentRoute.route[currentRoute.route.length] = [stop]
+      if(stop.trainstops) currentRoute.route[currentRoute.route.length] = [stop]
     }
   });
 

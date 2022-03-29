@@ -8,21 +8,14 @@ export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
     async (start, thunkAPI) => {
       const trainlinesQuery = 'trainlines/ids[]=' + start.join('&ids[]=');
-      const trainlines = await fetch(`${url}${trainlinesQuery}`, {'headers': headers})
+      const trainstops = await fetch(`${url}${trainlinesQuery}`, {'headers': headers})
       .then(response => {
         if (response.status !== 200) { throw new Error("Bad Server Response"); }
         return response.json()
       });
-
-      const trainlineIds = [...new Set(trainlines.map(s => s.trainline_id))];
-      const trainroutesQuery = 'trainroutes/ids[]=' + trainlineIds.join('&ids[]=');
-      let trainstops = await fetch(`${url}${trainroutesQuery}`, {'headers': headers})
-      .then(response => response.json());
-
       thunkAPI.dispatch(setDestinationList(trainstops));
-      
-      trainstops = refactorStopData(trainstops);
-      const trainroutes = allocateTrainstopsToRoute(trainlineIds, trainstops, start);
+      const trainstopsRefactored = trainstops.map(refactorStopData);
+      const trainroutes = allocateTrainstopsToRoute(trainstopsRefactored, start);
       return trainroutes
 });
 
