@@ -36,29 +36,21 @@ export const CombinedVelorouteDetails = ({
         { activeVelorouteSection && (
             <section className="veloroute-details veloroute-section-details">
                 <h5>{`${labels[lang].leg}`}</h5>
-                <h3 className="veloroute-trainstops">
-                    <ActiveVelorouteSectionIcon num={1}/>
-                    <span>
-                        {`${labels[lang].from} ${activeVelorouteSection[0].stop_name}`} 
-                        { activeVelorouteSection[0].train_list && activeVelorouteSection[0].train_list.map((s, i) => (
-                            <span 
-                                key ={i} 
-                                className="train">{s}</span>
-                        ))}
-                    </span>
-                </h3>
-                <h3 className="veloroute-trainstops">
-                    <ActiveVelorouteSectionIcon num={2}/>
-                    <span>
-                        {`${labels[lang].to} ${activeVelorouteSection[activeVelorouteSection.length - 1].stop_name}`}
-                        { activeVelorouteSection[activeVelorouteSection.length - 1].train_list && 
-                            activeVelorouteSection[activeVelorouteSection.length - 1].train_list.map((s, i) => (
-                            <span 
-                                key={i}
-                                className="train">{s}</span>))}
-                    </span>
-                </h3>
-                
+                { [activeVelorouteSection[0], activeVelorouteSection[activeVelorouteSection.length - 1]].map((stop, idx) => 
+                    (<h3 
+                        key={idx}
+                        className="veloroute-trainstops">
+                        <ActiveVelorouteSectionIcon num={idx + 1}/>
+                        <span>
+                            {`${idx===0 ? labels[lang].from : labels[lang].to} ${stop.stop_name}`}
+                            { stop.trainstops && 
+                                stop.trainstops.map((s, i) => (
+                                <span 
+                                    key={i}
+                                    className="train">{s}</span>))}
+                        </span>
+                    </h3>)
+                )}
                 { activeVelorouteSection.length > 2 && (<>
                     <h6>{labels[lang].via}</h6>
                     <ul className="veloroute-stops">

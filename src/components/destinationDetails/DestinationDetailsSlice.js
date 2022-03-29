@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const destinationDetailsSlice = createSlice({
-    name: "destinationDetails",
+    name: "destinations",
     initialState: {
         destinationList: {}
     },
@@ -18,12 +18,10 @@ export const destinationDetailsSlice = createSlice({
     }
 });
 
-export const selectDestinationList = (state) => state.destinationDetails.destinationList;
-export const selectActiveDestination = (state) => state.destinationDetails.activeDestination;
+export const selectDestinationList = (state) => state.destinations.destinationList;
 
 export const {
-    setDestinationList,
-    setActiveDestination
+    setDestinationList
 } = destinationDetailsSlice.actions;
 
 export default destinationDetailsSlice.reducer;

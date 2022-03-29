@@ -13,19 +13,11 @@ export const loadVeloroutes = createAsyncThunk(
     const destinations = thunkAPI.getState().destinations.destinationList;
 
     const veloroutesQuery = 'veloroutes/ids[]=' + activeIds.filter(s => !startDestinations.includes(s)).join('&ids[]=');
-      
     const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
     .then(response => response.json());
 
-    const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))];
-    const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
-
-    let velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
-    .then(response => response.json());
-    velorouteStops = refactorStopData(velorouteStops);
-
+    const velorouteStops = veloroutes.map(refactorStopData);
     const refactoredJourneys = allocateVeloroutestopsToRoute(velorouteStops, destinations);
-
     return refactoredJourneys
   }
 );
@@ -33,24 +25,16 @@ export const loadVeloroutes = createAsyncThunk(
 export const loadCrossingVeloroutes = createAsyncThunk(
   "veloroutes/setCrossingVelorouteList",
   async (activeVelorouteIds, thunkAPI) => {
-    const state = thunkAPI.getState()
 
+    const activeVelorouteId = thunkAPI.getState().veloroutes.activeVeloroute.id;
     const destinations = thunkAPI.getState().destinations.destinationList;
-    const activeVelorouteSection = state.veloroutes.activeVelorouteSection;
+    const activeVelorouteSection = thunkAPI.getState().veloroutes.activeVelorouteSection;
 
     const veloroutesQuery = 'veloroutes/ids[]=' + activeVelorouteIds.join('&ids[]=');
-      
     const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
     .then(response => response.json());
 
-    const velorouteIds = [...new Set(veloroutes.map(s => s.veloroute_id))].filter(id => id !== activeVelorouteSection[0].veloroute_id);
-
-    const velorouteIdsQuery = 'veloroutestops/ids[]=' + velorouteIds.join('&ids[]=');
-
-    let velorouteStops = await fetch(`${url}${velorouteIdsQuery}`, {'headers': headers})
-    .then(response => response.json());
-
-    velorouteStops = refactorStopData(velorouteStops);
+    const velorouteStops = veloroutes.filter(stop => stop.veloroute_id !== activeVelorouteId).map(refactorStopData);
     let refactoredJourneys = allocateVeloroutestopsToRoute(velorouteStops, destinations);
     refactoredJourneys = generateCrossingVeloroutes(activeVelorouteSection, refactoredJourneys);
 

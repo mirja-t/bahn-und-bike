@@ -9,9 +9,10 @@ const getDuration = (arr) => {
     }) 
 }
 
-export const allocateTrainstopsToRoute = (trainlineIds, trainstops, start) => {
+export const allocateTrainstopsToRoute = (trainstops, start) => {
     const trainlineStartingPoints = [];
 
+    const trainlineIds = [...new Set(trainstops.map(s => s.trainline_id))]
     trainlineIds.forEach(id => {
         const startPos = trainstops.filter(stop => start.includes(stop.stop_id))
             .find(stop => stop.trainline_id === id)
@@ -20,7 +21,6 @@ export const allocateTrainstopsToRoute = (trainlineIds, trainstops, start) => {
 
     const trainlines = [];
     for(let startingPoint of trainlineStartingPoints) {
-
         let currentTrainline = trainstops.filter(stop => stop.trainline_id === startingPoint.trainline_id);
         currentTrainline = currentTrainline.sort((a,b) => a.stop_number - b.stop_number);
 
