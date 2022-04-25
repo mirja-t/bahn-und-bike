@@ -1,37 +1,42 @@
 
 
 import { getRoutePath } from './getRoutePath';
+import { groupRoutes } from './groupRoutes';
 
-export const allocateVeloroutestopsToRoute = (velorouteStops, destinations) => {
+export const allocateVeloroutestopsToRoute = (stops, destinations) => {
   const veloroutes = [];
-  velorouteStops.forEach(stop => {
-    const currentRoute = veloroutes.find(obj => obj.id === stop.veloroute_id);
+  const velorouteStops = {};
+  while(stops.length){
+      const veloStops = groupRoutes(stops, 'bike');
+      velorouteStops[veloStops[0].veloroute_id] = veloStops;
+  }
 
-    if(stop.trainstops) {
-      // replace string with single trainstop stop_id with array of available trainstops
-      stop.trainstops = destinations[stop.stop_id]?.trainlineList ? destinations[stop.stop_id]?.trainlineList : [];
+  for(let route in velorouteStops){
+    const currentRoute = {
+      id: velorouteStops[route][0].veloroute_id,
+      name: velorouteStops[route][0].name,
+      len: velorouteStops[route][0].len,
+      route: [[]]
     }
-
-    if(!currentRoute) {
-      const newroute = {
-        id: stop.veloroute_id,
-        name: stop.name,
-        len: stop.len,
-        route: [[stop]]
+    velorouteStops[route].forEach((s, idx) => {
+      const stop = {
+        stop_id: s.stop_id,
+        stop_name: s.stop_name,
+        x: s.x,
+        y: s.y,
+        lat: s.lat,
+        lon: s.lon
       }
-      veloroutes.push(newroute)
-    }
-    else { 
       currentRoute.route[currentRoute.route.length-1].push(stop)
-      // new route section if trainstop array not empty and stop is not last/second last stop
-      if(stop.trainstops) currentRoute.route[currentRoute.route.length] = [stop]
-    }
-  });
-
-  veloroutes.forEach(route => {
-    route.path = getRoutePath(route.route);
-    route.route = route.route.filter(r => r.length > 1)
-  })
+      if(destinations[s.stop_id] && idx > 0 && idx < velorouteStops[route].length-1) {
+        stop.trainstops = destinations[s.stop_id];
+        currentRoute.route[currentRoute.route.length] = [stop];
+      }
+    });
+    currentRoute.path = getRoutePath(currentRoute.route);
+    currentRoute.route = currentRoute.route.filter(r => r.length > 1)
+    veloroutes.push(currentRoute)
+  }
 
   return veloroutes
 }

@@ -1,33 +1,41 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { headers, url } from '../../../config/config';
 import { refactorStopData } from '../../../utils/refactorStopData';
-import { allocateTrainstopsToRoute } from '../../../utils/allocateTrainstopsToRoute';
-import { setDestinationList } from '../../destinationDetails/destinationDetailsSlice';
+import { generateTrainlineTree } from '../../../utils/treeData/generateTrainlineTree'; 
+import { generateTrainlines } from '../../../utils/treeData/generateTrainlines'; 
+import { generateTrainList } from '../../../utils/generateTrainList';
 
 export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
-    async (start, thunkAPI) => {
-      const trainlinesQuery = 'trainlines/ids[]=' + start.join('&ids[]=');
-      const trainstops = await fetch(`${url}${trainlinesQuery}`, {'headers': headers})
+    async ({start, value, direct}, thunkAPI) => {
+      const connectionsQuery = direct ? 'trainstops/' + start : 'connections/' + start;
+      const connections = await fetch(`${url}${connectionsQuery}`, {'headers': headers})
       .then(response => {
         if (response.status !== 200) { throw new Error("Bad Server Response"); }
         return response.json()
       });
-      thunkAPI.dispatch(setDestinationList(trainstops));
-      const trainstopsRefactored = trainstops.map(refactorStopData);
-      const trainroutes = allocateTrainstopsToRoute(trainstopsRefactored, start);
-      return trainroutes
+      const trainstopsRefactored = connections.map(refactorStopData);
+      const startStops = trainstopsRefactored.filter(s => s.stop_id === start);
+      const trainrouteList = generateTrainlines(trainstopsRefactored);
+      const trainlines = generateTrainList(trainrouteList);
+      const [trainrouteTree, currentTrainroutes] = generateTrainlineTree(trainrouteList, startStops, value, direct);
+      
+      thunkAPI.dispatch(setTrainlineList(trainlines));
+      thunkAPI.dispatch(setCurrentTrainroutes(currentTrainroutes));
+
+      return trainrouteTree
 });
 
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: ['8011160', '8011306', '8011118', '8011113', '8011102', '8011162', '8010036'],
+        startPos: '8011160',
         travelInterval: 30,
-        trainrouteList: [],
-        trainrouteListLoading: false,
+        trainrouteTree: {},
+        trainlineList: [],
         currentTrainroutes: [],
-        hasError: false,
+        trainroutesLoading: false,
+        trainroutesError: false,
         activeSpot: null,
         activeSection: null,
         trainlinesAlongVeloroute: []
@@ -35,6 +43,9 @@ export const trainroutesSlice = createSlice({
     reducers: {
       setCurrentTrainroutes: (state, action) => {
         state.currentTrainroutes = action.payload;
+      },
+      setTrainlineList: (state, action) => {
+        state.trainlineList = action.payload;
       },
       setActiveSpot: (state, action) => {
         state.activeSpot = action.payload
@@ -54,37 +65,39 @@ export const trainroutesSlice = createSlice({
     },
     extraReducers: {
         [loadTrainroutes.pending]: (state, action) => {
-          state.trainrouteListLoading = true;
-          state.hasError = false;
+          state.trainroutesLoading = true;
+          state.trainroutesError = false;
         },
         [loadTrainroutes.fulfilled]: (state, action) => {
-          state.trainrouteList = action.payload;
-          state.trainrouteListLoading = false;
-          state.hasError = false;
+          state.trainrouteTree = action.payload;
+          state.trainroutesLoading = false;
+          state.trainroutesError = false;
         },
         [loadTrainroutes.rejected]: (state, action) => {
-          state.trainrouteListLoading = false;
-          state.hasError = true;
+          state.trainroutesLoading = false;
+          state.trainroutesError = true;
         }
       }
-  });
+});
 
-export const selectTrainrouteList = (state) => state.trainroutes.trainrouteList;
+export const selectTrainrouteList = (state) => state.trainroutes.trainrouteTree;
 export const selectActiveSpot = (state) => state.trainroutes.activeSpot;
 export const selectActiveSection = (state) => state.trainroutes.activeSection;
 export const selectTrainlinesAlongVeloroute = (state) => state.trainroutes.trainlinesAlongVeloroute;
-export const selectTrainrouteListLoading = (state) => state.trainroutes.trainrouteListLoading;
+export const selectTrainrouteListLoading = (state) => state.trainroutes.trainroutesLoading;
 export const selectTrainlinesAlongVelorouteLoading = (state) => state.trainroutes.trainlinesAlongVelorouteLoading;
 export const selectStartPos = (state) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state) => state.trainroutes.currentTrainroutes;
+export const selectTrainlineList = (state) => state.trainroutes.trainlineList;
 
 
 export const {
     setActiveSpot,
     setActiveSection,
     setTrainLinesAlongVeloroute,
+    setStartPos,
     setCurrentTrainroutes,
-    setStartPos
+    setTrainlineList
 } = trainroutesSlice.actions;
 
- export default trainroutesSlice.reducer;
+export default trainroutesSlice.reducer;

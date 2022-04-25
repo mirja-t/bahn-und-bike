@@ -10,12 +10,10 @@ import { Header } from './components/stateless/header/Header';
 import { Footer } from './components/stateless/footer/Footer';
 import { Error } from './components/stateless/error/Error';
 import { LanguagePicker } from './components/form/languagepicker/LanguagePicker';
-import { loadTrainroutes, selectStartPos } from './components/map/trainroutes/TrainroutesSlice';
 import { 
   loadLang, 
   selectLangLoading, 
-  selectLangError,
-  setUserScale 
+  selectLangError
 } from './AppSlice';
 import { 
   setActiveSection,
@@ -34,22 +32,11 @@ function App() {
   const dispatch = useDispatch();
   const languagesLoading = useSelector(selectLangLoading);
   const languagesError = useSelector(selectLangError);
-  const start = useSelector(selectStartPos);
   const location = useLocation();
 
   const setLanguage = lang => {
     setLang(lang)
   }
-
-  useEffect(()=>{
-    dispatch(setCurrentTrainroutes([]));
-    dispatch(setActiveSection(null));
-    dispatch(setActiveVeloroute(null));
-    dispatch(setActiveVelorouteSection(null));
-    dispatch(setTrainLinesAlongVeloroute([]));
-    dispatch(setUserScale(1));
-    dispatch(loadTrainroutes(start));
-  },[dispatch, start]);
 
   useEffect(()=>{
     dispatch(loadLang());

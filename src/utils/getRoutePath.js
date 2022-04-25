@@ -1,3 +1,10 @@
+/**
+ * 
+ * @param {array} arr 
+ * @returns 
+ * 
+ * expects an array of arrays with stops
+ */
 export const getRoutePath = arr => {
     if(!arr.length) return []
     const getPos = stop => [stop.x, stop.y]

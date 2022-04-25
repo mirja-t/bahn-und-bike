@@ -1,30 +1,52 @@
 import './travelduration.scss';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RangeInput } from './rangeinput/RangeInput';
 import { 
-    selectLang,
-    selectLoadingSequenceActive 
+    selectLang
 } from '../../AppSlice';
-import { selectStartPos } from '../map/trainroutes/TrainroutesSlice';
+import { 
+    selectStartPos
+} from '../map/trainroutes/TrainroutesSlice';
+import { CheckBox } from './checkBox/CheckBox';
+import { Button } from '../stateless/button/Button';
 
-export const TravelDuration = ({handleSubmit, handleInputChange, rangeValue, lang}) => {
+export const TravelDuration = ({handleSubmit, lang}) => {
 
     const labels = useSelector(selectLang);
     const startPos = useSelector(selectStartPos);
-    const loadingSequenceActive = useSelector(selectLoadingSequenceActive);
+    const [value, setValue] = useState(0);
+    const [direct, setDirect] = useState(true);
+
+    const handleCheckboxChange = () => {
+        setDirect(prev => !prev);
+    }
+
+    const handleInputChange = ({target}) => {
+        const val = target.value;
+        setValue(val);
+    }
 
     return (
-        <form id="travelduration" onSubmit={handleSubmit}>
+        <form id="travelduration" onSubmit={e => handleSubmit(e, value, direct)}>
+            <div className="traveldurationWrapper">
+                <CheckBox
+                    lang={lang}
+                    labels={labels}
+                    value={direct} 
+                    handleCheckboxChange={handleCheckboxChange}/>
                 <RangeInput 
+                    labels={labels}
                     lang={lang}
                     type="range" 
                     min="0" 
                     max="7" 
-                    value={rangeValue} 
+                    value={value} 
                     step="1"
                     handleInputChange={handleInputChange}
-                    loadingSequenceActive={loadingSequenceActive}
                     reset={startPos}/>
-            <input type="submit" value={labels[lang].search} className={loadingSequenceActive ? 'disabled' : ''}/>
+            </div>
+            <Button label={labels[lang].search} type="submit"/>
+            
         </form>)
 }

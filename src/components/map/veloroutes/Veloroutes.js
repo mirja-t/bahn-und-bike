@@ -11,7 +11,7 @@ import {
 import { AlternativeRoute } from './alternativeroute/AlternativeRoute';
 import { VelorouteStop } from './velorouteStop/VelorouteStop';
 import { VeloroutePath } from './veloroutePath/veloroutePath';
-import { ActiveVelorouteSectionDetails } from './activeVelorouteSectionDetails/ActiveVelorouteSectionDetails';
+import { ActiveVelorouteSectionIcon } from './activeVelorouteSectionDetails/ActiveVelorouteSectionIcon';
 
 export const Veloroutes = ({strokeScale}) => {
 
@@ -36,23 +36,23 @@ export const Veloroutes = ({strokeScale}) => {
         ))}
 
         { activeVeloroute.route.map(s => s.map((item, idx) => (
-                <VelorouteStop 
-                    key={idx}
-                    item={item}
-                    activeSpot={activeVelorouteStop}
-                    strokeScale={strokeScale}
-                    type={item===activeVRouteStops.start || item===activeVRouteStops.end ? 'active' : ''}/>
+            <VelorouteStop 
+                key={idx}
+                item={item}
+                activeSpot={activeVelorouteStop}
+                strokeScale={strokeScale}
+                type={item===activeVRouteStops.start || item===activeVRouteStops.end ? 'active' : ''}/>
         )))}
+
         { activeVelorouteSection && (<>
             {combinedVeloroute && (
                 <AlternativeRoute 
                     altroute={combinedVeloroute}
                     strokeScale={strokeScale}/>
             )}
-            <ActiveVelorouteSectionDetails 
+            <ActiveVelorouteSectionIcon 
                 strokeScale={strokeScale}
                 section={activeVelorouteSection}/>
         </>)}
-
     </g>)
 }

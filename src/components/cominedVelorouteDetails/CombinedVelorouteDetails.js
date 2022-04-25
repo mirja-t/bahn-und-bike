@@ -24,8 +24,8 @@ export const CombinedVelorouteDetails = ({
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
 
-    const hoverVeloStop = ({type}, id) => {
-        type==='mouseenter' ? dispatch(setActiveVelorouteStop(id)) : dispatch(setActiveVelorouteStop(null))
+    const hoverVeloStop = ({type}, spot) => {
+        type==='mouseenter' ? dispatch(setActiveVelorouteStop(spot)) : dispatch(setActiveVelorouteStop(null))
     }
 
     return (<ScrollContent parentEl={parent} transitionComplete={true}>
@@ -47,7 +47,7 @@ export const CombinedVelorouteDetails = ({
                                 stop.trainstops.map((s, i) => (
                                 <span 
                                     key={i}
-                                    className="train">{s}</span>))}
+                                    className="train">{s.name}</span>))}
                         </span>
                     </h3>)
                 )}

@@ -68,27 +68,8 @@
     }
 }
 
-.destinationLabel {
-    white-space: nowrap;
-    padding: 2px;
-    letter-spacing: 0.025em;
-    line-height: 1;
-    color: $primary;
-    transition: opacity .5s ease, color .5s ease;
-    font-weight: 600;
-    text-transform: uppercase;
-    font-family: 'Oswald', sans-serif;
-    z-index: 7;
-    tspan{
-        fill: $primary;
-        text-shadow: 1px 1px 0 #F2F2F2, -1px -1px 0 #F2F2F2;
-        filter: drop-shadow(2px 0 1px #F2F2F2)
-    }    
-}
-g.destination.hover {
-    .destinationLabel tspan{
-        fill: $primary-hover;
-    }
+
+g.destination:hover {
     .spot {
         transition: transform .35s ease, fill .35s ease; 
         &.spot-large{

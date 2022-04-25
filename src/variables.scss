@@ -2,13 +2,13 @@ $veloroute: #007377;//#977517;
 $veloroute-hover: #0f4749;//#a78d49;
 $background: #ffffff;//#33363A;//
 $background-dark: #eeeeee;//#0E1013;//
-$xlightgray: #eeeeee;
+$xlightgray: #ededed;
 $lightgray: #999;
 $gray: #666;
 $darkgray: #333;
 $primary: red;
 $primary-hover: #4a366a;
-$primary-muted: #ccc;//#501414;
+$primary-muted: rgb(194, 191, 195);//#501414;
 $primary-hover-muted: pink;
 
 $boxshadow: 8px 8px 8px rgba(0,0,0,0.3);
@@ -47,3 +47,8 @@ $h6-font-size:                                   $h5-font-size;
 // MEDIA QUERIES
 $breakpoint-l: 1680px;
 $breakpoint-xl: 1920px;
+
+// Checkboxes
+$checkBoxRadioActiveColor: rgba(225, 225, 225, 0.4);
+$checkBoxRadioColor: rgba(240,240,240,0.4);
+$checkBoxBorderradius: .4em;

@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-export const useZoom = (mapcontainerRef, journeys, vrouteposition, value, wrapper, dimensions, userscale) => { 
+export const useZoom = (mapcontainerRef, journeys, vrouteposition, value, wrapper, dimensions, userscale, loading) => { 
     userscale = userscale.toFixed(1);
 
     const [zoom, setZoom] = useState({
@@ -12,8 +12,11 @@ export const useZoom = (mapcontainerRef, journeys, vrouteposition, value, wrappe
         longestDist: 0
     });
 
+    const zoomMemo = useRef(zoom);
+
     useEffect(() => {
 
+        if(loading) return zoomMemo.current
         if(parseInt(value)===0) {
             setZoom({
                 x: 0,
@@ -66,16 +69,19 @@ export const useZoom = (mapcontainerRef, journeys, vrouteposition, value, wrappe
         const left = ((dimensions[0]/2)-(xStart * initScale)) * scale;
         const top =  ((dimensions[1]/2)-(yStart * initScale)) * scale;
 
-        setZoom({
+        const currentZoom = {
             x: left * userscale,
             y: top * userscale,
             scale: scale * userscale,
             containerWidth: dimensions[0] * scale * userscale,
             containerHeight: dimensions[1] * scale * userscale,
             longestDist: longestDist
-        })
+        }
+
+        setZoom(currentZoom);
+        zoomMemo.current = currentZoom;
         
-    },[mapcontainerRef, journeys, vrouteposition, value, wrapper, dimensions, userscale]);
+    },[mapcontainerRef, journeys, vrouteposition, value, wrapper, dimensions, userscale, loading]);
 
     return zoom
 }

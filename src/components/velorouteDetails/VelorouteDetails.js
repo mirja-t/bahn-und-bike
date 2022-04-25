@@ -18,7 +18,7 @@ import {
     selectTrainrouteList,
     setTrainLinesAlongVeloroute
 } from '../map/trainroutes/TrainroutesSlice';
-import { generateTrainlinesAlongVeloroute } from '../../utils/generateTrainlinesAlongVeloroute';
+import { generateCurrentTrainroutes } from '../../utils/treeData/generateCurrentTrainroutes';
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { VelorouteIcon } from '../stateless/icons/VelorouteIcon';
 import { Collapse } from '../stateless/collapse/Collapse';
@@ -41,9 +41,9 @@ export const VelorouteDetails = ({
     
     const setCurrentCombinedVeloroute = item => {
         const activeCombinedVRouteSection = item.route.reduce((acc, el)=> acc.concat(el),[]);
-        const stopIds = [item.route[0][0].stop_id, item.route[1][item.route[1].length-1].stop_id];
-        const trainlinesAlongVeloroute = generateTrainlinesAlongVeloroute(trainrouteList, stopIds);
-        dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute))
+        const stops = [item.route[0], item.route[item.route.length-1]];
+        const trainlinesAlongVeloroute = generateCurrentTrainroutes(trainrouteList, stops);
+        dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute));
         dispatch(setCombinedVeloroute(item));
         dispatch(setActiveVelorouteSection(activeCombinedVRouteSection));
     }

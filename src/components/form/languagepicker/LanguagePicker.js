@@ -11,8 +11,7 @@ export const LanguagePicker = ({setLanguage}) => {
     }
 
     return (<form id="language-picker">
-        
-        <fieldset className="lang">
+        <fieldset className={checkedRadioBtn}>
             <div className={`${checkedRadioBtn==='de' ? 'active inputRadiowrapper' : 'inputRadiowrapper'}`}>
                 <input 
                     type="radio" 

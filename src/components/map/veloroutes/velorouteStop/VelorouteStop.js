@@ -7,7 +7,6 @@ import {
 } from '../VeloroutesSlice';
 
 export const VelorouteStop = ({
-    activeSpot, 
     item, 
     strokeScale, 
     type
@@ -21,18 +20,12 @@ export const VelorouteStop = ({
         scale: type==='active' ? 1 : 0
     });
 
-    const hoverVeloStop = ({type}, id) => {
-        type==='mouseenter' ? dispatch(setActiveVelorouteStop(id)) : dispatch(setActiveVelorouteStop(null))
+    const hoverVeloStop = ({type}, spot) => {
+        type==='mouseenter' ? dispatch(setActiveVelorouteStop(spot)) : dispatch(setActiveVelorouteStop(null))
     }
 
     return (<g>
-        { (activeSpot===item.stop_id || activeVelorouteStop?.stop_id===item.stop_id) && (
-                <text className="veloroute destinationLabel"
-                    x={item.x + 5/strokeScale}
-                    y={item.y}
-                    style={{ fontSize: `${7 / strokeScale}px` }}>
-                    <tspan>{item.stop_name}</tspan>
-                </text>)}
+        
         <animated.circle
             className='veloroute-stop-outline'
             strokeWidth={0.8 / strokeScale}
@@ -48,7 +41,7 @@ export const VelorouteStop = ({
             cx={item.x}
             cy={item.y}
             r={type==='active' || activeVelorouteStop?.stop_id===item.stop_id ? 2 / strokeScale : 1.2 / strokeScale}
-            onMouseEnter={e => hoverVeloStop(e, item.stop_id)}
+            onMouseEnter={e => hoverVeloStop(e, item)}
             onMouseLeave={hoverVeloStop}
             style={{ 
                 transformOrigin: `${item.x}px ${item.y}px`

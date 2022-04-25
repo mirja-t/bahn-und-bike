@@ -1,73 +1,50 @@
 
 import './trainroutes.scss';
-import { useEffect } from 'react';
-import { useTransition } from 'react-spring';
+import { memo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
 import { 
     selectCurrentTrainroutes, 
-    setActiveSection,
     selectActiveSection,
-    setTrainLinesAlongVeloroute,
-    selectTrainlinesAlongVeloroute
+    selectTrainlinesAlongVeloroute,
+    selectActiveSpot
 } from './TrainroutesSlice';
 import { 
     selectActiveVeloroute,
-    setActiveVeloroute,
-    setActiveVelorouteSection,
     loadVeloroutes,
-    setCombinedVeloroute
+    selectActiveVelorouteStop
 } from '../veloroutes/VeloroutesSlice';
 import { Trainroute } from './trainroute/Trainroute';
 import { Veloroutes } from '../veloroutes/Veloroutes';
+import { Label } from '../label/Label';
 
-export const Trainroutes = ({
-        zoom
-    }) => {
+export const Trainroutes = memo(function Trainroutes({ containerHeight }) {
 
     const dispatch = useDispatch();
-    const journey = useSelector(selectCurrentTrainroutes);
+    const journeys = useSelector(selectCurrentTrainroutes);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
+    const activeSpot = useSelector(selectActiveSpot);
+    const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
-
-    const strokeScale = (zoom.containerHeight / 1080) / 2;
+    const strokeScale = (containerHeight / 1080) / 2;
     
     useEffect(() => {
         if(!activeSection?.stopIds) return
         dispatch(loadVeloroutes(activeSection?.stopIds))
     },[dispatch, activeSection]);
 
-    const setSectionActive = (line) => {
-        dispatch(setTrainLinesAlongVeloroute([]))
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(setActiveSection(line));
-        dispatch(setCombinedVeloroute(null))
+    const getClassName = (item) => {
+        if(!activeSection && !trainlinesAlongVeloroute.length){
+            return 'init'
+        }
+        else if(activeSection===item){
+            return 'active'
+        }
+        else {
+            return 'inactive'
+        }
     }
 
-    const setAdditionalTrainlineActive = (line) => {
-        dispatch(setActiveSection(line));
-    }
-    
-    const pathTransitions = useTransition(
-        journey,
-        {
-          from: p => ({
-              strokeDashoffset: p.pathLength,
-              strokeDasharray: p.pathLength
-          }),
-          leave: p => ({
-            strokeDashoffset: p.pathLength,
-            strokeDasharray: p.pathLength
-            }),
-          enter: {
-              strokeDashoffset: 0
-          },
-          delay: 500
-        }
-      )
-    
     return (
         <svg 
             id="routes" 
@@ -75,30 +52,38 @@ export const Trainroutes = ({
             y="0px" 
             viewBox="0 0 1920 1080" 
             xmlSpace="preserve">
-
-            { pathTransitions((styles, item) => (
+                
+            { journeys.map((item, idx) => (
                 <Trainroute 
-                    key={uuidv4()}
-                    classes={activeSection===item ? 'active' : 'inactive'}
+                    key={idx}
+                    className={getClassName(item)}
                     item={item}
-                    fn={setSectionActive}
                     strokeScale={strokeScale}
-                    styles={styles}/>
+                    />
             ))}
 
-            { trainlinesAlongVeloroute.map(item => (
+            { trainlinesAlongVeloroute.map((item, idx) => (
                 <Trainroute 
-                    key={uuidv4()}
+                    key={idx}
+                    className="active"
                     item={item}
-                    fn={setAdditionalTrainlineActive}
                     strokeScale={strokeScale} />
             ))}
-                
+            
             { activeSection && 
                 <Trainroute 
-                    classes='active'
+                    className="active"
                     item={activeSection}
                     strokeScale={strokeScale}/> }
-            { activeVeloroute && <Veloroutes strokeScale={strokeScale} /> }   
+
+            { activeVeloroute && 
+                <Veloroutes 
+                    strokeScale={strokeScale} /> }   
+
+            { (activeSpot || activeVelorouteStop) && (
+                <Label 
+                    item={activeSpot || activeVelorouteStop}
+                    className={activeSpot ? 'train' : 'veloroute'}
+                    strokeScale={strokeScale} />)}
         </svg>)
-    }
+});

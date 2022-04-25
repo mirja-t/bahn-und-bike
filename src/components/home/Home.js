@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectLang } from '../../AppSlice';
 import { Link } from 'react-router-dom';
 import img from '../../assets/images/germany-startscreen.svg';
+import { Button } from '../stateless/button/Button';
 
 export const Home = ({lang}) => {
     const labels = useSelector(selectLang);
@@ -21,7 +22,9 @@ export const Home = ({lang}) => {
                 <li>{labels[lang].home_l4}</li>
             </ol>
             <p className="margintop">
-                <Link to="/routefinder" title={labels[lang].start}><button>{labels[lang].start}</button></Link>
+                <Link to="/routefinder" title={labels[lang].start}>
+                    <Button label={labels[lang].start}/>
+                </Link>
             </p>
         </div>
         <div id="germany">

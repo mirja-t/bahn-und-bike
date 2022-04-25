@@ -37,7 +37,7 @@ export const ItemList = ({
                 style={styles}
                 key={i}
                 onClick={() => fn(items[i])}
-                className={activeItem && items[i].name===activeItem?.name ? 'active' : ''}>
+                className={activeItem && items[i].id===activeItem?.id ? 'active' : ''}>
                 <VelorouteIcon/>
                 <h4 
                     className="veloroute">

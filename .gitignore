@@ -25,6 +25,7 @@ index.php
 #database
 /api
 /api_dev
+/api2
 
 # backups
 /__bak

@@ -27,6 +27,7 @@ $transition: width .5s ease;
     &.width-2 {width: 2*$sidebarwidth + 100vw}
     &.width-3 {width: 3*$sidebarwidth + 100vw}
     @media (min-width: $breakpoint-l) {
+        width: 3*$sidebarwidth-xl + 100vw;
         &.width-1 {width: 1*$sidebarwidth-xl + 100vw}
         &.width-2 {width: 2*$sidebarwidth-xl + 100vw}
         &.width-3 {width: 3*$sidebarwidth-xl + 100vw}
@@ -61,6 +62,9 @@ aside {
         width: 3*$sidebarwidth-xl + 0vw;
     }
     > div {
+        @media (min-width: $breakpoint-l) {
+            width: $sidebarwidth-xl + 0vw;
+        }
         width: $sidebarwidth + 0vw;
         transition: $transition;
     }

@@ -6,6 +6,12 @@ $midspotscale: 1.5;
 $transitionSpeed: .35s;
 
 
+@keyframes strokeAni {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
 @keyframes circleHoverAni {
     0% {
         transform: scale(0);
@@ -23,20 +29,20 @@ $transitionSpeed: .35s;
 svg#routes{
     position: relative;
     z-index: 2;
+
     polyline,
     circle,
     g{
         cursor: pointer;
     }
-
     .routegroup{
         polyline.route{
             fill: none;
             stroke: $primary;
             transition: all .5s ease;
-            animation: strokeAni 1s linear forwards;
-            animation-delay: 1s;
             opacity: 1;
+            animation: strokeAni 3s linear forwards;
+            animation-delay: .5s;
         }
         polyline.route-bg {
             fill: none;
@@ -51,7 +57,7 @@ svg#routes{
         &.inactive {
             .route-bg{
                 stroke: #fff;
-                opacity: .8;
+                opacity: .5;
                 fill: none;
             }
             .route {

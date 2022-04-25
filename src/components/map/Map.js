@@ -2,23 +2,23 @@ import './map.css';
 import { useSpring, useTransition, animated } from 'react-spring';
 import { useDrag } from '@use-gesture/react';
 import { useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useZoom } from '../../hooks/useZoom';
 import { 
-    selectLang, 
-    selectLoadingSequenceActive,
-    setLoadingSequenceActive,
-    selectUserScale,
-    setUserScale
+    selectLang
 } from '../../AppSlice';
-import { selectCurrentTrainroutes } from './trainroutes/TrainroutesSlice';
-import { selectActiveVeloroute } from './veloroutes/VeloroutesSlice';
+import { 
+    selectCurrentTrainroutes,
+    selectTrainrouteListLoading
+} from './trainroutes/TrainroutesSlice';
+import { 
+    selectActiveVeloroute 
+} from './veloroutes/VeloroutesSlice';
 import { Trainroutes } from './trainroutes/Trainroutes';
 import { Germany } from './germany/Germany';
 import { Bundeslaender } from './bundeslaender/Bundeslaender';
 import { MapLegend } from './mapLegend/MapLegend';
 import { Cities } from './cities/Cities';
-import { selectTrainrouteListLoading } from './trainroutes/TrainroutesSlice';
 import { Loading } from '../stateless/loading/Loading';
 import { ZoomPanel } from '../stateless/zoomPanel/ZoomPanel';
 
@@ -26,41 +26,32 @@ export const Map = ({
     value,
     wrapper,
     dimensions,
-    lang
+    lang,
+    fn,
+    userScale
 }) => {
 
-    const dispatch = useDispatch();
     const mapcontainerRef = useRef(null);
-    const loadingSequence = useSelector(selectLoadingSequenceActive);
     const labels = useSelector(selectLang);
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
-    const userScale = useSelector(selectUserScale);
     const veloroute = useSelector(selectActiveVeloroute);
-    const zoom = useZoom(mapcontainerRef, journeys, veloroute, value, wrapper, dimensions, userScale);
+    const zoom = useZoom(mapcontainerRef, journeys, veloroute, value, wrapper, dimensions, userScale, isLoading);
 
     const mapInnerSpring = useSpring({
         left: zoom.x,
         top: zoom.y
     });
 
-    const loadingSpring = useTransition(loadingSequence,{
+    const loadingSpring = useTransition(isLoading, {
         from: { opacity: 0 },
         enter: { opacity: 1 },
         leave: { opacity: 0 },
         config: {
             tension: 280,
             friction: 60
-        },
-        delay: loadingSequence ? 500 : 0
+        }
     });
-
-    // set min time for loading animation
-    useEffect(()=>{
-        if(isLoading) return
-        const timer = setTimeout(() => { dispatch(setLoadingSequenceActive(false)) }, 200);
-        return () => { clearTimeout(timer) }
-    },[dispatch, isLoading]);
 
     // drag feature
     const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }))
@@ -70,18 +61,15 @@ export const Map = ({
         api.start({ x: mx, y: my })
     });
 
-    // zoom feature
-    const zoomMap = (dir) => {
-        const factor = dir === '+' ? 1 : -1;
-        dispatch(setUserScale(userScale + factor * 0.2))
-    }
+    
 
     useEffect(() => {
         api.start({ x: 0, y: 0 })
     },[value, api])
 
     return (<>
-    <ZoomPanel fn={zoomMap}/>
+    { loadingSpring((styles, item) => item && (<animated.div className="loading" style={styles}><Loading lang={lang}/></animated.div>) )}
+    <ZoomPanel fn={fn}/>
     <div 
         id="map-container" 
         ref={mapcontainerRef}
@@ -99,13 +87,12 @@ export const Map = ({
                 }}
                 className="map-inner" 
                 >
-                { loadingSpring((styles, item) => item && (<animated.div className="loading" style={styles}><Loading lang={lang}/></animated.div>) )}
-                { !isLoading && !loadingSequence && (<>
+                { !isLoading && (<>
                     {(parseInt(value)===0 && journeys.length===0 && !isLoading) && (<div className="instructions">
                         <p>{labels[lang].instruction}</p>
                     </div>)}
                     <Trainroutes 
-                        zoom={zoom} />
+                        containerHeight={zoom.containerHeight} />
                     </>)
                 }
                 <Germany/>
