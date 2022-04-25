@@ -1,47 +1,54 @@
-import { animated } from 'react-spring';
-import { v4 as uuidv4 } from 'uuid';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { 
-    selectActiveSection
+    setActiveSection,
+    setTrainLinesAlongVeloroute
 } from '../TrainroutesSlice';
 import {
-    selectActiveVelorouteSection
+    setActiveVeloroute,
+    setActiveVelorouteSection,
+    setCombinedVeloroute
 } from '../../veloroutes/VeloroutesSlice';
 import { Trainstop } from '../trainstop/Trainstop';
+import { memo } from 'react';
 
-export const Trainroute = ({
-    classes,
-    item, 
-    fn,
-    strokeScale, 
-    styles
-}) => {
 
-    const activeSection = useSelector(selectActiveSection)
-    const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
+export const Trainroute = memo(function Trainroute({
+    item,
+    strokeScale,
+    className
+}) {
+    
+    const dispatch = useDispatch();
 
-    const handleClick = () => {
-        fn && fn(item)
+    const setAdditionalTrainlineActive = (line) => {
+        dispatch(setTrainLinesAlongVeloroute([]))
+        dispatch(setActiveVeloroute(null));
+        dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveSection(line));
+        dispatch(setCombinedVeloroute(null))
     }
-
+    
     return (<g 
-        className={activeSection || activeVelorouteSection ? `routegroup ${classes && classes}` : `routegroup`}
-        onClick={handleClick}
+        className={`${className} routegroup`}
+        onClick={() => setAdditionalTrainlineActive(item)}
         >
-        <animated.polyline 
+       <polyline 
             className="route-bg"
             strokeWidth={5 / strokeScale}
-            points={item.points}
-            style={styles} />
-        <animated.polyline 
-            className="route"
+            points={item.points} />
+        <polyline 
+            className={'route'}
             strokeWidth={1 / strokeScale}
             points={item.points}
-            style={{...styles}} />
-        <Trainstop 
-            key={uuidv4()}
-            styles={{scale: 1}}
-            item={item.lastStation}
-            strokeScale={strokeScale} />
+            style={{
+                strokeDashoffset: item.pathLength,
+                strokeDasharray: item.pathLength
+            }}
+            />
+        { item && 
+            <Trainstop 
+                styles={{scale: 1}}
+                item={item.lastStation}
+                strokeScale={strokeScale} />}
     </g>)
-}
+}, (prev, next) => prev.item.pathLength === next.item.pathLength && prev.className === next.className && prev.strokeScale === next.strokeScale);

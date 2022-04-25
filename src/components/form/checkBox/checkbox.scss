@@ -1,0 +1,57 @@
+@import '../../../variables.scss';
+
+$checkbox-width: 1.75em;
+$checkBoxBorderradius: .4em;
+$transition-duration: .5s;
+
+.checkBoxRadioNotActive {
+    background-color: $checkBoxRadioColor;
+    transition: box-shadow $transition-duration ease, background-color $transition-duration ease;
+    box-shadow: -6px -6px 10px rgba(255,255,255,1), inset 1px 1px 1px rgba(255,255,255,0.9), inset -1px -1px 1px rgba(0,0,0, 0.1), 5px 5px 10px rgba(0,0,0, .1);
+}
+.checkBoxRadioActive {
+    background-color: $checkBoxRadioActiveColor;
+    transition: box-shadow $transition-duration ease, background-color $transition-duration ease;
+    box-shadow: -1px -1px 2px rgba(255,255,255,0.1), inset 4px 4px 8px rgba(0, 0, 0, 0.15), inset -1px -1px 1px rgba(0,0,0, 0), 1px 1px 0 rgba(255,255,255, 1);
+}
+  
+.directconnection {
+    svg.check {
+        pointer-events: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        filter: grayscale(1);
+        opacity: .3;
+        &.active {
+            filter: grayscale(0);
+            transition: all $transition-duration ease;
+            opacity: 1;
+        }
+        transition: all $transition-duration ease;
+    }
+
+    .inputCheckbox {
+        width: $checkbox-width;
+        height: $checkbox-width;
+        border-radius: $checkBoxBorderradius;
+        position: relative;
+        margin-top: .5em;
+
+        &.active {
+            @extend .checkBoxRadioActive;
+        }
+        &:not(.active){
+            @extend .checkBoxRadioNotActive;
+        }
+    }
+    
+    
+    label{
+        display: block;
+    }
+    input[type="checkbox"] {
+        width: 100%;
+        height: 100%;
+    }
+}

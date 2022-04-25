@@ -19,7 +19,6 @@
         fill: none;
         &.active {
             stroke-dasharray: 0;
-            stroke: $veloroute-hover;
         }
     }
     path.crossing-veloroute-section {

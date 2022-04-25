@@ -2,29 +2,42 @@
 
 /* Range Slider */
 
-$slider-height: 3px;
-$sliderborder-width: 6px;
-$sliderthumb-height: 18px;
+$slider-height: 6px;
+$sliderborder-width: 8px;
+$sliderthumb-height: 22px;
 
 .range-slider {
   flex-grow: 1;
   > div {
+    position: relative;
     margin-top: 1em;
-    border-top: 1px solid $lightgray;
-    &.disabled {
-      border-top: 1px solid #d2d2d2;
+    //border-top: 1px solid $lightgray;
+    &::after{
+      //content: '';
+      position: absolute;
+      left: -.5em;
+      top: -.75em;
+      height: 1.5em;
+      right: -.5em;
+      background-color: black;
+      opacity: .1;
+      border-radius: .3em;
     }
   }
 }
 
 input[type="range"] {
+    position: relative;
+    z-index: 1;
     display: block;
     -webkit-appearance: none;
     width: 100%;
     height: $slider-height;
-    background-color: transparent;  
+    background-color: #dbdbdb;
+    box-shadow: 1px 1px 0 white, inset 2px 2px 4px rgba(0, 0, 0, 0.35);
+    border-radius: $slider-height / 2;
     background-image: linear-gradient($primary, $primary);
-    margin-top: -2px;
+    margin-top: -4px;
     background-repeat: no-repeat;
 
     &:disabled{

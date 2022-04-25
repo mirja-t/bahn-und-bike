@@ -1,6 +1,7 @@
 import { selectLang } from '../../AppSlice';
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
+import { Button } from '../stateless/button/Button';
 
 export const Imprint = ({lang, resetState}) => {
 
@@ -19,11 +20,10 @@ export const Imprint = ({lang, resetState}) => {
         </div>
         <p className="margintop">
         <Link 
-            className="button" 
             to="/" 
             title={labels[lang].backtostart}
             onClick={resetState}>
-                {labels[lang].backtostart}
+                <Button label={labels[lang].backtostart}/>
         </Link>
         </p>
     </div>)

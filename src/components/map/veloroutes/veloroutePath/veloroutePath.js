@@ -31,7 +31,7 @@ export const VeloroutePath = ({
         onClick={() => {setVelorouteSectionActive(idx)}}>
         <path 
             className={activeVelorouteSection===activeVeloroute.route[idx] || active ? 'veloroute-section active' : 'veloroute-section'}
-            strokeWidth={activeVelorouteSection===activeVeloroute.route[idx] || active ? 2 / strokeScale : 1 / strokeScale}
+            strokeWidth={activeVelorouteSection===activeVeloroute.route[idx] || active ? 1.5 / strokeScale : 1 / strokeScale}
             d={path} />
         <path 
             className="veloroute-section-large"

@@ -1,8 +1,7 @@
 import './trainstop.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTransition, animated } from 'react-spring';
 import { 
-    selectActiveSpot, 
     setActiveSpot
 } from '../TrainroutesSlice';
 
@@ -13,8 +12,6 @@ export const Trainstop = ({
 }) => {
 
     const dispatch = useDispatch();
-    const activeSpot = useSelector(selectActiveSpot);
-
     const hoverSpot = ({type}, spot) => {
         if(type === 'mouseenter') dispatch(setActiveSpot(spot))
         else if(type === 'mouseleave') dispatch(setActiveSpot(null))
@@ -31,23 +28,18 @@ export const Trainstop = ({
         delay: 1500
     });
 
-    return (<g 
-        className={`destination ${activeSpot===item.stop_id ? 'hover' : ''}`}
-        >
-        { activeSpot===item.stop_id && (<>
-                <text className="destinationLabel"
-                    x={item.x + 6 / strokeScale } 
-                    y={item.y + 2 / strokeScale }
-                    style={{ fontSize: `${7 / strokeScale}px` }}>
-                    <tspan>{item.stop_name}</tspan>
-                </text>
-        </>)}
+    return (<g className="destination">
         <g 
-            onMouseEnter={(e) => {hoverSpot(e, item.stop_id)}}
-            onMouseLeave={hoverSpot}
-            
-            className="spotgroup">
+            className="spotgroup"
+            onMouseEnter={(e) => {hoverSpot(e, item)}}
+            onMouseLeave={hoverSpot}>
 
+            <circle
+                
+                className="spot-bg"
+                r={6 / strokeScale}
+                cx={item.x}
+                cy={item.y} />
             <animated.rect
                 className="spot spot-large"
                 x={ item.x - 1.5 / strokeScale}
@@ -68,11 +60,7 @@ export const Trainstop = ({
                     scale: styles.scale,
                     transformOrigin: `${item.x}px ${item.y}px`
                 }}/>))}
-            <circle
-                className="spot-bg"
-                r={6 / strokeScale}
-                cx={item.x}
-                cy={item.y} />
+            
         </g>
     </g>)
 }

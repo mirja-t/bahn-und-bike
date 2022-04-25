@@ -7,15 +7,11 @@ import { DestinationDetails } from '../destinationDetails/DestinationDetails';
 import { VelorouteDetails } from '../velorouteDetails/VelorouteDetails';
 import { CombinedVelorouteDetails } from '../cominedVelorouteDetails/CombinedVelorouteDetails';
 import { 
-    setUserScale
-} from '../../AppSlice';
-import { 
-    selectTrainrouteList,
     selectActiveSection,
     setActiveSection,
-    setCurrentTrainroutes,
     setTrainLinesAlongVeloroute,
-    selectStartPos
+    selectStartPos,
+    loadTrainroutes
 } from '../map/trainroutes/TrainroutesSlice';
 import { 
     selectActiveVeloroute,
@@ -23,49 +19,42 @@ import {
     setActiveVelorouteSection,
     selectActiveVelorouteSection
 } from '../map/veloroutes/VeloroutesSlice';
-import { generateCurrentTrainlines } from '../../utils/generateCurrentTrainlines';
 
 export const Container = ({lang}) => {
 
     const dispatch = useDispatch();
-    const trainrouteList = useSelector(selectTrainrouteList);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const startPos = useSelector(selectStartPos);
     const velorouteSectionActive = useSelector(selectActiveVelorouteSection);
-    const [value, setValue] = useState(0);
+    const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
     const [dimensions, setDimensions] = useState([0, 0]);
     const [containerHeight, setContainerHeight] = useState(0);
     const [wrapper, setWrapper] = useState(null);
     const [containerClass, setContainerClass] = useState('width-3');
+    const [userScale, setUserScale] = useState(1);
 
     const container = useRef(null);
     const prevValue = useRef(0);
-    const direction = useRef(1);
 
-    const handleInputChange = ({target}) => {
-        const val = target.value;
-        setValue(val);
+    // zoom feature
+    const zoomMap = (dir) => {
+        const factor = dir === '+' ? 1 : -1;
+        setUserScale(userScale + factor * 0.2);
     }
     
-    const handleSubmit = (e) => {
+    const handleSubmit = (e, value, direct=true) => {
+
         e.preventDefault();
         prevValue.current = value;
-        const currTrains = generateCurrentTrainlines(trainrouteList, value);
-        setSubmitVal(value);
-        dispatch(setCurrentTrainroutes(currTrains));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainLinesAlongVeloroute([]));
-        dispatch(setUserScale(1));
+        setUserScale(1);
+        dispatch(loadTrainroutes({start, value, direct}));
+        setSubmitVal(value);
     }
-
-    useEffect(()=>{
-        setSubmitVal(0);
-        setValue(0);
-    },[startPos]);
 
     useEffect(()=>{
 
@@ -84,13 +73,6 @@ export const Container = ({lang}) => {
         }
 
     },[activeVeloroute, activeSection, velorouteSectionActive]);
-
-    useEffect(()=>{
-        let dir = direction.current;
-        if(value < prevValue.current) dir = -1;
-        if(value > prevValue.current) dir = 1;
-        direction.current = dir;
-    },[value]);
 
     useEffect(()=> {
         if(!wrapper) return
@@ -156,14 +138,14 @@ export const Container = ({lang}) => {
                         wrapper={wrapper}
                         dimensions={dimensions}
                         lang={lang}
+                        fn={zoomMap}
+                        userScale={userScale}
                         />
                 </div>
             </main>
         </div>
         <TravelDuration
             handleSubmit={handleSubmit}
-            rangeValue={value}
-            handleInputChange={handleInputChange}
             lang={lang}/>
     </>)
 }

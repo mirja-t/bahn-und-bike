@@ -1,21 +1,18 @@
 import './rangeinput.scss';
 import { useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { selectLang } from '../../../AppSlice';
 import { getTime } from '../../../utils/getTime';
 
 export const RangeInput = ({
     lang,
+    labels,
     min,
     max,
     value,
     step,
-    handleInputChange,
-    loadingSequenceActive
+    handleInputChange
 }) => {
 
     const ref = useRef(null);
-    const labels = useSelector(selectLang);
 
     useEffect(() => {
         const trackLength = (value - min) * 100 / (max - min) + '% 100%';
@@ -36,12 +33,11 @@ export const RangeInput = ({
         return rangeSkala
     }
 
-    return (<fieldset className={loadingSequenceActive ? 'range-slider disabled' : 'range-slider'}>
+    return (<fieldset className="range-slider">
         <label htmlFor="fahrtzeit">{labels[lang].traveltime}:</label>
         <span> {labels[lang].upto} {getTime(value*30, lang)}</span>
         <div>
         <input 
-            disabled={loadingSequenceActive ? true : false}
             ref={ref}
             type="range" 
             name="fahrtzeit"

@@ -2,6 +2,7 @@ import './privacy.scss';
 import { selectLang } from '../../AppSlice';
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
+import { Button } from '../stateless/button/Button';
 
 export const Privacy = ({lang, resetState}) => {
 
@@ -36,11 +37,10 @@ export const Privacy = ({lang, resetState}) => {
             <div className="seal"><a href="https://datenschutz-generator.de/" title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." target="_blank" rel="noreferrer"><img src="https://datenschutz-generator.de/wp-content/plugins/ts-dsg/images/dsg-seal/dsg-seal-pp-de.png" alt="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." width="250" height="250"/></a></div>
             <p className="margintop">
                 <Link 
-                    className="button" 
                     to="/" 
                     title={labels[lang].backtostart}
                     onClick={resetState}>
-                        {labels[lang].backtostart}
+                    <Button label={labels[lang].backtostart}/>
                 </Link>
             </p>
         </div>
