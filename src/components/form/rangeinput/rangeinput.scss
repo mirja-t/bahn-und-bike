@@ -102,6 +102,9 @@ input[type="range"] {
   }
   .rangeInputWrapper {
     margin-top: 1.15em;
+    @media (max-height: $breakpoint-s-max), (max-width: $breakpoint-s-max) {
+      display: none;
+    }
   }
   ul.steps {
     display: flex;

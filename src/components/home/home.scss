@@ -1,7 +1,11 @@
 @import '../../variables.scss';
 
 #home {
-    
+    .container {
+        @media (max-height: $breakpoint-s-max), (max-width: $breakpoint-s-max) {
+            height: 85%;
+        }
+    }
     .wrapper{
         max-width: calc( 35em + 0.5vw );
         margin: auto;
@@ -10,8 +14,10 @@
         top: 50%;
         z-index: 2;
         max-height: 90%;
-        @media (max-height: 500px), (max-width: 800px) {
+        @media (max-height: $breakpoint-s-max), (max-width: $breakpoint-s-max) {
             overflow: scroll;
+            transform: translateY(0);
+            top: 0;
         }
     }
     ol {
@@ -36,6 +42,14 @@
         left: -2em;
         top: 0.25em;
         position: absolute;
+    }
+
+    p {
+        padding: 0 1em;
+    }
+
+    p.start {
+        padding: 1em;
     }
     
     #germany{

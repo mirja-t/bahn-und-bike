@@ -1,19 +1,18 @@
 
 import './destinationpicker.scss';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectLang } from '../../../AppSlice';
+import { useDispatch } from 'react-redux';
 import { 
     setStartPos
 } from '../../map/trainroutes/TrainroutesSlice';
 
 const startDest = {
-    berlin: ['8011160', '8098160', '8011306', '8011118', '8011113', '8011102', '8011162', '8010036'],
-    hameln: ['NDS000110215']
+    berlin: '8011160',
+    hameln: 'NDS000110215',
+    schwerin: '8010324'
 }
 
-export const DestinationPicker = ({lang}) => {
+export const DestinationPicker = ({labels, lang}) => {
     const dispatch = useDispatch();
-    const labels = useSelector(selectLang);
 
     const handleChange = ({target}) => {
         const start = startDest[target.value];
@@ -30,6 +29,7 @@ export const DestinationPicker = ({lang}) => {
                 onChange={handleChange}>
                 <option value="berlin">Berlin</option>
                 <option value="hameln">Hameln</option>
+                <option value="schwerin">Schwerin</option>
             </select>
         </div>
     </fieldset>)

@@ -5,16 +5,13 @@ import { RangeInput } from './rangeinput/RangeInput';
 import { 
     selectLang
 } from '../../AppSlice';
-import { 
-    selectStartPos
-} from '../map/trainroutes/TrainroutesSlice';
 import { CheckBox } from './checkBox/CheckBox';
 import { Button } from '../stateless/button/Button';
+import { DestinationPicker } from './destinationPicker/DestinationPicker';
 
-export const TravelDuration = ({handleSubmit, lang}) => {
+export const TravelDuration = ({handleSubmit, lang, start}) => {
 
     const labels = useSelector(selectLang);
-    const startPos = useSelector(selectStartPos);
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(true);
 
@@ -30,6 +27,9 @@ export const TravelDuration = ({handleSubmit, lang}) => {
     return (
         <form id="travelduration" onSubmit={e => handleSubmit(e, value, direct)}>
             <div className="traveldurationWrapper">
+                <DestinationPicker
+                    labels={labels}
+                    lang={lang}/>
                 <CheckBox
                     lang={lang}
                     labels={labels}
@@ -44,7 +44,7 @@ export const TravelDuration = ({handleSubmit, lang}) => {
                     value={value} 
                     step="1"
                     handleInputChange={handleInputChange}
-                    reset={startPos}/>
+                    reset={start}/>
             </div>
             <Button label={labels[lang].search} type="submit"/>
             

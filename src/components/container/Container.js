@@ -146,6 +146,7 @@ export const Container = ({lang}) => {
         </div>
         <TravelDuration
             handleSubmit={handleSubmit}
-            lang={lang}/>
+            lang={lang}
+            start={start}/>
     </>)
 }
