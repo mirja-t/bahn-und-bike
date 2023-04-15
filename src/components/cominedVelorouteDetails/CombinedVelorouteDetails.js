@@ -47,7 +47,7 @@ export const CombinedVelorouteDetails = ({
                                 stop.trainstops.map((s, i) => (
                                 <span 
                                     key={i}
-                                    className="train">{s.name}</span>))}
+                                    className="train">{s}</span>))}
                         </span>
                     </h3>)
                 )}
