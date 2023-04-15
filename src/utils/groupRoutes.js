@@ -11,6 +11,7 @@ export const groupRoutes = (stops, type='train') => {
     let line = stops[0][prop];
     let currentLine = true;
     let endIdx = 0;
+
     while(currentLine && endIdx < stops.length){
         if(stops[endIdx][prop]!==line) {
             currentLine = false;

@@ -24,7 +24,7 @@ export class TrainlineTree {
         parent.next_stops.push({
             stop: {
                 dur: parent.stop.dur + stopdata.dur,
-                trainline_ids: [stopdata.trainline_id],
+                trainlines: [{ id: stopdata.trainline_id, name: stopdata.name }],
                 pathLength: this.getPathLength(parent.stop, stopdata.x, stopdata.y),
                 stop_ids: parent.stop.stop_ids.concat(stopdata.stop_id),
                 points: parent.stop.points + `${stopdata.lon * xFactor + xOffset},${- stopdata.lat * yFactor + yOffset} `,
@@ -43,8 +43,8 @@ export class TrainlineTree {
 
     addTrainlineIds(stopdata, parent) {
         if(!parent) return
-        if(!parent.stop.trainline_ids.includes(stopdata.trainline_id))
-            parent.stop.trainline_ids = parent.stop.trainline_ids.concat([stopdata.trainline_id])
+        if(!parent.stop.trainlines.map(l => l.id).includes(stopdata.trainline_id))
+            parent.stop.trainlines = parent.stop.trainlines.concat([{ id: stopdata.trainline_id, name: stopdata.name }])
         return parent
     }
 
@@ -52,13 +52,12 @@ export class TrainlineTree {
         // add change stop info
         change.stop.connection = {
             stop_name: change.stop.stop_name,
-            initial_train: change.stop.trainline_ids,
-            connecting_train: currentStop.trainline_id
+            initial_train: change.stop.trainlines,
+            connecting_train: {id: currentStop.trainline_id, name: currentStop.name}
         }
     }
 
     buildTrainline(currentParent, currentItem, stops) {
-        //console.log('buildTrainline','\n parent: ',currentParent.stop.stop_name, currentParent.stop.trainline_ids, '\n current: ',currentItem.stop_name, '\n next: ',stops[0]?.stop_name)
 
         let childIds = !!this.getNextStopById(currentItem.stop_id, currentParent.next_stops);
         if(childIds) {
@@ -121,7 +120,8 @@ export class TrainlineTree {
                 return
             }
 
-            current = current.next_stops.filter(s => s.stop.trainline_ids.includes(stop.trainline_id));
+            //current = current.next_stops.filter(s => s.stop.trainline_ids.includes(stop.trainline_id));
+            current = current.next_stops.filter(s => s.stop.trainlines.map(l => l.id).includes(stop.trainline_id));
             if(!current) return
             current.forEach(child => depthTraversal(child));
         }
@@ -146,7 +146,7 @@ export class TrainlineTree {
         for (let i = 0; i < level; i++) {
           result += '-- ';
         }
-        console.log(`${result}${data.stop.stop_number}. ${data.stop.stop_name} ${data.stop.trainline_ids.join(', ')}`);
+        console.log(`${result}${data.stop.stop_number}. ${data.stop.stop_name} ${data.stop.trainlines.map(l => l.id).join(', ')}`);
         data.next_stops.forEach(child => this.print(child, level + 1));
     }
 }
@@ -160,7 +160,7 @@ export class Trainlines extends TrainlineTree {
     generateRoute(laststop, firststop) {
         let train = {
             dur: laststop.dur,
-            line: laststop.trainline_ids,
+            line: laststop.trainlines.map(l => l.name),
             pathLength: laststop.pathLength,
             firstStation: {
                 stop_name: firststop.stop_name,
@@ -236,7 +236,7 @@ export class Trainlines extends TrainlineTree {
 
     getTrainlinesAlongVeloroute(start, stops) {
         stops.forEach(stop => {
-            const directline = stop.trainstops && start.stop.trainline_ids.find(id => stop.trainstops.includes(id));
+            const directline = stop.trainstops && start.stop.trainlines.map(l => l.id).find(id => stop.trainstops.includes(id));
             if(directline) {
                 this.getDirectTrainlineRoute(start, stop)
             }

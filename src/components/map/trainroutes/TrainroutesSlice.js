@@ -32,7 +32,7 @@ export const trainroutesSlice = createSlice({
         startPos: '8011160',
         travelInterval: 30,
         trainrouteTree: {},
-        trainlineList: [],
+        trainlineList: {},
         currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
