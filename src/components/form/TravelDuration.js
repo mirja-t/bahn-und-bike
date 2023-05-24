@@ -7,7 +7,7 @@ import {
 } from '../../AppSlice';
 import { CheckBox } from './checkBox/CheckBox';
 import { Button } from '../stateless/button/Button';
-import { DestinationPicker } from './destinationPicker/DestinationPicker';
+//import { DestinationPicker } from './destinationPicker/DestinationPicker';
 
 export const TravelDuration = ({handleSubmit, lang, start}) => {
 
@@ -20,16 +20,16 @@ export const TravelDuration = ({handleSubmit, lang, start}) => {
     }
 
     const handleInputChange = ({target}) => {
-        const val = target.value;
+        const val = Number(target.value);
         setValue(val);
     }
 
     return (
         <form id="travelduration" onSubmit={e => handleSubmit(e, value, direct)}>
             <div className="traveldurationWrapper">
-                <DestinationPicker
+                {/* <DestinationPicker
                     labels={labels}
-                    lang={lang}/>
+                    lang={lang}/> */}
                 <CheckBox
                     lang={lang}
                     labels={labels}

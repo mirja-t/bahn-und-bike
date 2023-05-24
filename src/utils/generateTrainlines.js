@@ -1,4 +1,4 @@
-import { groupRoutes } from '../groupRoutes';
+import { groupRoutes } from './groupRoutes';
 export const generateTrainlines = stops => {
     /**
  * Create Object with trainline stops

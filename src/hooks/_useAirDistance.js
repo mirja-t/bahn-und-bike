@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useDistance = (section) => {
+export const useAirDistance = (section) => {
     const [dist, setDist] = useState(null);
 
     useEffect(()=>{

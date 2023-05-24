@@ -1,5 +1,5 @@
 import './container.scss';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Map } from '../map/Map';
 import { TravelDuration } from '../form/TravelDuration';
@@ -19,16 +19,18 @@ import {
     setActiveVelorouteSection,
     selectActiveVelorouteSection
 } from '../map/veloroutes/VeloroutesSlice';
+import { mapRatio } from '../../utils/svgMap';
 
 export const Container = ({lang}) => {
 
     const dispatch = useDispatch();
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const velorouteSectionActive = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSection = activeVelorouteSectionIdx !== null ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
     const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
-    const [dimensions, setDimensions] = useState([0, 0]);
+    const [mapSize, setMapSize] = useState([0, 0]);
     const [containerHeight, setContainerHeight] = useState(0);
     const [wrapper, setWrapper] = useState(null);
     const [containerClass, setContainerClass] = useState('width-3');
@@ -37,11 +39,11 @@ export const Container = ({lang}) => {
     const container = useRef(null);
     const prevValue = useRef(0);
 
-    // zoom feature
-    const zoomMap = (dir) => {
+    const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
+    const memoizedZoomMap = useCallback((dir) => {
         const factor = dir === '+' ? 1 : -1;
         setUserScale(userScale + factor * 0.2);
-    }
+    }, [userScale]);
     
     const handleSubmit = (e, value, direct=true) => {
 
@@ -68,23 +70,20 @@ export const Container = ({lang}) => {
             setContainerClass('width-3');
         }
 
-        if(velorouteSectionActive && !activeSection) {
+        if(activeVelorouteSection && !activeSection) {
             setContainerClass(prev => `${prev} shift`);
         }
 
-    },[activeVeloroute, activeSection, velorouteSectionActive]);
+    },[activeVeloroute, activeSection, activeVelorouteSection]);
 
     useEffect(()=> {
         if(!wrapper) return
 
         const setSize = () => {
             const wrapperWidth = wrapper.getBoundingClientRect().width;
-            const wrapperHeight = wrapper.getBoundingClientRect().height;
-            const ratio = wrapperWidth / 16 * 9 > wrapperHeight ? 'horizontal' : 'vertical';
-            const height = ratio==='horizontal' ? wrapperWidth / 16 * 9 : wrapperHeight;
-            const width = ratio==='horizontal' ? wrapperWidth : wrapperHeight / 9 * 16;
-
-            setDimensions([
+            const height = wrapperWidth / mapRatio;
+            const width = wrapperWidth;
+            setMapSize([
                 width,
                 height
             ])
@@ -96,7 +95,7 @@ export const Container = ({lang}) => {
             window.removeEventListener('resize', setSize);
         }
         
-    },[wrapper, wrapper?.offsetWidth]);
+    },[wrapper]);
 
     useEffect(() => {
         if(!container) return
@@ -136,9 +135,9 @@ export const Container = ({lang}) => {
                     <Map 
                         value={submitVal}
                         wrapper={wrapper}
-                        dimensions={dimensions}
+                        mapSize={memoizedMapSize}
                         lang={lang}
-                        fn={zoomMap}
+                        fn={memoizedZoomMap}
                         userScale={userScale}
                         />
                 </div>

@@ -16,9 +16,11 @@ import {
 import { Trainroute } from './trainroute/Trainroute';
 import { Veloroutes } from '../veloroutes/Veloroutes';
 import { Label } from '../label/Label';
+import { svgWidth, svgHeight } from '../../../utils/svgMap';
 
-export const Trainroutes = memo(function Trainroutes({ containerHeight }) {
-
+export const Trainroutes = memo(function Trainroutes({ zoom }) {
+    const { containerHeight } = zoom;
+    
     const dispatch = useDispatch();
     const journeys = useSelector(selectCurrentTrainroutes);
     const activeSection = useSelector(selectActiveSection);
@@ -27,7 +29,7 @@ export const Trainroutes = memo(function Trainroutes({ containerHeight }) {
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const trainlinesAlongVeloroute = useSelector(selectTrainlinesAlongVeloroute);
     const strokeScale = (containerHeight / 1080) / 2;
-    
+
     useEffect(() => {
         if(!activeSection?.stopIds) return
         dispatch(loadVeloroutes(activeSection?.stopIds))
@@ -50,9 +52,10 @@ export const Trainroutes = memo(function Trainroutes({ containerHeight }) {
             id="routes" 
             x="0px" 
             y="0px" 
-            viewBox="0 0 1920 1080" 
+            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+            preserveAspectRatio="xMidYMid meet"
             xmlSpace="preserve">
-                
+            
             { journeys.map((item, idx) => (
                 <Trainroute 
                     key={idx}
@@ -65,17 +68,17 @@ export const Trainroutes = memo(function Trainroutes({ containerHeight }) {
             { trainlinesAlongVeloroute.map((item, idx) => (
                 <Trainroute 
                     key={idx}
-                    className="active"
+                    className="active trainlinesAlongVeloroute"
                     item={item}
                     strokeScale={strokeScale} />
             ))}
-            
+{/*             
             { activeSection && 
                 <Trainroute 
                     className="active"
                     item={activeSection}
                     strokeScale={strokeScale}/> }
-
+            */}
             { activeVeloroute && 
                 <Veloroutes 
                     strokeScale={strokeScale} /> }   

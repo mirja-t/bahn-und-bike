@@ -1,10 +1,9 @@
-import { svg_scale } from '../data/svg_scale';
-const { xFactor, yFactor, xOffset, yOffset } = svg_scale;
+import { getMapPosition } from './svgMap';
 
 // get PathLength for getDistance
 export const getPathLength = (route) => {
     if(!route) return 0 
-    const path = route.map(el => [el.lon * xFactor + xOffset, - el.lat * yFactor + yOffset])
+    const path = route.map(el => getMapPosition(el.lon, el.lat));
     const reducer = (acc, n) => acc + n;
     return path.map((el, idx) => {
         const prev = idx > 0 ? path[idx-1] : el;

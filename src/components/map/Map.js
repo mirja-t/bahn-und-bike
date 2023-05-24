@@ -1,4 +1,4 @@
-import './map.css';
+import './map.scss';
 import { useSpring, useTransition, animated } from 'react-spring';
 import { useDrag } from '@use-gesture/react';
 import { useEffect, useRef } from 'react';
@@ -16,28 +16,31 @@ import {
 } from './veloroutes/VeloroutesSlice';
 import { Trainroutes } from './trainroutes/Trainroutes';
 import { Germany } from './germany/Germany';
-import { Bundeslaender } from './bundeslaender/Bundeslaender';
-import { MapLegend } from './mapLegend/MapLegend';
-import { Cities } from './cities/Cities';
+// import { Bundeslaender } from './bundeslaender/Bundeslaender';
+// import { MapLegend } from './mapLegend/MapLegend';
+// import { Cities } from './cities/Cities';
 import { Loading } from '../stateless/loading/Loading';
 import { ZoomPanel } from '../stateless/zoomPanel/ZoomPanel';
+//import { useTraceUpdate } from '../../hooks/useTraceUpdate';
 
 export const Map = ({
     value,
     wrapper,
-    dimensions,
+    mapSize,
     lang,
     fn,
     userScale
 }) => {
+
+    //useTraceUpdate({ value, wrapper, mapSize, lang, fn, userScale });
 
     const mapcontainerRef = useRef(null);
     const labels = useSelector(selectLang);
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroute = useSelector(selectActiveVeloroute);
-    const zoom = useZoom(mapcontainerRef, journeys, veloroute, value, wrapper, dimensions, userScale, isLoading);
 
+    const zoom = useZoom(journeys, veloroute, value, wrapper, mapSize, userScale, isLoading);
     const mapInnerSpring = useSpring({
         left: zoom.x,
         top: zoom.y
@@ -60,7 +63,6 @@ export const Map = ({
     const bind = useDrag(({ movement: [mx, my] }) => {
         api.start({ x: mx, y: my })
     });
-
     
 
     useEffect(() => {
@@ -83,22 +85,22 @@ export const Map = ({
                     x, 
                     y, 
                     touchAction: 'none', 
-                    ...mapInnerSpring 
+                    ...mapInnerSpring
                 }}
-                className="map-inner" 
+                className="map-inner"
                 >
                 { !isLoading && (<>
                     {(parseInt(value)===0 && journeys.length===0 && !isLoading) && (<div className="instructions">
                         <p>{labels[lang].instruction}</p>
                     </div>)}
                     <Trainroutes 
-                        containerHeight={zoom.containerHeight} />
+                        zoom={zoom} />
                     </>)
                 }
                 <Germany/>
-                <Bundeslaender value={value}/>
+                {/* <Bundeslaender value={value}/>
                 <MapLegend zoom={zoom} value={value}/>
-                <Cities zoom={zoom} value={value}/>
+                <Cities zoom={zoom} value={value}/> */}
             </animated.div>
     </div>
     </>)

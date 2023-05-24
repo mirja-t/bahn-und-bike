@@ -4,6 +4,7 @@ export const Label = ({
     className, 
     strokeScale
 }) => {
+
     return (
         <text 
             className={`${className} destinationLabel`}

@@ -5,24 +5,20 @@ import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
 import { selectLang } from '../../AppSlice';
 import { 
     selectActiveVeloroute, 
-    setActiveVelorouteSection,
+    // setActiveVelorouteSection,
     selectActiveVelorouteSection,
-    setCombinedVeloroute,
+    // setCombinedVeloroute,
     setHoveredVelorouteSection,
-    selectCrossingVelorouteList,
-    selectCrossingVeloroutesLoading,
-    selectCombinedVeloroute,
+    // selectCrossingVelorouteList,
+    // selectCombinedVeloroute,
     setVelorouteSectionActiveThunk
 } from '../map/veloroutes/VeloroutesSlice';
-import { 
-    selectTrainrouteList,
-    setTrainLinesAlongVeloroute
-} from '../map/trainroutes/TrainroutesSlice';
-import { generateCurrentTrainroutes } from '../../utils/treeData/generateCurrentTrainroutes';
+// import { 
+//     selectTrainrouteList
+// } from '../map/trainroutes/TrainroutesSlice';
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { VelorouteIcon } from '../stateless/icons/VelorouteIcon';
 import { Collapse } from '../stateless/collapse/Collapse';
-import { ItemList } from '../stateless/itemlist/ItemList';
 
 export const VelorouteDetails = ({
     parent, 
@@ -33,23 +29,20 @@ export const VelorouteDetails = ({
 
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
-    const trainrouteList = useSelector(selectTrainrouteList);
-    const crossingVeloroutes = useSelector(selectCrossingVelorouteList);
-    const crossingVeloroutesLoading = useSelector(selectCrossingVeloroutesLoading);
-    const combinedVeloroute = useSelector(selectCombinedVeloroute);
+    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSection = activeVelorouteSectionIdx !== null ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
+    // const trainrouteList = useSelector(selectTrainrouteList);
+    // const crossingVeloroutes = useSelector(selectCrossingVelorouteList);
+    // const combinedVeloroute = useSelector(selectCombinedVeloroute);
     
-    const setCurrentCombinedVeloroute = item => {
-        const activeCombinedVRouteSection = item.route.reduce((acc, el)=> acc.concat(el),[]);
-        const stops = [item.route[0], item.route[item.route.length-1]];
-        const trainlinesAlongVeloroute = generateCurrentTrainroutes(trainrouteList, stops);
-        dispatch(setTrainLinesAlongVeloroute(trainlinesAlongVeloroute));
-        dispatch(setCombinedVeloroute(item));
-        dispatch(setActiveVelorouteSection(activeCombinedVRouteSection));
-    }
+    // const setCurrentCombinedVeloroute = item => {
+    //     const activeCombinedVRouteSection = item.route.reduce((acc, el)=> acc.concat(el),[]);
+    //     dispatch(setCombinedVeloroute(item));
+    //     dispatch(setActiveVelorouteSection(activeCombinedVRouteSection));
+    // }
 
     const setVelorouteSectionActive = idx => {
-        dispatch(setVelorouteSectionActiveThunk({trainrouteList, activeVeloroute, idx}))
+        dispatch(setVelorouteSectionActiveThunk(idx))
     }
 
     const hoverVelorouteSection = ({type}, idx) => {
@@ -75,19 +68,18 @@ export const VelorouteDetails = ({
                         <Collapse title={`${labels[lang].cyclingroutelegs}`}>
                             <ol className="veloroute-stops">
                                 {activeVeloroute.route
-                                .slice(0, activeVeloroute.route[0][0].stop_id === activeVeloroute.route[activeVeloroute.route.length-1][activeVeloroute.route[activeVeloroute.route.length-1].length-1].stop_id ? activeVeloroute.route.length-1 : activeVeloroute.route.length)
-                                .map((arr, idx) =>
+                                .map((obj, idx) =>
                                     (<li 
                                         key={uuidv4()}
                                         onClick={() => setVelorouteSectionActive(idx)}
                                         onMouseEnter={e => hoverVelorouteSection(e, idx)}
                                         onMouseLeave={e => hoverVelorouteSection(e)}>
-                                        <div>{`${arr[0].stop_name} to ${arr[arr.length-1].stop_name}`}</div>
+                                        <div>{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length-1].stop_name}`}</div>
                                     </li>))}
                             </ol>
                         </Collapse>
                     </section>
-                    { activeVelorouteSection && 
+                    {/* { activeVelorouteSection && 
                         (<section className="section">
                             <h5>{labels[lang].alternativeveloroutes}</h5>
                             { crossingVeloroutes && !crossingVeloroutesLoading &&
@@ -97,7 +89,7 @@ export const VelorouteDetails = ({
                                     activeItem={combinedVeloroute}
                                     fn={setCurrentCombinedVeloroute} />}
                         </section>)
-                    }
+                    } */}
                     {!activeVelorouteSection && labels[lang].nolegchosen}
                 </div>
             )}

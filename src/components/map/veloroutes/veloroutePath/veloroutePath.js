@@ -3,11 +3,9 @@ import {
     selectHoveredVelorouteSection,
     selectActiveVeloroute,
     selectActiveVelorouteSection,
-    setVelorouteSectionActiveThunk
+    setVelorouteSectionActiveThunk,
+    loadCrossingVeloroutes
 } from '../VeloroutesSlice';
-import {
-    selectTrainrouteList
-} from '../../trainroutes/TrainroutesSlice';
 
 export const VeloroutePath = ({
     idx,
@@ -19,11 +17,12 @@ export const VeloroutePath = ({
     const dispatch = useDispatch();
     const hoveredVrouteSection = useSelector(selectHoveredVelorouteSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
-    const trainrouteList = useSelector(selectTrainrouteList);
+    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSection = activeVelorouteSectionIdx !== null ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
 
     const setVelorouteSectionActive = idx => {
-        dispatch(setVelorouteSectionActiveThunk({trainrouteList, activeVeloroute, idx}))
+        dispatch(setVelorouteSectionActiveThunk(idx));
+        dispatch(loadCrossingVeloroutes(idx));
     }
 
     return (<g

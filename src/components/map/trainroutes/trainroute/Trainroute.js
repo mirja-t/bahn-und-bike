@@ -17,7 +17,7 @@ export const Trainroute = memo(function Trainroute({
     strokeScale,
     className
 }) {
-    
+
     const dispatch = useDispatch();
 
     const setAdditionalTrainlineActive = (line) => {
@@ -45,7 +45,7 @@ export const Trainroute = memo(function Trainroute({
                 strokeDasharray: item.pathLength
             }}
             />
-        { item && 
+        { item && item.lastStation && 
             <Trainstop 
                 styles={{scale: 1}}
                 item={item.lastStation}

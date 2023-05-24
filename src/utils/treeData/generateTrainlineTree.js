@@ -3,25 +3,24 @@ import {
 } from './TrainlineTree';
 import { HashMap } from '../HashMap/HashMap';
 import { addConnectingTrainlines } from './addConnectingTrainlines';
-import { svg_scale } from "../../data/svg_scale";
-const {xFactor, yFactor, xOffset, yOffset} = svg_scale;
+import { getMapPosition } from "../svgMap";
 
 export const generateTrainlineTree = (trainlineStops, startStops, value, direct) => {
-
     const getFirstStop = (startStops) => {
+        const [x, y] = getMapPosition(startStops[0].lon, startStops[0].lat);
         return {
             dur: 0,
             trainline_ids: [startStops[0].trainline_id],
             pathLength: 0,
             stop_ids: [startStops[0].stop_id],
-            points: `${startStops[0].lon * xFactor + xOffset},${- startStops[0].lat * yFactor + yOffset} `,
+            points: `${x},${y} `,
             stop_name: startStops[0].stop_name,
             stop_number: 0,
             stop_id: startStops[0].stop_id,
             lat: startStops[0].lat,
             lon: startStops[0].lon,
-            x: startStops[0].lon * xFactor + xOffset,
-            y: - startStops[0].lat * yFactor + yOffset
+            x,
+            y
         };
     }
 
@@ -39,7 +38,7 @@ export const generateTrainlineTree = (trainlineStops, startStops, value, direct)
      */
      const directTrainlinesIndexMap = new Map();
      startStops.forEach(s => {
-         directTrainlinesIndexMap.set(s.trainline_id, s.stop_number)
+        directTrainlinesIndexMap.set(s.trainline_id, s.stop_number)
      });
 
      /**
@@ -79,7 +78,7 @@ export const generateTrainlineTree = (trainlineStops, startStops, value, direct)
 
 
     trainlineTree.getCurrentRoute(parseInt(value) * 30);
-    const trainrouteTree = trainlineTree.trainlines;
+    //const trainrouteTree = trainlineTree.trainlines;
     const currentTrainroutes = trainlineTree.journeys;
-    return [trainrouteTree, currentTrainroutes];
+    return currentTrainroutes;
 }

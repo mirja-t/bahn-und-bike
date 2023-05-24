@@ -1,9 +1,8 @@
 /**
  * 
- * @param {array} arr 
- * @returns 
+ * @param {{x: number, y: number}[][]}
+ * @returns {string}
  * 
- * expects an array of arrays with stops
  */
 export const getRoutePath = arr => {
     if(!arr.length) return []

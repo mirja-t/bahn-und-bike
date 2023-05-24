@@ -1,5 +1,5 @@
 import './germany.scss';
-import img from '../../../assets/images/germany.svg';
+import img from '../../../assets/images/de.svg';
 
 export const Germany = () => {
     return (<div id="germany">

@@ -1,5 +1,4 @@
-import { svg_scale } from "../../data/svg_scale";
-const {xFactor, yFactor, xOffset, yOffset} = svg_scale;
+import { getMapPosition } from "../svgMap";
 
 export class TrainlineTree {
 
@@ -21,20 +20,21 @@ export class TrainlineTree {
     }
 
     addChild(stopdata, parent) {
+        const [x, y] = getMapPosition(stopdata.lon, stopdata.lat);
         parent.next_stops.push({
             stop: {
                 dur: parent.stop.dur + stopdata.dur,
                 trainline_ids: [stopdata.trainline_id],
                 pathLength: this.getPathLength(parent.stop, stopdata.x, stopdata.y),
                 stop_ids: parent.stop.stop_ids.concat(stopdata.stop_id),
-                points: parent.stop.points + `${stopdata.lon * xFactor + xOffset},${- stopdata.lat * yFactor + yOffset} `,
+                points: parent.stop.points + `${x},${y} `,
                 stop_name: stopdata.stop_name,
                 stop_number: parent.stop.stop_number+1,
                 stop_id: stopdata.stop_id,
                 lat: stopdata.lat,
                 lon: stopdata.lon,
-                x: stopdata.lon * xFactor + xOffset,
-                y: - stopdata.lat * yFactor + yOffset,
+                x,
+                y,
                 connection: parent.stop.connection || null
             },
             next_stops: []
@@ -58,7 +58,6 @@ export class TrainlineTree {
     }
 
     buildTrainline(currentParent, currentItem, stops) {
-        //console.log('buildTrainline','\n parent: ',currentParent.stop.stop_name, currentParent.stop.trainline_ids, '\n current: ',currentItem.stop_name, '\n next: ',stops[0]?.stop_name)
 
         let childIds = !!this.getNextStopById(currentItem.stop_id, currentParent.next_stops);
         if(childIds) {
@@ -212,6 +211,7 @@ export class Trainlines extends TrainlineTree {
     }
 
     getShortestConnection(start, stop) {
+
         let dur = 240;
         let shortestJourney = {
             stop: start.stop, 

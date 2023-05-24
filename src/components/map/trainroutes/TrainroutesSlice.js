@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { headers, url } from '../../../config/config';
 import { refactorStopData } from '../../../utils/refactorStopData';
 import { generateTrainlineTree } from '../../../utils/treeData/generateTrainlineTree'; 
-import { generateTrainlines } from '../../../utils/treeData/generateTrainlines'; 
-import { generateTrainList } from '../../../utils/generateTrainList';
+import { generateTrainlines } from '../../../utils/generateTrainlines'; 
+import { makeTrainConnection } from '../../../utils/makeTrainConnection';
 
 export const loadTrainroutes = createAsyncThunk(
     "trainroutes/setTrainroutes",
@@ -17,13 +17,40 @@ export const loadTrainroutes = createAsyncThunk(
       const trainstopsRefactored = connections.map(refactorStopData);
       const startStops = trainstopsRefactored.filter(s => s.stop_id === start);
       const trainrouteList = generateTrainlines(trainstopsRefactored);
-      const trainlines = generateTrainList(trainrouteList);
-      const [trainrouteTree, currentTrainroutes] = generateTrainlineTree(trainrouteList, startStops, value, direct);
-      
-      thunkAPI.dispatch(setTrainlineList(trainlines));
-      thunkAPI.dispatch(setCurrentTrainroutes(currentTrainroutes));
+      const currentTrainroutes = generateTrainlineTree(trainrouteList, startStops, value, direct);
 
-      return trainrouteTree
+      const trainlineList = direct ? startStops.map(s => s.trainline_id) : null;
+      thunkAPI.dispatch(setTrainlineList(trainlineList));
+
+      return currentTrainroutes
+});
+
+export const loadTrainroutesAlongVeloroute = createAsyncThunk(
+  "trainroutes/setTrainroutesAlongVeloroute",
+  async (idx, thunkAPI) => {
+
+    const startdestination = thunkAPI.getState().trainroutes.startPos;
+    const activeVeloroute = thunkAPI.getState().veloroutes.activeVeloroute;
+    const startId = activeVeloroute.route[idx].leg[0].trainstop;
+    const endId = activeVeloroute.route[idx].leg[activeVeloroute.route[idx].leg.length - 1].trainstop;
+
+    const  connections = [];
+    const fetchConnection = async id => {
+      const connectionQuery = 'connection/' + startdestination + '&' + id;
+      const connection = await fetch(`${url}${connectionQuery}`, {'headers': headers})
+      .then(response => {
+        if (response.status !== 200) { throw new Error("Bad Server Response"); }
+        return response.json()
+      });
+      return connection
+    }
+
+    const connectionStart = await fetchConnection(startId);
+    const connectionEnd = await fetchConnection(endId);
+    connections.push(makeTrainConnection(connectionStart));
+    connections.push(makeTrainConnection(connectionEnd));
+
+    return connections
 });
 
 export const trainroutesSlice = createSlice({
@@ -38,7 +65,9 @@ export const trainroutesSlice = createSlice({
         trainroutesError: false,
         activeSpot: null,
         activeSection: null,
-        trainlinesAlongVeloroute: []
+        trainlinesAlongVeloroute: [],
+        trainroutesAlongVelorouteLoading: false,
+        trainroutesAlongVelorouteError: false,
     },
     reducers: {
       setCurrentTrainroutes: (state, action) => {
@@ -69,13 +98,26 @@ export const trainroutesSlice = createSlice({
           state.trainroutesError = false;
         },
         [loadTrainroutes.fulfilled]: (state, action) => {
-          state.trainrouteTree = action.payload;
+          state.currentTrainroutes = action.payload;
           state.trainroutesLoading = false;
           state.trainroutesError = false;
         },
         [loadTrainroutes.rejected]: (state, action) => {
           state.trainroutesLoading = false;
           state.trainroutesError = true;
+        },
+        [loadTrainroutesAlongVeloroute.pending]: (state, action) => {
+          state.trainroutesAlongVelorouteLoading = true;
+          state.trainroutesAlongVelorouteError = false;
+        },
+        [loadTrainroutesAlongVeloroute.fulfilled]: (state, action) => {
+          state.trainlinesAlongVeloroute = action.payload;
+          state.trainroutesAlongVelorouteLoading = false;
+          state.trainroutesAlongVelorouteError = false;
+        },
+        [loadTrainroutesAlongVeloroute.rejected]: (state, action) => {
+          state.trainroutesAlongVelorouteLoading = false;
+          state.trainroutesAlongVelorouteError = true;
         }
       }
 });

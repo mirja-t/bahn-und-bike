@@ -8,8 +8,7 @@ import {
     selectActiveVeloroute,
     selectVeloroutesLoading,
     setActiveVelorouteSection,
-    setActiveVeloroute,
-    setCombinedVeloroute
+    loadVeloroute
 } from '../map/veloroutes/VeloroutesSlice';
 import { 
     selectActiveSection,
@@ -42,8 +41,7 @@ export const DestinationDetails = ({
     const setVelorouteActive = vroute => {
         dispatch(setTrainLinesAlongVeloroute([]))
         dispatch(setActiveVelorouteSection(null))
-        dispatch(setActiveVeloroute(vroute))
-        dispatch(setCombinedVeloroute(null))
+        dispatch(loadVeloroute(vroute))
     }
 
     return (<ScrollContent parentEl={parent} transitionComplete={true} >

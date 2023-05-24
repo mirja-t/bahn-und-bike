@@ -16,17 +16,17 @@ import { ActiveVelorouteSectionIcon } from './activeVelorouteSectionDetails/Acti
 export const Veloroutes = ({strokeScale}) => {
 
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSection = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSection = activeVelorouteSectionIdx ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
     const activeVRouteStops = {
-        start: activeVelorouteSection ? activeVelorouteSection[0] : null,
-        end: activeVelorouteSection ? activeVelorouteSection[activeVelorouteSection.length-1] : null
+        start: activeVelorouteSection ? activeVelorouteSection.leg[0] : null,
+        end: activeVelorouteSection ? activeVelorouteSection.leg[activeVelorouteSection.length-1] : null
     }
 
     return (<g 
         className="veloroute" > 
-        
         { activeVeloroute.path.map((path, idx) => (
             <VeloroutePath
                 key={idx}
@@ -35,13 +35,14 @@ export const Veloroutes = ({strokeScale}) => {
                 strokeScale={strokeScale}/>
         ))}
 
-        { activeVeloroute.route.map(s => s.map((item, idx) => (
+        { activeVeloroute.route.map(s => s.leg.map((item, idx) => (
             <VelorouteStop 
                 key={idx}
                 item={item}
                 activeSpot={activeVelorouteStop}
                 strokeScale={strokeScale}
-                type={item===activeVRouteStops.start || item===activeVRouteStops.end ? 'active' : ''}/>
+                type={item===activeVRouteStops.start || item===activeVRouteStops.end ? 'active' : ''}
+                />
         )))}
 
         { activeVelorouteSection && (<>
@@ -52,7 +53,7 @@ export const Veloroutes = ({strokeScale}) => {
             )}
             <ActiveVelorouteSectionIcon 
                 strokeScale={strokeScale}
-                section={activeVelorouteSection}/>
+                section={activeVelorouteSection.leg}/>
         </>)}
     </g>)
 }
