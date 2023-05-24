@@ -49,8 +49,10 @@ svg#routes{
             stroke: transparent;
         }
         &.active {
-            .route {
+            polyline.route {
                 stroke: $primary-hover;
+                animation: none;
+                stroke-dashoffset: 0!important;
                 transition: all .5s ease;
             }
         }
