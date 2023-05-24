@@ -72,13 +72,11 @@ export const Trainroutes = memo(function Trainroutes({ zoom }) {
                     item={item}
                     strokeScale={strokeScale} />
             ))}
-{/*             
             { activeSection && 
                 <Trainroute 
                     className="active"
                     item={activeSection}
                     strokeScale={strokeScale}/> }
-            */}
             { activeVeloroute && 
                 <Veloroutes 
                     strokeScale={strokeScale} /> }   

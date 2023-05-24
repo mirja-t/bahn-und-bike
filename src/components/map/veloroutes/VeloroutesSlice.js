@@ -35,7 +35,7 @@ export const loadVeloroute = createAsyncThunk(
     const velorouteStopsGrouped = groupVeloroute(velorouteStops, trainlines);
     const path = getRoutePath(velorouteStopsGrouped);
     const route = makeVeloRoute(velorouteStopsGrouped);
-    if(id==7) console.log(route)
+
     return {
       id,
       name,

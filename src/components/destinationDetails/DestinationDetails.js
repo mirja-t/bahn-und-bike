@@ -22,7 +22,6 @@ export const DestinationDetails = ({
     parent,
     lang
 }) => {  
-
     
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
@@ -75,13 +74,11 @@ export const DestinationDetails = ({
 
                 <section className="section">
                     <h5>{labels[lang].veloroutes}</h5>
-                    {veloroutesLoading ? labels[lang].loading :
-                        <ItemList
-                            items={veloroutes}
-                            lang={lang}
-                            activeItem={activeVeloroute}
-                            fn={setVelorouteActive} />
-                    }
+                    <ItemList
+                        items={veloroutes}
+                        lang={lang}
+                        activeItem={activeVeloroute}
+                        fn={setVelorouteActive} />
                 </section>
             </>)}
         </div>

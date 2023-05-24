@@ -16,10 +16,13 @@ import { groupByKey } from './utils';
  * connection: { stop_name: string, initial_train: {}, connecting_train: {} }
  * }
  */
+
 export function makeTrainConnection(arr) {
     arr = arr.map(refactorStopData);
     const grouped = groupByKey('trainline_id', arr) 
     const connection = {
+        firstStation: grouped[0][0],
+        lastStation: grouped[grouped.length-1][grouped[grouped.length-1].length-1],
         dur: getConnectionDuration(arr),
         line: grouped.map(line => line[0].trainline_id),
         pathLength: getPathLength(arr),

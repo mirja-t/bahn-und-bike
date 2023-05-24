@@ -27,7 +27,6 @@ export const useZoom = (
     useEffect(() => {
 
         if(loading) return;
-        console.log(mapRatio)
         // get shortest size of wrapper
         const wrapperMinSize = Math.min(wrapper?.offsetWidth, wrapper?.offsetHeight) || 1;
 
