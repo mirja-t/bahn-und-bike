@@ -1,14 +1,14 @@
-@import '../../variables.scss';
+@import '../../scss/variables.scss';
 
 
 #destination.details {
     color: $primary-hover;
     h1, h2, h3, h4, h5, h6 {
-        color: $primary-hover;
+        color: var(--primary-hover);
     }
     .veloroute-section-details {
         h1, h2, h3, h4, h5, h6 {
-            color: $primary-hover;
+            color: var(--primary-hover);
         }
     }
 }

@@ -13,7 +13,8 @@ import { LanguagePicker } from './components/form/languagepicker/LanguagePicker'
 import { 
   loadLang, 
   selectLangLoading, 
-  selectLangError
+  selectLangError,
+  selectTheme
 } from './AppSlice';
 import { 
   setActiveSection,
@@ -32,6 +33,7 @@ function App() {
   const dispatch = useDispatch();
   const languagesLoading = useSelector(selectLangLoading);
   const languagesError = useSelector(selectLangError);
+  const theme = useSelector(selectTheme);
   const location = useLocation();
 
   const setLanguage = lang => {
@@ -58,7 +60,7 @@ function App() {
   if(languagesLoading) return <div/>;
   if(languagesError) return <Error/>;
   return (
-    <div className="App">
+    <div className={`App theme-${theme}`}>
       <div id="wrapper" className={classes}>
         <Header>
           <Link to="/" title={lang==='de' ? 'Zur Startseite' : 'Back to Homepage'}><div id="logo" onClick={resetState}/></Link>

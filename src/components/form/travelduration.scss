@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import '../../scss/variables.scss';
 
 #travelduration {
     position: relative;
@@ -11,20 +11,25 @@
     }
 }
 .traveldurationWrapper {
-    background: rgba(220,220,220,.6);
-    background: linear-gradient(180deg, rgba(250,250,250, 0.6) 0%, rgba(220, 220, 220, 0.8) 90%);
     width: 100%;
     display: flex;
     gap: $padding-xl;
     padding: $padding-s $padding-xl;
-    transition: all .25s ease;
-    border-radius: $borderradius * 2;
-    -webkit-appearance: none;
-    backdrop-filter: blur(3px);
-    box-shadow: -10px -10px 30px white, -5px -5px 10px white, 10px 10px 30px rgba(0, 0, 0, 0.25);
-    text-shadow: 1px 1px 0 white;
-    transition: all .3s ease;
     position: relative;
+}
+
+.theme-light {
+    .traveldurationWrapper {
+        background: rgba(220,220,220,.6);
+        background: linear-gradient(180deg, rgba(250,250,250, 0.6) 0%, rgba(220, 220, 220, 0.8) 90%);
+        transition: all .25s ease;
+        border-radius: $borderradius * 2;
+        -webkit-appearance: none;
+        backdrop-filter: blur(3px);
+        box-shadow: -10px -10px 30px white, -5px -5px 10px white, 10px 10px 30px rgba(0, 0, 0, 0.25);
+        text-shadow: 1px 1px 0 white;
+        transition: all .3s ease;
+    }
 }
 
 fieldset {

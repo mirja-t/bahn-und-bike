@@ -1,20 +1,13 @@
 import { getMapPosition } from './svgMap';
+import { removeWords } from './utils';
 
 export const refactorStopData = stop => {
-    
-    // shorten stop name
-    const getStopName = dest => {
-        if(!dest) return
-        // remove ', Bahnhof' from stop_name
-        const indexEnd = dest.indexOf(', Bahnhof') > 0 ? dest.indexOf(', Bahnhof') : dest.length;
-        return dest.slice(0, indexEnd)
-    }
-
+    const wordsToRemove = ['Bahnhof', 'Hbf', 'Hauptbahnhof', 'Bhf', 'S-Bahn', 'Busbahnhof'];
     const refactoredstop = {};
     const [x, y] = getMapPosition(stop.lon, stop.lat);
     try {
         refactoredstop.stop_id = stop.destination_id;
-        refactoredstop.stop_name = getStopName(stop.destination_name);
+        refactoredstop.stop_name = removeWords(stop.destination_name, wordsToRemove);
         refactoredstop.stop_number = parseInt(stop.stop_number);
         refactoredstop.lat = parseFloat(stop.lat);
         refactoredstop.lon = parseFloat(stop.lon);

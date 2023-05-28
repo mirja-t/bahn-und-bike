@@ -30,7 +30,13 @@ export const appSlice = createSlice({
     initialState: {
         lang: {},
         langLoading: true,
-        langError: false
+        langError: false,
+        theme: 'light'
+    },
+    reducers: {
+      setTheme: (state, action) => {
+        state.theme = action.payload;
+      }
     },
     extraReducers: {
         [loadLang.pending]: (state, action) => {
@@ -51,6 +57,7 @@ export const appSlice = createSlice({
   });
 
 export const selectLang = (state) => state.app.lang;
+export const selectTheme = (state) => state.app.theme;
 export const selectLangLoading = (state) => state.app.langLoading;
 export const selectLangError = (state) => state.app.langError;
 

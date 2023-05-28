@@ -31,15 +31,6 @@ export const VelorouteDetails = ({
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection = activeVelorouteSectionIdx !== null ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
-    // const trainrouteList = useSelector(selectTrainrouteList);
-    // const crossingVeloroutes = useSelector(selectCrossingVelorouteList);
-    // const combinedVeloroute = useSelector(selectCombinedVeloroute);
-    
-    // const setCurrentCombinedVeloroute = item => {
-    //     const activeCombinedVRouteSection = item.route.reduce((acc, el)=> acc.concat(el),[]);
-    //     dispatch(setCombinedVeloroute(item));
-    //     dispatch(setActiveVelorouteSection(activeCombinedVRouteSection));
-    // }
 
     const setVelorouteSectionActive = idx => {
         dispatch(setVelorouteSectionActiveThunk(idx))

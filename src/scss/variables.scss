@@ -10,6 +10,23 @@ $primary: red;
 $primary-hover: #4a366a;
 $primary-muted: rgb(194, 191, 195);//#501414;
 $primary-hover-muted: pink;
+$gold-dark: #8E6902;
+$gold: #e9d7a2;
+$dark: #162d38;
+
+$themes: (
+    light: (
+        'text': $darkgray,
+        'bg': $background-dark,
+        'primary-hover': $primary-hover,
+    ),
+    dark: (
+        'text': $gold-dark,
+        'bg': $dark,
+        'primary-hover': $gold,
+    )
+);
+
 
 $boxshadow: 8px 8px 8px rgba(0,0,0,0.3);
 

@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@import '../../scss/variables.scss';
 
 #veloroute.details {
     //background: $veloroute;
@@ -38,7 +38,7 @@ ul.veloroute-stops {
     }
 }
 ol.veloroute-stops{
-    padding-left: 1em;
+    padding-left: 1.5em;
     div {
         cursor: pointer;
         

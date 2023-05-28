@@ -26,7 +26,7 @@ export function groupByKey(key, arr) {
  * @returns {Array} - The property value of the input array with the least items. 
  */
 
-  export const getShortestArray = groups => {
+export const getShortestArray = groups => {
     let shortestArray = null;
     for (const key in groups) {
       const currentArray = groups[key];
@@ -46,4 +46,21 @@ export function groupByKey(key, arr) {
 
 export const separateStr = str => {
     return str.split(',').map(item => item.trim());
+}
+
+/**
+ * Removes words from a string.
+ * @param {string} str - The input string.
+ * @param {Array} words - The words to remove from the string.
+ * @returns {string} - The input string without the words.
+ * @example
+ */
+
+export const removeWords = (str, words) => {
+    const regex = new RegExp(words.join('|'), 'gi');
+    let sanitizedString = str.replace(regex, '').trim();
+    if(sanitizedString[sanitizedString.length-1] === ',') {
+        sanitizedString = sanitizedString.slice(0, -1);
+    }
+    return sanitizedString;
 }

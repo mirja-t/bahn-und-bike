@@ -6,7 +6,6 @@ import { selectLang } from '../../AppSlice';
 import { 
     selectVelorouteList,
     selectActiveVeloroute,
-    selectVeloroutesLoading,
     setActiveVelorouteSection,
     loadVeloroute
 } from '../map/veloroutes/VeloroutesSlice';
@@ -26,7 +25,6 @@ export const DestinationDetails = ({
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
-    const veloroutesLoading =  useSelector(selectVeloroutesLoading);
     const veloroutes = useSelector(selectVelorouteList);
 
     const headline = activeSection ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}` : null;

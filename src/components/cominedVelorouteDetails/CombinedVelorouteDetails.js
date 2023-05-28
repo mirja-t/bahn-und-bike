@@ -43,7 +43,6 @@ export const CombinedVelorouteDetails = ({
             </span>
         </h3>
     );
-
     return (<ScrollContent parentEl={parent} transitionComplete={true}>
         <div 
             id="veloroute"
@@ -54,26 +53,12 @@ export const CombinedVelorouteDetails = ({
                 <h5>{`${labels[lang].leg}`}</h5>
                 { sectionHeadline(activeVelorouteSection.leg[0], 1) }
                 { sectionHeadline(activeVelorouteSection.leg[activeVelorouteSection.leg.length-1], 2) }
-                {/* { [activeVelorouteSection.leg[0], activeVelorouteSection.leg[activeVelorouteSection.leg.length - 1]].map((stop, idx) => 
-                    (<h3 
-                        key={idx}
-                        className="veloroute-trainstops">
-                        <ActiveVelorouteSectionIcon num={idx + 1}/>
-                        <span>
-                            {`${idx===0 ? labels[lang].from : labels[lang].to} ${stop.stop_name}`}
-                            { stop.trainstops && 
-                                stop.trainstops.map((s, i) => (
-                                <span 
-                                    key={i}
-                                    className="train">{s.name}</span>))}
-                        </span>
-                    </h3>)
-                )} */}
-                { activeVelorouteSection.length > 2 && (<>
+                { activeVelorouteSection.leg.length > 2 && (
+                    <>
                     <h6>{labels[lang].via}</h6>
                     <ul className="veloroute-stops">
-                        {activeVelorouteSection.slice(1,activeVelorouteSection.length-1)
-                            .filter((s, idx, arr) => s.stop_name !== arr[idx-1]?.stop_name)
+                        {activeVelorouteSection.leg
+                            .slice(1,-1)
                             .map((s, idx, arr) => (<li key={idx}>
                                 <span 
                                     className={activeVelorouteStop && activeVelorouteStop.stop_id===s.stop_id ? 'hover' : ''}
@@ -84,8 +69,8 @@ export const CombinedVelorouteDetails = ({
                             </li>)
                         )}
                     </ul>
-                </>)}
-                <h6>{`${labels[lang].distance} (${labels[lang].airline})`}</h6>
+                </>)}       
+                <h6>{labels[lang].distance}</h6>
                 <p>{activeVelorouteSection.dist} km</p>
             </section>)}
             

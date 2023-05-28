@@ -7,6 +7,9 @@
  * path: string
  */
 
+import { removeWords } from "./utils";
+
+const wordsToRemove = ['Bahnhof', 'Hbf', 'Hauptbahnhof', 'Bhf', 'S-Bahn', 'Busbahnhof'];
 
 export const makeVeloRoute = stopsGroup => {
     const route = [];
@@ -17,7 +20,7 @@ export const makeVeloRoute = stopsGroup => {
         stops.forEach(stop => {
             const routestop = {
                 stop_id: stop.id,
-                stop_name: stop.dest_name,
+                stop_name: removeWords(stop.dest_name, wordsToRemove),
                 trainlines: stop.trainlines,
                 x: stop.x,
                 y: stop.y
