@@ -49,7 +49,9 @@ export const DestinationDetails = ({
             {activeSection && (<>
                 <header>
                     <div className="details-headline">
-                        <PinIcon><TrainIcon/></PinIcon>
+                        <PinIcon>
+                            <TrainIcon/>
+                        </PinIcon>
                         <h2>{`${headline}  `}{train}</h2>
                     </div>
                 </header>

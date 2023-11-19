@@ -1,14 +1,14 @@
 @import '../../scss/variables.scss';
 
 
-#destination.details {
-    color: $primary-hover;
+.details {
+    color: var(--text);
     h1, h2, h3, h4, h5, h6 {
-        color: var(--primary-hover);
+        color: var(--train-headline);
     }
     .veloroute-section-details {
         h1, h2, h3, h4, h5, h6 {
-            color: var(--primary-hover);
+            color: var(--bike);
         }
     }
 }
@@ -21,10 +21,6 @@
     .details-headline{
         display: flex;
         gap: .15em;
-    
-        h2 {
-            margin-top: .5em;
-        }
     }
     h5 + p {
         margin-top: -.5em;

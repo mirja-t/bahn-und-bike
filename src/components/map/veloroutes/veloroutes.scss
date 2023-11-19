@@ -9,12 +9,12 @@
         &.hover {
             path.veloroute-section {
                 stroke-dasharray: 0;
-                stroke: $veloroute;
+                stroke: var(--bike);
             }
         }
     }
     path.veloroute-section {
-        stroke: $veloroute;
+        stroke: var(--bike);
         stroke-dasharray: 2;
         fill: none;
         &.active {
@@ -27,7 +27,7 @@
         fill: none;
         &.active {
             stroke-dasharray: 0;
-            stroke: $veloroute-hover;
+            stroke: var(--bike-hover);
         }
     }
     path.veloroute-section-large {

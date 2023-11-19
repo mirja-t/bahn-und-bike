@@ -1,22 +1,22 @@
 @import '../../../../scss/variables.scss';
 
 .veloroute-stop{
-    fill: $veloroute;
+    fill: var(--bike);
     transform: scale(1);
     &.hover {
         transform: scale(1.8);
     }
     &.active {
-        fill: $veloroute-hover;
+        fill: var(--bike-hover);
     }
 }
 .veloroute.destinationLabel{
     tspan {
-        fill: $veloroute-hover; 
+        fill: var(--bike-hover); 
     }
 }
 
 circle.veloroute-stop-outline {
-    stroke: $veloroute-hover;
-    fill: rgba(255,255,255,0.66);
+    stroke: var(--bike-hover);
+    fill: var(--bg);
 }

@@ -19,7 +19,7 @@ export const AlternativeRoute = ({altroute, strokeScale}) => {
             strokeScale={strokeScale}
             active={true}/>
 
-        {[route[0], route[route.length-1]].map((item, idx) => (
+        {/* {[route[0], route[route.length-1]].map((item, idx) => (
             <VelorouteStop 
                 key={idx}
                 item={item}
@@ -27,6 +27,6 @@ export const AlternativeRoute = ({altroute, strokeScale}) => {
                 strokeScale={strokeScale}
                 fn={hoverVeloStop}
                 type="active"/>
-        ))}
+        ))} */}
     </>)
 }

@@ -17,12 +17,12 @@ export const Veloroutes = ({strokeScale}) => {
 
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    const activeVelorouteSection = activeVelorouteSectionIdx ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
+    const activeVelorouteSection = activeVelorouteSectionIdx !== null ? activeVeloroute.route[activeVelorouteSectionIdx] : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
     const activeVRouteStops = {
         start: activeVelorouteSection ? activeVelorouteSection.leg[0] : null,
-        end: activeVelorouteSection ? activeVelorouteSection.leg[activeVelorouteSection.length-1] : null
+        end: activeVelorouteSection ? activeVelorouteSection.leg[activeVelorouteSection.leg.length-1] : null
     }
 
     return (<g 

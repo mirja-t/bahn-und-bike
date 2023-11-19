@@ -2,7 +2,7 @@ import './pins.scss';
 
 export const VelorouteIcon = () => {
     return (<div className="velo-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 30 30" xmlSpace="preserve">
+    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" x="0px" y="0px" viewBox="0 0 30 30" xmlSpace="preserve">
         <rect className="bg" width="30" height="30"/>
         <path fill="white" d="M22.2,12.2c-0.7,0-1.4,0.2-2,0.4l-1.1-1.8l0.8-1.5C20,9,20,8.9,19.9,8.7c-0.1-0.2-0.3-0.2-0.4-0.2h-1.8
             c-0.3,0-0.5,0.2-0.5,0.5s0.2,0.5,0.5,0.5h1l-0.5,0.9l-7-0.7l0.3-0.7l1.6,0.2c0.3,0,0.5-0.1,0.6-0.4c0-0.3-0.2-0.5-0.4-0.6l-2-0.3

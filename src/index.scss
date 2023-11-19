@@ -49,7 +49,7 @@ h3 {
 h5 {
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
+  letter-spacing: $letterspacing;
   color: $gray;
   font-size: $h5-font-size;
   margin-bottom: .75em;
@@ -64,11 +64,11 @@ h6 {
 
 label {
   font-family: $base-heading-font-family;
-  font-size: 70%;
+  font-size: 75%;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
-  color: $gray;
+  letter-spacing: $letterspacing;
+  color: var(--label);
 }
 
 header {
@@ -111,13 +111,13 @@ a {
 
 span.train {
   display: inline-block;
-  background-color: $background-dark;
+  background-color: var(--bg-light);
   border-radius: $borderradius / 2;
-  padding: 2px 6px;
+  padding: 1px 3px;
   font-family: $global-font-family;
   font-weight: 700;
-  color: $gray;
-  font-size: .8rem;
+  color: var(--train-headline);
+  font-size: .75rem;
   margin: 0 5px 0 0;
   vertical-align: top;
   white-space: nowrap;

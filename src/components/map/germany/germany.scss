@@ -12,4 +12,9 @@
     img {
         width: 100%;
     }
+    #germany-map {
+        * {
+            fill: var(--map-fill);
+        }
+    }
 }

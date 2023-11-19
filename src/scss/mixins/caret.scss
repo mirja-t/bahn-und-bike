@@ -1,9 +1,9 @@
 @import '../../scss/variables.scss';
 
-.caret {
+@mixin caret($color: var(--secondary)) {
     width: 0; 
     height: 0; 
     border-left: .5em solid transparent;
     border-right: .5em solid transparent;
-    border-top: .5em solid $primary;
+    border-top: .5em solid $color;
   }

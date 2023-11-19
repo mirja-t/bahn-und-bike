@@ -1,12 +1,13 @@
 @import '../../../scss/variables.scss';
+@import '../../../scss/mixins/caret.scss';
 
-.caret {
-    width: 0; 
-    height: 0; 
-    border-left: .35em solid transparent;
-    border-right: .35em solid transparent;
-    border-top: .35em solid $veloroute;
-  }
+// .caret {
+//     width: 0; 
+//     height: 0; 
+//     border-left: .35em solid transparent;
+//     border-right: .35em solid transparent;
+//     border-top: .35em solid var(--bike);
+// }
 .collapse {
     .toggle {
         cursor: pointer;
@@ -15,7 +16,7 @@
             content: '';
             position: absolute;
             margin-left: $padding-xs;
-            @extend .caret;
+            @include caret(var(--bike));
             top: 50%;
         }
         &.on {

@@ -1,0 +1,36 @@
+.veloroutesection-icon {
+    background-color: var(--bg-light);
+    margin: 0 .25em 0 0;
+    position: relative;
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    box-shadow: 1px 2px 5px rgba(0,0,0,0.2);
+    span {
+        background-color: var(--bike);
+        color: var(--bg-light);
+        width: 75%;
+        height: 75%;
+        font-family: $font-family-display;
+        font-weight: 700;
+        font-size: 0.5em;
+        text-align: center;
+        vertical-align: baseline;
+        padding-top: 0.1em;
+        border-radius: 50%;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        @include caret(var(--bg-light));
+        z-index: 0;
+    }
+}

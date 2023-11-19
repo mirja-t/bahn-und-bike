@@ -1,5 +1,5 @@
 @import '../../scss/variables.scss';
-@import '../../assets/mixins/caret.scss';
+@import '../../scss/mixins/caret.scss';
 
 $sidebarwidth: 25;
 $sidebarwidth-xl: 20;
@@ -82,6 +82,6 @@ aside {
         bottom: -0.75em;
         left: 50%;
         transform: translateX(-50%);
-        @extend .caret
+        @include caret();
     }
 }

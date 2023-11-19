@@ -1,14 +1,14 @@
 @import '../../scss/variables.scss';
+@import '../../scss/mixins/caret.scss';
 
 #veloroute.details {
-    //background: $veloroute;
-    color: $veloroute;
+    color: var(--text);
     h1, h2, h3, h4, h5, h6 {
-        color: $veloroute;
+        color: var(--bike);
     }
     .veloroute-section-details {
         h1, h2, h3, h4, h5, h6 {
-            color: $veloroute;
+            color: var(--bike);
         }
     }
 }
@@ -32,7 +32,7 @@ ul.veloroute-stops {
             &:hover,
             &.hover{
                 text-decoration: underline;
-                color: $veloroute-hover;
+                color: var(--bike-hover);
             }
         }
     }
@@ -45,13 +45,14 @@ ol.veloroute-stops{
         &:hover,
         &.hover{
             text-decoration: underline;
-            color: $veloroute-hover;
+            color: var(--bike-hover);
         }
     }
 }
 .veloroute-trainstops {
     padding: 0;
     display: flex;
+    
     span.train {
         transform: scale(.85);
         margin: 0 1px 1px 0;

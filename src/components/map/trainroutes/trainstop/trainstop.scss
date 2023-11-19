@@ -1,7 +1,7 @@
 @import '../../../../scss/variables.scss';
 
 .spot{
-    fill: $primary;
+    fill: var(--train);
     transition: transform .35s ease, fill .35s ease;
     &.spot-large{
         transition: all .35s ease, fill .35s ease;
@@ -21,7 +21,7 @@
             transition: transform .35s ease, fill .35s ease; 
             &.spot-small{
                 transform: scale(1)!important;
-                fill: $primary;
+                fill: var(--train);
             }
         }
     }
@@ -31,7 +31,7 @@
             &.spot-small{
                 transition: all .35s ease, fill .35s ease; 
                 transform: scale(1)!important;
-                fill: $primary-hover;
+                fill: var(--train);
             }
         }
     }
@@ -43,26 +43,34 @@
             transition: transform .35s ease, fill .35s ease; 
             &.spot-small{
                 transform: scale(0.8)!important;
-                fill: $primary-muted;
+                fill: var(--train-muted);
             }
             &:hover {
                 .spot {
                     transition: transform .35s ease, fill .35s ease; 
                     &.spot-small{
                         transform: scale(1)!important;
-                        fill: $primary;
+                        fill: var(--train-hover);
                     }
                 }
             }
         }
     }
-    &.active,
+    &.active {
+        .spot {
+            transition: transform .35s ease, fill .35s ease; 
+            &.spot-small{
+                transform: scale(1)!important;
+                fill: var(--train-active);
+            }
+        }
+    }
     &:hover {
         .spot {
             transition: transform .35s ease, fill .35s ease; 
             &.spot-small{
                 transform: scale(1)!important;
-                fill: $primary-hover;
+                fill: var(--train-hover);
             }
         }
     }
@@ -73,13 +81,13 @@ g.destination:hover {
     .spot {
         transition: transform .35s ease, fill .35s ease; 
         &.spot-large{
-            fill: $primary-hover;
+            fill: var(--train-hover);
             opacity: 0;
             animation: circleHoverAni .5s ease-in-out forwards;
         }
         &.spot-small{
             transform: scale(1.2);
-            fill: $primary-hover;
+            fill: var(--train-hover);
         }
     }
 }

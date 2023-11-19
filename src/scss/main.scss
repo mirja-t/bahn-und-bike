@@ -1,4 +1,6 @@
 @import 'variables';
+@import './mixins/caret.scss';
+@import './icons/icons.scss';
 
 @each $name, $map in $themes {
     .theme-#{$name} {

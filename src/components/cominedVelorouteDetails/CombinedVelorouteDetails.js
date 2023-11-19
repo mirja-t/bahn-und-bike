@@ -32,7 +32,7 @@ export const CombinedVelorouteDetails = ({
     const sectionHeadline = (stop, idx) => (
         <h3 
             className="veloroute-trainstops">
-            <ActiveVelorouteSectionIcon num={idx}/>
+            <div className="veloroutesection-icon"><span>{idx}</span></div>
             <span>
                 { idx===1 ? labels[lang].from : labels[lang].to } { stop.stop_name }
                 { stop.trainlines && 
@@ -48,7 +48,7 @@ export const CombinedVelorouteDetails = ({
             id="veloroute"
             className="details"
         >
-        { activeVelorouteSection && (
+        { activeVelorouteSection !== null && (
             <section className="veloroute-details veloroute-section-details">
                 <h5>{`${labels[lang].leg}`}</h5>
                 { sectionHeadline(activeVelorouteSection.leg[0], 1) }

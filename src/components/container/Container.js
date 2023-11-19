@@ -70,7 +70,7 @@ export const Container = ({lang}) => {
             setContainerClass('width-3');
         }
 
-        if(activeVelorouteSection && !activeSection) {
+        if(activeVelorouteSection !== null && !activeSection) {
             setContainerClass(prev => `${prev} shift`);
         }
 

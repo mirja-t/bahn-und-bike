@@ -1,13 +1,14 @@
 @import '../../../scss/variables.scss';
 
-$iconsize: calc( #{$scalefactor} + 1.3em);
+$iconsize: calc( #{$scalefactor} + 1.5em);
 
 .destinationslist {
     li {
         position: relative;
-        background: white;
+        background: var(--linklist-bg);
+        border-radius: var(--linklist-border-radius);
         box-shadow: 3px 3px 8px rgba(0,0,0,0.1); 
-        padding: $padding-xs;
+        padding: 0.25em;
         margin: $padding-xs 0;
         transition: all .35s ease;
         cursor: pointer;
@@ -19,14 +20,14 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
             height: $iconsize;
             flex-shrink: 0;
             rect.bg{
-                fill: #ccc;
+                fill: var(--bike-inactive);
                 transition: all .35s ease;
             }
         }
         h4.veloroute {
             font-family: 'Source Sans Pro', sans-serif;
             font-weight: 300;
-            color: $gray !important;
+            color: var(--linklist);
             line-height: 1.2;
         }
         &:before {
@@ -43,27 +44,30 @@ $iconsize: calc( #{$scalefactor} + 1.3em);
         &.active,
         &:hover {
             transition: all .35s ease;
-            background: white;
+            background: var(--linklist-bg-active);
             box-shadow: 5px 3px 10px rgba(0,0,0,0.15); 
-            h4 {
-                color: $veloroute-hover;
+            h4.veloroute {
+                color: var(--linklist-active);
             }
             
             .velo-icon{
                 rect.bg{
-                    fill: $veloroute;
+                    fill: var(--bike-active);
                     transition: all .35s ease;
                 }
             }
         }
         &.active {
+            h4.veloroute {
+                color: var(--linklist-active)!important;
+            }
             &:before {
                 width: 0; 
                 height: 0; 
                 right: -.5em;
                 border-top: .5em solid transparent;
                 border-bottom: 10px solid transparent;
-                border-left: .5em solid white;
+                border-left: .5em solid var(--linklist-bg-active);
                 transition: all .35s ease;
             }
         }

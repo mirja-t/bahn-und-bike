@@ -1,29 +1,121 @@
+// light theme
+$background: #ffffff;//#33363A;//
+$background-darker: #eeeeee;//#0E1013;//
+$boxshadow: inset -1px -1px 2px rgba(0,0,0,0.15), 
+    1px 1px 0 rgba(255,255,255,0.5), 
+    -1px -1px 1px rgba(0, 0, 0, 0.1), 
+    inset 1px 1px 2px rgba(255,255,255,0.8),
+    9px 9px 30px rgba(0,0,0,0.05);
+$gray: #666;
 $veloroute: #007377;//#977517;
 $veloroute-hover: #0f4749;//#a78d49;
-$background: #ffffff;//#33363A;//
-$background-dark: #eeeeee;//#0E1013;//
+$veloroute-muted: $gray;
 $xlightgray: #ededed;
-$lightgray: #999;
-$gray: #666;
+$lightgray: #afafaf;
 $darkgray: #333;
 $primary: red;
-$primary-hover: #4a366a;
+$primary-hover: red; //#4a366a;
+$primary-active: rgb(70, 0, 46);
 $primary-muted: rgb(194, 191, 195);//#501414;
 $primary-hover-muted: pink;
-$gold-dark: #8E6902;
-$gold: #e9d7a2;
-$dark: #162d38;
+
+$brown: #382b08;
+$brown-light: #4b3909;
+$gold-dark: #be9b3b;
+$gold: #c5b37b;
+$gold-light: #efe6ca;
+$background-dark: #181f24;
+$xlightblue:#65777f;
+$lightblue: #2e3c46;
+$dark-lighter: #2c3438;
+$dark-darker: #13191c;
+$borderradius-light: 6px;
+$borderradius-dark: 0;
+$borderradius-xs-light: 4px;
+$borderradius-xs-dark: 0;
+$map: #1f292f;
 
 $themes: (
     light: (
+        'border-radius': $borderradius-light,
         'text': $darkgray,
-        'bg': $background-dark,
+        'text-active': $gray,
+        'text-inactive': $lightgray,
+        'bg': $background-darker,
+        'bg-light': $background,
+        'primary': $primary,
         'primary-hover': $primary-hover,
+        'secondary': $gray,
+        'muted': $xlightgray,
+        'train': $primary,
+        'train-hover': $primary-hover,
+        'train-active': $primary-active,
+        'train-muted': $lightgray,
+        'train-headline': $primary-active,
+        'train-details': $primary-hover,
+        'bike': $veloroute,
+        'bike-hover': $veloroute-hover,
+        'bike-active': $veloroute-hover,
+        'bike-inactive': $lightgray,
+        'bike-muted': $veloroute-muted,
+        'bike-details': $veloroute,
+        'primary-muted': $primary-muted,
+        'linklist-bg': $xlightgray,
+        'linklist-bg-active': white,
+        'linklist-border-radius': $borderradius-light,
+        'linklist': $gray,
+        'linklist-active': $veloroute,
+        'label': $gray,
+        'label-active': $primary,
+        'label-inactive': $lightgray,
+        'label-bg': transparent,
+        'label-active-bg': transparent,
+        'input-border': transparent,
+        'logo-color': $darkgray,
+        'dropdown-bg': linear-gradient(0deg, #ccc, transparent),
+        'dropdown-box-shadow': $boxshadow,
+        'map-fill': #dcdbdb,
     ),
     dark: (
-        'text': $gold-dark,
-        'bg': $dark,
+        'border-radius': $borderradius-dark,
+        'text': $gold,
+        'text-active': $gold-light,
+        'text-inactive': $brown-light,
+        'bg': $background-dark,
+        'bg-light': $brown,
+        'primary': $gold-dark,
         'primary-hover': $gold,
+        'secondary': $gold-light,
+        'muted': $gray,
+        'train': $gold-dark,
+        'train-hover': $gold,
+        'train-active': $gold-dark,
+        'train-muted': $brown-light,
+        'train-headline': $gold-dark,
+        'train-details': $gold-dark,
+        'bike': $gold,
+        'bike-hover': $gold-light,
+        'bike-active': $gold-dark,
+        'bike-inactive': $brown-light,
+        'bike-muted': $brown-light,
+        'bike-details': $gold-light,
+        'primary-muted': $lightblue,
+        'linklist-bg': $dark-darker,
+        'linklist-bg-active': $gold,
+        'linklist-border-radius': $borderradius-dark,
+        'linklist': $gold-light,
+        'linklist-active': white,
+        'label': $lightblue,
+        'label-active': $gold-light,
+        'label-inactive': $lightblue,
+        'label-bg': $dark-darker,
+        'label-active-bg': $xlightblue,
+        'label-inactive-bg': $lightblue,
+        'input-border': $dark-darker,
+        'logo-color': $gold,
+        'dropdown-bg': $lightblue,
+        'dropdown-box-shadow': none,
+        'map-fill': $map,
     )
 );
 
@@ -55,11 +147,13 @@ $base-line-height:                               1.5;
 $base-font-size:                                 1em;
 $global-font-size:                               $base-font-size;
 $h1-font-size:                                   calc( #{$base-font-size} * 1.5 + #{$scalefactor} );
-$h2-font-size:                                   calc( #{$base-font-size} * 1 + #{$scalefactor} );
+$h2-font-size:                                   calc( #{$base-font-size} * .95 + #{$scalefactor} );
 $h3-font-size:                                   calc( #{$base-font-size} * .8 + #{$scalefactor} );
 $h4-font-size:                                   calc( #{$base-font-size} * .7 + #{$scalefactor} );
 $h5-font-size:                                   $base-font-size * .8;
 $h6-font-size:                                   $h5-font-size;
+
+$letterspacing:                                  0.03em;
 
 // MEDIA QUERIES
 $breakpoint-l: 1680px;
