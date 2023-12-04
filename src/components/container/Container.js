@@ -80,9 +80,8 @@ export const Container = ({lang}) => {
         if(!wrapper) return
 
         const setSize = () => {
-            const wrapperWidth = wrapper.getBoundingClientRect().width;
-            const height = wrapperWidth / mapRatio;
-            const width = wrapperWidth;
+            const width = wrapper.getBoundingClientRect().width;
+            const height = width / mapRatio;
             setMapSize([
                 width,
                 height
@@ -134,8 +133,8 @@ export const Container = ({lang}) => {
                 <div id="map-wrapper" ref={setWrapper}>
                     <Map 
                         value={submitVal}
-                        wrapper={wrapper}
                         mapSize={memoizedMapSize}
+                        mapContainer={wrapper}
                         lang={lang}
                         fn={memoizedZoomMap}
                         userScale={userScale}

@@ -16,23 +16,26 @@ import {
 } from './veloroutes/VeloroutesSlice';
 import { Trainroutes } from './trainroutes/Trainroutes';
 import { Germany } from './germany/Germany';
-// import { Bundeslaender } from './bundeslaender/Bundeslaender';
-// import { MapLegend } from './mapLegend/MapLegend';
-// import { Cities } from './cities/Cities';
 import { Loading } from '../stateless/loading/Loading';
 import { ZoomPanel } from '../stateless/zoomPanel/ZoomPanel';
-//import { useTraceUpdate } from '../../hooks/useTraceUpdate';
+
+// interface MapProps {
+//     value: string
+//     mapContainer: HTMLDivElement
+//     mapSize: [number, number]
+//     lang: string
+//     fn: () => {}
+//     userScale: number
+// }
 
 export const Map = ({
     value,
-    wrapper,
+    mapContainer,
     mapSize,
     lang,
     fn,
     userScale
 }) => {
-
-    //useTraceUpdate({ value, wrapper, mapSize, lang, fn, userScale });
 
     const mapcontainerRef = useRef(null);
     const labels = useSelector(selectLang);
@@ -40,7 +43,7 @@ export const Map = ({
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroute = useSelector(selectActiveVeloroute);
 
-    const zoom = useZoom(journeys, veloroute, value, wrapper, mapSize, userScale, isLoading);
+    const zoom = useZoom(journeys, veloroute, Number(value), mapContainer, mapSize, userScale, isLoading);
     const mapInnerSpring = useSpring({
         left: zoom.x,
         top: zoom.y
@@ -63,7 +66,6 @@ export const Map = ({
     const bind = useDrag(({ movement: [mx, my] }) => {
         api.start({ x: mx, y: my })
     });
-    
 
     useEffect(() => {
         api.start({ x: 0, y: 0 })
@@ -77,7 +79,8 @@ export const Map = ({
         ref={mapcontainerRef}
         style={{
             width: zoom.containerWidth,
-            height: zoom.containerHeight
+            height: zoom.containerHeight,
+            transform: `translate(-50%, -50%)`
         }}>
             <animated.div 
                 {...bind()} 
@@ -98,9 +101,6 @@ export const Map = ({
                     </>)
                 }
                 <Germany/>
-                {/* <Bundeslaender value={value}/>
-                <MapLegend zoom={zoom} value={value}/>
-                <Cities zoom={zoom} value={value}/> */}
             </animated.div>
     </div>
     </>)

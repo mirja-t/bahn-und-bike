@@ -7,6 +7,7 @@
     bottom: $mainpadding;
     left: $padding-l;
     button {
+        cursor: pointer;
         color: var(--secondary);
         height: $padding-xl;
         width: $padding-xl;
@@ -15,10 +16,12 @@
         margin-bottom: $padding-xs;
         font-size: 1.25em;
         background: var(--dropdown-bg);
-        transition: box-shadow .2s ease, background-color .2s ease, color .5s ease;
+        border-radius: var(--border-radius);
+        transition: all .2s ease, background-color .2s ease, color .5s ease;
         &:hover {
-            color: var(--primary-hover);
-            transition: box-shadow .2s ease, background-color .2s ease, color .5s ease;
+            background: var(--dropdown-bg-hover);
+            color: var(--secondary-hover);
+            transition: all .2s ease, background-color .2s ease, color .5s ease;
         }
     }
 }
@@ -26,7 +29,6 @@
 .theme-light {
     #zoompanel {
         button {
-            border-radius: $checkBoxBorderradius;
             @extend .checkBoxRadioNotActive;
             &:hover {
                 box-shadow: -1px -1px 1px rgba(255,255,255, 1), inset 1px 1px 1px rgba(255,255,255, 0.9), inset -1px -1px 1px rgba(0,0,0, 0.1), 1px 1px 1px rgba(0,0,0, .1);

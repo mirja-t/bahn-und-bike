@@ -29,7 +29,7 @@ export const appSlice = createSlice({
     name: "app",
     initialState: {
         lang: {},
-        theme: 'dark',
+        theme: 'light',
         langLoading: true,
         langError: false,
     },

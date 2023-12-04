@@ -36,7 +36,7 @@ h1, h2, h3 {
 h2, h3 {
   font-size: $h2-font-size;
   margin-bottom: .33em;
-  color: $darkgray;
+  color: var(--text);
   font-family: $global-font-family;
   font-weight: 400;
 }
@@ -50,7 +50,7 @@ h5 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: $letterspacing;
-  color: $gray;
+  color: var(--text);
   font-size: $h5-font-size;
   margin-bottom: .75em;
   margin-top: 1em;
@@ -58,7 +58,7 @@ h5 {
 
 h6 {
   font-size: $h6-font-size;
-  color: $gray;
+  color: var(--text);
   margin-top: .75em;
 }
 
@@ -90,7 +90,7 @@ header {
 } 
 
 a {
-  color: $lightgray;
+  color: var(--text);
   text-decoration: none;
   &:hover {
     text-decoration: underline;

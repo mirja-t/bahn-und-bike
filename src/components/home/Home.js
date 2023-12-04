@@ -2,8 +2,9 @@ import './home.scss';
 import { useSelector } from 'react-redux';
 import { selectLang } from '../../AppSlice';
 import { Link } from 'react-router-dom';
-import img from '../../assets/images/germany-startscreen.svg';
 import { Button } from '../stateless/button/Button';
+import { Germany } from '../map/germany/Germany';
+
 
 export const Home = ({lang}) => {
     const labels = useSelector(selectLang);
@@ -28,7 +29,7 @@ export const Home = ({lang}) => {
             </p>
         </div>
         <div id="germany">
-            <img src={img} alt=""/>
+            <Germany />
         </div>
     </div>)
 }

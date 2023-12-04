@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
 import { PinIcon } from '../stateless/icons/PinIcon';
 import { VelorouteIcon } from '../stateless/icons/VelorouteIcon';
-import { ActiveVelorouteSectionIcon } from './activeVelorouteSectionIcon/ActiveVelorouteSectionIcon';
 import { selectLang } from '../../AppSlice';
 import { 
     selectActiveVeloroute,

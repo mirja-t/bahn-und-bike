@@ -31,7 +31,7 @@ export type CurrentTrainroutes = CurrentTrainroute[];
 export interface Veloroute {
     id: string, 
     name: string, 
-    len: number, 
+    len: string, 
     route: Route[], 
     path: string[]
 }

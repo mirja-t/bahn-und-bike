@@ -35,7 +35,7 @@
         width: 1.5em;
         height: 1.5em;
         content: counter(item);
-        background: $primary;
+        background: var(--primary);
         color: white;
         text-align: center;
         display: inline-block;
@@ -60,7 +60,9 @@
         }
         background-size: cover;
         background-position: center;
-        width: 200%;
-        left: -50%;
+        width: 100%;
+        left: 30%;
+        top: 40%;
+        transform: translate(-50%,-50%);
     }
 }

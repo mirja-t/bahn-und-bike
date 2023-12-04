@@ -1,29 +1,32 @@
 // light theme
-$background: #ffffff;//#33363A;//
-$background-darker: #eeeeee;//#0E1013;//
+$background: #eaedf1;
+$background-darker: #dadee3;
+$background-lighter: #eff2f5;
 $boxshadow: inset -1px -1px 2px rgba(0,0,0,0.15), 
     1px 1px 0 rgba(255,255,255,0.5), 
     -1px -1px 1px rgba(0, 0, 0, 0.1), 
     inset 1px 1px 2px rgba(255,255,255,0.8),
     9px 9px 30px rgba(0,0,0,0.05);
-$gray: #666;
-$veloroute: #007377;//#977517;
-$veloroute-hover: #0f4749;//#a78d49;
+$gray: #5a6367;
+$veloroute: #007377;
+$veloroute-hover: #0f4749;
 $veloroute-muted: $gray;
 $xlightgray: #ededed;
-$lightgray: #afafaf;
-$darkgray: #333;
+$lightgray: #9ea9b0;
+$darkgray: #2b2f32;
 $primary: red;
-$primary-hover: red; //#4a366a;
-$primary-active: rgb(70, 0, 46);
-$primary-muted: rgb(194, 191, 195);//#501414;
+$primary-hover: red;
+$primary-active: #5c003d;
+$primary-muted: rgb(194, 191, 195);
 $primary-hover-muted: pink;
 
+// dark theme
 $brown: #382b08;
 $brown-light: #4b3909;
 $gold-dark: #be9b3b;
 $gold: #c5b37b;
 $gold-light: #efe6ca;
+$gold-xlight:rgb(252, 250, 244);
 $background-dark: #181f24;
 $xlightblue:#65777f;
 $lightblue: #2e3c46;
@@ -33,19 +36,21 @@ $borderradius-light: 6px;
 $borderradius-dark: 0;
 $borderradius-xs-light: 4px;
 $borderradius-xs-dark: 0;
-$map: #1f292f;
+$map-dark-bg: #1f292f;
 
 $themes: (
     light: (
         'border-radius': $borderradius-light,
+        'border-radius-xl': $borderradius-light * 4,
         'text': $darkgray,
         'text-active': $gray,
         'text-inactive': $lightgray,
-        'bg': $background-darker,
-        'bg-light': $background,
+        'bg': $background,
+        'bg-light': $background-lighter,
         'primary': $primary,
         'primary-hover': $primary-hover,
         'secondary': $gray,
+        'secondary-hover': $primary,
         'muted': $xlightgray,
         'train': $primary,
         'train-hover': $primary-hover,
@@ -62,7 +67,7 @@ $themes: (
         'primary-muted': $primary-muted,
         'linklist-bg': $xlightgray,
         'linklist-bg-active': white,
-        'linklist-border-radius': $borderradius-light,
+        'linklist-border-radius': none,
         'linklist': $gray,
         'linklist-active': $veloroute,
         'label': $gray,
@@ -72,12 +77,20 @@ $themes: (
         'label-active-bg': transparent,
         'input-border': transparent,
         'logo-color': $darkgray,
-        'dropdown-bg': linear-gradient(0deg, #ccc, transparent),
+        'button-bg': linear-gradient(180deg, $background-lighter 0%, $background-darker 100%),
+        'button-bg-hover': linear-gradient(180deg, $background-darker 0%, $xlightgray 70%), 
+        'dropdown-bg': linear-gradient(0deg, $background-darker, transparent),
+        'dropdown-bg-hover': linear-gradient(0deg, $background-darker, transparent),
         'dropdown-box-shadow': $boxshadow,
-        'map-fill': #dcdbdb,
+        'map-fill': $background-lighter,
+        'map-stroke': $background-darker,
+        'map-river': #cae4ef,
+        'map-labels': $background-darker,
+        'map-sea': #dae7ea,
     ),
     dark: (
         'border-radius': $borderradius-dark,
+        'border-radius-xl': $borderradius-dark,
         'text': $gold,
         'text-active': $gold-light,
         'text-inactive': $brown-light,
@@ -86,6 +99,7 @@ $themes: (
         'primary': $gold-dark,
         'primary-hover': $gold,
         'secondary': $gold-light,
+        'secondary-hover': $gold-xlight,
         'muted': $gray,
         'train': $gold-dark,
         'train-hover': $gold,
@@ -113,9 +127,16 @@ $themes: (
         'label-inactive-bg': $lightblue,
         'input-border': $dark-darker,
         'logo-color': $gold,
+        'button-bg': $lightblue,
+        'button-bg-hover': $gold-dark,
         'dropdown-bg': $lightblue,
+        'dropdown-bg-hover': $gold-dark,
         'dropdown-box-shadow': none,
-        'map-fill': $map,
+        'map-fill': $map-dark-bg,
+        'map-stroke': $background-dark,
+        'map-river': $background-dark,
+        'map-labels': $background-dark,
+        'map-sea': transparent,
     )
 );
 
