@@ -19,15 +19,6 @@ import { Germany } from './germany/Germany';
 import { Loading } from '../stateless/loading/Loading';
 import { ZoomPanel } from '../stateless/zoomPanel/ZoomPanel';
 
-// interface MapProps {
-//     value: string
-//     mapContainer: HTMLDivElement
-//     mapSize: [number, number]
-//     lang: string
-//     fn: () => {}
-//     userScale: number
-// }
-
 export const Map = ({
     value,
     mapContainer,

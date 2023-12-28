@@ -28,9 +28,9 @@ export const TravelDuration = ({handleSubmit, lang, start}) => {
     return (
         <form id="travelduration" onSubmit={e => handleSubmit(e, value, direct)}>
             <div className="traveldurationWrapper">
-                <DestinationPicker
+                {/* <DestinationPicker
                     labels={labels}
-                    lang={lang}/>
+                    lang={lang}/> */}
                 <CheckBox
                     lang={lang}
                     labels={labels}
