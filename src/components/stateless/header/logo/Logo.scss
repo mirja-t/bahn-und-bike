@@ -1,0 +1,11 @@
+#logo {
+    width: calc( 7.5em + 1.5vw );
+    height: 3em;
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: all;
+    fill: var(--logo-color);
+    path {
+        fill: var(--logo-color);
+    }
+}

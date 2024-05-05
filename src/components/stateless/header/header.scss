@@ -9,18 +9,6 @@
     position: relative;
     pointer-events: none;
 }
-#logo {
-    //background-image: url('../../../assets/images/bahnundbike_logo.svg');
-    width: calc( 7.5em + 1.5vw );
-    height: 3em;
-    background-repeat: no-repeat;
-    background-size: contain;
-    pointer-events: all;
-    fill: var(--logo-color);
-    * > {
-        fill: var(--logo-color);
-    }
-}
 .home {
     #header {
         #language-picker {
