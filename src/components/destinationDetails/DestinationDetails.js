@@ -29,8 +29,8 @@ export const DestinationDetails = ({
 
     const headline = activeSection ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}` : null;
     const trainList = activeSection && activeSection.line.map((train, idx) => <span key={idx} className="train">{train}</span>);
-    const initialTrains = activeSection && activeSection.connection && activeSection.connection.initial_train.map((train, idx) => <span key={idx} className="train">{train}</span>)
-    const connectingTrain = activeSection && activeSection.connection && (<span className="train">{activeSection.connection.connecting_train}</span>)
+    const initialTrains = activeSection && activeSection.connection && activeSection.connection.initial_train.map((train, idx) => <span key={idx} className="train">{train.name}</span>)
+    const connectingTrain = activeSection && activeSection.connection && (<span className="train">{activeSection.connection.connecting_train.name}</span>)
     const train = (activeSection && activeSection.connection) ? (<>{initialTrains}<span className="train connection"> + </span>{connectingTrain}</>) : trainList;
     
     const dispatch = useDispatch();

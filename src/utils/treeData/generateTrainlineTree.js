@@ -10,7 +10,7 @@ export const generateTrainlineTree = (trainlineStops, startStops, value, direct)
         const [x, y] = getMapPosition(startStops[0].lon, startStops[0].lat);
         return {
             dur: 0,
-            trainline_ids: [startStops[0].trainline_id],
+            trainlines: [{id: startStops[0].trainline_id, name: startStops[0].name }],
             pathLength: 0,
             stop_ids: [startStops[0].stop_id],
             points: `${x},${y} `,
