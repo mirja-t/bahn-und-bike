@@ -27,6 +27,8 @@ index.php
 /api
 /api_dev
 /api2
+/db
+/docker
 
 # backups
 /__bak
@@ -43,3 +45,5 @@ index.php
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+docker-compose.yml
