@@ -2,9 +2,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, url } from "./config/config.tsx";
 import type { RootState } from "./store.tsx";
 
+export enum Theme {
+    Light = "light",
+    Dark = "dark",
+}
+export enum LangCode {
+    DE = "de",
+    EN = "en",
+}
+export type Lang = { id: string } & { [key in LangCode]: string };
+
 export interface AppState {
     lang: Record<string, Record<string, string>>;
-    theme: "light" | "dark";
+    theme: Theme;
     langLoading: boolean;
     langError: boolean;
 }
@@ -21,12 +31,11 @@ export const loadLang = createAsyncThunk<
             return response.json();
         })
         .then((JSONresponse) => {
-            type LangType = { id: string; de: string; en: string };
             const obj = {
                 de: {} as Record<string, string>,
                 en: {} as Record<string, string>,
             };
-            JSONresponse.forEach((el: LangType) => {
+            JSONresponse.forEach((el: Lang) => {
                 obj.de[el.id] = el.de;
                 obj.en[el.id] = el.en;
             });
@@ -44,7 +53,7 @@ export const appSlice = createSlice({
         langError: false,
     } as AppState,
     reducers: {
-        setTheme: (state, action: { payload: "light" | "dark" }) => {
+        setTheme: (state, action: { payload: Theme }) => {
             state.theme = action.payload;
         },
     },
