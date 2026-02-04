@@ -1,7 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, url } from "./config/config.tsx";
+import type { RootState } from "./store.tsx";
 
-export const loadLang = createAsyncThunk("app/loadLang", async () => {
+export interface AppState {
+    lang: Record<string, Record<string, string>>;
+    theme: "light" | "dark";
+    langLoading: boolean;
+    langError: boolean;
+}
+
+export const loadLang = createAsyncThunk<
+    Record<string, Record<string, string>>
+>("app/loadLang", async () => {
     const query = "lang";
     const lang = await fetch(`${url}${query}`, { headers: headers })
         .then((response) => {
@@ -32,9 +42,9 @@ export const appSlice = createSlice({
         theme: "light",
         langLoading: true,
         langError: false,
-    },
+    } as AppState,
     reducers: {
-        setTheme: (state, action) => {
+        setTheme: (state, action: { payload: "light" | "dark" }) => {
             state.theme = action.payload;
         },
     },
@@ -56,18 +66,10 @@ export const appSlice = createSlice({
     },
 });
 
-export const selectLang = (state: {
-    app: ReturnType<typeof appSlice.reducer>;
-}) => state.app.lang;
-export const selectTheme = (state: {
-    app: ReturnType<typeof appSlice.reducer>;
-}) => state.app.theme;
-export const selectLangLoading = (state: {
-    app: ReturnType<typeof appSlice.reducer>;
-}) => state.app.langLoading;
-export const selectLangError = (state: {
-    app: ReturnType<typeof appSlice.reducer>;
-}) => state.app.langError;
+export const selectLang = (state: RootState) => state.app.lang;
+export const selectTheme = (state: RootState) => state.app.theme;
+export const selectLangLoading = (state: RootState) => state.app.langLoading;
+export const selectLangError = (state: RootState) => state.app.langError;
 
 export const { setTheme } = appSlice.actions;
 

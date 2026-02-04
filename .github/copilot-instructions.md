@@ -57,7 +57,9 @@ API configuration uses environment variables in [src/config/config.tsx](src/conf
 
 ### File Conventions
 
-- **Mixed JS/TS**: Utils are `.js`, components/slices are `.tsx`
+- **Component structure**: Stateless components in `stateless/`, feature components in dedicated folders
+- **Type definitions**: In each component file
+- **File types**: Utils are `.ts`, components/slices are `.tsx`
 - **SCSS styling**: Component-level `.scss` files, [App.scss](src/App.scss) for global styles
 - **API structure**: REST endpoints in [api/app/routes.php](api/app/routes.php) (`/lang`, `/destination/{id}`, `/veloroutes/{qry}`)
 
