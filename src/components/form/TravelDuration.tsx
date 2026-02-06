@@ -1,14 +1,26 @@
 import "./travelduration.scss";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { RangeInput } from "./rangeinput/RangeInput";
 import { selectLang } from "../../AppSlice";
-import { CheckBox } from "./checkBox/CheckBox";
 import { Button } from "../stateless/button/Button";
-import { DestinationPicker } from "./destinationPicker/DestinationPicker";
+import { RangeInput } from "./rangeinput/RangeInput";
+import { CheckBox } from "./checkBox/CheckBox";
 //import { DestinationPicker } from './destinationPicker/DestinationPicker';
 
-export const TravelDuration = ({ handleSubmit, lang, start }) => {
+interface TravelDurationProps {
+    lang: string;
+    start: any;
+    handleSubmit: (
+        e: React.FormEvent<HTMLFormElement>,
+        value: number,
+        direct: boolean,
+    ) => void;
+}
+export const TravelDuration = ({
+    handleSubmit,
+    lang,
+    start,
+}: TravelDurationProps) => {
     const labels = useSelector(selectLang);
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(true);
@@ -17,7 +29,9 @@ export const TravelDuration = ({ handleSubmit, lang, start }) => {
         setDirect((prev) => !prev);
     };
 
-    const handleInputChange = ({ target }) => {
+    const handleInputChange = ({
+        target,
+    }: React.ChangeEvent<HTMLInputElement>) => {
         const val = Number(target.value);
         setValue(val);
     };
@@ -40,13 +54,12 @@ export const TravelDuration = ({ handleSubmit, lang, start }) => {
                 <RangeInput
                     labels={labels}
                     lang={lang}
-                    type="range"
-                    min="0"
-                    max="7"
+                    min={0}
+                    max={7}
                     value={value}
-                    step="1"
+                    step={1}
                     handleInputChange={handleInputChange}
-                    reset={start}
+                    // reset={start} // reset value when start changes --> fix
                 />
             </div>
             <Button label={labels[lang].search} type="submit" />

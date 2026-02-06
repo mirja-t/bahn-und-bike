@@ -2,7 +2,6 @@ import "./container.scss";
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Map } from "../map/Map";
-import { TravelDuration } from "../form/TravelDuration";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
@@ -20,6 +19,7 @@ import {
     selectActiveVelorouteSection,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
+import { TravelDuration } from "../form/TravelDuration";
 
 interface ContainerProps {
     lang: string;
@@ -38,11 +38,11 @@ export const Container = ({ lang }: ContainerProps) => {
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState([0, 0]);
     const [containerHeight, setContainerHeight] = useState(0);
-    const [wrapper, setWrapper] = useState(null);
+    const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
     const [containerClass, setContainerClass] = useState("width-3");
     const [userScale, setUserScale] = useState(1);
 
-    const container = useRef(null);
+    const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
 
     const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
@@ -100,6 +100,7 @@ export const Container = ({ lang }: ContainerProps) => {
         if (!container) return;
 
         const setHeight = () => {
+            if (!container.current) return;
             const h = container.current.getBoundingClientRect().height;
             setContainerHeight(h);
         };
@@ -110,44 +111,43 @@ export const Container = ({ lang }: ContainerProps) => {
         };
     }, []);
 
-    return "hello world!";
-    // return (
-    //     <>
-    //         <div
-    //             id="container"
-    //             ref={container}
-    //             style={{ height: containerHeight }}
-    //             className={containerClass}
-    //         >
-    //             <aside className="destination-details-container">
-    //                 <DestinationDetails
-    //                     parent={container.current}
-    //                     lang={lang}
-    //                 />
-    //                 <VelorouteDetails parent={container.current} lang={lang} />
-    //                 <CombinedVelorouteDetails
-    //                     parent={container.current}
-    //                     lang={lang}
-    //                 />
-    //             </aside>
-    //             <main>
-    //                 <div id="map-wrapper" ref={setWrapper}>
-    //                     <Map
-    //                         value={submitVal}
-    //                         mapSize={memoizedMapSize}
-    //                         mapContainer={wrapper}
-    //                         lang={lang}
-    //                         fn={memoizedZoomMap}
-    //                         userScale={userScale}
-    //                     />
-    //                 </div>
-    //             </main>
-    //         </div>
-    //         <TravelDuration
-    //             handleSubmit={handleSubmit}
-    //             lang={lang}
-    //             start={start}
-    //         />
-    //     </>
-    // );
+    return (
+        <>
+            <div
+                id="container"
+                ref={container}
+                style={{ height: containerHeight }}
+                className={containerClass}
+            >
+                {/* <aside className="destination-details-container">
+                    <DestinationDetails
+                        parent={container.current}
+                        lang={lang}
+                    />
+                    <VelorouteDetails parent={container.current} lang={lang} />
+                    <CombinedVelorouteDetails
+                        parent={container.current}
+                        lang={lang}
+                    />
+                </aside> */}
+                <main>
+                    <div id="map-wrapper" ref={setWrapper}>
+                        <Map
+                            value={submitVal}
+                            mapSize={memoizedMapSize}
+                            mapContainer={wrapper}
+                            lang={lang}
+                            fn={memoizedZoomMap}
+                            userScale={userScale}
+                        />
+                    </div>
+                </main>
+            </div>
+            <TravelDuration
+                handleSubmit={handleSubmit}
+                lang={lang}
+                start={start}
+            />
+        </>
+    );
 };
