@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 //import { allocateVeloroutestopsToRoute } from '../../../utils/allocateVeloroutestopsToRoute';
-import { headers, url } from "../../../config/config";
+import { headers, VITE_API_URL } from "../../../config/config";
 //import { generateCrossingVeloroutes } from '../../../utils/generateCrossingVeloroutes';
 import {
     setActiveSection,
@@ -43,7 +43,7 @@ export const loadVeloroutes = createAsyncThunk<
     const veloroutesQuery =
         "veloroutes/ids[]=" +
         activeIds.filter((s) => !startDestinations.includes(s)).join("&ids[]=");
-    const veloroutes = await fetch(`${url}${veloroutesQuery}`, {
+    const veloroutes = await fetch(`${VITE_API_URL}${veloroutesQuery}`, {
         headers: headers,
     }).then((response) => response.json());
 
@@ -57,7 +57,7 @@ export const loadVeloroute = createAsyncThunk<
 >("veloroutes/setVeloroute", async (vroute: VelorouteInput, thunkAPI) => {
     const { id, name, len } = vroute;
     const velorouteQuery = "veloroute/" + id;
-    const veloroute = await fetch(`${url}${velorouteQuery}`, {
+    const veloroute = await fetch(`${VITE_API_URL}${velorouteQuery}`, {
         headers: headers,
     }).then((response) => response.json());
 

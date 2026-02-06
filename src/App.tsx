@@ -27,6 +27,9 @@ import {
 import { Footer } from "./components/stateless/footer/Footer";
 import { Home } from "./components/home/Home";
 import { Error } from "./components/stateless/error/Error";
+import { Privacy } from "./components/privacy/Privacy";
+import { Imprint } from "./components/imprint/Imprint";
+import { Container } from "./components/container/Container";
 export function App() {
     const theme = useSelector(selectTheme);
     const [classes, setClasses] = useState("");
@@ -150,7 +153,7 @@ export function App() {
                 </Header>
                 <Routes>
                     <Route path="/" element={<Home lang={lang} />} />
-                    {/* <Route
+                    <Route
                         path="routefinder"
                         element={<Container lang={lang} />}
                     />
@@ -165,7 +168,7 @@ export function App() {
                         element={
                             <Imprint lang={lang} resetState={resetState} />
                         }
-                    /> */}
+                    />
                 </Routes>
                 <Footer>
                     <Link to="datenschutz">

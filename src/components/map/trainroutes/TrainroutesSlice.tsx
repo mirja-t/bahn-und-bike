@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { headers, url } from "../../../config/config";
+import { headers, VITE_API_URL } from "../../../config/config";
 import { refactorStopData } from "../../../utils/refactorStopData";
 import { generateTrainlineTree } from "../../../utils/treeData/generateTrainlineTree";
 import { generateTrainlines } from "../../../utils/generateTrainlines";
@@ -38,7 +38,7 @@ export const loadTrainroutes = createAsyncThunk<
     const connectionsQuery = direct
         ? "trainstops/" + start
         : "connections/" + start;
-    const connections = await fetch(`${url}${connectionsQuery}`, {
+    const connections = await fetch(`${VITE_API_URL}${connectionsQuery}`, {
         headers: headers,
     }).then((response) => {
         if (response.status !== 200) {
@@ -78,7 +78,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
     const connections = [];
     const fetchConnection = async (id) => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
-        const connection = await fetch(`${url}${connectionQuery}`, {
+        const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
         }).then((response) => {
             if (response.status !== 200) {

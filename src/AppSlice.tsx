@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { headers, url } from "./config/config.tsx";
+import { headers, VITE_API_URL } from "./config/config.tsx";
 import type { AppDispatch, RootState } from "./store";
 import { useDispatch } from "react-redux";
 
@@ -24,7 +24,7 @@ export const loadLang = createAsyncThunk<
     Record<string, Record<string, string>>
 >("app/loadLang", async () => {
     const query = "lang";
-    const lang = await fetch(`${url}${query}`, { headers: headers })
+    const lang = await fetch(`${VITE_API_URL}${query}`, { headers: headers })
         .then((response) => {
             if (response.status !== 200) {
                 throw new Error("Bad Server Response");
