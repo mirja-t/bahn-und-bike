@@ -1,45 +1,40 @@
 import "./App.scss";
-import { selectTheme, setTheme, LangCode, Theme } from "./AppSlice";
-import { useState } from "react";
+import {
+    selectTheme,
+    setTheme,
+    LangCode,
+    Theme,
+    selectLangLoading,
+    selectLangError,
+    loadLang,
+    useAppDispatch,
+} from "./AppSlice";
+import { useEffect, useState } from "react";
 import { Header } from "./components/stateless/header/Header";
-import { useDispatch, useSelector } from "react-redux";
-// import { Routes, Route, Link, useLocation } from "react-router-dom";
-// import { useEffect, useState } from "react";
-// import { Home } from "./components/home/Home";
-// import { Imprint } from "./components/imprint/Imprint";
-// import { Privacy } from "./components/privacy/Privacy";
-// import { Container } from "./components/container/Container";
-// import { Footer } from "./components/stateless/footer/Footer";
-// import { Error } from "./components/stateless/error/Error";
+import { useSelector } from "react-redux";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Switcher } from "./components/form/switcher/Switcher";
-// import {
-//     loadLang,
-//     setTheme,
-//     selectTheme,
-//     selectLangLoading,
-//     selectLangError,
-// } from "./AppSlice";
-// import {
-//     setActiveSection,
-//     setCurrentTrainroutes,
-//     setTrainLinesAlongVeloroute,
-// } from "./components/map/trainroutes/TrainroutesSlice";
-// import {
-//     setActiveVeloroute,
-//     setActiveVelorouteSection,
-// } from "./components/map/veloroutes/VeloroutesSlice";
-// import { Logo } from "./components/stateless/header/logo/Logo";
-
+import { Logo } from "./components/stateless/header/logo/Logo";
+import {
+    setActiveSection,
+    setCurrentTrainroutes,
+    setTrainLinesAlongVeloroute,
+} from "./components/map/trainroutes/TrainroutesSlice";
+import {
+    setActiveVeloroute,
+    setActiveVelorouteSection,
+} from "./components/map/veloroutes/VeloroutesSlice";
+import { Footer } from "./components/stateless/footer/Footer";
+import { Home } from "./components/home/Home";
+import { Error } from "./components/stateless/error/Error";
 export function App() {
     const theme = useSelector(selectTheme);
     const [classes, setClasses] = useState("");
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [lang, setLang] = useState<LangCode>(LangCode.DE);
-    /*
     const languagesLoading = useSelector(selectLangLoading);
     const languagesError = useSelector(selectLangError);
     const location = useLocation();
-*/
     const setLanguage = (lang: LangCode) => {
         setLang(lang);
     };
@@ -48,16 +43,19 @@ export function App() {
         setTheme(theme);
         dispatch(setTheme(theme));
     };
-    /*
+
     useEffect(() => {
         dispatch(loadLang());
     }, [dispatch]);
 
     useEffect(() => {
+        const lastSlugSegment = location.pathname.match(/[^\/]*$/);
         const classNames =
             location.pathname === "/"
                 ? "home"
-                : location.pathname.match(/[^/]*$/)[0];
+                : lastSlugSegment
+                  ? lastSlugSegment[0]
+                  : "";
         setClasses(classNames);
     }, [location]);
 
@@ -68,16 +66,25 @@ export function App() {
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainLinesAlongVeloroute([]));
     };
-    
-  if(languagesLoading) return <div/>;
-  if(languagesError) return <Error/>;
-  */
+
+    if (languagesLoading) return <div className="App">Loading...</div>;
+    if (languagesError) return <Error />;
+
     return (
         <div className={`App theme-${theme}`}>
             <div id="wrapper" className={classes}>
                 <Header>
-                    <>hello world!</>
-                    {/* <Link to="/" title={lang==='de' ? 'Zur Startseite' : 'Back to Homepage'} onClick={resetState}><Logo/></Link> */}
+                    <Link
+                        to="/"
+                        title={
+                            lang === "de"
+                                ? "Zur Startseite"
+                                : "Back to Homepage"
+                        }
+                        onClick={resetState}
+                    >
+                        <Logo />
+                    </Link>
                     <div style={{ display: "flex", gap: "0.5em" }}>
                         <Switcher
                             setValue={setLanguage}
@@ -141,16 +148,34 @@ export function App() {
                         />
                     </div>
                 </Header>
-                {/* <Routes>
-              <Route path="/" element={<Home lang={lang}/>} />
-              <Route path="routefinder" element={<Container lang={lang} />} />
-              <Route path="datenschutz" element={<Privacy lang={lang} resetState={resetState} />} />
-              <Route path="impressum" element={<Imprint lang={lang} resetState={resetState} />} />
-            </Routes>
-            <Footer>
-              <Link to="datenschutz">{lang==='de' ? 'Datenschutz' : 'Privacy'}</Link>&nbsp;&nbsp;
-              <Link to="impressum">{lang==='de' ? 'Impressum' : 'Legal Notes'}</Link>
-            </Footer> */}
+                <Routes>
+                    <Route path="/" element={<Home lang={lang} />} />
+                    {/* <Route
+                        path="routefinder"
+                        element={<Container lang={lang} />}
+                    />
+                    <Route
+                        path="datenschutz"
+                        element={
+                            <Privacy lang={lang} resetState={resetState} />
+                        }
+                    />
+                    <Route
+                        path="impressum"
+                        element={
+                            <Imprint lang={lang} resetState={resetState} />
+                        }
+                    /> */}
+                </Routes>
+                <Footer>
+                    <Link to="datenschutz">
+                        {lang === LangCode.DE ? "Datenschutz" : "Privacy"}
+                    </Link>
+                    &nbsp;&nbsp;
+                    <Link to="impressum">
+                        {lang === LangCode.DE ? "Impressum" : "Legal Notes"}
+                    </Link>
+                </Footer>
             </div>
         </div>
     );

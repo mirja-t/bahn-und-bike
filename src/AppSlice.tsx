@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, url } from "./config/config.tsx";
-import type { RootState } from "./store.tsx";
+import type { AppDispatch, RootState } from "./store";
+import { useDispatch } from "react-redux";
 
 export enum Theme {
     Light = "light",
@@ -83,3 +84,4 @@ export const selectLangError = (state: RootState) => state.app.langError;
 export const { setTheme } = appSlice.actions;
 
 export default appSlice.reducer;
+export const useAppDispatch: () => AppDispatch = useDispatch;
