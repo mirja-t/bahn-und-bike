@@ -79,7 +79,7 @@ export const loadVeloroute = createAsyncThunk<
 
 export const loadCrossingVeloroutes = createAsyncThunk(
     "veloroutes/setCrossingVelorouteList",
-    async (idx, thunkAPI) => {
+    async (idx: number, thunkAPI) => {
         //const activeVelorouteSectionIds = thunkAPI.getState().veloroutes.activeVeloroute.route[idx].leg.map(s => s.stop_id);
         // const trainlines = thunkAPI.getState().trainroutes.trainlineList;
         // const activeVelorouteSection = thunkAPI.getState().veloroutes.activeVelorouteSection;

@@ -11,7 +11,15 @@ import {
     setActiveVelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
 
-export const CombinedVelorouteDetails = ({ parent, lang }) => {
+interface CombinedVelorouteDetailsProps {
+    parent: any;
+    lang: string;
+}
+
+export const CombinedVelorouteDetails = ({
+    parent,
+    lang,
+}: CombinedVelorouteDetailsProps) => {
     const dispatch = useDispatch();
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
@@ -23,13 +31,13 @@ export const CombinedVelorouteDetails = ({ parent, lang }) => {
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const combinedVeloroute = useSelector(selectCombinedVeloroute);
 
-    const hoverVeloStop = ({ type }, spot) => {
+    const hoverVeloStop = ({ type }: React.MouseEvent, spot?: any) => {
         type === "mouseenter"
             ? dispatch(setActiveVelorouteStop(spot))
             : dispatch(setActiveVelorouteStop(null));
     };
 
-    const sectionHeadline = (stop, idx) => (
+    const sectionHeadline = (stop: any, idx: number) => (
         <h3 className="veloroute-trainstops">
             <div className="veloroutesection-icon">
                 <span>{idx}</span>
@@ -47,7 +55,11 @@ export const CombinedVelorouteDetails = ({ parent, lang }) => {
         </h3>
     );
     return (
-        <ScrollContent parentEl={parent} transitionComplete={true}>
+        <ScrollContent
+            parentEl={parent}
+            transitionComplete={true}
+            id="veloroute-details"
+        >
             <div id="veloroute" className="details">
                 {activeVelorouteSection !== null && (
                     <section className="veloroute-details veloroute-section-details">

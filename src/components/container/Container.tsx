@@ -1,7 +1,6 @@
 import "./container.scss";
 import { useRef, useEffect, useState, useMemo, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Map } from "../map/Map";
+import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
@@ -20,13 +19,15 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
+import { Map } from "../map/Map";
+import { useAppDispatch } from "../../AppSlice";
 
 interface ContainerProps {
     lang: string;
 }
 
 export const Container = ({ lang }: ContainerProps) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
@@ -47,14 +48,18 @@ export const Container = ({ lang }: ContainerProps) => {
 
     const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
     const memoizedZoomMap = useCallback(
-        (dir) => {
+        (dir: "+" | "-") => {
             const factor = dir === "+" ? 1 : -1;
             setUserScale(userScale + factor * 0.2);
         },
         [userScale],
     );
 
-    const handleSubmit = (e, value, direct = true) => {
+    const handleSubmit = (
+        e: React.SubmitEvent,
+        value: number,
+        direct = true,
+    ) => {
         e.preventDefault();
         prevValue.current = value;
         dispatch(setActiveSection(null));
@@ -119,7 +124,7 @@ export const Container = ({ lang }: ContainerProps) => {
                 style={{ height: containerHeight }}
                 className={containerClass}
             >
-                {/* <aside className="destination-details-container">
+                <aside className="destination-details-container">
                     <DestinationDetails
                         parent={container.current}
                         lang={lang}
@@ -129,7 +134,7 @@ export const Container = ({ lang }: ContainerProps) => {
                         parent={container.current}
                         lang={lang}
                     />
-                </aside> */}
+                </aside>
                 <main>
                     <div id="map-wrapper" ref={setWrapper}>
                         <Map

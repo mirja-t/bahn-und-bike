@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
-import { refactorStopData } from "../../../utils/refactorStopData";
-import { generateTrainlineTree } from "../../../utils/treeData/generateTrainlineTree";
-import { generateTrainlines } from "../../../utils/generateTrainlines";
-import { makeTrainConnection } from "../../../utils/makeTrainConnection";
 import type { RootState } from "../../../store";
+import { generateTrainlines } from "../../../utils/generateTrainlines";
+import { generateTrainlineTree } from "../../../utils/treeData/generateTrainlineTree";
+import { refactorStopData } from "../../../utils/refactorStopData";
+import { makeTrainConnection } from "../../../utils/makeTrainConnection";
 
 export interface LoadTrainroutesParams {
     start: string;
@@ -23,7 +23,7 @@ export interface TrainroutesState {
     trainroutesLoading: boolean;
     trainroutesError: boolean;
     activeSpot: string | null;
-    activeSection: number | null;
+    activeSection: Record<string, any> | null;
     trainlinesAlongVeloroute: any[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
@@ -126,7 +126,10 @@ export const trainroutesSlice = createSlice({
         setActiveSpot: (state, action: { payload: string | null }) => {
             state.activeSpot = action.payload;
         },
-        setActiveSection: (state, action: { payload: number | null }) => {
+        setActiveSection: (
+            state,
+            action: { payload: Record<string, any> | null },
+        ) => {
             state.activeSection = action.payload;
         },
         setTrainLinesAlongVeloroute: (state, action: { payload: any[] }) => {
