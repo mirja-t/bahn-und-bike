@@ -13,7 +13,6 @@ interface ItemListProps {
 
 export const ItemList = ({ items, lang, activeItem, fn }: ItemListProps) => {
     const labels = useSelector(selectLang);
-
     return (
         <ul className="destinationslist">
             {items.length < 1 && (
@@ -30,7 +29,7 @@ export const ItemList = ({ items, lang, activeItem, fn }: ItemListProps) => {
                         opacity: 1,
                     }}
                     transition={{
-                        delay: 250 * idx,
+                        delay: 0.25 * idx,
                     }}
                     key={item.id}
                     onClick={() => fn(item)}
