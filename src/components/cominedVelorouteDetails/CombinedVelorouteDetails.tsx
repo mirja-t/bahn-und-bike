@@ -1,13 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { PinIcon } from "../stateless/icons/PinIcon";
-import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { selectLang } from "../../AppSlice";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectActiveVelorouteStop,
-    selectCombinedVeloroute,
     setActiveVelorouteStop,
     type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
@@ -30,7 +27,6 @@ export const CombinedVelorouteDetails = ({
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const combinedVeloroute = useSelector(selectCombinedVeloroute);
 
     const hoverVeloStop = (
         { type }: React.MouseEvent,
@@ -116,20 +112,6 @@ export const CombinedVelorouteDetails = ({
                         )}
                         <h6>{labels[lang].distance}</h6>
                         <p>{activeVelorouteSection.dist} km</p>
-                    </section>
-                )}
-
-                {combinedVeloroute && (
-                    <section>
-                        <h5>{labels[lang].combined_veloroute}</h5>
-                        <header>
-                            <div className="details-headline">
-                                <PinIcon size="small">
-                                    <VelorouteIcon />
-                                </PinIcon>
-                                <h3>{`${combinedVeloroute.veloroute_name}`}</h3>
-                            </div>
-                        </header>
                     </section>
                 )}
             </div>

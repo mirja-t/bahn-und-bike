@@ -94,7 +94,7 @@ export const ScrollContent = ({
 
             return memo;
         },
-        onDrag: ({ memo, movement: [_, dy] }) => {
+        onDrag: ({ memo, movement: [, dy] }) => {
             if (!memo)
                 memo = {
                     pos: touchScrollPos,

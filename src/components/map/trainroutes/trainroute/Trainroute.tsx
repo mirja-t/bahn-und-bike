@@ -6,7 +6,6 @@ import {
 import {
     setActiveVeloroute,
     setActiveVelorouteSection,
-    setCombinedVeloroute,
 } from "../../veloroutes/VeloroutesSlice";
 import { Trainstop } from "../trainstop/Trainstop";
 import { memo } from "react";
@@ -27,7 +26,6 @@ export const Trainroute = memo(
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
-            dispatch(setCombinedVeloroute(null));
         };
 
         return (

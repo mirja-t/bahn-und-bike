@@ -5,17 +5,10 @@ import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
 import { selectLang, useAppDispatch } from "../../AppSlice";
 import {
     selectActiveVeloroute,
-    // setActiveVelorouteSection,
     selectActiveVelorouteSection,
-    // setCombinedVeloroute,
     setHoveredVelorouteSection,
-    // selectCrossingVelorouteList,
-    // selectCombinedVeloroute,
     setVelorouteSectionActiveThunk,
 } from "../map/veloroutes/VeloroutesSlice";
-// import {
-//     selectTrainrouteList
-// } from '../map/trainroutes/TrainroutesSlice';
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
@@ -44,9 +37,10 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
         { type }: React.MouseEvent,
         idx?: number,
     ) => {
-        type === "mouseenter" && idx !== undefined
-            ? dispatch(setHoveredVelorouteSection(idx))
-            : dispatch(setHoveredVelorouteSection(null));
+        if (type === "mouseenter" && idx !== undefined) {
+            return dispatch(setHoveredVelorouteSection(idx));
+        }
+        dispatch(setHoveredVelorouteSection(null));
     };
 
     return (
@@ -104,17 +98,6 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
                                 </ol>
                             </Collapse>
                         </section>
-                        {/* { activeVelorouteSection && 
-                        (<section className="section">
-                            <h5>{labels[lang].alternativeveloroutes}</h5>
-                            { crossingVeloroutes && !crossingVeloroutesLoading &&
-                                <ItemList
-                                    items={crossingVeloroutes}
-                                    lang={lang}
-                                    activeItem={combinedVeloroute}
-                                    fn={setCurrentCombinedVeloroute} />}
-                        </section>)
-                    } */}
                         {!activeVelorouteSection && labels[lang].nolegchosen}
                     </div>
                 )}

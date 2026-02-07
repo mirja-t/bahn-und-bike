@@ -4,12 +4,9 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectActiveVelorouteStop,
-    selectCombinedVeloroute,
 } from "./VeloroutesSlice";
-import { AlternativeRoute } from "./alternativeroute/AlternativeRoute";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
-import { ActiveVelorouteSectionIcon } from "./activeVelorouteSectionDetails/ActiveVelorouteSectionIcon";
 
 interface VeloroutesProps {
     strokeScale: number;
@@ -23,7 +20,6 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const combinedVeloroute = useSelector(selectCombinedVeloroute);
     const activeVRouteStops = {
         start: activeVelorouteSection ? activeVelorouteSection.leg[0] : null,
         end: activeVelorouteSection
@@ -57,21 +53,6 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
                         }
                     />
                 )),
-            )}
-
-            {activeVelorouteSection && (
-                <>
-                    {combinedVeloroute && (
-                        <AlternativeRoute
-                            altroute={combinedVeloroute}
-                            strokeScale={strokeScale}
-                        />
-                    )}
-                    <ActiveVelorouteSectionIcon
-                        strokeScale={strokeScale}
-                        section={activeVelorouteSection.leg}
-                    />
-                </>
             )}
         </g>
     );
