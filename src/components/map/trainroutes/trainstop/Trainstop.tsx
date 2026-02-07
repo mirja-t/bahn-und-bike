@@ -11,7 +11,7 @@ interface TrainstopProps {
 
 export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
     const dispatch = useDispatch();
-    const hoverSpot = (e: React.MouseEvent, spot?: any) => {
+    const hoverSpot = (e: React.MouseEvent, spot?: Item) => {
         if (e.type === "mouseenter") dispatch(setActiveSpot(spot || item));
         else if (e.type === "mouseleave") dispatch(setActiveSpot(null));
     };

@@ -147,7 +147,7 @@ export const trainroutesSlice = createSlice({
         setTrainlineList: (state, action: { payload: any }) => {
             state.trainlineList = action.payload;
         },
-        setActiveSpot: (state, action: { payload: string | null }) => {
+        setActiveSpot: (state, action: { payload: Trainstop | null }) => {
             state.activeSpot = action.payload;
         },
         setActiveSection: (

@@ -13,7 +13,7 @@ import {
 } from "../../../utils/makeVeloRoute";
 import type { RootState } from "../../../store";
 
-export type VelorouteStop = {
+export type VelorouteStopType = {
     stop_id: string;
     stop_name: string;
     trainlines: string[];
@@ -28,7 +28,7 @@ export type Veloroute = {
     len: number;
     route: {
         dist: number;
-        leg: VelorouteStop[];
+        leg: VelorouteStopType[];
     }[];
     path: string[];
 };
@@ -40,14 +40,14 @@ export type CombinedVeloroute = {
     name: string;
     route: {
         dist: number;
-        leg: VelorouteStop[];
+        leg: VelorouteStopType[];
     }[];
     path: string[];
 };
 
 export interface VeloroutesState {
     velorouteList: Veloroute[];
-    crossingVelorouteList: any;
+    crossingVelorouteList: Veloroute[];
     isLoading: boolean;
     hasError: boolean;
     crossingRoutesLoading: boolean;
@@ -55,12 +55,12 @@ export interface VeloroutesState {
     activeVeloroute: Veloroute | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
-    activeVelorouteStop: VelorouteStop | null;
+    activeVelorouteStop: VelorouteStopType | null;
     crossingVelorouteSection?: number[];
 }
 
 export const loadVeloroutes = createAsyncThunk<
-    any[],
+    Veloroute[],
     string[],
     { state: RootState }
 >("veloroutes/setVelorouteList", async (activeIds: string[], thunkAPI) => {
@@ -123,7 +123,7 @@ export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
         velorouteList: [],
-        crossingVelorouteList: {},
+        crossingVelorouteList: [],
         isLoading: false,
         hasError: false,
         crossingRoutesLoading: false,
@@ -149,7 +149,10 @@ export const veloroutesSlice = createSlice({
         ) => {
             state.hoveredVelorouteSection = action.payload;
         },
-        setActiveVelorouteStop: (state, action: { payload: any | null }) => {
+        setActiveVelorouteStop: (
+            state,
+            action: { payload: VelorouteStopType | null },
+        ) => {
             state.activeVelorouteStop = action.payload;
         },
         setCrossingVelorouteSection: (state) => {

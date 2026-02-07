@@ -7,10 +7,15 @@ import {
 import { motion } from "framer-motion";
 
 interface VelorouteStopProps {
-    item: any;
+    item: {
+        stop_id: string;
+        stop_name: string;
+        x: number;
+        y: number;
+        trainlines?: string[];
+    };
     strokeScale: number;
     type: string;
-    activeSpot?: any;
 }
 
 export const VelorouteStop = ({
@@ -23,11 +28,12 @@ export const VelorouteStop = ({
 
     const hoverVeloStop = (
         { type }: React.MouseEvent<SVGCircleElement>,
-        spot?: any,
+        spot?: VelorouteStopProps["item"],
     ) => {
-        type === "mouseenter"
-            ? dispatch(setActiveVelorouteStop(spot))
-            : dispatch(setActiveVelorouteStop(null));
+        if (type === "mouseenter" && spot) {
+            return dispatch(setActiveVelorouteStop(spot));
+        }
+        dispatch(setActiveVelorouteStop(null));
     };
 
     return (
