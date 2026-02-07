@@ -21,7 +21,7 @@ import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 
 interface VelorouteDetailsProps {
-    parent: any;
+    parent: HTMLElement | null;
     lang: string;
 }
 
@@ -32,7 +32,7 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null
+        activeVelorouteSectionIdx !== null && activeVeloroute !== null
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
 

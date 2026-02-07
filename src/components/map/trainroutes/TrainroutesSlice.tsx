@@ -36,7 +36,7 @@ export type TrainrouteSection = {
     points: string;
     connection: Connection | null;
 };
-export type CurrentTrainroutes = any[];
+export type CurrentTrainroutes = TrainrouteSection[];
 
 export interface TrainroutesState {
     startPos: string;
@@ -48,10 +48,10 @@ export interface TrainroutesState {
     trainroutesError: boolean;
     activeSpot: string | null;
     activeSection: TrainrouteSection | null;
-    trainlinesAlongVeloroute: any[];
+    trainlinesAlongVeloroute: TrainrouteSection[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
-    trainlineNames?: any;
+    trainlineNames?: string[];
 }
 
 export const loadTrainroutes = createAsyncThunk<
@@ -100,7 +100,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         ].trainstop;
 
     const connections = [];
-    const fetchConnection = async (id) => {
+    const fetchConnection = async (id: string | undefined) => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
