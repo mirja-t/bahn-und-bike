@@ -8,6 +8,7 @@ import {
     selectActiveVeloroute,
     setActiveVelorouteSection,
     loadVeloroute,
+    type Veloroute,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -18,7 +19,7 @@ import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 
 interface DestinationDetailsProps {
-    parent: any;
+    parent: HTMLElement | null;
     lang: string;
 }
 
@@ -67,7 +68,7 @@ export const DestinationDetails = ({
 
     const dispatch = useAppDispatch();
 
-    const setVelorouteActive = (vroute) => {
+    const setVelorouteActive = (vroute: Veloroute) => {
         dispatch(setTrainLinesAlongVeloroute([]));
         dispatch(setActiveVelorouteSection(null));
         dispatch(loadVeloroute(vroute));

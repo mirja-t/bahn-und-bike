@@ -11,7 +11,31 @@ export interface LoadTrainroutesParams {
     value: number;
     direct: boolean;
 }
-
+export type Train = {
+    id: string;
+    name: string;
+};
+export type Trainstop = {
+    stop_name: string;
+    stop_id: string;
+    x: number;
+    y: number;
+};
+export type Connection = {
+    stop_name: string;
+    initial_train: Train[];
+    connecting_train: Train;
+};
+export type TrainrouteSection = {
+    dur: number;
+    line: string[];
+    pathLength: number;
+    firstStation: Trainstop;
+    lastStation: Trainstop;
+    stopIds: string[];
+    points: string;
+    connection: Connection | null;
+};
 export type CurrentTrainroutes = any[];
 
 export interface TrainroutesState {
@@ -23,7 +47,7 @@ export interface TrainroutesState {
     trainroutesLoading: boolean;
     trainroutesError: boolean;
     activeSpot: string | null;
-    activeSection: Record<string, any> | null;
+    activeSection: TrainrouteSection | null;
     trainlinesAlongVeloroute: any[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
@@ -128,7 +152,7 @@ export const trainroutesSlice = createSlice({
         },
         setActiveSection: (
             state,
-            action: { payload: Record<string, any> | null },
+            action: { payload: TrainrouteSection | null },
         ) => {
             state.activeSection = action.payload;
         },
