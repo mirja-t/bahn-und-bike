@@ -1,9 +1,10 @@
+import type { Labels, LangCode } from "../../../AppSlice";
 import { getTime } from "../../../utils/getTime";
 import "./rangeinput.scss";
 import { useRef, useEffect } from "react";
 interface RangeInputProps {
-    lang: string;
-    labels: any;
+    lang: LangCode;
+    labels: Labels;
     min: number;
     max: number;
     value: number;

@@ -1,19 +1,16 @@
 // @ts-check
 
-import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
-import { defineConfig } from "eslint/config";
 
-export default defineConfig(
-    eslint.configs.recommended,
-    tseslint.configs.strict,
+export default [
+    ...tseslint.configs.strict,
+    { ignores: ["**/*.js"] },
     {
         rules: {
             "@typescript-eslint/no-explicit-any": "error",
-            "@typescript-eslint/no-unused-vars": "error",
         },
     },
-);
+];
 
 // import tseslint, { parser } from "typescript-eslint";
 // import reactHooks from "eslint-plugin-react-hooks";

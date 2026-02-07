@@ -1,6 +1,7 @@
 import "./destinationpicker.scss";
 import { useDispatch } from "react-redux";
 import { setStartPos } from "../../map/trainroutes/TrainroutesSlice";
+import type { LangCode, Labels } from "../../../AppSlice";
 
 const startDest = {
     berlin: "8011160",
@@ -9,8 +10,8 @@ const startDest = {
 };
 
 interface DestinationPickerProps {
-    labels: { [key: string]: any };
-    lang: string;
+    labels: Labels;
+    lang: LangCode;
 }
 
 export const DestinationPicker = ({ labels, lang }: DestinationPickerProps) => {

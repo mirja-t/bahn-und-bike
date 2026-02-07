@@ -36,9 +36,10 @@ export const CombinedVelorouteDetails = ({
         { type }: React.MouseEvent,
         velorouteStop?: VelorouteStop,
     ) => {
-        type === "mouseenter"
-            ? dispatch(setActiveVelorouteStop(velorouteStop))
-            : dispatch(setActiveVelorouteStop(null));
+        if (type === "mouseenter") {
+            return dispatch(setActiveVelorouteStop(velorouteStop));
+        }
+        dispatch(setActiveVelorouteStop(null));
     };
 
     const sectionHeadline = (stop: VelorouteStop, idx: number) => (
