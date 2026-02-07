@@ -1,0 +1,99 @@
+import "./map.scss";
+import { useRef } from "react";
+import { useSelector } from "react-redux";
+import { useZoom } from "../../hooks/useZoom";
+import { selectLang } from "../../AppSlice";
+import {
+    selectCurrentTrainroutes,
+    selectTrainrouteListLoading,
+} from "./trainroutes/TrainroutesSlice";
+import { selectActiveVeloroute } from "./veloroutes/VeloroutesSlice";
+import { Trainroutes } from "./trainroutes/Trainroutes";
+import { Germany } from "./germany/Germany";
+import { Loading } from "../stateless/loading/Loading";
+import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
+import { AnimatePresence, motion } from "framer-motion";
+
+interface MapProps {
+    value: string;
+    mapContainer: HTMLDivElement | null;
+    mapSize: [number, number];
+    lang: string;
+    fn: (dir: "+" | "-") => void;
+    userScale: number;
+}
+export const Map = ({
+    value,
+    mapContainer,
+    mapSize,
+    lang,
+    fn,
+    userScale,
+}: MapProps) => {
+    const mapcontainerRef = useRef<HTMLDivElement | null>(null);
+    const labels = useSelector(selectLang);
+    const journeys = useSelector(selectCurrentTrainroutes);
+    const isLoading = useSelector(selectTrainrouteListLoading);
+    const veloroute = useSelector(selectActiveVeloroute);
+
+    const zoom = useZoom(
+        journeys,
+        veloroute,
+        Number(value),
+        mapContainer,
+        mapSize,
+        userScale,
+        isLoading,
+    );
+
+    return (
+        <>
+            <AnimatePresence>
+                {isLoading && (
+                    <motion.div
+                        className="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Loading lang={lang} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+            <ZoomPanel fn={fn} />
+            <div
+                id="map-container"
+                ref={mapcontainerRef}
+                style={{
+                    width: zoom.containerWidth,
+                    height: zoom.containerHeight,
+                    transform: `translate(-50%, -50%)`,
+                }}
+            >
+                <motion.div
+                    style={{
+                        left: zoom.x,
+                        top: zoom.y,
+                        touchAction: "none",
+                    }}
+                    className="map-inner"
+                >
+                    {!isLoading && (
+                        <>
+                            {parseInt(value) === 0 &&
+                                journeys.length === 0 &&
+                                !isLoading && (
+                                    <div className="instructions">
+                                        <p>{labels[lang].instruction}</p>
+                                    </div>
+                                )}
+                            <Trainroutes zoom={zoom} />
+                        </>
+                    )}
+                    <Germany />
+                </motion.div>
+            </div>
+        </>
+    );
+};
