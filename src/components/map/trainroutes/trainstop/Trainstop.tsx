@@ -1,10 +1,10 @@
 import "./trainstop.scss";
 import { useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
-import { setActiveSpot } from "../TrainroutesSlice";
+import { setActiveSpot, type Trainstop as Item } from "../TrainroutesSlice";
 
 interface TrainstopProps {
-    item: any;
+    item: Item;
     strokeScale: number;
     styles: any;
 }

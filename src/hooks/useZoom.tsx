@@ -47,13 +47,13 @@ export const useZoom = (
             const leftOffset = (svgWidth / 2 - xStart) / 2;
             const topOffset = (svgHeight / 2 - yStart) / 2;
 
-            let distX: number = getLongestDistance(
+            const distX: number = getLongestDistance(
                 journeys,
                 "x",
                 xStart,
                 vrouteposition || null,
             );
-            let distY: number = getLongestDistance(
+            const distY: number = getLongestDistance(
                 journeys,
                 "y",
                 yStart,
