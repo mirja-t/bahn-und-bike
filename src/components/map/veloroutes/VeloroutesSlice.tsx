@@ -23,7 +23,7 @@ export type VelorouteStop = {
 };
 
 export type Veloroute = {
-    id: number;
+    id: string;
     name: string;
     len: number;
     route: {
