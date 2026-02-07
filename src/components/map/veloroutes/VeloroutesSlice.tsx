@@ -16,20 +16,52 @@ import {
 } from "../../../utils/makeVeloRoute";
 import type { RootState } from "../../../store";
 
+export type VelorouteStop = {
+    stop_id: string;
+    stop_name: string;
+    trainlines: string[];
+    trainstop?: string;
+    x: number;
+    y: number;
+};
+
+export type Veloroute = {
+    id: number;
+    name: string;
+    len: number;
+    route: {
+        dist: number;
+        leg: VelorouteStop[];
+    }[];
+    path: string[];
+};
+
+export type CombinedVeloroute = {
+    id: string;
+    route_id: string;
+    veloroute_name: string;
+    name: string;
+    route: {
+        dist: number;
+        leg: VelorouteStop[];
+    }[];
+    path: string[];
+};
+
 export interface VeloroutesState {
-    velorouteList: any[];
+    velorouteList: Veloroute[];
     crossingVelorouteList: any;
-    combinedVeloroute: any | null;
+    combinedVeloroute: CombinedVeloroute | null;
     isLoading: boolean;
     hasError: boolean;
     crossingRoutesLoading: boolean;
     crossingRoutesError: boolean;
-    activeVeloroute: any | null;
+    activeVeloroute: Veloroute | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
-    activeVelorouteStop: any | null;
+    activeVelorouteStop: VelorouteStop | null;
     combinedVelorouteActive: any | null;
-    crossingVelorouteSection?: any[];
+    crossingVelorouteSection?: number[];
 }
 
 export const loadVeloroutes = createAsyncThunk<
@@ -51,9 +83,9 @@ export const loadVeloroutes = createAsyncThunk<
 
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
-    VelorouteInput,
+    any,
     { state: RootState }
->("veloroutes/setVeloroute", async (vroute: VelorouteInput, thunkAPI) => {
+>("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
     const { id, name, len } = vroute;
     const velorouteQuery = "veloroute/" + id;
     const veloroute = await fetch(`${VITE_API_URL}${velorouteQuery}`, {
