@@ -12,7 +12,7 @@ interface VeloroutePathProps {
     idx: number;
     strokeScale: number;
     path: string;
-    active: boolean;
+    active?: boolean;
 }
 
 export const VeloroutePath = ({
