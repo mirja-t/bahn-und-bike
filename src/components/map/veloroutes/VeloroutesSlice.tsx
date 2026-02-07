@@ -14,7 +14,6 @@ import {
     makeVeloRoute,
     makeTrainlinesArray,
 } from "../../../utils/makeVeloRoute";
-import type { Veloroute, VelorouteInput } from "../../../types/types";
 import type { RootState } from "../../../store";
 
 export interface VeloroutesState {
@@ -25,7 +24,7 @@ export interface VeloroutesState {
     hasError: boolean;
     crossingRoutesLoading: boolean;
     crossingRoutesError: boolean;
-    activeVeloroute: Veloroute | null;
+    activeVeloroute: any | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
     activeVelorouteStop: any | null;
