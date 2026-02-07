@@ -1,6 +1,5 @@
 import "./map.scss";
-import { useDrag } from "@use-gesture/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { selectLang } from "../../AppSlice";
@@ -13,13 +12,14 @@ import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
 import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface MapProps {
-    value: number;
+    value: string;
     mapContainer: HTMLDivElement | null;
-    mapSize: number[];
+    mapSize: [number, number];
     lang: string;
-    fn: (dir: string) => void;
+    fn: (dir: "+" | "-") => void;
     userScale: number;
 }
 export const Map = ({
@@ -30,7 +30,7 @@ export const Map = ({
     fn,
     userScale,
 }: MapProps) => {
-    const mapcontainerRef = useRef(null);
+    const mapcontainerRef = useRef<HTMLDivElement | null>(null);
     const labels = useSelector(selectLang);
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
@@ -45,43 +45,22 @@ export const Map = ({
         userScale,
         isLoading,
     );
-    // const mapInnerSpring = useSpring({
-    //     left: zoom.x,
-    //     top: zoom.y,
-    // });
-
-    // const loadingSpring = useTransition(isLoading, {
-    //     from: { opacity: 0 },
-    //     enter: { opacity: 1 },
-    //     leave: { opacity: 0 },
-    //     config: {
-    //         tension: 280,
-    //         friction: 60,
-    //     },
-    // });
-
-    // // drag feature
-    // const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
-
-    // // Set the drag hook and define component movement based on gesture data.
-    // const bind = useDrag(({ movement: [mx, my] }) => {
-    //     api.start({ x: mx, y: my });
-    // });
-
-    // useEffect(() => {
-    //     api.start({ x: 0, y: 0 });
-    // }, [value, api]);
 
     return (
         <>
-            {/* {loadingSpring(
-                (styles, item) =>
-                    item && (
-                        <animated.div className="loading" style={styles}>
-                            <Loading lang={lang} />
-                        </animated.div>
-                    ),
-            )} */}
+            <AnimatePresence>
+                {isLoading && (
+                    <motion.div
+                        className="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Loading lang={lang} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <ZoomPanel fn={fn} />
             <div
                 id="map-container"
@@ -92,13 +71,11 @@ export const Map = ({
                     transform: `translate(-50%, -50%)`,
                 }}
             >
-                {/* <animated.div
-                    {...bind()}
+                <motion.div
                     style={{
-                        x,
-                        y,
+                        left: zoom.x,
+                        top: zoom.y,
                         touchAction: "none",
-                        ...mapInnerSpring,
                     }}
                     className="map-inner"
                 >
@@ -115,7 +92,7 @@ export const Map = ({
                         </>
                     )}
                     <Germany />
-                </animated.div> */}
+                </motion.div>
             </div>
         </>
     );

@@ -11,16 +11,12 @@ interface TravelDurationProps {
     lang: string;
     start: any;
     handleSubmit: (
-        e: React.FormEvent<HTMLFormElement>,
+        e: React.SubmitEvent<HTMLFormElement>,
         value: number,
         direct: boolean,
     ) => void;
 }
-export const TravelDuration = ({
-    handleSubmit,
-    lang,
-    start,
-}: TravelDurationProps) => {
+export const TravelDuration = ({ handleSubmit, lang }: TravelDurationProps) => {
     const labels = useSelector(selectLang);
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(true);

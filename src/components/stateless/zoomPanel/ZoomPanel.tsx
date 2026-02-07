@@ -1,7 +1,7 @@
 import "./zoompanel.scss";
 
 interface ZoomPanelProps {
-    fn: (arg0: string) => void;
+    fn: (arg0: "+" | "-") => void;
 }
 
 export const ZoomPanel = ({ fn }: ZoomPanelProps) => {
