@@ -1,6 +1,7 @@
 import {
     setActiveSection,
     setTrainLinesAlongVeloroute,
+    type TrainrouteSection,
 } from "../TrainroutesSlice";
 import {
     setActiveVeloroute,
@@ -12,7 +13,7 @@ import { memo } from "react";
 import { useAppDispatch } from "../../../../AppSlice";
 
 interface TrainrouteProps {
-    item: any;
+    item: TrainrouteSection;
     strokeScale: number;
     className: string;
 }
@@ -21,7 +22,7 @@ export const Trainroute = memo(
     function Trainroute({ item, strokeScale, className }: TrainrouteProps) {
         const dispatch = useAppDispatch();
 
-        const setAdditionalTrainlineActive = (line: any) => {
+        const setAdditionalTrainlineActive = (line: TrainrouteSection) => {
             dispatch(setTrainLinesAlongVeloroute([]));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
