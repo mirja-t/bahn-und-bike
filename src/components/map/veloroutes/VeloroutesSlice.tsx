@@ -13,7 +13,7 @@ import {
 } from "../../../utils/makeVeloRoute";
 import type { RootState } from "../../../store";
 
-export type VelorouteStopType = {
+export type VelorouteStop = {
     stop_id: string;
     stop_name: string;
     trainlines: string[];
@@ -28,7 +28,7 @@ export type Veloroute = {
     len: number;
     route: {
         dist: number;
-        leg: VelorouteStopType[];
+        leg: VelorouteStop[];
     }[];
     path: string[];
 };
@@ -40,7 +40,7 @@ export type CombinedVeloroute = {
     name: string;
     route: {
         dist: number;
-        leg: VelorouteStopType[];
+        leg: VelorouteStop[];
     }[];
     path: string[];
 };
@@ -55,7 +55,7 @@ export interface VeloroutesState {
     activeVeloroute: Veloroute | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
-    activeVelorouteStop: VelorouteStopType | null;
+    activeVelorouteStop: VelorouteStop | null;
     crossingVelorouteSection?: number[];
 }
 
@@ -78,7 +78,7 @@ export const loadVeloroutes = createAsyncThunk<
 
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
-    any,
+    Veloroute,
     { state: RootState }
 >("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
     const { id, name, len } = vroute;
@@ -151,7 +151,7 @@ export const veloroutesSlice = createSlice({
         },
         setActiveVelorouteStop: (
             state,
-            action: { payload: VelorouteStopType | null },
+            action: { payload: VelorouteStop | null },
         ) => {
             state.activeVelorouteStop = action.payload;
         },

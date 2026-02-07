@@ -3,17 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     setActiveVelorouteStop,
     selectActiveVelorouteStop,
+    type VelorouteStop as VelorouteStopType,
 } from "../VeloroutesSlice";
 import { motion } from "framer-motion";
 
 interface VelorouteStopProps {
-    item: {
-        stop_id: string;
-        stop_name: string;
-        x: number;
-        y: number;
-        trainlines?: string[];
-    };
+    item: VelorouteStopType;
     strokeScale: number;
     type: string;
 }
@@ -28,7 +23,7 @@ export const VelorouteStop = ({
 
     const hoverVeloStop = (
         { type }: React.MouseEvent<SVGCircleElement>,
-        spot?: VelorouteStopProps["item"],
+        spot?: VelorouteStopType,
     ) => {
         if (type === "mouseenter" && spot) {
             return dispatch(setActiveVelorouteStop(spot));
