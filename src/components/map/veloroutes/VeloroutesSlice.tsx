@@ -1,4 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+    createSlice,
+    createAsyncThunk,
+    type ActionCreatorWithPayload,
+} from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
 import {
     setActiveSection,
@@ -104,7 +108,7 @@ export const loadVeloroute = createAsyncThunk<
 });
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
-    return (dispatch: any) => {
+    return (dispatch: ActionCreatorWithPayload<unknown, string>) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));

@@ -6,7 +6,10 @@ import { setActiveSpot, type Trainstop as Item } from "../TrainroutesSlice";
 interface TrainstopProps {
     item: Item;
     strokeScale: number;
-    styles: any;
+    styles: {
+        scale: number;
+        transformOrigin: string;
+    };
 }
 
 export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
