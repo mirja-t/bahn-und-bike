@@ -32,7 +32,7 @@ export const Container = ({ lang }: ContainerProps) => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null
+        activeVelorouteSectionIdx !== null && activeVeloroute !== null
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
     const start = useSelector(selectStartPos);

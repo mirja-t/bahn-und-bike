@@ -1,12 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-//import { allocateVeloroutestopsToRoute } from '../../../utils/allocateVeloroutestopsToRoute';
+import {
+    createSlice,
+    createAsyncThunk,
+    type ActionCreatorWithPayload,
+} from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
-//import { generateCrossingVeloroutes } from '../../../utils/generateCrossingVeloroutes';
 import {
     setActiveSection,
     loadTrainroutesAlongVeloroute,
 } from "../trainroutes/TrainroutesSlice";
-//import { refactorStopData } from '../../../utils/refactorStopData';
 import { getRoutePath } from "../../../utils/getRoutePath";
 import { addXYValues } from "../../../utils/addXYValues";
 import {
@@ -16,24 +17,54 @@ import {
 } from "../../../utils/makeVeloRoute";
 import type { RootState } from "../../../store";
 
+export type VelorouteStop = {
+    stop_id: string;
+    stop_name: string;
+    trainlines: string[];
+    trainstop?: string;
+    x: number;
+    y: number;
+};
+
+export type Veloroute = {
+    id: string;
+    name: string;
+    len: number;
+    route: {
+        dist: number;
+        leg: VelorouteStop[];
+    }[];
+    path: string[];
+};
+
+export type CombinedVeloroute = {
+    id: string;
+    route_id: string;
+    veloroute_name: string;
+    name: string;
+    route: {
+        dist: number;
+        leg: VelorouteStop[];
+    }[];
+    path: string[];
+};
+
 export interface VeloroutesState {
-    velorouteList: any[];
-    crossingVelorouteList: any;
-    combinedVeloroute: any | null;
+    velorouteList: Veloroute[];
+    crossingVelorouteList: Veloroute[];
     isLoading: boolean;
     hasError: boolean;
     crossingRoutesLoading: boolean;
     crossingRoutesError: boolean;
-    activeVeloroute: any | null;
+    activeVeloroute: Veloroute | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
-    activeVelorouteStop: any | null;
-    combinedVelorouteActive: any | null;
-    crossingVelorouteSection?: any[];
+    activeVelorouteStop: VelorouteStop | null;
+    crossingVelorouteSection?: number[];
 }
 
 export const loadVeloroutes = createAsyncThunk<
-    any[],
+    Veloroute[],
     string[],
     { state: RootState }
 >("veloroutes/setVelorouteList", async (activeIds: string[], thunkAPI) => {
@@ -51,9 +82,9 @@ export const loadVeloroutes = createAsyncThunk<
 
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
-    VelorouteInput,
+    Veloroute,
     { state: RootState }
->("veloroutes/setVeloroute", async (vroute: VelorouteInput, thunkAPI) => {
+>("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
     const { id, name, len } = vroute;
     const velorouteQuery = "veloroute/" + id;
     const veloroute = await fetch(`${VITE_API_URL}${velorouteQuery}`, {
@@ -76,24 +107,8 @@ export const loadVeloroute = createAsyncThunk<
     };
 });
 
-export const loadCrossingVeloroutes = createAsyncThunk(
-    "veloroutes/setCrossingVelorouteList",
-    async (idx: number, thunkAPI) => {
-        //const activeVelorouteSectionIds = thunkAPI.getState().veloroutes.activeVeloroute.route[idx].leg.map(s => s.stop_id);
-        // const trainlines = thunkAPI.getState().trainroutes.trainlineList;
-        // const activeVelorouteSection = thunkAPI.getState().veloroutes.activeVelorouteSection;
-        // const veloroutesQuery = 'veloroutes/ids[]=' + activeVelorouteIds.join('&ids[]=');
-        // const veloroutes = await fetch(`${url}${veloroutesQuery}`, {'headers': headers})
-        // .then(response => response.json());
-        // const velorouteStops = veloroutes.filter(stop => stop.veloroute_id !== activeVelorouteId).map(refactorStopData);
-        // let refactoredJourneys = allocateVeloroutestopsToRoute(velorouteStops, trainlines);
-        // refactoredJourneys = generateCrossingVeloroutes(activeVelorouteSection, refactoredJourneys);
-        // return refactoredJourneys
-    },
-);
-
 export const setVelorouteSectionActiveThunk = (idx: number) => {
-    return (dispatch: any) => {
+    return (dispatch: ActionCreatorWithPayload<unknown, string>) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));
@@ -112,8 +127,7 @@ export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
         velorouteList: [],
-        crossingVelorouteList: {},
-        combinedVeloroute: null,
+        crossingVelorouteList: [],
         isLoading: false,
         hasError: false,
         crossingRoutesLoading: false,
@@ -122,7 +136,6 @@ export const veloroutesSlice = createSlice({
         activeVelorouteSection: null,
         hoveredVelorouteSection: null,
         activeVelorouteStop: null,
-        combinedVelorouteActive: null,
     } as VeloroutesState,
     reducers: {
         setActiveVeloroute: (state, action: { payload: Veloroute | null }) => {
@@ -140,14 +153,14 @@ export const veloroutesSlice = createSlice({
         ) => {
             state.hoveredVelorouteSection = action.payload;
         },
-        setActiveVelorouteStop: (state, action: { payload: any | null }) => {
+        setActiveVelorouteStop: (
+            state,
+            action: { payload: VelorouteStop | null },
+        ) => {
             state.activeVelorouteStop = action.payload;
         },
         setCrossingVelorouteSection: (state) => {
             state.crossingVelorouteSection = [];
-        },
-        setCombinedVeloroute: (state, action: { payload: any }) => {
-            state.combinedVeloroute = action.payload;
         },
     },
     extraReducers(builder) {
@@ -177,19 +190,6 @@ export const veloroutesSlice = createSlice({
             .addCase(loadVeloroute.rejected, (state) => {
                 state.isLoading = false;
                 state.hasError = true;
-            })
-            .addCase(loadCrossingVeloroutes.pending, (state) => {
-                state.crossingRoutesLoading = true;
-                state.crossingRoutesError = false;
-            })
-            .addCase(loadCrossingVeloroutes.fulfilled, (state, action) => {
-                state.crossingVelorouteList = action.payload;
-                state.crossingRoutesLoading = false;
-                state.crossingRoutesError = false;
-            })
-            .addCase(loadCrossingVeloroutes.rejected, (state) => {
-                state.crossingRoutesLoading = false;
-                state.crossingRoutesError = true;
             });
     },
 });
@@ -208,8 +208,6 @@ export const selectVeloroutesLoading = (state: RootState) =>
     state.veloroutes.isLoading;
 export const selectCrossingVeloroutesLoading = (state: RootState) =>
     state.veloroutes.crossingRoutesLoading;
-export const selectCombinedVeloroute = (state: RootState) =>
-    state.veloroutes.combinedVeloroute;
 export const selectHoveredVelorouteSection = (state: RootState) =>
     state.veloroutes.hoveredVelorouteSection;
 
@@ -219,7 +217,6 @@ export const {
     setHoveredVelorouteSection,
     setActiveVelorouteStop,
     setCrossingVelorouteSection,
-    setCombinedVeloroute,
 } = veloroutesSlice.actions;
 
 export default veloroutesSlice.reducer;

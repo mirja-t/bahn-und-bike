@@ -12,7 +12,7 @@ export const AlternativeRoute = ({
     altroute,
     strokeScale,
 }: AlternativeRouteProps) => {
-    let { path } = altroute;
+    const { path } = altroute;
 
     // const [hoverDest, setHoverDest] = useState(null);
 

@@ -1,9 +1,10 @@
+import type { VelorouteStop } from "../VeloroutesSlice";
 import "./activeVelorouteSectionIcon.scss";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ActiveVelorouteSectionIconProps {
     strokeScale: number;
-    section: any[];
+    section: VelorouteStop[];
 }
 
 export const ActiveVelorouteSectionIcon = ({

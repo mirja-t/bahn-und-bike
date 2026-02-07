@@ -11,8 +11,33 @@ export interface LoadTrainroutesParams {
     value: number;
     direct: boolean;
 }
-
-export type CurrentTrainroutes = any[];
+export type Train = {
+    id: string;
+    name: string;
+};
+export type Trainstop = {
+    stop_name: string;
+    stop_id: string;
+    trainline_id?: string;
+    x: number;
+    y: number;
+};
+export type Connection = {
+    stop_name: string;
+    initial_train: Train[];
+    connecting_train: Train;
+};
+export type TrainrouteSection = {
+    dur: number;
+    line: string[];
+    pathLength: number;
+    firstStation: Trainstop;
+    lastStation: Trainstop;
+    stopIds: string[];
+    points: string;
+    connection: Connection | null;
+};
+export type CurrentTrainroutes = TrainrouteSection[];
 
 export interface TrainroutesState {
     startPos: string;
@@ -22,12 +47,12 @@ export interface TrainroutesState {
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
-    activeSpot: string | null;
-    activeSection: Record<string, any> | null;
-    trainlinesAlongVeloroute: any[];
+    activeSpot: Trainstop | null;
+    activeSection: TrainrouteSection | null;
+    trainlinesAlongVeloroute: TrainrouteSection[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
-    trainlineNames?: any;
+    trainlineNames?: string[];
 }
 
 export const loadTrainroutes = createAsyncThunk<
@@ -47,7 +72,9 @@ export const loadTrainroutes = createAsyncThunk<
         return response.json();
     });
     const trainstopsRefactored = connections.map(refactorStopData);
-    const startStops = trainstopsRefactored.filter((s) => s.stop_id === start);
+    const startStops = trainstopsRefactored.filter(
+        (s: Trainstop) => s.stop_id === start,
+    );
     const trainrouteList = generateTrainlines(trainstopsRefactored);
     const currentTrainroutes = generateTrainlineTree(
         trainrouteList,
@@ -56,27 +83,32 @@ export const loadTrainroutes = createAsyncThunk<
         direct,
     );
 
-    const trainlineList = direct ? startStops.map((s) => s.trainline_id) : null;
+    const trainlineList = direct
+        ? startStops.map((s: Trainstop) => s.trainline_id)
+        : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
 
     return currentTrainroutes;
 });
 
 export const loadTrainroutesAlongVeloroute = createAsyncThunk<
-    any[],
+    TrainrouteSection[],
     number,
     { state: RootState }
 >("trainroutes/setTrainroutesAlongVeloroute", async (idx: number, thunkAPI) => {
     const startdestination = thunkAPI.getState().trainroutes.startPos;
     const activeVeloroute = thunkAPI.getState().veloroutes.activeVeloroute;
-    const startId = activeVeloroute.route[idx].leg[0].trainstop;
-    const endId =
-        activeVeloroute.route[idx].leg[
-            activeVeloroute.route[idx].leg.length - 1
-        ].trainstop;
+    const startId = activeVeloroute
+        ? activeVeloroute.route[idx].leg[0].trainstop
+        : undefined;
+    const endId = activeVeloroute
+        ? activeVeloroute.route[idx].leg[
+              activeVeloroute.route[idx].leg.length - 1
+          ].trainstop
+        : undefined;
 
-    const connections = [];
-    const fetchConnection = async (id) => {
+    const connections: TrainrouteSection[] = [];
+    const fetchConnection = async (id: string | undefined) => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
@@ -123,12 +155,12 @@ export const trainroutesSlice = createSlice({
         setTrainlineList: (state, action: { payload: any }) => {
             state.trainlineList = action.payload;
         },
-        setActiveSpot: (state, action: { payload: string | null }) => {
+        setActiveSpot: (state, action: { payload: Trainstop | null }) => {
             state.activeSpot = action.payload;
         },
         setActiveSection: (
             state,
-            action: { payload: Record<string, any> | null },
+            action: { payload: TrainrouteSection | null },
         ) => {
             state.activeSection = action.payload;
         },

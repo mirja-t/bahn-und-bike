@@ -1,18 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { PinIcon } from "../stateless/icons/PinIcon";
-import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { selectLang } from "../../AppSlice";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectActiveVelorouteStop,
-    selectCombinedVeloroute,
     setActiveVelorouteStop,
+    type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
 
 interface CombinedVelorouteDetailsProps {
-    parent: any;
+    parent: HTMLElement | null;
     lang: string;
 }
 
@@ -25,19 +23,22 @@ export const CombinedVelorouteDetails = ({
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null
+        activeVelorouteSectionIdx !== null && activeVeloroute !== null
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const combinedVeloroute = useSelector(selectCombinedVeloroute);
 
-    const hoverVeloStop = ({ type }: React.MouseEvent, spot?: any) => {
-        type === "mouseenter"
-            ? dispatch(setActiveVelorouteStop(spot))
-            : dispatch(setActiveVelorouteStop(null));
+    const hoverVeloStop = (
+        { type }: React.MouseEvent,
+        velorouteStop?: VelorouteStop,
+    ) => {
+        if (type === "mouseenter") {
+            return dispatch(setActiveVelorouteStop(velorouteStop));
+        }
+        dispatch(setActiveVelorouteStop(null));
     };
 
-    const sectionHeadline = (stop: any, idx: number) => (
+    const sectionHeadline = (stop: VelorouteStop, idx: number) => (
         <h3 className="veloroute-trainstops">
             <div className="veloroutesection-icon">
                 <span>{idx}</span>
@@ -77,45 +78,40 @@ export const CombinedVelorouteDetails = ({
                                 <ul className="veloroute-stops">
                                     {activeVelorouteSection.leg
                                         .slice(1, -1)
-                                        .map((s, idx, arr) => (
-                                            <li key={idx}>
-                                                <span
-                                                    className={
-                                                        activeVelorouteStop &&
-                                                        activeVelorouteStop.stop_id ===
-                                                            s.stop_id
-                                                            ? "hover"
-                                                            : ""
-                                                    }
-                                                    onMouseEnter={(e) =>
-                                                        hoverVeloStop(e, s)
-                                                    }
-                                                    onMouseLeave={hoverVeloStop}
-                                                >
-                                                    {s.stop_name}
-                                                </span>
-                                                {idx !== arr.length - 1 && `, `}
-                                            </li>
-                                        ))}
+                                        .map(
+                                            (
+                                                s: VelorouteStop,
+                                                idx: number,
+                                                arr: VelorouteStop[],
+                                            ) => (
+                                                <li key={idx}>
+                                                    <span
+                                                        className={
+                                                            activeVelorouteStop &&
+                                                            activeVelorouteStop.stop_id ===
+                                                                s.stop_id
+                                                                ? "hover"
+                                                                : ""
+                                                        }
+                                                        onMouseEnter={(e) =>
+                                                            hoverVeloStop(e, s)
+                                                        }
+                                                        onMouseLeave={
+                                                            hoverVeloStop
+                                                        }
+                                                    >
+                                                        {s.stop_name}
+                                                    </span>
+                                                    {idx !== arr.length - 1 &&
+                                                        `, `}
+                                                </li>
+                                            ),
+                                        )}
                                 </ul>
                             </>
                         )}
                         <h6>{labels[lang].distance}</h6>
                         <p>{activeVelorouteSection.dist} km</p>
-                    </section>
-                )}
-
-                {combinedVeloroute && (
-                    <section>
-                        <h5>{labels[lang].combined_veloroute}</h5>
-                        <header>
-                            <div className="details-headline">
-                                <PinIcon size="small">
-                                    <VelorouteIcon />
-                                </PinIcon>
-                                <h3>{`${combinedVeloroute.veloroute_name}`}</h3>
-                            </div>
-                        </header>
                     </section>
                 )}
             </div>

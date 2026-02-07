@@ -4,11 +4,17 @@ import { useSelector } from "react-redux";
 import { selectLang } from "../../../AppSlice";
 import { motion } from "framer-motion";
 
+type Item = {
+    id: string;
+    name: string;
+} & {
+    [K in string]?: unknown;
+};
 interface ItemListProps {
-    items: any[];
+    items: Item[];
     lang: string;
-    activeItem: any;
-    fn: (item: any) => void;
+    activeItem: Item | null;
+    fn: (item: Item) => void;
 }
 
 export const ItemList = ({ items, lang, activeItem, fn }: ItemListProps) => {

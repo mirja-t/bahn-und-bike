@@ -11,6 +11,7 @@ export enum LangCode {
     DE = "de",
     EN = "en",
 }
+export type Labels = Record<LangCode, Record<string, string>>;
 export type Lang = { id: string } & { [key in LangCode]: string };
 
 export interface AppState {

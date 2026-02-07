@@ -77,7 +77,7 @@ export const ScrollContent = ({
     }, [scrollbarHeight]);
 
     const bind = useGesture({
-        onWheel: ({ memo, movement: [_, dy] }) => {
+        onWheel: ({ memo, movement: [, dy] }) => {
             if (!memo)
                 memo = {
                     pos: touchScrollPos,
@@ -94,7 +94,7 @@ export const ScrollContent = ({
 
             return memo;
         },
-        onDrag: ({ memo, movement: [_, dy] }) => {
+        onDrag: ({ memo, movement: [, dy] }) => {
             if (!memo)
                 memo = {
                     pos: touchScrollPos,

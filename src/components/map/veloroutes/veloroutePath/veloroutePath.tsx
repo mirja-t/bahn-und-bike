@@ -4,7 +4,6 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     setVelorouteSectionActiveThunk,
-    loadCrossingVeloroutes,
 } from "../VeloroutesSlice";
 import { useAppDispatch } from "../../../../AppSlice";
 
@@ -32,7 +31,6 @@ export const VeloroutePath = ({
 
     const setVelorouteSectionActive = (idx: number) => {
         dispatch(setVelorouteSectionActiveThunk(idx));
-        dispatch(loadCrossingVeloroutes(idx));
     };
 
     return (

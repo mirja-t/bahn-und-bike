@@ -9,7 +9,6 @@ import { CheckBox } from "./checkBox/CheckBox";
 
 interface TravelDurationProps {
     lang: string;
-    start: any;
     handleSubmit: (
         e: React.SubmitEvent<HTMLFormElement>,
         value: number,

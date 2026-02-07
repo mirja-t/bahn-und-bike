@@ -2,10 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { mapRatio, svgWidth, svgHeight } from "../utils/svgMap";
 import { getLongestDistance } from "../utils/getLongestDistance";
 import { getCenterPosition } from "../utils/getCenterPosition";
+import type { TrainrouteSection } from "../components/map/trainroutes/TrainroutesSlice";
 
 export const useZoom = (
-    journeys: any,
-    vrouteposition: any,
+    journeys: TrainrouteSection[],
+    vrouteposition: number | null,
     value: number,
     mapContainer: HTMLDivElement | null,
     mapSize: [number, number],
@@ -46,13 +47,13 @@ export const useZoom = (
             const leftOffset = (svgWidth / 2 - xStart) / 2;
             const topOffset = (svgHeight / 2 - yStart) / 2;
 
-            let distX: number = getLongestDistance(
+            const distX: number = getLongestDistance(
                 journeys,
                 "x",
                 xStart,
                 vrouteposition || null,
             );
-            let distY: number = getLongestDistance(
+            const distY: number = getLongestDistance(
                 journeys,
                 "y",
                 yStart,
