@@ -21,8 +21,8 @@
         height 0.35s ease,
         background-color 0.35s ease;
     background-color: var(--muted);
-    height: var(--sliderthumb-height) / 2;
-    width: var(--sliderthumb-height) / 2;
+    height: calc(var(--sliderthumb-height) * 0.5);
+    width: calc(var(--sliderthumb-height) * 0.5);
     margin-top: -(var(--sliderthumb-height) - var(slider-height)) / 4;
 }
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "./scss/variables/spacing.scss" as spacing;
 @use "./scss/variables/fonts.scss" as fonts;
 @use "./scss/variables/breakpoints.scss" as breakpoints;
@@ -124,7 +125,7 @@ a {
 span.train {
     display: inline-block;
     background-color: var(--bg-light);
-    border-radius: borders.$borderradius / 2;
+    border-radius: math.div(borders.$borderradius, 2);
     padding: 1px 3px;
     font-family: fonts.$global-font-family;
     font-weight: 700;
