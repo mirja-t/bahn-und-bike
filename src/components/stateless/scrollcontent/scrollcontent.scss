@@ -1,4 +1,4 @@
-@import '../../../scss/variables.scss';
+@use "../../../scss/variables/colors.scss" as colors;
 
 .scrollcontent-wrapper {
     touch-action: none;
@@ -9,7 +9,7 @@
     .scrollcontent {
         overflow: hidden;
         //width: calc(100% + 2rem);
-    
+
         > div {
             overflow: hidden;
             > div {
@@ -32,7 +32,7 @@
         right: 0.5em;
         top: 0;
         width: 1px;
-        background: $primary;
+        background: colors.$primary;
         height: 100%;
     }
 }

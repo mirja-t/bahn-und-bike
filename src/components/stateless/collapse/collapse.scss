@@ -1,9 +1,9 @@
-@import '../../../scss/variables.scss';
-@import '../../../scss/mixins/caret.scss';
+@use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/mixins/caret.scss" as caret;
 
 // .caret {
-//     width: 0; 
-//     height: 0; 
+//     width: 0;
+//     height: 0;
 //     border-left: .35em solid transparent;
 //     border-right: .35em solid transparent;
 //     border-top: .35em solid var(--bike);
@@ -13,10 +13,10 @@
         cursor: pointer;
         position: relative;
         &:after {
-            content: '';
+            content: "";
             position: absolute;
-            margin-left: $padding-xs;
-            @include caret(var(--bike));
+            margin-left: spacing.$padding-xs;
+            @include caret.caret(var(--bike));
             top: 50%;
         }
         &.on {

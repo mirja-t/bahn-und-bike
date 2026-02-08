@@ -1,10 +1,9 @@
-@import '../../../scss/variables.scss';
+// Local variables for trainroutes
 
-$strokeAniDuration: .35s;
+$strokeAniDuration: 0.35s;
 $maxspotscale: 2.5;
 $midspotscale: 1.5;
-$transitionSpeed: .35s;
-
+$transitionSpeed: 0.35s;
 
 @keyframes strokeAni {
     100% {
@@ -18,7 +17,7 @@ $transitionSpeed: .35s;
         opacity: 0;
     }
     40% {
-        opacity: .5;
+        opacity: 0.5;
     }
     100% {
         transform: scale(3);
@@ -26,23 +25,23 @@ $transitionSpeed: .35s;
     }
 }
 
-svg#routes{
+svg#routes {
     position: relative;
     z-index: 2;
 
     polyline,
     circle,
-    g{
+    g {
         cursor: pointer;
     }
-    .routegroup{
-        polyline.route{
+    .routegroup {
+        polyline.route {
             fill: none;
             stroke: var(--train);
-            transition: all .5s ease;
+            transition: all 0.5s ease;
             opacity: 1;
             animation: strokeAni 3s linear forwards;
-            animation-delay: .5s;
+            animation-delay: 0.5s;
         }
         polyline.route-bg {
             fill: none;
@@ -52,18 +51,18 @@ svg#routes{
             polyline.route {
                 stroke: var(--train-active);
                 animation: none;
-                stroke-dashoffset: 0!important;
-                transition: all .5s ease;
+                stroke-dashoffset: 0 !important;
+                transition: all 0.5s ease;
             }
         }
         &.inactive {
-            .route-bg{
+            .route-bg {
                 stroke: transparent;
-                opacity: .5;
+                opacity: 0.5;
                 fill: none;
             }
             .route {
-                transition: all .5s ease;
+                transition: all 0.5s ease;
                 opacity: 1;
                 stroke: var(--train-muted);
                 fill: none;

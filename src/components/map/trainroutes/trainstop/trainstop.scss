@@ -1,14 +1,16 @@
-@import '../../../../scss/variables.scss';
-
-.spot{
+.spot {
     fill: var(--train);
-    transition: transform .35s ease, fill .35s ease;
-    &.spot-large{
-        transition: all .35s ease, fill .35s ease;
+    transition:
+        transform 0.35s ease,
+        fill 0.35s ease;
+    &.spot-large {
+        transition:
+            all 0.35s ease,
+            fill 0.35s ease;
         opacity: 0;
         transform: scale(1);
     }
-    &.spot-small{
+    &.spot-small {
         transform: scale(0);
     }
 }
@@ -18,19 +20,25 @@
 .spotgroup {
     &.veloroutestop {
         .spot {
-            transition: transform .35s ease, fill .35s ease; 
-            &.spot-small{
-                transform: scale(1)!important;
+            transition:
+                transform 0.35s ease,
+                fill 0.35s ease;
+            &.spot-small {
+                transform: scale(1) !important;
                 fill: var(--train);
             }
         }
     }
     &.sectionstop {
         .spot {
-            transition: transform .35s ease, fill .35s ease; 
-            &.spot-small{
-                transition: all .35s ease, fill .35s ease; 
-                transform: scale(1)!important;
+            transition:
+                transform 0.35s ease,
+                fill 0.35s ease;
+            &.spot-small {
+                transition:
+                    all 0.35s ease,
+                    fill 0.35s ease;
+                transform: scale(1) !important;
                 fill: var(--train);
             }
         }
@@ -40,16 +48,20 @@
 .routegroup {
     &.inactive {
         .spot {
-            transition: transform .35s ease, fill .35s ease; 
-            &.spot-small{
-                transform: scale(0.8)!important;
+            transition:
+                transform 0.35s ease,
+                fill 0.35s ease;
+            &.spot-small {
+                transform: scale(0.8) !important;
                 fill: var(--train-muted);
             }
             &:hover {
                 .spot {
-                    transition: transform .35s ease, fill .35s ease; 
-                    &.spot-small{
-                        transform: scale(1)!important;
+                    transition:
+                        transform 0.35s ease,
+                        fill 0.35s ease;
+                    &.spot-small {
+                        transform: scale(1) !important;
                         fill: var(--train-hover);
                     }
                 }
@@ -58,34 +70,39 @@
     }
     &.active {
         .spot {
-            transition: transform .35s ease, fill .35s ease; 
-            &.spot-small{
-                transform: scale(1)!important;
+            transition:
+                transform 0.35s ease,
+                fill 0.35s ease;
+            &.spot-small {
+                transform: scale(1) !important;
                 fill: var(--train-active);
             }
         }
     }
     &:hover {
         .spot {
-            transition: transform .35s ease, fill .35s ease; 
-            &.spot-small{
-                transform: scale(1)!important;
+            transition:
+                transform 0.35s ease,
+                fill 0.35s ease;
+            &.spot-small {
+                transform: scale(1) !important;
                 fill: var(--train-hover);
             }
         }
     }
 }
 
-
 g.destination:hover {
     .spot {
-        transition: transform .35s ease, fill .35s ease; 
-        &.spot-large{
+        transition:
+            transform 0.35s ease,
+            fill 0.35s ease;
+        &.spot-large {
             fill: var(--train-hover);
             opacity: 0;
-            animation: circleHoverAni .5s ease-in-out forwards;
+            animation: circleHoverAni 0.5s ease-in-out forwards;
         }
-        &.spot-small{
+        &.spot-small {
             transform: scale(1.2);
             fill: var(--train-hover);
         }

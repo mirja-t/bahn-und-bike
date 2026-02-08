@@ -1,15 +1,13 @@
-@import '../../../scss/variables.scss';
-
 .pin {
-    filter: drop-shadow( 2px 2px 4px rgba(0,0,0, 0.1));
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.1));
     width: 2.25em;
     height: 3.5em;
-    margin-right: .5em;
+    margin-right: 0.5em;
     flex-shrink: 0;
     position: relative;
     padding: 0.5em 0.125em;
 
-    .pinicon{
+    .pinicon {
         svg {
             width: 100%;
             height: auto;
@@ -31,7 +29,7 @@
     .pin {
         background-image: url("data:image/svg+xml,%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 25.6 29.6' style='enable-background:new 0 0 25.6 29.6;' xml:space='preserve'%3E%3Cg transform='translate(5 5)'%3E%3Cpolygon fill='white' points='-5,-5 -5,20.4 3.8,20.4 7.8,24.6 11.8,20.4 20.6,20.4 20.6,-5 '/%3E%3C/g%3E%3C/svg%3E%0A");
         background-repeat: no-repeat;
-        background-position: center .5em;
+        background-position: center 0.5em;
         padding: 0.75em 0.25em;
     }
 }

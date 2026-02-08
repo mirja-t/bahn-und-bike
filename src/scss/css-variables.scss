@@ -1,0 +1,9 @@
+@use "./themes";
+
+@each $name, $map in themes.$themes {
+    .theme-#{$name} {
+        @each $key, $value in $map {
+            --#{$key}: #{$value};
+        }
+    }
+}

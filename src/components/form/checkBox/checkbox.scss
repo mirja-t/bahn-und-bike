@@ -1,8 +1,9 @@
-@import '../../../scss/variables.scss';
-
+// Checkboxes
+$checkbox-radioactivecolor: rgba(225, 225, 225, 0.4);
+$checkbox-radiocolor: rgba(240, 240, 240, 0.4);
+$checkbox-borderradius: 0.4em;
 $checkbox-width: 1.75em;
-$checkBoxBorderradius: .4em;
-$transition-duration: .5s;
+$checkbox-transition-duration: 0.5s;
 
 input[type="checkbox"] {
     -webkit-appearance: none;
@@ -15,19 +16,19 @@ input[type="checkbox"] {
         left: 0;
         top: 0;
         &.active {
-            transition: all $transition-duration ease;
+            transition: all $checkbox-transition-duration ease;
         }
-        transition: all $transition-duration ease;
+        transition: all $checkbox-transition-duration ease;
     }
 
     .inputCheckbox {
         width: $checkbox-width;
         height: $checkbox-width;
         position: relative;
-        margin-top: .5em;
+        margin-top: 0.5em;
     }
-    
-    label{
+
+    label {
         display: block;
     }
     input[type="checkbox"] {
@@ -38,29 +39,41 @@ input[type="checkbox"] {
 
 .theme-light {
     .checkBoxRadioNotActive {
-        background-color: $checkBoxRadioColor;
-        transition: box-shadow $transition-duration ease, background-color $transition-duration ease;
-        box-shadow: -6px -6px 10px rgba(255,255,255,1), inset 1px 1px 1px rgba(255,255,255,0.9), inset -1px -1px 1px rgba(0,0,0, 0.1), 5px 5px 10px rgba(0,0,0, .1);
+        background-color: $checkbox-radiocolor;
+        transition:
+            box-shadow $checkbox-transition-duration ease,
+            background-color $checkbox-transition-duration ease;
+        box-shadow:
+            -6px -6px 10px rgba(255, 255, 255, 1),
+            inset 1px 1px 1px rgba(255, 255, 255, 0.9),
+            inset -1px -1px 1px rgba(0, 0, 0, 0.1),
+            5px 5px 10px rgba(0, 0, 0, 0.1);
     }
     .checkBoxRadioActive {
-        background-color: $checkBoxRadioActiveColor;
-        transition: box-shadow $transition-duration ease, background-color $transition-duration ease;
-        box-shadow: -1px -1px 2px rgba(255,255,255,0.1), inset 4px 4px 8px rgba(0, 0, 0, 0.15), inset -1px -1px 1px rgba(0,0,0, 0), 1px 1px 0 rgba(255,255,255, 1);
+        background-color: $checkbox-radioactivecolor;
+        transition:
+            box-shadow $checkbox-transition-duration ease,
+            background-color $checkbox-transition-duration ease;
+        box-shadow:
+            -1px -1px 2px rgba(255, 255, 255, 0.1),
+            inset 4px 4px 8px rgba(0, 0, 0, 0.15),
+            inset -1px -1px 1px rgba(0, 0, 0, 0),
+            1px 1px 0 rgba(255, 255, 255, 1);
     }
 
     .directconnection {
         .inputCheckbox {
-            border-radius: $checkBoxBorderradius;
+            border-radius: $checkbox-borderradius;
             &.active {
                 @extend .checkBoxRadioActive;
             }
-            &:not(.active){
+            &:not(.active) {
                 @extend .checkBoxRadioNotActive;
             }
         }
         svg.check {
             filter: grayscale(1);
-            opacity: .3;
+            opacity: 0.3;
             &.active {
                 filter: grayscale(0);
                 opacity: 1;
@@ -68,9 +81,8 @@ input[type="checkbox"] {
         }
     }
 }
-  
+
 .theme-dark {
-    
     .directconnection {
         .inputCheckbox {
             background-color: var(--label-inactive-bg);
@@ -79,7 +91,7 @@ input[type="checkbox"] {
             }
         }
         svg.check polyline {
-            stroke: var(--secondary)!important;
+            stroke: var(--secondary) !important;
         }
     }
 }
