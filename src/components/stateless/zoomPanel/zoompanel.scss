@@ -1,5 +1,5 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
-@import "../../form/checkBox/checkbox.scss";
+@use "../../form/checkBox/checkbox.scss" as checkbox;
 
 #zoompanel {
     position: absolute;
