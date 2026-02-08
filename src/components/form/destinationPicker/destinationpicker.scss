@@ -1,15 +1,15 @@
-@import '../../../scss/variables.scss';
-@import '../../../scss/mixins/caret.scss';
+@use "../../scss/variables/spacing.scss" as spacing;
+@import "../../../scss/mixins/caret.scss";
 
 .startdestination {
     .selectwrapper {
         position: relative;
-        margin-top: $padding-xs;
-        
+        margin-top: spacing.$padding-xs;
+
         &::before {
             @include caret();
 
-            content: '';
+            content: "";
             pointer-events: none;
             position: absolute;
             top: 40%;
@@ -24,7 +24,7 @@
         width: 100%;
         appearance: none;
         border-radius: var(--border-radius);
-        min-width: calc( 3em + 0.5vw );
+        min-width: calc(3em + 0.5vw);
         padding: $padding-xs $padding-xl $padding-xs $padding-l;
         border: none;
         box-shadow: var(--dropdown-box-shadow);

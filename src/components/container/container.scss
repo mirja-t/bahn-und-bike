@@ -1,9 +1,9 @@
-@import '../../scss/variables.scss';
-@import '../../scss/mixins/caret.scss';
+@use "../../scss/variables/breakpoints.scss" as breakpoints;
+@import "../../scss/mixins/caret.scss";
 
 $sidebarwidth: 25;
 $sidebarwidth-xl: 20;
-$transition: width .5s ease;
+$transition: width 0.5s ease;
 
 #wrapper {
     display: flex;
@@ -14,23 +14,35 @@ $transition: width .5s ease;
     overflow: hidden;
 }
 #container {
-    width: 3*$sidebarwidth + 100vw;
+    width: 3 * $sidebarwidth + 100vw;
     position: relative;
     display: flex;
     justify-content: right;
     flex-grow: 1;
     transition: $transition;
-    &[class*='width-'] {
+    &[class*="width-"] {
         transition: $transition;
     }
-    &.width-1 {width: 1*$sidebarwidth + 100vw}
-    &.width-2 {width: 2*$sidebarwidth + 100vw}
-    &.width-3 {width: 3*$sidebarwidth + 100vw}
-    @media (min-width: $breakpoint-l) {
-        width: 3*$sidebarwidth-xl + 100vw;
-        &.width-1 {width: 1*$sidebarwidth-xl + 100vw}
-        &.width-2 {width: 2*$sidebarwidth-xl + 100vw}
-        &.width-3 {width: 3*$sidebarwidth-xl + 100vw}
+    &.width-1 {
+        width: 1 * $sidebarwidth + 100vw;
+    }
+    &.width-2 {
+        width: 2 * $sidebarwidth + 100vw;
+    }
+    &.width-3 {
+        width: 3 * $sidebarwidth + 100vw;
+    }
+    @media (min-width: breakpoints.$breakpoint-l) {
+        width: 3 * $sidebarwidth-xl + 100vw;
+        &.width-1 {
+            width: 1 * $sidebarwidth-xl + 100vw;
+        }
+        &.width-2 {
+            width: 2 * $sidebarwidth-xl + 100vw;
+        }
+        &.width-3 {
+            width: 3 * $sidebarwidth-xl + 100vw;
+        }
     }
 
     &.shift {
@@ -57,12 +69,12 @@ aside {
     pointer-events: none;
     position: relative;
     display: flex;
-    width: 3*$sidebarwidth + 0vw;
-    @media (min-width: $breakpoint-l) {
-        width: 3*$sidebarwidth-xl + 0vw;
+    width: 3 * $sidebarwidth + 0vw;
+    @media (min-width: breakpoints.$breakpoint-l) {
+        width: 3 * $sidebarwidth-xl + 0vw;
     }
     > div {
-        @media (min-width: $breakpoint-l) {
+        @media (min-width: breakpoints.$breakpoint-l) {
             width: $sidebarwidth-xl + 0vw;
         }
         width: $sidebarwidth + 0vw;
@@ -77,7 +89,7 @@ aside {
     transform: translate(-50%, -50%);
     z-index: 2;
     &:before {
-        content:'';
+        content: "";
         position: absolute;
         bottom: -0.75em;
         left: 50%;

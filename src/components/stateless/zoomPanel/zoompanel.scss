@@ -1,27 +1,33 @@
-@import '../../../scss/variables.scss';
-@import '../../form/checkBox/checkbox.scss';
+@use "../../../scss/variables/spacing.scss" as spacing;
+@import "../../form/checkBox/checkbox.scss";
 
 #zoompanel {
     position: absolute;
     z-index: 9;
-    bottom: $mainpadding;
-    left: $padding-l;
+    bottom: spacing.$mainpadding;
+    left: spacing.$padding-l;
     button {
         cursor: pointer;
         color: var(--secondary);
-        height: $padding-xl;
-        width: $padding-xl;
+        height: spacing.$padding-xl;
+        width: spacing.$padding-xl;
         padding: 0;
         display: block;
-        margin-bottom: $padding-xs;
+        margin-bottom: spacing.$padding-xs;
         font-size: 1.25em;
         background: var(--dropdown-bg);
         border-radius: var(--border-radius);
-        transition: all .2s ease, background-color .2s ease, color .5s ease;
+        transition:
+            all 0.2s ease,
+            background-color 0.2s ease,
+            color 0.5s ease;
         &:hover {
             background: var(--dropdown-bg-hover);
             color: var(--secondary-hover);
-            transition: all .2s ease, background-color .2s ease, color .5s ease;
+            transition:
+                all 0.2s ease,
+                background-color 0.2s ease,
+                color 0.5s ease;
         }
     }
 }
@@ -31,7 +37,11 @@
         button {
             @extend .checkBoxRadioNotActive;
             &:hover {
-                box-shadow: -1px -1px 1px rgba(255,255,255, 1), inset 1px 1px 1px rgba(255,255,255, 0.9), inset -1px -1px 1px rgba(0,0,0, 0.1), 1px 1px 1px rgba(0,0,0, .1);
+                box-shadow:
+                    -1px -1px 1px rgba(255, 255, 255, 1),
+                    inset 1px 1px 1px rgba(255, 255, 255, 0.9),
+                    inset -1px -1px 1px rgba(0, 0, 0, 0.1),
+                    1px 1px 1px rgba(0, 0, 0, 0.1);
             }
         }
     }

@@ -1,5 +1,4 @@
-@import "../../../scss/variables.scss";
-
+@use "../../../scss/variables/spacing.scss" as spacing;
 $scalefactor: 0.5vw;
 $iconsize: calc(#{$scalefactor} + 1.5em);
 
@@ -10,12 +9,12 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
         border-radius: var(--linklist-border-radius);
         box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
         padding: 0.25em;
-        margin: $padding-xs 0;
+        margin: spacing.$padding-xs 0;
         transition: all 0.35s ease;
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: $padding-s;
+        gap: spacing.$padding-s;
         .velo-icon {
             width: $iconsize;
             height: $iconsize;

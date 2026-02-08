@@ -1,4 +1,4 @@
-@import '../../scss/variables.scss';
+@use "../../scss/variables/spacing.scss" as spacing;
 
 #privacy.container {
     overflow: scroll;
@@ -6,7 +6,7 @@
     .wrapper {
         max-width: 80%;
         margin: auto;
-        padding: $mainpadding;
+        padding: spacing.$mainpadding;
         text-align: left;
         .seal {
             width: 100px;

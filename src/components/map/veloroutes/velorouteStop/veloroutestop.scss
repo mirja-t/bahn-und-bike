@@ -1,6 +1,4 @@
-@import '../../../../scss/variables.scss';
-
-.veloroute-stop{
+.veloroute-stop {
     fill: var(--bike);
     transform: scale(1);
     &.hover {
@@ -10,9 +8,9 @@
         fill: var(--bike-hover);
     }
 }
-.veloroute.destinationLabel{
+.veloroute.destinationLabel {
     tspan {
-        fill: var(--bike-hover); 
+        fill: var(--bike-hover);
     }
 }
 

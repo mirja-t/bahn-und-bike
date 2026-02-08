@@ -1,24 +1,26 @@
-@import '../../../scss/variables.scss';
-
 .destinationLabel {
     white-space: nowrap;
     padding: 2px;
     letter-spacing: 0.025em;
     line-height: 1;
     color: var(--primary);
-    transition: opacity .5s ease, color .5s ease;
+    transition:
+        opacity 0.5s ease,
+        color 0.5s ease;
     font-weight: 600;
     text-transform: uppercase;
-    font-family: 'Oswald', sans-serif;
+    font-family: "Oswald", sans-serif;
     z-index: 7;
-    tspan{
+    tspan {
         fill: var(--primary-hover);
-        text-shadow: 1px 1px 0 var(--bg), -1px -1px 0 var(--bg);
-        filter: drop-shadow(2px 0 1px var(--bg))
-    }    
+        text-shadow:
+            1px 1px 0 var(--bg),
+            -1px -1px 0 var(--bg);
+        filter: drop-shadow(2px 0 1px var(--bg));
+    }
 }
 g.destination.hover {
-    .destinationLabel tspan{
+    .destinationLabel tspan {
         fill: var(--primary-hover);
     }
 }

@@ -1,10 +1,13 @@
-@import '../../../scss/variables.scss';
-@import '../checkBox/checkbox.scss';
-@import '../../stateless/button/button.scss';
+@use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/variables/fonts.scss" as fonts;
+@use "../../../scss/variables/borders.scss" as borders;
+@use "../checkBox/checkbox.scss" as checkboxes;
+@import "../checkBox/checkbox.scss";
+@import "../../stateless/button/button.scss";
 
 $radiobtn-height: 2.2em;
 $radiobtn-width: 2.2em;
-$radioTransitionSpeed: .35s;
+$radioTransitionSpeed: 0.35s;
 $langSwitcherPadding: 0.4em;
 $langSwitcherBorderRadius: 2em;
 
@@ -19,14 +22,14 @@ form.switcher fieldset {
     height: $radiobtn-height;
     &:after,
     &:before {
-        content: '';
+        content: "";
         display: table;
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
         height: 100%;
-        transition: all .5s ease;
+        transition: all 0.5s ease;
     }
     &:before {
         z-index: 2;
@@ -53,9 +56,9 @@ form.switcher fieldset {
     //         }
     //     }
     // }
-    .inputRadiowrapper{
-        label{
-            transition: all .5s ease;
+    .inputRadiowrapper {
+        label {
+            transition: all 0.5s ease;
         }
     }
     .inputRadiowrapper {
@@ -76,7 +79,7 @@ form.switcher fieldset {
             text-shadow: none;
             text-align: center;
             cursor: pointer;
-            transition: all .5s ease;
+            transition: all 0.5s ease;
         }
         &.active {
             input {
@@ -98,7 +101,7 @@ form.switcher fieldset {
         -moz-appearance: none;
         appearance: none;
         border: none;
-        padding: $padding-xs;
+        padding: spacing.$padding-xs;
         height: 100%;
         cursor: pointer;
         width: 100%;
@@ -112,11 +115,15 @@ form.switcher fieldset {
     form.switcher {
         border-radius: $langSwitcherBorderRadius;
         background-color: var(--muted);
-        box-shadow: 0 0 1px #fff, 0 0 2px #fff, 5px 8px 15px rgba(0,0,0,0.1), -5px -3px 15px white;
+        box-shadow:
+            0 0 1px #fff,
+            0 0 2px #fff,
+            5px 8px 15px rgba(0, 0, 0, 0.1),
+            -5px -3px 15px white;
     }
     form.switcher fieldset {
         border-radius: $langSwitcherBorderRadius;
-        
+
         &:after,
         &:before {
             border-radius: $langSwitcherBorderRadius;
@@ -126,17 +133,23 @@ form.switcher fieldset {
         }
         &.val-1 {
             &:after {
-                box-shadow: 1px 1px 1px white, inset 1px 1px 2px white, -1px -1px 2px rgba(0,0,0,0.15), inset -6px 0px 1px rgba(0,0,0,0.2), inset -1px -1px 2px rgba(0,0,0,0.2), inset -1px 1px 8px rgba(0,0,0,0.05);
+                box-shadow:
+                    1px 1px 1px white,
+                    inset 1px 1px 2px white,
+                    -1px -1px 2px rgba(0, 0, 0, 0.15),
+                    inset -6px 0px 1px rgba(0, 0, 0, 0.2),
+                    inset -1px -1px 2px rgba(0, 0, 0, 0.2),
+                    inset -1px 1px 8px rgba(0, 0, 0, 0.05);
             }
             &:before {
-                background: rgba(255,255,255,0.35);
+                background: rgba(255, 255, 255, 0.35);
             }
-            .inputRadiowrapper:first-child{
-                label{
+            .inputRadiowrapper:first-child {
+                label {
                     transform: translate(-40%, -50%);
                 }
             }
-            .inputRadiowrapper:nth-child(2){
+            .inputRadiowrapper:nth-child(2) {
                 label {
                     transform: translate(-100%, -50%);
                 }
@@ -144,44 +157,48 @@ form.switcher fieldset {
         }
         &.val-2 {
             &:after {
-                box-shadow: 1px 1px 1px white, inset 1px 1px 2px white, -1px -1px 2px rgba(0,0,0,0.15), inset 6px 0px 1px rgba(255,255,255,0.9),  inset -1px -1px 2px rgba(0,0,0,0.2), inset 1px 0px 8px rgba(0,0,0,0.05);
+                box-shadow:
+                    1px 1px 1px white,
+                    inset 1px 1px 2px white,
+                    -1px -1px 2px rgba(0, 0, 0, 0.15),
+                    inset 6px 0px 1px rgba(255, 255, 255, 0.9),
+                    inset -1px -1px 2px rgba(0, 0, 0, 0.2),
+                    inset 1px 0px 8px rgba(0, 0, 0, 0.05);
             }
             &:before {
-                background: rgba(255,255,255,0);
+                background: rgba(255, 255, 255, 0);
             }
-            .inputRadiowrapper:first-child{
-                label{
+            .inputRadiowrapper:first-child {
+                label {
                     transform: translate(0%, -50%);
                 }
             }
-            .inputRadiowrapper:nth-child(2){
-                label{
+            .inputRadiowrapper:nth-child(2) {
+                label {
                     transform: translate(-50%, -50%);
                 }
             }
         }
     }
 
-
     .inputRadiowrapper {
         label {
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: $letterspacing;
-            font-size: .75em;
+            letter-spacing: fonts.$letterspacing;
+            font-size: 0.75em;
             text-shadow: 1px 1px 1px white;
         }
     }
 
     input[type="radio"],
     input[type="checkbox"] {
-        padding: $padding-xs;
+        padding: spacing.$padding-xs;
         font-weight: 600;
-        font-size: .8rem;
-        border-radius: $checkBoxBorderradius;
+        font-size: 0.8rem;
+        border-radius: checkboxes.$checkBoxBorderradius;
     }
 }
-
 
 .theme-dark {
     form.switcher {
