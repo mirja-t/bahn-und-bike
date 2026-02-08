@@ -1,8 +1,8 @@
-@import '../../../scss/variables.scss';
+@use "../../../scss/variables/spacing.scss" as spacing;
 
 #header {
     width: 100%;
-    padding: $padding-l $padding-l;
+    padding: spacing.$padding-l spacing.$padding-l;
     display: flex;
     justify-content: space-between;
     z-index: 2;
