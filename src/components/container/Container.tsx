@@ -71,19 +71,19 @@ export const Container = ({ lang }: ContainerProps) => {
         setSubmitVal(value);
     };
 
-    useEffect(() => {
-        if (activeVeloroute) {
-            setContainerClass("width-1");
-        } else if (activeSection) {
-            setContainerClass("width-2");
-        } else {
-            setContainerClass("width-3");
-        }
+    // useEffect(() => {
+    //     if (activeVeloroute) {
+    //         setContainerClass("width-1");
+    //     } else if (activeSection) {
+    //         setContainerClass("width-2");
+    //     } else {
+    //         setContainerClass("width-3");
+    //     }
 
-        if (activeVelorouteSection !== null && !activeSection) {
-            setContainerClass((prev) => `${prev} shift`);
-        }
-    }, [activeVeloroute, activeSection, activeVelorouteSection]);
+    //     if (activeVelorouteSection !== null && !activeSection) {
+    //         setContainerClass((prev) => `${prev} shift`);
+    //     }
+    // }, [activeVeloroute, activeSection, activeVelorouteSection]);
 
     useEffect(() => {
         if (!wrapper) return;
