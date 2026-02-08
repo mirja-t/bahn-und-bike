@@ -1,8 +1,7 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { selectLang, useAppDispatch } from "../../AppSlice";
+import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
 import {
     selectVelorouteList,
     selectActiveVeloroute,
@@ -19,14 +18,10 @@ import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 
 interface DestinationDetailsProps {
-    parent: HTMLElement | null;
-    lang: string;
+    lang: LangCode;
 }
 
-export const DestinationDetails = ({
-    parent,
-    lang,
-}: DestinationDetailsProps) => {
+export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
@@ -69,17 +64,15 @@ export const DestinationDetails = ({
     const dispatch = useAppDispatch();
 
     const setVelorouteActive = (vroute: Veloroute) => {
-        dispatch(setTrainLinesAlongVeloroute([]));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(loadVeloroute(vroute));
+        if (vroute.len !== undefined) {
+            dispatch(setTrainLinesAlongVeloroute([]));
+            dispatch(setActiveVelorouteSection(null));
+            dispatch(loadVeloroute(vroute as Veloroute));
+        }
     };
 
     return (
-        <ScrollContent
-            parentEl={parent}
-            transitionComplete={true}
-            id="destination-details"
-        >
+        <div id="destination-details">
             <div id="destination" className="details">
                 {activeSection && (
                     <>
@@ -129,6 +122,6 @@ export const DestinationDetails = ({
                     </>
                 )}
             </div>
-        </ScrollContent>
+        </div>
     );
 };

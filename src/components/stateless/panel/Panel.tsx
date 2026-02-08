@@ -1,10 +1,9 @@
-import React from "react";
 import "./panel.scss";
 
 interface PanelProps {
-    children?: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export const Panel: React.FC<PanelProps> = ({ children }) => {
+export const Panel = ({ children }: PanelProps) => {
     return <div className="panel-wrapper">{children}</div>;
 };

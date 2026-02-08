@@ -5,42 +5,40 @@ import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
 import {
-    selectActiveSection,
     setActiveSection,
     setTrainLinesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
-    selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
-    selectActiveVelorouteSection,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
 import { Map } from "../map/Map";
-import { useAppDispatch } from "../../AppSlice";
+import { useAppDispatch, type LangCode } from "../../AppSlice";
+import { Panel } from "../stateless/panel/Panel";
+import Tabs from "../stateless/tabs/Tabs";
 
 interface ContainerProps {
-    lang: string;
+    lang: LangCode;
 }
 
 export const Container = ({ lang }: ContainerProps) => {
     const dispatch = useAppDispatch();
-    const activeSection = useSelector(selectActiveSection);
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute !== null
-            ? activeVeloroute.route[activeVelorouteSectionIdx]
-            : null;
+    // const activeSection = useSelector(selectActiveSection);
+    // const activeVeloroute = useSelector(selectActiveVeloroute);
+    // const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    // const activeVelorouteSection =
+    //     activeVelorouteSectionIdx !== null && activeVeloroute !== null
+    //         ? activeVeloroute.route[activeVelorouteSectionIdx]
+    //         : null;
     const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState([0, 0]);
-    const [containerHeight, setContainerHeight] = useState(0);
+    // const [containerHeight, setContainerHeight] = useState(0);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
-    const [containerClass, setContainerClass] = useState("width-3");
     const [userScale, setUserScale] = useState(1);
 
     const container = useRef<HTMLDivElement | null>(null);
@@ -71,20 +69,6 @@ export const Container = ({ lang }: ContainerProps) => {
         setSubmitVal(value);
     };
 
-    // useEffect(() => {
-    //     if (activeVeloroute) {
-    //         setContainerClass("width-1");
-    //     } else if (activeSection) {
-    //         setContainerClass("width-2");
-    //     } else {
-    //         setContainerClass("width-3");
-    //     }
-
-    //     if (activeVelorouteSection !== null && !activeSection) {
-    //         setContainerClass((prev) => `${prev} shift`);
-    //     }
-    // }, [activeVeloroute, activeSection, activeVelorouteSection]);
-
     useEffect(() => {
         if (!wrapper) return;
 
@@ -101,40 +85,48 @@ export const Container = ({ lang }: ContainerProps) => {
         };
     }, [wrapper]);
 
-    useEffect(() => {
-        if (!container) return;
+    // useEffect(() => {
+    //     if (!container) return;
 
-        const setHeight = () => {
-            if (!container.current) return;
-            const h = container.current.getBoundingClientRect().height;
-            setContainerHeight(h);
-        };
-        setHeight();
-        window.addEventListener("resize", setHeight);
-        return () => {
-            window.removeEventListener("resize", setHeight);
-        };
-    }, []);
+    //     const setHeight = () => {
+    //         if (!container.current) return;
+    //         const h = container.current.getBoundingClientRect().height;
+    //         setContainerHeight(h);
+    //     };
+    //     setHeight();
+    //     window.addEventListener("resize", setHeight);
+    //     return () => {
+    //         window.removeEventListener("resize", setHeight);
+    //     };
+    // }, []);
 
     return (
         <>
-            <div
-                id="container"
-                ref={container}
-                style={{ height: containerHeight }}
-                className={containerClass}
-            >
-                <aside className="destination-details-container">
-                    <DestinationDetails
-                        parent={container.current}
-                        lang={lang}
-                    />
-                    <VelorouteDetails parent={container.current} lang={lang} />
-                    <CombinedVelorouteDetails
-                        parent={container.current}
-                        lang={lang}
-                    />
-                </aside>
+            <div id="container" ref={container}>
+                <div
+                    className="box"
+                    style={{
+                        position: "relative",
+                        zIndex: 2,
+                        height: "100%",
+                    }}
+                >
+                    <Panel>
+                        <aside className="destination-details-container">
+                            <Tabs>
+                                <Tabs.Tab id="destination" name="Destination">
+                                    <DestinationDetails lang={lang} />
+                                </Tabs.Tab>
+                                <Tabs.Tab id="veloroute" name="Veloroute">
+                                    <VelorouteDetails lang={lang} />
+                                </Tabs.Tab>
+                                <Tabs.Tab id="combined" name="Combined">
+                                    <CombinedVelorouteDetails lang={lang} />
+                                </Tabs.Tab>
+                            </Tabs>
+                        </aside>
+                    </Panel>
+                </div>
                 <main>
                     <div id="map-wrapper" ref={setWrapper}>
                         <Map
@@ -148,11 +140,11 @@ export const Container = ({ lang }: ContainerProps) => {
                     </div>
                 </main>
             </div>
-            <TravelDuration
-                handleSubmit={handleSubmit}
-                lang={lang}
-                start={start}
-            />
+            <div className="box">
+                <Panel>
+                    <TravelDuration handleSubmit={handleSubmit} lang={lang} />
+                </Panel>
+            </div>
         </>
     );
 };

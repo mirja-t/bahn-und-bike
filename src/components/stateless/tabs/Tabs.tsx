@@ -1,0 +1,120 @@
+import React, { type ReactNode, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Button } from "../button/Button";
+import "./tabs.scss";
+
+type TabProps = {
+    id: string;
+    name: string;
+    children: ReactNode | ReactNode[];
+    active?: boolean;
+};
+type TabsProps = {
+    children: ReactNode | ReactNode[];
+    additionalNavItems?: ReactNode;
+    renderAdditionalNavItems?: (_id: string) => ReactNode;
+};
+
+const Tab = ({ children, id }: TabProps) => {
+    return (
+        <div data-testid={`tab-${id}`} className="tab">
+            {children}
+        </div>
+    );
+};
+type TabHeaderProps = { children: ReactNode };
+const TabHeader = ({ children }: TabHeaderProps) => {
+    return <div className="tabheader">{children}</div>;
+};
+
+const Tabs = ({ children, renderAdditionalNavItems }: TabsProps) => {
+    const tabs = React.Children.toArray(children).filter(
+        (child) => React.isValidElement(child) && child.type === Tab,
+    ) as React.ReactElement<TabProps>[];
+    const [activeId, setActiveId] = useState<string>(() => {
+        // Set the initial active tab to the first one or the one with active prop
+        const activeTab = tabs.find((tab) => tab.props.active);
+        return activeTab
+            ? activeTab.props.id
+            : (tabs[0] && tabs[0].props.id) || "";
+    });
+    return (
+        <div className="tabs">
+            <nav
+                aria-label="Tabs"
+                data-testid="tabs"
+                className="flex -mb-5 justify-between"
+            >
+                <ul className="flex space-x-1">
+                    {tabs.map((tab) => (
+                        <li
+                            key={tab.props.id}
+                            className={
+                                tab.props.id === activeId ? "active" : ""
+                            }
+                        >
+                            <Button
+                                key={tab.props.id}
+                                onClick={() => {
+                                    setActiveId(tab.props.id);
+                                }}
+                                label={tab.props.name}
+                            />
+                        </li>
+                    ))}
+                </ul>
+                {renderAdditionalNavItems && (
+                    <div className="mb-2">
+                        {renderAdditionalNavItems(activeId)}
+                    </div>
+                )}
+            </nav>
+            <div className="">
+                <div className="">
+                    <div className="">
+                        <AnimatePresence mode="popLayout">
+                            {tabs.map(
+                                (tab) =>
+                                    tab.props.id === activeId && (
+                                        <motion.div
+                                            key={tab.props.id}
+                                            initial={{
+                                                scale: 0.8,
+                                                opacity: 0,
+                                                x: "-50%",
+                                            }}
+                                            animate={{
+                                                scale: 1,
+                                                opacity: 1,
+                                                x: 0,
+                                            }}
+                                            exit={{
+                                                scale: 0.8,
+                                                opacity: 0,
+                                                x: "50%",
+                                            }}
+                                            transition={{
+                                                type: "tween",
+                                                duration: 0.2,
+                                            }}
+                                        >
+                                            <Tab
+                                                id={tab.props.id}
+                                                name={tab.props.name}
+                                            >
+                                                {tab.props.children}
+                                            </Tab>
+                                        </motion.div>
+                                    ),
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </div>
+                {/* overlay for round borders beneath scrollbar */}
+                <div className=""></div>
+            </div>
+        </div>
+    );
+};
+
+export default Object.assign(Tabs, { Tab, TabHeader });

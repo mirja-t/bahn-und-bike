@@ -12,11 +12,13 @@ const meta = {
     argTypes: {
         label: { control: "text" },
         type: { control: "select", options: ["button", "submit", "reset"] },
+        variant: { control: "select", options: ["primary", "secondary"] },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         label: "Button",
         type: "button",
+        variant: "primary",
     },
 } satisfies Meta<typeof Button>;
 
@@ -28,5 +30,6 @@ export const Primary: Story = {
     args: {
         label: "Button",
         type: "button",
+        variant: "primary",
     },
 };

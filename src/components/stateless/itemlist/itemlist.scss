@@ -2,14 +2,15 @@
 $scalefactor: 0.5vw;
 $iconsize: calc(#{$scalefactor} + 1.5em);
 
-.destinationslist {
+.itemlist {
+    overflow: hidden;
     li {
         position: relative;
         background: var(--linklist-bg);
         border-radius: var(--linklist-border-radius);
-        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.1);
-        padding: 0.25em;
-        margin: spacing.$padding-xs 0;
+        box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.05);
+        padding: 0.125em;
+        margin: 0.25em 0;
         transition: all 0.35s ease;
         cursor: pointer;
         display: flex;
@@ -30,22 +31,21 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
             color: var(--linklist);
             line-height: 1.2;
         }
-        &:before {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            border-bottom: 10px solid transparent;
-            border-top: 10px solid transparent;
-            border-left: 0em solid white;
-            transition: all 0.35s ease;
-        }
+        // &:before {
+        //     content: "";
+        //     position: absolute;
+        //     right: 0;
+        //     top: 50%;
+        //     transform: translateY(-50%);
+        //     border-bottom: 10px solid transparent;
+        //     border-top: 10px solid transparent;
+        //     border-left: 0em solid white;
+        //     transition: all 0.35s ease;
+        // }
         &.active,
         &:hover {
             transition: all 0.35s ease;
             background: var(--linklist-bg-active);
-            box-shadow: 5px 3px 10px rgba(0, 0, 0, 0.15);
             h4.veloroute {
                 color: var(--linklist-active);
             }

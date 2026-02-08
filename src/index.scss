@@ -84,9 +84,6 @@ label {
     color: var(--label);
 }
 
-header {
-    margin-bottom: spacing.$padding-xs;
-}
 .section {
     margin-bottom: spacing.$mainpadding;
     p {
@@ -143,5 +140,5 @@ span.train {
     white-space: nowrap;
 }
 .box {
-    padding: spacing.$padding-l spacing.$padding-l;
+    padding: spacing.$padding-s spacing.$padding-l;
 }

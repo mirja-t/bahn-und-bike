@@ -5,6 +5,8 @@
     gap: spacing.$padding-xl;
     padding: spacing.$padding-s spacing.$padding-l;
     position: relative;
+    height: 100%;
+    overflow: hidden;
 }
 .theme-light {
     .panel-wrapper {

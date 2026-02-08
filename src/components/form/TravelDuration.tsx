@@ -53,9 +53,12 @@ export const TravelDuration = ({ handleSubmit, lang }: TravelDurationProps) => {
                 value={value}
                 step={1}
                 handleInputChange={handleInputChange}
-                // reset={start} // reset value when start changes --> fix
             />
-            <Button label={labels[lang].search} type="submit" />
+            <Button
+                variant="primary"
+                type="submit"
+                label={labels[lang].search}
+            />
         </form>
     );
 };
