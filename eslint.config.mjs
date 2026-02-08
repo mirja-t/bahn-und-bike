@@ -1,16 +1,15 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 // @ts-check
 
 import tseslint from "typescript-eslint";
 
-export default [
-    ...tseslint.configs.strict,
-    { ignores: ["**/*.js"] },
-    {
-        rules: {
-            "@typescript-eslint/no-explicit-any": "error",
-        },
+export default [...tseslint.configs.strict, { ignores: ["**/*.js"] }, {
+    rules: {
+        "@typescript-eslint/no-explicit-any": "error",
     },
-];
+}, ...storybook.configs["flat/recommended"]];
 
 // import tseslint, { parser } from "typescript-eslint";
 // import reactHooks from "eslint-plugin-react-hooks";
