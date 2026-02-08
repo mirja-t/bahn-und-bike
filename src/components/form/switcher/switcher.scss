@@ -1,9 +1,7 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 @use "../../../scss/variables/fonts.scss" as fonts;
 @use "../../../scss/variables/borders.scss" as borders;
-@use "../checkBox/checkbox.scss" as checkboxes;
-@import "../checkBox/checkbox.scss";
-@import "../../stateless/button/button.scss";
+@use "../checkBox/checkbox.scss" as checkbox;
 
 $radiobtn-height: 2.2em;
 $radiobtn-width: 2.2em;
@@ -64,7 +62,7 @@ form.switcher fieldset {
     .inputRadiowrapper {
         position: relative;
         z-index: 2;
-        transition: all $transition-duration ease;
+        transition: all checkbox.$checkbox-transition-duration ease;
         width: $radiobtn-width;
         height: $radiobtn-width;
         label {
@@ -79,7 +77,7 @@ form.switcher fieldset {
             text-shadow: none;
             text-align: center;
             cursor: pointer;
-            transition: all 0.5s ease;
+            transition: all checkbox.$checkbox-transition-duration ease;
         }
         &.active {
             input {
@@ -196,7 +194,7 @@ form.switcher fieldset {
         padding: spacing.$padding-xs;
         font-weight: 600;
         font-size: 0.8rem;
-        border-radius: checkboxes.$checkBoxBorderradius;
+        border-radius: checkbox.$checkbox-borderradius;
     }
 }
 

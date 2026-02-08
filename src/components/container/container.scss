@@ -1,5 +1,5 @@
 @use "../../scss/variables/breakpoints.scss" as breakpoints;
-@import "../../scss/mixins/caret.scss";
+@use "../../scss/mixins/caret.scss" as caret;
 
 $sidebarwidth: 25;
 $sidebarwidth-xl: 20;
@@ -94,6 +94,6 @@ aside {
         bottom: -0.75em;
         left: 50%;
         transform: translateX(-50%);
-        @include caret();
+        @include caret.caret();
     }
 }

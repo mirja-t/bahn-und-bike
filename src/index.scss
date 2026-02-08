@@ -3,8 +3,8 @@
 @use "./scss/variables/fonts.scss" as fonts;
 @use "./scss/variables/breakpoints.scss" as breakpoints;
 @use "./scss/variables/borders.scss" as borders;
-@import "./scss/css-variables";
-@import "./webfonts.css";
+@use "./scss/css-variables";
+@use "./webfonts.css";
 
 html {
     font-size: 16px;
