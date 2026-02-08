@@ -1,7 +1,7 @@
-@import '../../../scss/variables.scss';
+@use "../../../scss/variables/spacing.scss" as spacing;
 
 #footer {
-    padding: $padding-xs $padding-l;
+    padding: spacing.$padding-xs spacing.$padding-l;
     z-index: 3;
     a {
         font-size: 85%;

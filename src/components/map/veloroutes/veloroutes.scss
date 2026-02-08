@@ -1,4 +1,4 @@
-@import '../../../scss/variables.scss';
+@use "../../../scss/variables/colors.scss" as colors;
 
 .veloroute {
     path,
@@ -22,7 +22,7 @@
         }
     }
     path.crossing-veloroute-section {
-        stroke: $lightgray;
+        stroke: colors.$lightgray;
         stroke-dasharray: 2;
         fill: none;
         &.active {
@@ -38,8 +38,7 @@
 .veloroute-details {
     display: block;
     padding: 0;
-    .veloroute-stops{
+    .veloroute-stops {
         font-size: 80%;
     }
 }
-

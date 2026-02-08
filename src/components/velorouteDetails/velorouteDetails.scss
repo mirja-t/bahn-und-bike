@@ -1,49 +1,56 @@
-@import '../../scss/variables.scss';
-@import '../../scss/mixins/caret.scss';
-
 #veloroute.details {
     color: var(--text);
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
         color: var(--bike);
     }
     .veloroute-section-details {
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             color: var(--bike);
         }
     }
 }
 .veloroute-details {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
     h4 {
-        margin: .5em 0;
+        margin: 0.5em 0;
     }
-    &:last-child{
+    &:last-child {
         margin-bottom: 1.5em;
     }
 }
 ul.veloroute-stops {
     padding: 0;
-    li{
+    li {
         list-style-type: none;
         display: inline;
         span {
             cursor: pointer;
-            
+
             &:hover,
-            &.hover{
+            &.hover {
                 text-decoration: underline;
                 color: var(--bike-hover);
             }
         }
     }
 }
-ol.veloroute-stops{
+ol.veloroute-stops {
     padding-left: 1.5em;
     div {
         cursor: pointer;
-        
+
         &:hover,
-        &.hover{
+        &.hover {
             text-decoration: underline;
             color: var(--bike-hover);
         }
@@ -52,12 +59,12 @@ ol.veloroute-stops{
 .veloroute-trainstops {
     padding: 0;
     display: flex;
-    
+
     span.train {
-        transform: scale(.85);
+        transform: scale(0.85);
         margin: 0 1px 1px 0;
-        &:first-child{
-            margin-left: .75em;
+        &:first-child {
+            margin-left: 0.75em;
         }
     }
 }

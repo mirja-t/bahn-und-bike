@@ -1,4 +1,4 @@
-@import '../../../scss/variables.scss';
+@use "../../../scss/variables/fonts.scss" as fonts;
 
 #germany {
     background-repeat: no-repeat;
@@ -47,28 +47,26 @@
         #labels {
             * {
                 fill: var(--map-labels);
-                font-family: 'Merriweather';
+                font-family: "Merriweather";
                 font-size: 0.75em;
                 font-weight: 300;
                 text-transform: uppercase;
                 pointer-events: none;
                 letter-spacing: 0.1em;
             }
-        
         }
         #labels-rivers {
             * {
                 fill: var(--map-river);
-                font-family: $font-family-sans-serif;
+                font-family: fonts.$font-family-sans-serif;
                 font-size: 0.55em;
                 font-weight: 400;
                 pointer-events: none;
             }
-        
         }
     }
     .map-bg {
-        background-image: url('../../../assets/images/germany_bg.png');
+        background-image: url("../../../assets/images/germany_bg.png");
         position: absolute;
         left: 0;
         top: 0;
