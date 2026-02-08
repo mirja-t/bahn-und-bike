@@ -1,9 +1,14 @@
-@import './scss/main.scss';
+@use "./scss/colors.scss";
+
 .App {
     width: 100%;
     height: 100%;
-    background: $background-dark;
-    background: linear-gradient(160deg, $background 20%, $background-dark 80%);
+    background: colors.$background-dark;
+    background: linear-gradient(
+        160deg,
+        colors.$background 20%,
+        colors.$background-dark 80%
+    );
     background: var(--bg);
     color: var(--text);
 }
