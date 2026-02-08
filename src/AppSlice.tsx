@@ -15,15 +15,13 @@ export type Labels = Record<LangCode, Record<string, string>>;
 export type Lang = { id: string } & { [key in LangCode]: string };
 
 export interface AppState {
-    lang: Record<string, Record<string, string>>;
+    lang: Labels;
     theme: Theme;
     langLoading: boolean;
     langError: boolean;
 }
 
-export const loadLang = createAsyncThunk<
-    Record<string, Record<string, string>>
->("app/loadLang", async () => {
+export const loadLang = createAsyncThunk<Labels>("app/loadLang", async () => {
     const query = "lang";
     const lang = await fetch(`${VITE_API_URL}${query}`, { headers: headers })
         .then((response) => {

@@ -4,41 +4,10 @@
 #travelduration {
     position: relative;
     display: flex;
-    padding: 0 spacing.$padding-l;
+    flex-grow: 1;
     gap: spacing.$padding-xl;
-    padding: 0.5em spacing.$padding-l;
     input {
         align-self: center;
-    }
-}
-.traveldurationWrapper {
-    width: 100%;
-    display: flex;
-    gap: spacing.$padding-xl;
-    padding: spacing.$padding-s spacing.$padding-xl;
-    position: relative;
-    -webkit-appearance: none;
-    backdrop-filter: blur(3px);
-}
-
-.theme-light {
-    .traveldurationWrapper {
-        background: rgba(var(--bg), 0.6);
-        // background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 90%);
-        background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 90%);
-        transition: all 0.25s ease;
-        border-radius: borders.$borderradius * 2;
-        box-shadow:
-            -10px -10px 30px white,
-            -5px -5px 10px white,
-            10px 10px 30px rgba(0, 0, 0, 0.25);
-        text-shadow: 1px 1px 0 white;
-        transition: all 0.3s ease;
-    }
-}
-.theme-dark {
-    .traveldurationWrapper {
-        background: var(--linklist-bg);
     }
 }
 

@@ -18,9 +18,6 @@ $transition: width 0.5s ease;
     justify-content: flex-end;
     flex-grow: 1;
     transition: $transition;
-    &[class*="width-"] {
-        transition: $transition;
-    }
 }
 main {
     position: relative;

@@ -1,0 +1,27 @@
+@use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/variables/borders.scss" as borders;
+.panel-wrapper {
+    display: flex;
+    gap: spacing.$padding-xl;
+    padding: spacing.$padding-s spacing.$padding-l;
+    position: relative;
+}
+.theme-light {
+    .panel-wrapper {
+        background: rgba(var(--bg), 1);
+        background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 90%);
+        transition: all 0.25s ease;
+        border-radius: borders.$borderradius * 2;
+        box-shadow:
+            inset 1px 1px 1px rgba(255, 255, 255, 0.9),
+            1px 1px 1px rgba(200, 200, 200, 0.7),
+            5px 5px 20px rgba(0, 0, 0, 0.15);
+        text-shadow: 1px 1px 0 white;
+        transition: all 0.3s ease;
+    }
+}
+.theme-dark {
+    .panel-wrapper {
+        background: var(--linklist-bg);
+    }
+}
