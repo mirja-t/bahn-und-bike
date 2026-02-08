@@ -22,12 +22,26 @@ const meta = {
             <div style={{ height: "800px" }}>
                 <p>This is scrollable content.</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
-                <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa.</p>
+                <p>
+                    Sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                </p>
+                <p>
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+                </p>
+                <p>
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse.
+                </p>
+                <p>
+                    Excepteur sint occaecat cupidatat non proident, sunt in
+                    culpa.
+                </p>
                 <p>Qui officia deserunt mollit anim id est laborum.</p>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem.</p>
+                <p>
+                    Sed ut perspiciatis unde omnis iste natus error sit
+                    voluptatem.
+                </p>
                 <p>Accusantium doloremque laudantium, totam rem aperiam.</p>
                 <p>Eaque ipsa quae ab illo inventore veritatis et quasi.</p>
             </div>
