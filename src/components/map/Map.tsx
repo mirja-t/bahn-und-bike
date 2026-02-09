@@ -2,7 +2,7 @@ import "./map.scss";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
-import { selectLang } from "../../AppSlice";
+import { type LangCode, selectLang } from "../../AppSlice";
 import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
@@ -11,14 +11,13 @@ import { selectActiveVeloroute } from "./veloroutes/VeloroutesSlice";
 import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
 import { Loading } from "../stateless/loading/Loading";
-import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface MapProps {
     value: string;
     mapContainer: HTMLDivElement | null;
     mapSize: [number, number];
-    lang: string;
+    lang: LangCode;
     fn: (dir: "+" | "-") => void;
     userScale: number;
 }
@@ -27,7 +26,6 @@ export const Map = ({
     mapContainer,
     mapSize,
     lang,
-    fn,
     userScale,
 }: MapProps) => {
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
@@ -61,7 +59,7 @@ export const Map = ({
                     </motion.div>
                 )}
             </AnimatePresence>
-            <ZoomPanel fn={fn} />
+            {/* <ZoomPanel fn={fn} /> */}
             <div
                 id="map-container"
                 ref={mapcontainerRef}
