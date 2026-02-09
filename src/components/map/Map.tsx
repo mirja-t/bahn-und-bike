@@ -14,7 +14,7 @@ import { Loading } from "../stateless/loading/Loading";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface MapProps {
-    value: string;
+    value: number;
     mapContainer: HTMLDivElement | null;
     mapSize: [number, number];
     lang: LangCode;
@@ -79,7 +79,7 @@ export const Map = ({
                 >
                     {!isLoading && (
                         <>
-                            {parseInt(value) === 0 &&
+                            {value === 0 &&
                                 journeys.length === 0 &&
                                 !isLoading && (
                                     <div className="instructions">

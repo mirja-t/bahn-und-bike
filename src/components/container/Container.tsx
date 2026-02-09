@@ -36,8 +36,7 @@ export const Container = ({ lang }: ContainerProps) => {
     //         : null;
     const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
-    const [mapSize, setMapSize] = useState([0, 0]);
-    // const [containerHeight, setContainerHeight] = useState(0);
+    const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
     const [userScale, setUserScale] = useState(1);
 
@@ -85,21 +84,6 @@ export const Container = ({ lang }: ContainerProps) => {
         };
     }, [wrapper]);
 
-    // useEffect(() => {
-    //     if (!container) return;
-
-    //     const setHeight = () => {
-    //         if (!container.current) return;
-    //         const h = container.current.getBoundingClientRect().height;
-    //         setContainerHeight(h);
-    //     };
-    //     setHeight();
-    //     window.addEventListener("resize", setHeight);
-    //     return () => {
-    //         window.removeEventListener("resize", setHeight);
-    //     };
-    // }, []);
-
     return (
         <>
             <div id="container" ref={container}>
@@ -114,13 +98,14 @@ export const Container = ({ lang }: ContainerProps) => {
                     <Panel>
                         <aside className="destination-details-container">
                             <Tabs>
-                                <Tabs.Tab id="destination" name="Destination">
+                                <Tabs.Tab id="trainlines" name="Bahnlinien">
+                                    Bahnlinien
+                                </Tabs.Tab>
+                                <Tabs.Tab id="destination" name="Radwege">
                                     <DestinationDetails lang={lang} />
                                 </Tabs.Tab>
-                                <Tabs.Tab id="veloroute" name="Veloroute">
+                                <Tabs.Tab id="veloroute" name="Abschnitte">
                                     <VelorouteDetails lang={lang} />
-                                </Tabs.Tab>
-                                <Tabs.Tab id="combined" name="Combined">
                                     <CombinedVelorouteDetails lang={lang} />
                                 </Tabs.Tab>
                             </Tabs>
