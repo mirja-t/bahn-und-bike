@@ -17,6 +17,7 @@ import {
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { useEffect } from "react";
 
 interface DestinationDetailsProps {
     parent: HTMLElement | null;
@@ -37,11 +38,14 @@ export const DestinationDetails = ({
         : null;
     const trainList =
         activeSection &&
-        activeSection.line.map((train, idx) => (
+        activeSection.trainlines.map((train, idx) => (
             <span key={idx} className="train">
                 {train}
             </span>
         ));
+    useEffect(() => {
+        console.log("activeSection", activeSection);
+    }, [activeSection]);
     const initialTrains =
         activeSection &&
         activeSection.connection &&
