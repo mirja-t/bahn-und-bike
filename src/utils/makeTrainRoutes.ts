@@ -111,12 +111,11 @@ export const makeTrainRoutes = (
                 };
                 currentRoute.dur += stop.dur;
                 currentRoute.points += `${x},${y} `;
-                currentRoute.pathLength = [
-                    ...currentRoute.points
-                        .split(" ")
-                        .map((point) => point.split(",").map(Number)),
-                    [x, y],
-                ]
+                currentRoute.pathLength = currentRoute.points
+                    .split(" ")
+                    .slice(0, -1)
+                    .map((point) => point.split(",").map(Number))
+
                     .map((el, idx, arr) => {
                         const prev = idx > 0 ? arr[idx - 1] : el;
                         const a = Math.abs(prev[0] - el[0]);
