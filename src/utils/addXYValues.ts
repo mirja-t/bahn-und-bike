@@ -1,8 +1,12 @@
-import { getMapPosition } from './svgMap';
+import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
-export const addXYValues = arr => {
-    return arr.map(stop => {
-        const [x, y] = getMapPosition(stop.lon, stop.lat);
-        return { ...stop, x, y }
+export const addXYValues = (arr: { lon: number; lat: number }[]) => {
+    return arr.map((stop) => {
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            stop.lon,
+            stop.lat,
+            germanyBounds,
+        );
+        return { ...stop, x, y };
     });
-}
+};
