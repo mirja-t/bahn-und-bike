@@ -49,7 +49,7 @@ export const Trainroute = memo(
                 />
                 {item && item.lastStation && (
                     <Trainstop
-                        styles={{ scale: 1 }}
+                        styles={{ scale: 1, transformOrigin: "center" }}
                         item={item.lastStation}
                         strokeScale={strokeScale}
                     />
