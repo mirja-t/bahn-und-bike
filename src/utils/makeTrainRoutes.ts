@@ -88,7 +88,7 @@ export const makeTrainRoutes = (
                 if (group[0].dur + stop.dur > durationLimit) continue;
 
                 const currentRoute = createNewRoute(group[0]);
-                currentRoute.stopIds.push(stop.destination_name);
+                currentRoute.stopIds.push(stop.destination_id);
                 currentRoute.lastStation = {
                     stop_name: stop.destination_name,
                     stop_id: stop.destination_id,
@@ -102,7 +102,7 @@ export const makeTrainRoutes = (
                 // Add to existing route if within duration limit
                 const currentRoute = routes[routes.length - 1];
                 if (currentRoute.dur + stop.dur > durationLimit) break;
-                currentRoute.stopIds.push(stop.destination_name);
+                currentRoute.stopIds.push(stop.destination_id);
                 currentRoute.lastStation = {
                     stop_name: stop.destination_name,
                     stop_id: stop.destination_id,
