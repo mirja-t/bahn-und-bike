@@ -3,6 +3,7 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
 import { makeTrainConnection } from "../../../utils/makeTrainConnection";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
+import { refactorStopData } from "../../../utils/refactorStopData";
 
 export type ResponseStop = {
     destination_id: string;
@@ -77,15 +78,15 @@ export const loadTrainroutes = createAsyncThunk<
         }
         return response.json();
     });
-    // const trainstopsRefactored = connections.map(refactorStopData);
-    // const startStops = trainstopsRefactored.filter(
-    //     (s: Trainstop) => s.stop_id === start,
-    // );
+    const trainstopsRefactored = connections.map(refactorStopData);
+    const startStops = trainstopsRefactored.filter(
+        (s: Trainstop) => s.stop_id === start,
+    );
 
-    // const trainlineList = direct
-    //     ? startStops.map((s: Trainstop) => s.trainline_id)
-    //     : null;
-    // thunkAPI.dispatch(setTrainlineList(trainlineList));
+    const trainlineList = direct
+        ? startStops.map((s: Trainstop) => s.trainline_id)
+        : null;
+    thunkAPI.dispatch(setTrainlineList(trainlineList));
 
     const currentTrainroutes = makeTrainRoutes(connections, start, value * 30);
 
