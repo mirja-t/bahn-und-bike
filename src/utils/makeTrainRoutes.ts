@@ -112,7 +112,9 @@ export const makeTrainRoutes = (
                 currentRoute.dur += stop.dur;
                 currentRoute.points += `${x},${y} `;
                 currentRoute.pathLength = [
-                    [currentRoute.firstStation.x, currentRoute.firstStation.y],
+                    ...currentRoute.points
+                        .split(" ")
+                        .map((point) => point.split(",").map(Number)),
                     [x, y],
                 ]
                     .map((el, idx, arr) => {
