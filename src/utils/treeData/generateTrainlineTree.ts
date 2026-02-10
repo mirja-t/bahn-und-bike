@@ -1,7 +1,7 @@
 import { Trainlines } from "./TrainlineTree";
 import { HashMap } from "../HashMap/HashMap";
 import { addConnectingTrainlines } from "./addConnectingTrainlines";
-import { getMapPosition } from "../svgMap";
+import { germanyBounds, SvgMapBuilder } from "../svgMap";
 
 export const generateTrainlineTree = (
     trainlineStops,
@@ -10,7 +10,11 @@ export const generateTrainlineTree = (
     direct,
 ) => {
     const getFirstStop = (startStops) => {
-        const [x, y] = getMapPosition(startStops[0].lon, startStops[0].lat);
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            startStops[0].lon,
+            startStops[0].lat,
+            germanyBounds,
+        );
         return {
             dur: 0,
             trainlines: [

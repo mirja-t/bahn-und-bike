@@ -1,26 +1,51 @@
-import { getMapPosition } from './svgMap';
-import { removeWords } from './utils';
+import type {
+    ConnectionStop,
+    ConnectionStopRefactored,
+} from "../components/map/trainroutes/TrainroutesSlice";
+import { germanyBounds, SvgMapBuilder } from "./svgMap";
+import { removeWords } from "./utils";
 
-export const refactorStopData = stop => {
-    const wordsToRemove = ['Bahnhof', 'Hbf', 'Hauptbahnhof', 'Bhf', 'S-Bahn', 'Busbahnhof'];
-    const refactoredstop = {};
-    const [x, y] = getMapPosition(stop.lon, stop.lat);
+export const refactorStopData = (
+    stop: ConnectionStop,
+): ConnectionStopRefactored => {
+    const wordsToRemove = [
+        "Bahnhof",
+        "Hbf",
+        "Hauptbahnhof",
+        "Bhf",
+        "S-Bahn",
+        "Busbahnhof",
+    ];
+    const [x, y] = SvgMapBuilder.getMapPosition(
+        parseFloat(stop.lon),
+        parseFloat(stop.lat),
+        germanyBounds,
+    );
+    const connectionStop: ConnectionStopRefactored = {
+        stop_id: stop.destination_id,
+        stop_name: removeWords(stop.destination_name, wordsToRemove),
+        stop_number: stop.stop_number,
+        lat: parseFloat(stop.lat),
+        lon: parseFloat(stop.lon),
+        x: x,
+        y: y,
+        trainline_id: stop.trainline_id,
+    };
     try {
-        refactoredstop.stop_id = stop.destination_id;
-        refactoredstop.stop_name = removeWords(stop.destination_name, wordsToRemove);
-        refactoredstop.stop_number = parseInt(stop.stop_number);
-        refactoredstop.lat = parseFloat(stop.lat);
-        refactoredstop.lon = parseFloat(stop.lon);
-        refactoredstop.x = x;
-        refactoredstop.y = y;
-        if(stop.trainline_id) refactoredstop.trainline_id = stop.trainline_id;
-        if(stop.trainstops) refactoredstop.trainstops = stop.trainstops;
-        if(stop.veloroute_id) refactoredstop.veloroute_id = stop.veloroute_id;
-        if(stop.dur) refactoredstop.dur = parseInt(stop.dur);
-        if(stop.len) refactoredstop.len = parseInt(stop.len);
+        for (const key in connectionStop) {
+            if (
+                connectionStop[key as keyof ConnectionStopRefactored] ===
+                undefined
+            ) {
+                throw new Error(`Missing value for key ${key} in stop ${stop}`);
+            }
+        }
+        // if (stop.trainstops) trainstops = stop.trainstops;
+        // if (stop.veloroute_id) veloroute_id = stop.veloroute_id;
+        // if (stop.dur) dur = parseInt(stop.dur);
+        // if (stop.len) len = parseInt(stop.len);
+    } catch (e) {
+        console.error("Error refactoring stop data: ", e);
     }
-    catch(e){
-        throw new Error('error: ',e)
-    }
-    return refactoredstop
-}
+    return connectionStop;
+};
