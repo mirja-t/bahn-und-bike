@@ -1,35 +1,38 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
-import { generateTrainlines } from "../../../utils/generateTrainlines";
-import { generateTrainlineTree } from "../../../utils/treeData/generateTrainlineTree";
-import { refactorStopData } from "../../../utils/refactorStopData";
 import { makeTrainConnection } from "../../../utils/makeTrainConnection";
+import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 
-export interface LoadTrainroutesParams {
-    start: string;
-    value: number;
-    direct: boolean;
-}
-export type Train = {
+export type ResponseStop = {
+    destination_id: string;
+    destination_name: string;
+    dur: number;
+    lat: string;
+    lon: string;
+    name: string;
+    stop_number: number;
+    trainline_id: string;
+};
+type Train = {
     id: string;
     name: string;
 };
-export type Trainstop = {
+type Trainstop = {
     stop_name: string;
     stop_id: string;
     trainline_id?: string;
     x: number;
     y: number;
 };
-export type Connection = {
+type Connection = {
     stop_name: string;
     initial_train: Train[];
     connecting_train: Train;
 };
-export type TrainrouteSection = {
+export type CurrentTrainroute = {
     dur: number;
-    line: string[];
+    trainlines: string[];
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
@@ -37,7 +40,7 @@ export type TrainrouteSection = {
     points: string;
     connection: Connection | null;
 };
-export type CurrentTrainroutes = TrainrouteSection[];
+export type CurrentTrainroutes = CurrentTrainroute[];
 
 export interface TrainroutesState {
     startPos: string;
@@ -48,8 +51,8 @@ export interface TrainroutesState {
     trainroutesLoading: boolean;
     trainroutesError: boolean;
     activeSpot: Trainstop | null;
-    activeSection: TrainrouteSection | null;
-    trainlinesAlongVeloroute: TrainrouteSection[];
+    activeSection: CurrentTrainroute | null;
+    trainlinesAlongVeloroute: CurrentTrainroute[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
     trainlineNames?: string[];
@@ -57,42 +60,40 @@ export interface TrainroutesState {
 
 export const loadTrainroutes = createAsyncThunk<
     CurrentTrainroutes,
-    LoadTrainroutesParams,
+    { start: string; value: number; direct: boolean },
     { state: RootState }
 >("trainroutes/setTrainroutes", async ({ start, value, direct }, thunkAPI) => {
     const connectionsQuery = direct
         ? "trainstops/" + start
         : "connections/" + start;
-    const connections = await fetch(`${VITE_API_URL}${connectionsQuery}`, {
-        headers: headers,
-    }).then((response) => {
+    const connections: ResponseStop[] = await fetch(
+        `${VITE_API_URL}${connectionsQuery}`,
+        {
+            headers: headers,
+        },
+    ).then((response) => {
         if (response.status !== 200) {
             throw new Error("Bad Server Response");
         }
         return response.json();
     });
-    const trainstopsRefactored = connections.map(refactorStopData);
-    const startStops = trainstopsRefactored.filter(
-        (s: Trainstop) => s.stop_id === start,
-    );
-    const trainrouteList = generateTrainlines(trainstopsRefactored);
-    const currentTrainroutes = generateTrainlineTree(
-        trainrouteList,
-        startStops,
-        value,
-        direct,
-    );
+    // const trainstopsRefactored = connections.map(refactorStopData);
+    // const startStops = trainstopsRefactored.filter(
+    //     (s: Trainstop) => s.stop_id === start,
+    // );
 
-    const trainlineList = direct
-        ? startStops.map((s: Trainstop) => s.trainline_id)
-        : null;
-    thunkAPI.dispatch(setTrainlineList(trainlineList));
+    // const trainlineList = direct
+    //     ? startStops.map((s: Trainstop) => s.trainline_id)
+    //     : null;
+    // thunkAPI.dispatch(setTrainlineList(trainlineList));
+
+    const currentTrainroutes = makeTrainRoutes(connections, start, value * 30);
 
     return currentTrainroutes;
 });
 
 export const loadTrainroutesAlongVeloroute = createAsyncThunk<
-    TrainrouteSection[],
+    CurrentTrainroutes,
     number,
     { state: RootState }
 >("trainroutes/setTrainroutesAlongVeloroute", async (idx: number, thunkAPI) => {
@@ -107,7 +108,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
           ].trainstop
         : undefined;
 
-    const connections: TrainrouteSection[] = [];
+    const connections: CurrentTrainroutes = [];
     const fetchConnection = async (id: string | undefined) => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
@@ -160,11 +161,14 @@ export const trainroutesSlice = createSlice({
         },
         setActiveSection: (
             state,
-            action: { payload: TrainrouteSection | null },
+            action: { payload: CurrentTrainroute | null },
         ) => {
             state.activeSection = action.payload;
         },
-        setTrainLinesAlongVeloroute: (state, action: { payload: any[] }) => {
+        setTrainLinesAlongVeloroute: (
+            state,
+            action: { payload: CurrentTrainroute[] },
+        ) => {
             state.trainlinesAlongVeloroute = action.payload;
         },
         setTrainlinesNames: (state, action: { payload: any }) => {
