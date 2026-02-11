@@ -88,7 +88,12 @@ export const loadTrainroutes = createAsyncThunk<
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
 
-    const currentTrainroutes = makeTrainRoutes(connections, start, value * 30);
+    const currentTrainroutes = makeTrainRoutes(
+        connections,
+        start,
+        value * 30,
+        direct,
+    );
 
     return currentTrainroutes;
 });

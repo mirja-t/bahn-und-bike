@@ -8,6 +8,7 @@ export const makeTrainRoutes = (
     stops: ResponseStop[],
     start: string,
     durationLimit: number,
+    direct: boolean = true,
 ): CurrentTrainroute[] => {
     // to do: consider duration order for reverse direction
     function createNewRoute(startDest: ResponseStop) {
@@ -66,7 +67,7 @@ export const makeTrainRoutes = (
         (acc, stop) => {
             if (!acc[stop.trainline_id]) {
                 acc[stop.trainline_id] = {
-                    startStopIdx: 0,
+                    startStopIdx: -1,
                     stops: [],
                 };
             }
