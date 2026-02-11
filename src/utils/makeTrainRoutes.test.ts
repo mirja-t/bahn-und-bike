@@ -274,12 +274,10 @@ describe("makeTrainRoutes", () => {
             (r) => r.lastStation.stop_id === "warsaw",
         );
         expect(warsawRoute).toBeDefined();
-        expect(warsawRoute?.lastStation.stop_id).toBe("warsaw");
         
         const parisRoute = result.find(
             (r) => r.lastStation.stop_id === "paris",
         );
         expect(parisRoute).toBeDefined();
-        expect(parisRoute?.lastStation.stop_id).toBe("paris");
     });
 });
