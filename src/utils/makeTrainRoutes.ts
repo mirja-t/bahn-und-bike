@@ -51,6 +51,25 @@ export const makeTrainRoutes = (
             })
             .reduce((acc: number, n: number) => acc + n, 0);
     }
+    function createNestedStopsGroups(trainlineStopsObj: {
+        [key: string]: {
+            startStopIdx: number;
+            stops: ResponseStop[];
+        };
+    }) {
+        const groupedDirectStops: ResponseStop[][] = [];
+        for (const trainlineId in trainlineStopsObj) {
+            const { startStopIdx, stops } = trainlineStopsObj[trainlineId];
+            if (startStopIdx === undefined) continue; // Skip if start station is not found
+            if (startStopIdx >= 0) {
+                groupedDirectStops.push(stops.slice(startStopIdx)); // forward direction
+                groupedDirectStops.push(
+                    stops.slice(0, startStopIdx + 1).reverse(),
+                ); // backward direction
+            }
+        }
+        return groupedDirectStops;
+    }
 
     /**
      * Group stops by trainline and determine the index of the start station for each trainline.
@@ -89,17 +108,9 @@ export const makeTrainRoutes = (
     /**
      * [{responseStop, responseStop, ...}, {...}] => [
      */
-    const groupedStops: ResponseStop[][] = [];
-    for (const trainlineId in trainlineStopsObj) {
-        const { startStopIdx, stops } = trainlineStopsObj[trainlineId];
-        if (startStopIdx === undefined) continue; // Skip if start station is not found
-        if (startStopIdx > 0) {
-            groupedStops.push(stops.slice(startStopIdx)); // forward direction
-            groupedStops.push(stops.slice(0, startStopIdx + 1).reverse()); // backward direction
-        }
-    }
+    const groupedDirectStops = createNestedStopsGroups(trainlineStopsObj);
 
-    if (!groupedStops.length) return [];
+    if (!groupedDirectStops.length) return [];
 
     /**
      * Create routes tree
@@ -108,10 +119,10 @@ export const makeTrainRoutes = (
         route: CurrentTrainroute;
         nextRoutes: (typeof routeTree)[];
     } = {
-        route: createNewRoute(groupedStops[0][0]),
+        route: createNewRoute(groupedDirectStops[0][0]),
         nextRoutes: [],
     };
-    for (const group of groupedStops) {
+    for (const group of groupedDirectStops) {
         let currentRoute = routeTree;
         for (const stop of group) {
             // break if duration limit exceeded
