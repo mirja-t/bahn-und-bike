@@ -4,19 +4,19 @@ import type {
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
+type TrainlineStopsObj = {
+    [key: string]: {
+        startStopIdx: number;
+        stops: ResponseStop[];
+    };
+};
+
 export const makeTrainRoutes = (
     stops: ResponseStop[],
     start: string,
     durationLimit: number,
     direct: boolean = true,
 ): CurrentTrainroute[] => {
-    type TrainlineStopsObj = {
-        [key: string]: {
-            startStopIdx: number;
-            stops: ResponseStop[];
-        };
-    };
-    // to do: consider duration order for reverse direction
     function createNewRoute(startDest: ResponseStop) {
         const [x, y] = SvgMapBuilder.getMapPosition(
             parseFloat(startDest.lon),
@@ -64,9 +64,16 @@ export const makeTrainRoutes = (
             if (startStopIdx === undefined) continue; // Skip if start station is not found
             if (startStopIdx >= 0) {
                 groupedDirectStops.push(stops.slice(startStopIdx)); // forward direction
-                groupedDirectStops.push(
-                    stops.slice(0, startStopIdx + 1).reverse(),
-                ); // backward direction
+
+                // backward direction - to do: consider duration order for reverse direction
+                const reversedStops = stops
+                    .slice(0, startStopIdx + 1)
+                    .reverse()
+                    .map((stop, idx, arr) => ({
+                        ...stop,
+                        dur: idx === 0 ? 0 : arr[idx - 1].dur, // take duration from prev stop
+                    }));
+                groupedDirectStops.push(reversedStops); // backward direction
             }
         }
         return groupedDirectStops;
@@ -214,13 +221,6 @@ export const makeTrainRoutes = (
                             connectingRoute.route.points,
                         );
                     }
-                    if (stop.destination_name.includes("Rostock"))
-                        console.log(
-                            "Connecting route:",
-                            connectingRoute,
-                            connectingRoute.route.lastStation.stop_name !==
-                                stop.destination_name,
-                        );
                     if (
                         connectingRoute.route.lastStation.stop_name !==
                         stop.destination_name
