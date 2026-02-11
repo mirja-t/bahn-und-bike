@@ -3,7 +3,6 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
 import { makeTrainConnection } from "../../../utils/makeTrainConnection";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
-import { refactorStopData } from "../../../utils/refactorStopData";
 
 export type ResponseStop = {
     destination_id: string;
@@ -19,6 +18,8 @@ type Trainstop = {
     stop_name: string;
     stop_id: string;
     trainline_id?: string;
+    lat: number;
+    lon: number;
     x: number;
     y: number;
 };
@@ -74,15 +75,6 @@ export const loadTrainroutes = createAsyncThunk<
         }
         return response.json();
     });
-    const trainstopsRefactored = connections.map(refactorStopData);
-    const startStops = trainstopsRefactored.filter(
-        (s: Trainstop) => s.stop_id === start,
-    );
-
-    const trainlineList = direct
-        ? startStops.map((s: Trainstop) => s.trainline_id)
-        : null;
-    thunkAPI.dispatch(setTrainlineList(trainlineList));
 
     const currentTrainroutes = makeTrainRoutes(
         connections,
@@ -90,6 +82,10 @@ export const loadTrainroutes = createAsyncThunk<
         value * 30,
         direct,
     );
+    const trainlineList = direct
+        ? currentTrainroutes.map((route) => route.trainlines).flat()
+        : null;
+    thunkAPI.dispatch(setTrainlineList(trainlineList));
 
     return currentTrainroutes;
 });
@@ -155,7 +151,7 @@ export const trainroutesSlice = createSlice({
         ) => {
             state.currentTrainroutes = action.payload;
         },
-        setTrainlineList: (state, action: { payload: any }) => {
+        setTrainlineList: (state, action: { payload: string[] | null }) => {
             state.trainlineList = action.payload;
         },
         setActiveSpot: (state, action: { payload: Trainstop | null }) => {

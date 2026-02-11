@@ -2,6 +2,7 @@ import type {
     CurrentTrainroute,
     ResponseStop,
 } from "../components/map/trainroutes/TrainroutesSlice";
+import { createNewRoute } from "./createNewRoute";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
 type TrainlineStopsObj = {
@@ -17,33 +18,6 @@ export const makeTrainRoutes = (
     durationLimit: number,
     direct: boolean = true,
 ): CurrentTrainroute[] => {
-    function createNewRoute(startDest: ResponseStop) {
-        const [x, y] = SvgMapBuilder.getMapPosition(
-            parseFloat(startDest.lon),
-            parseFloat(startDest.lat),
-            germanyBounds,
-        );
-        return {
-            connection: null,
-            dur: 0,
-            trainlines: [startDest.trainline_id],
-            firstStation: {
-                stop_name: startDest.destination_name,
-                stop_id: startDest.destination_id,
-                x,
-                y,
-            },
-            lastStation: {
-                stop_name: startDest.destination_name,
-                stop_id: startDest.destination_id,
-                x,
-                y,
-            },
-            stopIds: [startDest.destination_id],
-            points: `${x},${y} `,
-            pathLength: 0,
-        };
-    }
     function getPathLength(path: string) {
         return path
             .split(" ")
@@ -210,6 +184,8 @@ export const makeTrainRoutes = (
                         connectingRoute.route.lastStation = {
                             stop_name: connectingStop.destination_name,
                             stop_id: connectingStop.destination_id,
+                            lat: parseFloat(connectingStop.lat),
+                            lon: parseFloat(connectingStop.lon),
                             x,
                             y,
                         };
@@ -263,6 +239,8 @@ export const makeTrainRoutes = (
                         lastStation: {
                             stop_name: stop.destination_name,
                             stop_id: stop.destination_id,
+                            lat: parseFloat(stop.lat),
+                            lon: parseFloat(stop.lon),
                             x,
                             y,
                         },
