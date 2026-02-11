@@ -48,7 +48,7 @@ export const DestinationDetails = ({
         activeSection.connection &&
         activeSection.connection.initial_trains.map((train, idx) => (
             <span key={idx} className="train">
-                {idx > 0 ? `/${train}` : train}
+                {train}
             </span>
         ));
     const connectingTrain = activeSection && activeSection.connection && (
