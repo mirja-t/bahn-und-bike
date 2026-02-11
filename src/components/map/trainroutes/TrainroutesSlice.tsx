@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
-import { makeTrainConnection } from "../../../utils/makeTrainConnection";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
+import { createNewRoute } from "../../../utils/createNewRoute";
 
 export type ResponseStop = {
     destination_id: string;
@@ -122,8 +122,18 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
 
     const connectionStart = await fetchConnection(startId);
     const connectionEnd = await fetchConnection(endId);
-    connections.push(makeTrainConnection(connectionStart));
-    connections.push(makeTrainConnection(connectionEnd));
+    connections.push(
+        createNewRoute(
+            connectionStart[0],
+            connectionStart[connectionStart.length - 1],
+        ),
+    );
+    connections.push(
+        createNewRoute(
+            connectionEnd[0],
+            connectionEnd[connectionEnd.length - 1],
+        ),
+    );
 
     return connections;
 });
