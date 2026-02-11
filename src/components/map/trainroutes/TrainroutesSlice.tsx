@@ -122,18 +122,8 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
 
     const connectionStart = await fetchConnection(startId);
     const connectionEnd = await fetchConnection(endId);
-    connections.push(
-        createNewRoute(
-            connectionStart[0],
-            connectionStart[connectionStart.length - 1],
-        ),
-    );
-    connections.push(
-        createNewRoute(
-            connectionEnd[0],
-            connectionEnd[connectionEnd.length - 1],
-        ),
-    );
+    connections.push(createNewRoute(connectionStart[0], connectionStart));
+    connections.push(createNewRoute(connectionEnd[0], connectionEnd));
 
     return connections;
 });

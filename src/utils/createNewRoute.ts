@@ -2,6 +2,7 @@ import type {
     CurrentTrainroute,
     ResponseStop,
 } from "../components/map/trainroutes/TrainroutesSlice";
+import { getPathLengthFromPoints } from "./getPathLength";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 import { removeWords } from "./utils";
 
@@ -16,9 +17,21 @@ const wordsToRemove = [
 
 export function createNewRoute(
     startDest: ResponseStop,
-    lastDest?: ResponseStop,
+    route?: ResponseStop[],
 ): CurrentTrainroute {
-    lastDest = lastDest || startDest;
+    const getPoints = (route: ResponseStop[]) =>
+        route
+            .map(({ lat, lon }) =>
+                SvgMapBuilder.getMapPosition(
+                    parseFloat(lon),
+                    parseFloat(lat),
+                    germanyBounds,
+                ),
+            )
+            .map((el) => el.join(","))
+            .join(" ") + " ";
+    const svgPathPoints = getPoints(route || [startDest]);
+    const lastDest = route ? route[route.length - 1] : startDest;
     const getMapPosition = (stop: ResponseStop) =>
         SvgMapBuilder.getMapPosition(
             parseFloat(stop.lon),
@@ -46,7 +59,7 @@ export function createNewRoute(
             y: getMapPosition(lastDest)[1],
         },
         stopIds: [startDest.destination_id],
-        points: `${getMapPosition(startDest)[0]},${getMapPosition(startDest)[1]} `,
-        pathLength: 0,
+        points: svgPathPoints,
+        pathLength: getPathLengthFromPoints(svgPathPoints),
     };
 }

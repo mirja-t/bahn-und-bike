@@ -3,6 +3,7 @@ import type {
     ResponseStop,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { createNewRoute } from "./createNewRoute";
+import { getPathLengthFromPoints } from "./getPathLength";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
 type TrainlineStopsObj = {
@@ -18,19 +19,6 @@ export const makeTrainRoutes = (
     durationLimit: number,
     direct: boolean = true,
 ): CurrentTrainroute[] => {
-    function getPathLength(path: string) {
-        return path
-            .split(" ")
-            .slice(0, -1)
-            .map((point) => point.split(",").map(Number))
-            .map((el, idx, arr) => {
-                const prev = idx > 0 ? arr[idx - 1] : el;
-                const a = Math.abs(prev[0] - el[0]);
-                const b = Math.abs(prev[1] - el[1]);
-                return Math.sqrt(a ** 2 + b ** 2);
-            })
-            .reduce((acc: number, n: number) => acc + n, 0);
-    }
     function createNestedStopsGroups(trainlineStopsObj: TrainlineStopsObj) {
         const groupedDirectStops: ResponseStop[][] = [];
         for (const trainlineId in trainlineStopsObj) {
@@ -193,9 +181,10 @@ export const makeTrainRoutes = (
                             connectingStop.destination_id,
                         );
                         connectingRoute.route.points += `${x},${y} `;
-                        connectingRoute.route.pathLength = getPathLength(
-                            connectingRoute.route.points,
-                        );
+                        connectingRoute.route.pathLength =
+                            getPathLengthFromPoints(
+                                connectingRoute.route.points,
+                            );
                     }
                     if (
                         connectingRoute.route.lastStation.stop_name !==
@@ -249,7 +238,7 @@ export const makeTrainRoutes = (
                             stop.destination_id,
                         ],
                         points,
-                        pathLength: getPathLength(points),
+                        pathLength: getPathLengthFromPoints(points),
                     },
                     nextRoutes: [],
                 });
