@@ -266,7 +266,20 @@ describe("makeTrainRoutes", () => {
             true,
         );
 
-        // Assert
-        expect(result[0].lastStation.stop_id).toBe("warsaw");
+        // Assert - Check that routes contain expected destinations
+        // (order is not guaranteed as it depends on implementation details)
+        expect(result).toHaveLength(2);
+        
+        const warsawRoute = result.find(
+            (r) => r.lastStation.stop_id === "warsaw",
+        );
+        expect(warsawRoute).toBeDefined();
+        expect(warsawRoute?.lastStation.stop_id).toBe("warsaw");
+        
+        const parisRoute = result.find(
+            (r) => r.lastStation.stop_id === "paris",
+        );
+        expect(parisRoute).toBeDefined();
+        expect(parisRoute?.lastStation.stop_id).toBe("paris");
     });
 });
