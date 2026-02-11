@@ -37,8 +37,32 @@ export const makeTrainRoutes = (
             pathLength: 0,
         };
     }
+    function getPathLength(path: string) {
+        return path
+            .split(" ")
+            .slice(0, -1)
+            .map((point) => point.split(",").map(Number))
+            .map((el, idx, arr) => {
+                const prev = idx > 0 ? arr[idx - 1] : el;
+                const a = Math.abs(prev[0] - el[0]);
+                const b = Math.abs(prev[1] - el[1]);
+                return Math.sqrt(a ** 2 + b ** 2);
+            })
+            .reduce((acc: number, n: number) => acc + n, 0);
+    }
 
-    const stopsObj = stops.reduce(
+    /**
+     * Group stops by trainline and determine the index of the start station for each trainline.
+     * This allows us to create routes in both directions (forward and backward) from the start station.
+     *
+     * {
+     *  trainline_id: {
+     *      startStopIdx: number; // index of the start station in the stops array for this trainline
+     *      stops: ResponseStop[]; // all stops for this trainline
+     *  }
+     * }
+     */
+    const trainlineStopsObj = stops.reduce(
         (acc, stop) => {
             if (!acc[stop.trainline_id]) {
                 acc[stop.trainline_id] = {
@@ -60,10 +84,13 @@ export const makeTrainRoutes = (
         },
     );
 
+    // Create routes for each trainline in both directions from the start station
+    /**
+     * [{responseStop, responseStop, ...}, {...}] => [
+     */
     const groupedStops: ResponseStop[][] = [];
-
-    for (const trainlineId in stopsObj) {
-        const { startStopIdx, stops } = stopsObj[trainlineId];
+    for (const trainlineId in trainlineStopsObj) {
+        const { startStopIdx, stops } = trainlineStopsObj[trainlineId];
         if (startStopIdx === undefined) continue; // Skip if start station is not found
         if (startStopIdx > 0) {
             groupedStops.push(stops.slice(startStopIdx)); // forward direction
@@ -73,59 +100,87 @@ export const makeTrainRoutes = (
 
     if (!groupedStops.length) return [];
 
-    const routes: CurrentTrainroute[] = [];
+    /**
+     * Create routes tree
+     */
+    const routeTree: {
+        route: CurrentTrainroute;
+        nextRoutes: (typeof routeTree)[];
+    } = {
+        route: createNewRoute(groupedStops[0][0]),
+        nextRoutes: [],
+    };
     for (const group of groupedStops) {
-        let stopIdx = 0;
+        let currentRoute = routeTree;
         for (const stop of group) {
-            // Add trainline to existing route if stop is already in route
-            const [x, y] = SvgMapBuilder.getMapPosition(
-                parseFloat(stop.lon),
-                parseFloat(stop.lat),
-                germanyBounds,
+            // break if duration limit exceeded
+            if (currentRoute.route.dur + stop.dur > durationLimit) break;
+
+            // find current route
+            const nextRoute = currentRoute.nextRoutes.find(
+                (r) => r.route.lastStation.stop_id === stop.destination_id,
             );
-            if (stopIdx === 1) {
-                // Add new route
-                if (group[0].dur + stop.dur > durationLimit) continue;
-
-                const currentRoute = createNewRoute(group[0]);
-                currentRoute.stopIds.push(stop.destination_id);
-                currentRoute.lastStation = {
-                    stop_name: stop.destination_name,
-                    stop_id: stop.destination_id,
-                    x,
-                    y,
-                };
-                currentRoute.dur += stop.dur;
-                currentRoute.points += `${x},${y} `;
-                routes.push(currentRoute);
-            } else if (stopIdx > 1) {
-                // Add to existing route if within duration limit
-                const currentRoute = routes[routes.length - 1];
-                if (currentRoute.dur + stop.dur > durationLimit) break;
-                currentRoute.stopIds.push(stop.destination_id);
-                currentRoute.lastStation = {
-                    stop_name: stop.destination_name,
-                    stop_id: stop.destination_id,
-                    x,
-                    y,
-                };
-                currentRoute.dur += stop.dur;
-                currentRoute.points += `${x},${y} `;
-                currentRoute.pathLength = currentRoute.points
-                    .split(" ")
-                    .slice(0, -1)
-                    .map((point) => point.split(",").map(Number))
-
-                    .map((el, idx, arr) => {
-                        const prev = idx > 0 ? arr[idx - 1] : el;
-                        const a = Math.abs(prev[0] - el[0]);
-                        const b = Math.abs(prev[1] - el[1]);
-                        return Math.sqrt(a ** 2 + b ** 2);
-                    })
-                    .reduce((acc: number, n: number) => acc + n, 0);
+            if (nextRoute) {
+                currentRoute = nextRoute;
             }
-            stopIdx++;
+            if (
+                stop.destination_id === currentRoute.route.lastStation.stop_id
+            ) {
+                // Add trainline to existing route if stop is already in route
+                if (
+                    !currentRoute.route.trainlines.includes(stop.trainline_id)
+                ) {
+                    currentRoute.route.trainlines.push(stop.trainline_id);
+                }
+            } else {
+                // create new route
+                const [x, y] = SvgMapBuilder.getMapPosition(
+                    parseFloat(stop.lon),
+                    parseFloat(stop.lat),
+                    germanyBounds,
+                );
+                const points = `${currentRoute.route.points}${x},${y} `;
+                currentRoute.nextRoutes.push({
+                    route: {
+                        connection: null,
+                        dur: currentRoute.route.dur + stop.dur,
+                        trainlines: [stop.trainline_id],
+                        firstStation: routeTree.route.firstStation,
+                        lastStation: {
+                            stop_name: stop.destination_name,
+                            stop_id: stop.destination_id,
+                            x,
+                            y,
+                        },
+                        stopIds: [
+                            ...currentRoute.route.stopIds,
+                            stop.destination_id,
+                        ],
+                        points,
+                        pathLength: getPathLength(points),
+                    },
+                    nextRoutes: [],
+                });
+                currentRoute =
+                    currentRoute.nextRoutes[currentRoute.nextRoutes.length - 1]; // Move to the newly created route
+            }
         }
     }
+
+    const routes: CurrentTrainroute[] = [];
+
+    // Breadth traverse route tree to extract routes
+    const queue: (typeof routeTree)[] = [routeTree];
+    while (queue.length) {
+        const current = queue.shift()!;
+        if (current.nextRoutes.length === 0) {
+            routes.push(current.route);
+        } else {
+            for (const nextRoute of current.nextRoutes) {
+                queue.push(nextRoute);
+            }
+        }
+    }
+
     return routes;
 };
