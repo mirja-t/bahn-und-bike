@@ -15,10 +15,6 @@ export type ResponseStop = {
     stop_number: number;
     trainline_id: string;
 };
-type Train = {
-    id: string;
-    name: string;
-};
 type Trainstop = {
     stop_name: string;
     stop_id: string;
@@ -28,8 +24,8 @@ type Trainstop = {
 };
 type Connection = {
     stop_name: string;
-    initial_train: Train[];
-    connecting_train: Train;
+    initial_trains: string[];
+    connecting_train: string;
 };
 export type CurrentTrainroute = {
     dur: number;

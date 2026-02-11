@@ -46,14 +46,14 @@ export const DestinationDetails = ({
     const initialTrains =
         activeSection &&
         activeSection.connection &&
-        activeSection.connection.initial_train.map((train, idx) => (
+        activeSection.connection.initial_trains.map((train, idx) => (
             <span key={idx} className="train">
-                {train.name}
+                {idx > 0 ? `/${train}` : train}
             </span>
         ));
     const connectingTrain = activeSection && activeSection.connection && (
         <span className="train">
-            {activeSection.connection.connecting_train.name}
+            {activeSection.connection.connecting_train}
         </span>
     );
     const train =
