@@ -13,6 +13,11 @@ type TrainlineStopsObj = {
     };
 };
 
+type RouteNode = {
+    route: CurrentTrainroute;
+    nextRoutes: RouteNode[];
+};
+
 export const makeTrainRoutes = (
     stops: ResponseStop[],
     start: string,
@@ -92,10 +97,7 @@ export const makeTrainRoutes = (
     /**
      * Create routes tree
      */
-    const routeTree: {
-        route: CurrentTrainroute;
-        nextRoutes: (typeof routeTree)[];
-    } = {
+    const routeTree: RouteNode = {
         route: createNewRoute(groupedDirectStops[0][0]),
         nextRoutes: [],
     };
@@ -250,7 +252,7 @@ export const makeTrainRoutes = (
     const routes: CurrentTrainroute[] = [];
 
     // Breadth traverse route tree to extract routes
-    const queue: (typeof routeTree)[] = [routeTree];
+    const queue: RouteNode[] = [routeTree];
     while (queue.length) {
         const current = queue.shift()!;
         if (current.nextRoutes.length === 0) {
