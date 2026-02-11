@@ -37,22 +37,23 @@ export const DestinationDetails = ({
         : null;
     const trainList =
         activeSection &&
-        activeSection.line.map((train, idx) => (
+        activeSection.trainlines.map((train, idx) => (
             <span key={idx} className="train">
                 {train}
             </span>
         ));
+
     const initialTrains =
         activeSection &&
         activeSection.connection &&
-        activeSection.connection.initial_train.map((train, idx) => (
+        activeSection.connection.initial_trains.map((train, idx) => (
             <span key={idx} className="train">
-                {train.name}
+                {train}
             </span>
         ));
     const connectingTrain = activeSection && activeSection.connection && (
         <span className="train">
-            {activeSection.connection.connecting_train.name}
+            {activeSection.connection.connecting_train}
         </span>
     );
     const train =

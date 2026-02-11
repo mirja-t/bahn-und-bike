@@ -1,7 +1,7 @@
 import {
     setActiveSection,
     setTrainLinesAlongVeloroute,
-    type TrainrouteSection,
+    type CurrentTrainroute,
 } from "../TrainroutesSlice";
 import {
     setActiveVeloroute,
@@ -12,7 +12,7 @@ import { memo } from "react";
 import { useAppDispatch } from "../../../../AppSlice";
 
 interface TrainrouteProps {
-    item: TrainrouteSection;
+    item: CurrentTrainroute;
     strokeScale: number;
     className: string;
 }
@@ -21,7 +21,7 @@ export const Trainroute = memo(
     function Trainroute({ item, strokeScale, className }: TrainrouteProps) {
         const dispatch = useAppDispatch();
 
-        const setAdditionalTrainlineActive = (line: TrainrouteSection) => {
+        const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
             dispatch(setTrainLinesAlongVeloroute([]));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
@@ -49,7 +49,7 @@ export const Trainroute = memo(
                 />
                 {item && item.lastStation && (
                     <Trainstop
-                        styles={{ scale: 1 }}
+                        styles={{ scale: 1, transformOrigin: "center" }}
                         item={item.lastStation}
                         strokeScale={strokeScale}
                     />

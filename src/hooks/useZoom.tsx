@@ -2,10 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { mapRatio, svgWidth, svgHeight } from "../utils/svgMap";
 import { getLongestDistance } from "../utils/getLongestDistance";
 import { getCenterPosition } from "../utils/getCenterPosition";
-import type { TrainrouteSection } from "../components/map/trainroutes/TrainroutesSlice";
+import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
 
 export const useZoom = (
-    journeys: TrainrouteSection[],
+    journeys: CurrentTrainroute[],
     vrouteposition: number | null,
     value: number,
     mapContainer: HTMLDivElement | null,

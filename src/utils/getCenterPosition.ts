@@ -1,8 +1,8 @@
-import type { TrainrouteSection } from "../components/map/trainroutes/TrainroutesSlice";
+import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
 
 // get the journey center avarage origin on the map
 export const getCenterPosition = (
-    trainroutes: TrainrouteSection[],
+    trainroutes: CurrentTrainroute[],
     coord: "x" | "y",
 ) => {
     const devider = trainroutes.length > 0 ? trainroutes.length : 1;
