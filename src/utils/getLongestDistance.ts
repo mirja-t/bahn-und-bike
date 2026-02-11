@@ -1,9 +1,9 @@
-import type { TrainrouteSection } from "../components/map/trainroutes/TrainroutesSlice";
+import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
 import type { VelorouteStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 // get the farthest distance to the starting point by direction
 export const getLongestDistance = (
-    trainroutes: TrainrouteSection[],
+    trainroutes: CurrentTrainroute[],
     coord: "x" | "y",
     xStart: number,
     veloroute?: {
