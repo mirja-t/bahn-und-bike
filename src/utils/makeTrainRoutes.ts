@@ -149,6 +149,7 @@ export const makeTrainRoutes = (
                         },
                         nextRoutes: [],
                     };
+                    let indexOfConnectingStop = 0;
                     for (const connectingStop of connectingGroup) {
                         if (
                             connectingRoute.route.dur + connectingStop.dur >
@@ -162,7 +163,9 @@ export const makeTrainRoutes = (
                             parseFloat(connectingStop.lat),
                             germanyBounds,
                         );
-                        connectingRoute.route.dur += connectingStop.dur;
+                        if (indexOfConnectingStop > 0)
+                            connectingRoute.route.dur += connectingStop.dur;
+                        indexOfConnectingStop++;
                         connectingRoute.route.trainlines = [
                             ...new Set([
                                 ...connectingRoute.route.trainlines,
