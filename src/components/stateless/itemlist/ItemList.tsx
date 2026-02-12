@@ -1,5 +1,4 @@
-import "./itemlist.scss";
-import { VelorouteIcon } from "../icons/VelorouteIcon";
+import styles from "./itemlist.module.scss";
 import { useSelector } from "react-redux";
 import { type LangCode, selectLang } from "../../../AppSlice";
 import { motion } from "framer-motion";
@@ -12,6 +11,7 @@ type Item<T> = {
 };
 interface ItemListProps<T> {
     items: Item<T>[];
+    icon?: React.ReactNode;
     lang: LangCode;
     activeItem: Item<T> | null;
     fn: (item: Item<T>) => void;
@@ -21,13 +21,16 @@ export const ItemList = <T,>({
     items,
     lang,
     activeItem,
+    icon,
     fn,
 }: ItemListProps<T>) => {
     const labels = useSelector(selectLang);
     return (
-        <ul className="itemlist">
+        <ul className={styles.itemlist}>
             {items.length < 1 && (
-                <li className="route nomatch">{`${labels[lang].nomatch}`}</li>
+                <li
+                    className={`${styles.route} ${styles.nomatch}`}
+                >{`${labels[lang].nomatch}`}</li>
             )}
             {items.map((item, idx) => (
                 <motion.li
@@ -44,11 +47,13 @@ export const ItemList = <T,>({
                     key={item.id}
                     onClick={() => fn(item)}
                     className={
-                        activeItem && item.id === activeItem?.id ? "active" : ""
+                        activeItem && item.id === activeItem?.id
+                            ? styles.active
+                            : ""
                     }
                 >
-                    <VelorouteIcon />
-                    <h4 className="veloroute">{`${item.name}`}</h4>
+                    {icon && icon}
+                    <h4>{`${item.name}`}</h4>
                 </motion.li>
             ))}
         </ul>
