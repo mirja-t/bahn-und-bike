@@ -20,6 +20,8 @@ import { Map } from "../map/Map";
 import { useAppDispatch, type LangCode } from "../../AppSlice";
 import { Panel } from "../stateless/panel/Panel";
 import Tabs from "../stateless/tabs/Tabs";
+import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
+import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 
 interface ContainerProps {
     lang: LangCode;
@@ -27,18 +29,13 @@ interface ContainerProps {
 
 export const Container = ({ lang }: ContainerProps) => {
     const dispatch = useAppDispatch();
-    // const activeSection = useSelector(selectActiveSection);
-    // const activeVeloroute = useSelector(selectActiveVeloroute);
-    // const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    // const activeVelorouteSection =
-    //     activeVelorouteSectionIdx !== null && activeVeloroute !== null
-    //         ? activeVeloroute.route[activeVelorouteSectionIdx]
-    //         : null;
     const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
     const [userScale, setUserScale] = useState(1);
+    const sidebarRef = useRef<HTMLElement>(null);
+    const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
 
     const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
@@ -96,10 +93,13 @@ export const Container = ({ lang }: ContainerProps) => {
                     }}
                 >
                     <Panel>
-                        <aside className="destination-details-container">
-                            <Tabs>
+                        <aside
+                            ref={sidebarRef}
+                            className="destination-details-container"
+                        >
+                            <Tabs height={sidebarHeight.toString() + "px"}>
                                 <Tabs.Tab id="trainlines" name="Bahnlinien">
-                                    Bahnlinien
+                                    <TrainlineDetails lang={lang} />
                                 </Tabs.Tab>
                                 <Tabs.Tab id="destination" name="Radwege">
                                     <DestinationDetails lang={lang} />

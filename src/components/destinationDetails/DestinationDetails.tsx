@@ -16,6 +16,7 @@ import {
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 
 interface DestinationDetailsProps {
     lang: LangCode;
@@ -75,53 +76,52 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
     return (
         <div id="destination-details">
             <div id="destination" className="details">
-                {activeSection && (
-                    <>
-                        <header>
-                            <div className="details-headline">
-                                <PinIcon size="large">
-                                    <TrainIcon />
-                                </PinIcon>
-                                <h2>
-                                    {`${headline}  `}
-                                    {train}
-                                </h2>
-                            </div>
-                        </header>
+                <>
+                    <header>
+                        <div className="details-headline">
+                            <PinIcon size="large">
+                                <TrainIcon />
+                            </PinIcon>
+                            <h2>
+                                {`${headline}  `}
+                                {train}
+                            </h2>
+                        </div>
+                    </header>
 
+                    <section className="section">
+                        <div>
+                            <h5>{labels[lang].traveltime}</h5>
+                            {activeSection && (
+                                <p>{getTime(activeSection.dur, lang)}</p>
+                            )}
+                        </div>
+                    </section>
+
+                    {activeSection && activeSection.connection && (
                         <section className="section">
                             <div>
-                                <h5>{labels[lang].traveltime}</h5>
+                                <h5>{labels[lang].trainconnection}</h5>
                                 {activeSection && (
-                                    <p>{getTime(activeSection.dur, lang)}</p>
+                                    <p>{activeSection.connection.stop_name}</p>
                                 )}
                             </div>
                         </section>
+                    )}
 
-                        {activeSection && activeSection.connection && (
-                            <section className="section">
-                                <div>
-                                    <h5>{labels[lang].trainconnection}</h5>
-                                    {activeSection && (
-                                        <p>
-                                            {activeSection.connection.stop_name}
-                                        </p>
-                                    )}
-                                </div>
-                            </section>
+                    <section className="section">
+                        <h5>{labels[lang].veloroutes}</h5>
+                        {veloroutes.length < 1 && (
+                            <li>{`${labels[lang].nomatch}`}</li>
                         )}
-
-                        <section className="section">
-                            <h5>{labels[lang].veloroutes}</h5>
-                            <ItemList
-                                items={veloroutes}
-                                lang={lang}
-                                activeItem={activeVeloroute}
-                                fn={setVelorouteActive}
-                            />
-                        </section>
-                    </>
-                )}
+                        <ItemList
+                            items={veloroutes}
+                            activeItem={activeVeloroute}
+                            fn={setVelorouteActive}
+                            icon={<VelorouteIcon />}
+                        />
+                    </section>
+                </>
             </div>
         </div>
     );
