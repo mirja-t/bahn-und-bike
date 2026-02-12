@@ -2,6 +2,7 @@ import React, { type ReactNode, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../button/Button";
 import "./tabs.scss";
+import ScrollContainer from "../scrollcontainer/ScrollContainer";
 
 type TabProps = {
     id: string;
@@ -11,8 +12,7 @@ type TabProps = {
 };
 type TabsProps = {
     children: ReactNode | ReactNode[];
-    additionalNavItems?: ReactNode;
-    renderAdditionalNavItems?: (_id: string) => ReactNode;
+    height?: string;
 };
 
 const Tab = ({ children, id }: TabProps) => {
@@ -27,7 +27,7 @@ const TabHeader = ({ children }: TabHeaderProps) => {
     return <div className="tabheader">{children}</div>;
 };
 
-const Tabs = ({ children, renderAdditionalNavItems }: TabsProps) => {
+const Tabs = ({ children, height }: TabsProps) => {
     const tabs = React.Children.toArray(children).filter(
         (child) => React.isValidElement(child) && child.type === Tab,
     ) as React.ReactElement<TabProps>[];
@@ -39,37 +39,35 @@ const Tabs = ({ children, renderAdditionalNavItems }: TabsProps) => {
             : (tabs[0] && tabs[0].props.id) || "";
     });
     return (
-        <div className="tabs">
-            <nav
-                aria-label="Tabs"
-                data-testid="tabs"
-                className="flex -mb-5 justify-between"
-            >
-                <ul className="flex space-x-1">
-                    {tabs.map((tab) => (
-                        <li
-                            key={tab.props.id}
-                            className={
-                                tab.props.id === activeId ? "active" : ""
-                            }
-                        >
-                            <Button
+        <ScrollContainer className="tabs" height={height}>
+            <ScrollContainer.FitContent className="tabs-fit-content">
+                <nav
+                    aria-label="Tabs"
+                    data-testid="tabs"
+                    className="flex -mb-5 justify-between"
+                >
+                    <ul className="flex space-x-1">
+                        {tabs.map((tab) => (
+                            <li
                                 key={tab.props.id}
-                                onClick={() => {
-                                    setActiveId(tab.props.id);
-                                }}
-                                label={tab.props.name}
-                            />
-                        </li>
-                    ))}
-                </ul>
-                {renderAdditionalNavItems && (
-                    <div className="mb-2">
-                        {renderAdditionalNavItems(activeId)}
-                    </div>
-                )}
-            </nav>
-            <div className="">
+                                className={
+                                    tab.props.id === activeId ? "active" : ""
+                                }
+                            >
+                                <Button
+                                    key={tab.props.id}
+                                    onClick={() => {
+                                        setActiveId(tab.props.id);
+                                    }}
+                                    label={tab.props.name}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </ScrollContainer.FitContent>
+
+            <ScrollContainer.ScrollContent className="tabs-scroll-content">
                 <div className="">
                     <div className="">
                         <AnimatePresence mode="popLayout">
@@ -112,8 +110,8 @@ const Tabs = ({ children, renderAdditionalNavItems }: TabsProps) => {
                 </div>
                 {/* overlay for round borders beneath scrollbar */}
                 <div className=""></div>
-            </div>
-        </div>
+            </ScrollContainer.ScrollContent>
+        </ScrollContainer>
     );
 };
 
