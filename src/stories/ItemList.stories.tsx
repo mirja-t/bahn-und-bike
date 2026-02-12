@@ -5,7 +5,6 @@ import { ItemList } from "../components/stateless/itemlist/ItemList";
 import { Provider } from "react-redux";
 import { mockStore } from "./MockSlice";
 import { VelorouteIcon } from "../components/stateless/icons/VelorouteIcon";
-import { LangCode } from "../AppSlice";
 import { TrainIcon } from "../components/stateless/icons/TrainIcon";
 
 // Mock items data
@@ -31,7 +30,6 @@ const meta = {
     // More on argTypes: https://storybook.js.org/docs/api/argtypes
     argTypes: {
         items: { control: "object" },
-        lang: { control: "select", options: ["en", "de"] },
         activeItem: { control: "object" },
         fn: { action: "clicked" },
         icon: { control: "text" },
@@ -39,7 +37,6 @@ const meta = {
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         items: mockItems,
-        lang: LangCode.EN,
         activeItem: null,
         fn: fn(),
         icon: <VelorouteIcon />,
@@ -53,7 +50,6 @@ type Story = StoryObj<typeof meta>;
 export const Veloroute: Story = {
     args: {
         items: mockItems,
-        lang: LangCode.EN,
         activeItem: null,
         icon: <VelorouteIcon />,
     },
@@ -61,7 +57,6 @@ export const Veloroute: Story = {
 export const Train: Story = {
     args: {
         items: mockItems,
-        lang: LangCode.EN,
         activeItem: null,
         icon: <TrainIcon />,
     },
@@ -70,7 +65,6 @@ export const Train: Story = {
 export const WithActiveItem: Story = {
     args: {
         items: mockItems,
-        lang: LangCode.EN,
         activeItem: mockItems[0],
         icon: <VelorouteIcon />,
     },
