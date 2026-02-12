@@ -39,6 +39,8 @@ export function createNewRoute(
             germanyBounds,
         );
     return {
+        id: startDest.destination_id,
+        name: [startDest.destination_id, lastDest.destination_id].join("-"),
         connection: null,
         dur: 0,
         trainlines: [startDest.trainline_id],

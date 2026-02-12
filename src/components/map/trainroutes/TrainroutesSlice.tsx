@@ -29,6 +29,8 @@ type Connection = {
     connecting_train: string;
 };
 export type CurrentTrainroute = {
+    id: string;
+    name: string;
     dur: number;
     trainlines: string[];
     pathLength: number;
