@@ -1,4 +1,4 @@
-import React, { type ReactNode, useState } from "react";
+import React, { type ReactNode, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../button/Button";
 import "./tabs.scss";
@@ -13,6 +13,8 @@ type TabProps = {
 type TabsProps = {
     children: ReactNode | ReactNode[];
     height?: string;
+    activeTabId?: string;
+    setActiveTabId?: (id: string) => void;
 };
 
 const Tab = ({ children, id }: TabProps) => {
@@ -27,7 +29,7 @@ const TabHeader = ({ children }: TabHeaderProps) => {
     return <div className="tabheader">{children}</div>;
 };
 
-const Tabs = ({ children, height }: TabsProps) => {
+const Tabs = ({ children, height, activeTabId, setActiveTabId }: TabsProps) => {
     const tabs = React.Children.toArray(children).filter(
         (child) => React.isValidElement(child) && child.type === Tab,
     ) as React.ReactElement<TabProps>[];
@@ -38,6 +40,12 @@ const Tabs = ({ children, height }: TabsProps) => {
             ? activeTab.props.id
             : (tabs[0] && tabs[0].props.id) || "";
     });
+    useEffect(() => {
+        if (activeTabId) {
+            setActiveId(activeTabId);
+        }
+    }, [activeTabId]);
+
     return (
         <ScrollContainer className="tabs" height={height}>
             <ScrollContainer.FitContent className="tabs-fit-content">
@@ -58,6 +66,8 @@ const Tabs = ({ children, height }: TabsProps) => {
                                     key={tab.props.id}
                                     onClick={() => {
                                         setActiveId(tab.props.id);
+                                        setActiveTabId &&
+                                            setActiveTabId(tab.props.id);
                                     }}
                                     label={tab.props.name}
                                 />

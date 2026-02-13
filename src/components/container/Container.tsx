@@ -36,6 +36,7 @@ export const Container = ({ lang }: ContainerProps) => {
     const [userScale, setUserScale] = useState(1);
     const sidebarRef = useRef<HTMLElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
+    const [activeTabId, setActiveTabId] = useState<string | undefined>();
 
     const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
@@ -97,14 +98,24 @@ export const Container = ({ lang }: ContainerProps) => {
                             ref={sidebarRef}
                             className="destination-details-container"
                         >
-                            <Tabs height={sidebarHeight.toString() + "px"}>
+                            <Tabs
+                                height={sidebarHeight.toString() + "px"}
+                                activeTabId={activeTabId}
+                                setActiveTabId={setActiveTabId}
+                            >
                                 <Tabs.Tab id="trainlines" name="Bahnlinien">
-                                    <TrainlineDetails lang={lang} />
+                                    <TrainlineDetails
+                                        lang={lang}
+                                        setActiveTabId={setActiveTabId}
+                                    />
                                 </Tabs.Tab>
-                                <Tabs.Tab id="destination" name="Radwege">
-                                    <DestinationDetails lang={lang} />
+                                <Tabs.Tab id="veloroutes" name="Radwege">
+                                    <DestinationDetails
+                                        lang={lang}
+                                        setActiveTabId={setActiveTabId}
+                                    />
                                 </Tabs.Tab>
-                                <Tabs.Tab id="veloroute" name="Abschnitte">
+                                <Tabs.Tab id="leg" name="Abschnitte">
                                     <VelorouteDetails lang={lang} />
                                     <CombinedVelorouteDetails lang={lang} />
                                 </Tabs.Tab>
