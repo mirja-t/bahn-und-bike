@@ -13,12 +13,16 @@ const meta = {
         label: { control: "text" },
         type: { control: "select", options: ["button", "submit", "reset"] },
         variant: { control: "select", options: ["primary", "secondary"] },
+        onClick: { action: "clicked" },
+        disabled: { control: "boolean" },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         label: "Button",
         type: "button",
         variant: "primary",
+        onClick: () => console.log("Button clicked!"),
+        disabled: false,
     },
 } satisfies Meta<typeof Button>;
 
@@ -31,5 +35,35 @@ export const Primary: Story = {
         label: "Button",
         type: "button",
         variant: "primary",
+        onClick: () => console.log("Primary button clicked!"),
+        disabled: false,
+    },
+};
+
+export const Secondary: Story = {
+    args: {
+        label: "Button",
+        type: "button",
+        variant: "secondary",
+        onClick: () => console.log("Secondary button clicked!"),
+        disabled: false,
+    },
+};
+export const PrimaryDisabled: Story = {
+    args: {
+        label: "Button",
+        type: "button",
+        variant: "primary",
+        onClick: () => console.log("Primary button clicked!"),
+        disabled: true,
+    },
+};
+export const SecondaryDisabled: Story = {
+    args: {
+        label: "Button",
+        type: "button",
+        variant: "secondary",
+        onClick: () => console.log("Secondary button clicked!"),
+        disabled: true,
     },
 };

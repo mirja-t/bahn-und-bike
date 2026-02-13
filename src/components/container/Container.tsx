@@ -115,10 +115,18 @@ export const Container = ({ lang }: ContainerProps) => {
                                 <Tabs.Tab id="trainlines" name="Bahnlinien">
                                     <TrainlineDetails lang={lang} />
                                 </Tabs.Tab>
-                                <Tabs.Tab id="veloroutes" name="Radwege">
+                                <Tabs.Tab
+                                    id="veloroutes"
+                                    name="Radwege"
+                                    disabled={!activeSection}
+                                >
                                     <DestinationDetails lang={lang} />
                                 </Tabs.Tab>
-                                <Tabs.Tab id="leg" name="Abschnitte">
+                                <Tabs.Tab
+                                    id="leg"
+                                    name="Abschnitte"
+                                    disabled={!activeVeloroute}
+                                >
                                     <VelorouteDetails lang={lang} />
                                     <CombinedVelorouteDetails lang={lang} />
                                 </Tabs.Tab>

@@ -9,6 +9,7 @@ type TabProps = {
     name: string;
     children: ReactNode | ReactNode[];
     active?: boolean;
+    disabled?: boolean;
 };
 type TabsProps = {
     children: ReactNode | ReactNode[];
@@ -17,7 +18,7 @@ type TabsProps = {
     setActiveTabId?: (id: string) => void;
 };
 
-const Tab = ({ children, id }: TabProps) => {
+const Tab = ({ children, id, disabled }: TabProps) => {
     return (
         <div data-testid={`tab-${id}`} className="tab">
             {children}
@@ -69,6 +70,7 @@ const Tabs = ({ children, height, activeTabId, setActiveTabId }: TabsProps) => {
                                         setActiveTabId &&
                                             setActiveTabId(tab.props.id);
                                     }}
+                                    disabled={tab.props.disabled}
                                     label={tab.props.name}
                                 />
                             </li>
