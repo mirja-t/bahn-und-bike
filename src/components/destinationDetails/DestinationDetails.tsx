@@ -22,13 +22,9 @@ import { Fragment } from "react";
 
 interface DestinationDetailsProps {
     lang: LangCode;
-    setActiveTabId?: (id: string) => void;
 }
 
-export const DestinationDetails = ({
-    lang,
-    setActiveTabId,
-}: DestinationDetailsProps) => {
+export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
@@ -80,7 +76,6 @@ export const DestinationDetails = ({
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
             dispatch(loadVeloroute(vroute as Veloroute));
-            setActiveTabId && setActiveTabId("leg");
         }
     };
     const trainSections = activeSection

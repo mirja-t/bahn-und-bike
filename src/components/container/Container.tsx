@@ -9,8 +9,10 @@ import {
     setTrainroutesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
+    selectActiveSection,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
+    selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
 } from "../map/veloroutes/VeloroutesSlice";
@@ -30,6 +32,8 @@ interface ContainerProps {
 export const Container = ({ lang }: ContainerProps) => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
+    const activeSection = useSelector(selectActiveSection);
+    const activeVeloroute = useSelector(selectActiveVeloroute);
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
@@ -82,6 +86,11 @@ export const Container = ({ lang }: ContainerProps) => {
         };
     }, [wrapper]);
 
+    useEffect(() => {
+        activeSection && setActiveTabId("veloroutes");
+        activeVeloroute && setActiveTabId("leg");
+    }, [activeSection, activeVeloroute]);
+
     return (
         <>
             <div id="container" ref={container}>
@@ -104,16 +113,10 @@ export const Container = ({ lang }: ContainerProps) => {
                                 setActiveTabId={setActiveTabId}
                             >
                                 <Tabs.Tab id="trainlines" name="Bahnlinien">
-                                    <TrainlineDetails
-                                        lang={lang}
-                                        setActiveTabId={setActiveTabId}
-                                    />
+                                    <TrainlineDetails lang={lang} />
                                 </Tabs.Tab>
                                 <Tabs.Tab id="veloroutes" name="Radwege">
-                                    <DestinationDetails
-                                        lang={lang}
-                                        setActiveTabId={setActiveTabId}
-                                    />
+                                    <DestinationDetails lang={lang} />
                                 </Tabs.Tab>
                                 <Tabs.Tab id="leg" name="Abschnitte">
                                     <VelorouteDetails lang={lang} />

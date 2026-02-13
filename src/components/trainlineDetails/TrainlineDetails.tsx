@@ -19,13 +19,9 @@ import { loadDestinations } from "../destinationDetails/destinationDetailsSlice"
 
 interface DestinationDetailsProps {
     lang: LangCode;
-    setActiveTabId: (id: string) => void;
 }
 
-export const TrainlineDetails = ({
-    lang,
-    setActiveTabId,
-}: DestinationDetailsProps) => {
+export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
     const labels = useSelector(selectLang);
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
@@ -39,7 +35,6 @@ export const TrainlineDetails = ({
         dispatch(setActiveSection(line));
         dispatch(loadDestinations({ ids: line.stopIds }));
         dispatch(loadVeloroutes(line.stopIds));
-        setActiveTabId("veloroutes");
     };
 
     return (
