@@ -4,16 +4,18 @@ import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
 import {
     setActiveVelorouteSection,
     setActiveVeloroute,
+    loadVeloroutes,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
     selectCurrentTrainroutes,
     setActiveSection,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { loadDestinations } from "../destinationDetails/destinationDetailsSlice";
 
 interface DestinationDetailsProps {
     lang: LangCode;
@@ -27,10 +29,12 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
     const dispatch = useAppDispatch();
 
     const setTrainlineActive = (line: CurrentTrainroute) => {
-        dispatch(setTrainLinesAlongVeloroute([]));
+        dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
+        dispatch(loadDestinations({ ids: line.stopIds }));
+        dispatch(loadVeloroutes(line.stopIds));
     };
 
     return (
@@ -42,7 +46,10 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
                     )}
                     {/* <h5>{labels[lang].trains}</h5> */}
                     <ItemList
-                        items={trainRoutes}
+                        items={trainRoutes.map((route) => ({
+                            ...route,
+                            name: `${route.trainlines.map((line) => line).join(", ")}: ${route.lastStation.stop_name}`,
+                        }))}
                         activeItem={activeSection}
                         fn={setTrainlineActive}
                         icon={<TrainIcon />}

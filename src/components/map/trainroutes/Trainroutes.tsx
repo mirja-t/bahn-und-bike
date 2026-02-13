@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import {
     selectCurrentTrainroutes,
     selectActiveSection,
-    selectTrainlinesAlongVeloroute,
+    selectTrainroutesAlongVeloroute,
     selectActiveSpot,
 } from "./TrainroutesSlice";
 import {
@@ -40,7 +40,7 @@ export const Trainroutes = memo(function Trainroutes({
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const trainlinesAlongVeloroute = useSelector(
-        selectTrainlinesAlongVeloroute,
+        selectTrainroutesAlongVeloroute,
     );
     const strokeScale = containerHeight / 1080 / 2;
 
@@ -49,7 +49,7 @@ export const Trainroutes = memo(function Trainroutes({
         dispatch(loadVeloroutes(activeSection?.stopIds));
     }, [dispatch, activeSection]);
 
-    const getClassName = (item) => {
+    const getClassName = (item: typeof activeSection) => {
         if (!activeSection && !trainlinesAlongVeloroute.length) {
             return "init";
         } else if (activeSection === item) {

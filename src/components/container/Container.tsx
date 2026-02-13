@@ -6,7 +6,7 @@ import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
 import {
     setActiveSection,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
 } from "../map/trainroutes/TrainroutesSlice";
@@ -59,7 +59,7 @@ export const Container = ({ lang }: ContainerProps) => {
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
-        dispatch(setTrainLinesAlongVeloroute([]));
+        dispatch(setTrainroutesAlongVeloroute([]));
         setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);

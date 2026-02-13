@@ -45,14 +45,13 @@ export type CurrentTrainroutes = CurrentTrainroute[];
 export interface TrainroutesState {
     startPos: string;
     travelInterval: number;
-    trainrouteTree: Record<string, any>;
     trainlineList: Record<string, any> | string[] | null;
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
     activeSpot: Trainstop | null;
     activeSection: CurrentTrainroute | null;
-    trainlinesAlongVeloroute: CurrentTrainroute[];
+    trainroutesAlongVeloroute: CurrentTrainroute[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
     trainlineNames?: string[];
@@ -122,9 +121,9 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         return connection;
     };
 
-    const connectionStart = await fetchConnection(startId);
-    const connectionEnd = await fetchConnection(endId);
-    connections.push(createNewRoute(connectionStart[0], connectionStart));
+    const connectionStart: ResponseStop[] = await fetchConnection(startId);
+    const connectionEnd: ResponseStop[] = await fetchConnection(endId);
+    connections.push(createNewRoute(connectionStart[0], connectionStart)); // duration is not correct, but we need the trainlines and stopIds for the veloroute section
     connections.push(createNewRoute(connectionEnd[0], connectionEnd));
 
     return connections;
@@ -135,14 +134,13 @@ export const trainroutesSlice = createSlice({
     initialState: {
         startPos: "8011160",
         travelInterval: 30,
-        trainrouteTree: {},
         trainlineList: {},
         currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
         activeSpot: null,
         activeSection: null,
-        trainlinesAlongVeloroute: [],
+        trainroutesAlongVeloroute: [],
         trainroutesAlongVelorouteLoading: false,
         trainroutesAlongVelorouteError: false,
     } as TrainroutesState,
@@ -165,11 +163,11 @@ export const trainroutesSlice = createSlice({
         ) => {
             state.activeSection = action.payload;
         },
-        setTrainLinesAlongVeloroute: (
+        setTrainroutesAlongVeloroute: (
             state,
             action: { payload: CurrentTrainroute[] },
         ) => {
-            state.trainlinesAlongVeloroute = action.payload;
+            state.trainroutesAlongVeloroute = action.payload;
         },
         setTrainlinesNames: (state, action: { payload: any }) => {
             state.trainlineNames = action.payload;
@@ -200,7 +198,7 @@ export const trainroutesSlice = createSlice({
             .addCase(
                 loadTrainroutesAlongVeloroute.fulfilled,
                 (state, action) => {
-                    state.trainlinesAlongVeloroute = action.payload;
+                    state.trainroutesAlongVeloroute = action.payload;
                     state.trainroutesAlongVelorouteLoading = false;
                     state.trainroutesAlongVelorouteError = false;
                 },
@@ -212,18 +210,16 @@ export const trainroutesSlice = createSlice({
     },
 });
 
-export const selectTrainrouteList = (state: RootState) =>
-    state.trainroutes.trainrouteTree;
 export const selectActiveSpot = (state: RootState) =>
     state.trainroutes.activeSpot;
 export const selectActiveSection = (state: RootState) =>
     state.trainroutes.activeSection;
-export const selectTrainlinesAlongVeloroute = (state: RootState) =>
-    state.trainroutes.trainlinesAlongVeloroute;
+export const selectTrainroutesAlongVeloroute = (state: RootState) =>
+    state.trainroutes.trainroutesAlongVeloroute;
 export const selectTrainrouteListLoading = (state: RootState) =>
     state.trainroutes.trainroutesLoading;
-export const selectTrainlinesAlongVelorouteLoading = (state: RootState) =>
-    state.trainroutes.trainlinesAlongVelorouteLoading;
+export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
+    state.trainroutes.trainroutesAlongVelorouteLoading;
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state: RootState) =>
     state.trainroutes.currentTrainroutes;
@@ -233,7 +229,7 @@ export const selectTrainlineList = (state: RootState) =>
 export const {
     setActiveSpot,
     setActiveSection,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
     setStartPos,
     setCurrentTrainroutes,
     setTrainlineList,

@@ -18,7 +18,7 @@ import { Logo } from "./components/stateless/header/logo/Logo";
 import {
     setActiveSection,
     setCurrentTrainroutes,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
 } from "./components/map/trainroutes/TrainroutesSlice";
 import {
     setActiveVeloroute,
@@ -67,7 +67,7 @@ export function App() {
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
-        dispatch(setTrainLinesAlongVeloroute([]));
+        dispatch(setTrainroutesAlongVeloroute([]));
     };
 
     if (languagesLoading) return <div className="App">Loading...</div>;

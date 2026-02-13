@@ -1,6 +1,6 @@
 import {
     setActiveSection,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
 } from "../TrainroutesSlice";
 import {
@@ -22,7 +22,7 @@ export const Trainroute = memo(
         const dispatch = useAppDispatch();
 
         const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
-            dispatch(setTrainLinesAlongVeloroute([]));
+            dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
