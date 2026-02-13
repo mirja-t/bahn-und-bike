@@ -30,6 +30,11 @@ export function createNewRoute(
             )
             .map((el) => el.join(","))
             .join(" ") + " ";
+    const getDuration = (route: ResponseStop[] | undefined) => {
+        if (!route || route.length === 0) return 0;
+        const dur = route.reduce((acc, stop) => acc + stop.dur, 0);
+        return dur;
+    };
     const svgPathPoints = getPoints(route || [startDest]);
     const lastDest = route ? route[route.length - 1] : startDest;
     const getMapPosition = (stop: ResponseStop) =>
@@ -42,7 +47,7 @@ export function createNewRoute(
         id: startDest.destination_id,
         name: [startDest.destination_id, lastDest.destination_id].join("-"),
         connection: null,
-        dur: 0,
+        dur: getDuration(route),
         trainlines: [startDest.trainline_id],
         firstStation: {
             stop_name: removeWords(startDest.destination_name, wordsToRemove),
