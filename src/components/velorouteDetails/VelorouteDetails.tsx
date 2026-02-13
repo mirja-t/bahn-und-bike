@@ -85,7 +85,14 @@ export const VelorouteDetails = ({ lang }: VelorouteDetailsProps) => {
                                                     hoverVelorouteSection(e)
                                                 }
                                             >
-                                                <div>{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}</div>
+                                                <span
+                                                    className={
+                                                        activeVelorouteSectionIdx ===
+                                                        idx
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                >{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}</span>
                                             </li>
                                         ),
                                     )}
