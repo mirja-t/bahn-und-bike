@@ -5,7 +5,7 @@ type Item<T> = {
     id: string;
     name: string;
 } & {
-    [K in keyof T]: T[K];
+    [K in keyof T]?: T[K];
 };
 interface ItemListProps<T> {
     items: Item<T>[];
