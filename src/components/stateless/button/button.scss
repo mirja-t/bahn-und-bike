@@ -1,5 +1,8 @@
+@use "sass:math";
 @use "../../../scss/variables/spacing.scss" as spacing;
 @use "../../../scss/variables/fonts.scss" as fonts;
+
+$buttonsize: 0.85;
 
 button,
 input[type="submit"],
@@ -15,7 +18,7 @@ input[type="submit"],
         text-transform: uppercase;
         color: var(--secondary);
         font-weight: 700;
-        font-size: 0.8rem;
+        font-size: ($buttonsize + $buttonsize * 0.5) * 0.75em;
         line-height: 1.5;
         transition: all 0.35s ease;
         display: inline-block;
@@ -50,18 +53,17 @@ input[type="submit"],
 }
 
 .button-primary {
-    padding: 0.65em 1.25em;
     align-self: center;
     display: inline-block;
     position: relative;
-    padding: 0.65em 0.75em;
+    padding: $buttonsize * 0.65em $buttonsize * 0.75em;
     background-color: transparent;
     border-radius: var(--border-radius-xl);
     transition: all 0.3s ease;
-
     span {
         background: var(--button-bg);
-        padding: spacing.$mainpadding spacing.$padding-xl;
+        padding: calc((0.5vw * $buttonsize) + (0.5em * $buttonsize))
+            calc((0.5vw * $buttonsize) + (1.25em * $buttonsize));
         border-radius: var(--border-radius-xl);
     }
     &:hover:not(:disabled) {
@@ -96,10 +98,10 @@ input[type="submit"],
             text-decoration: none;
             color: var(--primary-hover);
             position: absolute;
-            left: 0.5em;
-            top: 0.5em;
-            width: calc(100% - 1.15em);
-            height: calc(100% - 1em);
+            left: $buttonsize * 0.5em;
+            top: $buttonsize * 0.5em;
+            width: calc(100% - #{$buttonsize * 1.15em});
+            height: calc(100% - #{$buttonsize * 1em});
             border-radius: var(--border-radius-xl);
         }
 
