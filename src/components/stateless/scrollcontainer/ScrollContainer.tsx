@@ -1,4 +1,4 @@
-import styles from "./ScrollContainer.module.scss";
+import styles from "./scrollContainer.module.scss";
 import { forwardRef, useRef } from "react";
 
 interface ChildProps {
