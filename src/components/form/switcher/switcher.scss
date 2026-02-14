@@ -3,8 +3,8 @@
 @use "../../../scss/variables/borders.scss" as borders;
 @use "../checkBox/checkbox.scss" as checkbox;
 
-$radiobtn-height: 2.2em;
-$radiobtn-width: 2.2em;
+$radiobtn-height: 2em;
+$radiobtn-width: $radiobtn-height;
 $radioTransitionSpeed: 0.35s;
 $langSwitcherPadding: 0.4em;
 $langSwitcherBorderRadius: 2em;
@@ -32,31 +32,10 @@ form.switcher fieldset {
     &:before {
         z-index: 2;
     }
-    // &.val-1 {
-    //     .inputRadiowrapper:first-child{
-    //         label{
-    //             color: var(--primary);
-    //             fill: var(--primary);
-    //             * {
-    //                 fill: var(--primary);
-    //             }
-    //         }
-    //     }
-    // }
-    // &.val-2 {
-    //     .inputRadiowrapper:nth-child(2){
-    //         label{
-    //             color: var(--primary);
-    //             fill: var(--primary);
-    //             * {
-    //                 fill: var(--primary);
-    //             }
-    //         }
-    //     }
-    // }
     .inputRadiowrapper {
         label {
             transition: all 0.5s ease;
+            display: flex;
         }
     }
     .inputRadiowrapper {
@@ -203,9 +182,8 @@ form.switcher fieldset {
         fieldset {
             .inputRadiowrapper {
                 label {
-                    transform: translateY(-50%);
-                    left: 0;
-                    width: 100%;
+                    transform: translate(-50%, -50%);
+                    left: 50%;
                 }
             }
         }
