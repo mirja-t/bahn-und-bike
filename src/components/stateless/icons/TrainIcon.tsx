@@ -1,9 +1,10 @@
 import "./pins.scss";
+import iconstyles from "./icons.module.scss";
 import styles from "./trainIcon.module.scss";
 
 export const TrainIcon = () => {
     return (
-        <div className={styles.trainIcon}>
+        <div className={`${styles.trainIcon} ${iconstyles.icon}`}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
