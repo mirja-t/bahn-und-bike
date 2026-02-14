@@ -193,6 +193,8 @@ export const makeTrainRoutes = (
                                 connectingRoute.route.points,
                             );
                         connectingRoute.route.name = `${currentRoute.route.firstStation.stop_name} + ${connectingRoute.route.lastStation.stop_name}`;
+                        connectingRoute.route.id =
+                            connectingRoute.route.stopIds.join("-");
                     }
                     if (
                         connectingRoute.route.lastStation.stop_name !==
