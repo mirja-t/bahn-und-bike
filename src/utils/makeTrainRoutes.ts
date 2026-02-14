@@ -131,6 +131,8 @@ export const makeTrainRoutes = (
                 for (const connectingGroup of connectingTrainlineRoutesGroups) {
                     const connectingRoute = {
                         route: {
+                            id: currentRoute.route.stopIds.join("-"),
+                            name: `${currentRoute.route.firstStation.stop_name} + ${currentRoute.route.lastStation.stop_name}`,
                             connection: {
                                 stop_name: stop.destination_name,
                                 initial_trains: currentRoute.route.trainlines,
@@ -190,6 +192,9 @@ export const makeTrainRoutes = (
                             getPathLengthFromPoints(
                                 connectingRoute.route.points,
                             );
+                        connectingRoute.route.name = `${currentRoute.route.firstStation.stop_name} + ${connectingRoute.route.lastStation.stop_name}`;
+                        connectingRoute.route.id =
+                            connectingRoute.route.stopIds.join("-");
                     }
                     if (
                         connectingRoute.route.lastStation.stop_name !==
@@ -224,8 +229,14 @@ export const makeTrainRoutes = (
                     germanyBounds,
                 );
                 const points = `${currentRoute.route.points}${x},${y} `;
+                const stopIds = [
+                    ...currentRoute.route.stopIds,
+                    stop.destination_id,
+                ];
                 currentRoute.nextRoutes.push({
                     route: {
+                        id: stopIds.join("-"),
+                        name: `${routeTree.route.firstStation.stop_name} - ${stop.destination_name}`,
                         connection: null,
                         dur: currentRoute.route.dur + stop.dur,
                         trainlines: [stop.trainline_id],
@@ -238,10 +249,7 @@ export const makeTrainRoutes = (
                             x,
                             y,
                         },
-                        stopIds: [
-                            ...currentRoute.route.stopIds,
-                            stop.destination_id,
-                        ],
+                        stopIds,
                         points,
                         pathLength: getPathLengthFromPoints(points),
                     },

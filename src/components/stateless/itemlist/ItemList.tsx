@@ -1,50 +1,49 @@
-import "./itemlist.scss";
-import { VelorouteIcon } from "../icons/VelorouteIcon";
-import { useSelector } from "react-redux";
-import { selectLang } from "../../../AppSlice";
+import styles from "./itemlist.module.scss";
 import { motion } from "framer-motion";
 
-type Item = {
+type Item<T> = {
     id: string;
     name: string;
 } & {
-    [K in string]?: unknown;
+    [K in keyof T]: T[K];
 };
-interface ItemListProps {
-    items: Item[];
-    lang: string;
-    activeItem: Item | null;
-    fn: (item: Item) => void;
+interface ItemListProps<T> {
+    items: Item<T>[];
+    icon?: React.ReactNode;
+    activeItem: Item<T> | null;
+    fn: (item: Item<T>) => void;
 }
 
-export const ItemList = ({ items, lang, activeItem, fn }: ItemListProps) => {
-    const labels = useSelector(selectLang);
+export const ItemList = <T,>({
+    items,
+    activeItem,
+    icon,
+    fn,
+}: ItemListProps<T>) => {
     return (
-        <ul className="destinationslist">
-            {items.length < 1 && (
-                <li className="route nomatch">{`${labels[lang].nomatch}`}</li>
-            )}
+        <ul className={styles.itemlist}>
             {items.map((item, idx) => (
                 <motion.li
                     initial={{
-                        x: 500,
                         opacity: 0,
                     }}
                     animate={{
-                        x: 0,
                         opacity: 1,
                     }}
                     transition={{
-                        delay: 0.25 * idx,
+                        delay: 0.1 * idx,
+                        duration: 1,
                     }}
                     key={item.id}
                     onClick={() => fn(item)}
                     className={
-                        activeItem && item.id === activeItem?.id ? "active" : ""
+                        activeItem && item.id === activeItem?.id
+                            ? styles.active
+                            : ""
                     }
                 >
-                    <VelorouteIcon />
-                    <h4 className="veloroute">{`${item.name}`}</h4>
+                    {icon && icon}
+                    <h4>{`${item.name}`}</h4>
                 </motion.li>
             ))}
         </ul>

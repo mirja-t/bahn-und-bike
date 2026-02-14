@@ -24,11 +24,6 @@
     }
 }
 .details {
-    width: 25vw;
-    @media (min-width: breakpoints.$breakpoint-l) {
-        width: 20vw;
-    }
-    pointer-events: all;
     .details-headline {
         display: flex;
         gap: 0.15em;
@@ -37,7 +32,6 @@
         margin-top: -0.5em;
     }
     position: relative;
-    padding: 0 spacing.$padding-l;
     .devider {
         margin-left: 2px;
         color: #999;

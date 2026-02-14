@@ -6,9 +6,12 @@ import veloroutesReducer, {
 import trainroutesReducer, {
     type TrainroutesState,
 } from "./components/map/trainroutes/TrainroutesSlice.tsx";
-
+import destinationsReducer, {
+    type DestinationsState,
+} from "./components/destinationDetails/DestinationDetailsSlice.tsx";
 export interface RootState {
     app: AppState;
+    destinations: DestinationsState;
     trainroutes: TrainroutesState;
     veloroutes: VeloroutesState;
 }
@@ -16,6 +19,7 @@ export interface RootState {
 const store = configureStore({
     reducer: {
         app: appReducer,
+        destinations: destinationsReducer,
         trainroutes: trainroutesReducer,
         veloroutes: veloroutesReducer,
     },

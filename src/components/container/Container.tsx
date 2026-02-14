@@ -5,43 +5,42 @@ import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
 import {
-    selectActiveSection,
     setActiveSection,
-    setTrainLinesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
+    selectActiveSection,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
-    selectActiveVelorouteSection,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
 import { Map } from "../map/Map";
-import { useAppDispatch } from "../../AppSlice";
+import { useAppDispatch, type LangCode } from "../../AppSlice";
+import { Panel } from "../stateless/panel/Panel";
+import Tabs from "../stateless/tabs/Tabs";
+import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
+import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 
 interface ContainerProps {
-    lang: string;
+    lang: LangCode;
 }
 
 export const Container = ({ lang }: ContainerProps) => {
     const dispatch = useAppDispatch();
+    const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute !== null
-            ? activeVeloroute.route[activeVelorouteSectionIdx]
-            : null;
-    const start = useSelector(selectStartPos);
     const [submitVal, setSubmitVal] = useState(0);
-    const [mapSize, setMapSize] = useState([0, 0]);
-    const [containerHeight, setContainerHeight] = useState(0);
+    const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
-    const [containerClass, setContainerClass] = useState("width-3");
     const [userScale, setUserScale] = useState(1);
+    const sidebarRef = useRef<HTMLElement>(null);
+    const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
+    const [activeTabId, setActiveTabId] = useState<string | undefined>();
 
     const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
@@ -65,25 +64,11 @@ export const Container = ({ lang }: ContainerProps) => {
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
-        dispatch(setTrainLinesAlongVeloroute([]));
+        dispatch(setTrainroutesAlongVeloroute([]));
         setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);
     };
-
-    useEffect(() => {
-        if (activeVeloroute) {
-            setContainerClass("width-1");
-        } else if (activeSection) {
-            setContainerClass("width-2");
-        } else {
-            setContainerClass("width-3");
-        }
-
-        if (activeVelorouteSection !== null && !activeSection) {
-            setContainerClass((prev) => `${prev} shift`);
-        }
-    }, [activeVeloroute, activeSection, activeVelorouteSection]);
 
     useEffect(() => {
         if (!wrapper) return;
@@ -102,39 +87,53 @@ export const Container = ({ lang }: ContainerProps) => {
     }, [wrapper]);
 
     useEffect(() => {
-        if (!container) return;
-
-        const setHeight = () => {
-            if (!container.current) return;
-            const h = container.current.getBoundingClientRect().height;
-            setContainerHeight(h);
-        };
-        setHeight();
-        window.addEventListener("resize", setHeight);
-        return () => {
-            window.removeEventListener("resize", setHeight);
-        };
-    }, []);
+        activeSection && setActiveTabId("veloroutes");
+        activeVeloroute && setActiveTabId("leg");
+    }, [activeSection, activeVeloroute]);
 
     return (
         <>
-            <div
-                id="container"
-                ref={container}
-                style={{ height: containerHeight }}
-                className={containerClass}
-            >
-                <aside className="destination-details-container">
-                    <DestinationDetails
-                        parent={container.current}
-                        lang={lang}
-                    />
-                    <VelorouteDetails parent={container.current} lang={lang} />
-                    <CombinedVelorouteDetails
-                        parent={container.current}
-                        lang={lang}
-                    />
-                </aside>
+            <div id="container" ref={container}>
+                <div
+                    className="box"
+                    style={{
+                        position: "relative",
+                        zIndex: 2,
+                        height: "100%",
+                    }}
+                >
+                    <Panel>
+                        <aside
+                            ref={sidebarRef}
+                            className="destination-details-container"
+                        >
+                            <Tabs
+                                height={sidebarHeight.toString() + "px"}
+                                activeTabId={activeTabId}
+                                setActiveTabId={setActiveTabId}
+                            >
+                                <Tabs.Tab id="trainlines" name="Bahnlinien">
+                                    <TrainlineDetails lang={lang} />
+                                </Tabs.Tab>
+                                <Tabs.Tab
+                                    id="veloroutes"
+                                    name="Radwege"
+                                    disabled={!activeSection}
+                                >
+                                    <DestinationDetails lang={lang} />
+                                </Tabs.Tab>
+                                <Tabs.Tab
+                                    id="leg"
+                                    name="Abschnitte"
+                                    disabled={!activeVeloroute}
+                                >
+                                    <VelorouteDetails lang={lang} />
+                                    <CombinedVelorouteDetails lang={lang} />
+                                </Tabs.Tab>
+                            </Tabs>
+                        </aside>
+                    </Panel>
+                </div>
                 <main>
                     <div id="map-wrapper" ref={setWrapper}>
                         <Map
@@ -148,11 +147,11 @@ export const Container = ({ lang }: ContainerProps) => {
                     </div>
                 </main>
             </div>
-            <TravelDuration
-                handleSubmit={handleSubmit}
-                lang={lang}
-                start={start}
-            />
+            <div className="box">
+                <Panel>
+                    <TravelDuration handleSubmit={handleSubmit} lang={lang} />
+                </Panel>
+            </div>
         </>
     );
 };

@@ -1,0 +1,47 @@
+.scrollContainer {
+    display: flex;
+    flex-direction: column;
+}
+.scrollContent {
+    --scrollbar-size: 10px;
+    --scrollbar-border-radius: 4px;
+    --scrollbar-color: var(--bg);
+    --thumb-color: var(--primary);
+    --thumb-hover-color: var(--primary);
+
+    @-moz-document url-prefix() {
+        scrollbar-color: var(--thumb-color) var(--scrollbar-color);
+        scrollbar-width: thin;
+    }
+
+    &::-webkit-scrollbar {
+        width: var(--scrollbar-size);
+        height: var(--scrollbar-size);
+        background: var(--scrollbar-color);
+    }
+    &::-webkit-scrollbar-color,
+    &::-webkit-scrollbar-track {
+        background: var(--scrollbar-color);
+        border: var(--scrollbar-border-radius) solid var(--scrollbar-color);
+    }
+
+    &::-webkit-scrollbar-corner {
+        background: var(--scrollbar-color);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: var(--thumb-color);
+        border-radius: calc(var(--scrollbar-border-radius) * 2);
+        border: var(--scrollbar-border-radius) solid var(--scrollbar-color);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: var(--thumb-hover-color);
+        border: var(--scrollbar-border-radius) solid var(--thumb-hover-color);
+    }
+
+    position: relative;
+    overflow: auto;
+    min-width: 100%;
+    flex-grow: 1;
+}

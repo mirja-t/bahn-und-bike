@@ -1,8 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import type { Trainstop } from "../TrainroutesSlice";
 
 interface ActiveDestinationProps {
-    activeDestination: Trainstop["stop_id"] | null;
+    activeDestination: string | null;
     item: {
         stop_id: string;
         x: number;

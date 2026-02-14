@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { selectLang } from "../../AppSlice";
+import { type LangCode, selectLang } from "../../AppSlice";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
@@ -10,12 +9,10 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 
 interface CombinedVelorouteDetailsProps {
-    parent: HTMLElement | null;
-    lang: string;
+    lang: LangCode;
 }
 
 export const CombinedVelorouteDetails = ({
-    parent,
     lang,
 }: CombinedVelorouteDetailsProps) => {
     const dispatch = useDispatch();
@@ -56,11 +53,7 @@ export const CombinedVelorouteDetails = ({
         </h3>
     );
     return (
-        <ScrollContent
-            parentEl={parent}
-            transitionComplete={true}
-            id="veloroute-details"
-        >
+        <div id="veloroute-details">
             <div id="veloroute" className="details">
                 {activeVelorouteSection !== null && (
                     <section className="veloroute-details veloroute-section-details">
@@ -115,6 +108,6 @@ export const CombinedVelorouteDetails = ({
                     </section>
                 )}
             </div>
-        </ScrollContent>
+        </div>
     );
 };

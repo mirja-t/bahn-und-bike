@@ -1,8 +1,7 @@
 import "./velorouteDetails.scss";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
-import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { selectLang, useAppDispatch } from "../../AppSlice";
+import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
@@ -14,11 +13,10 @@ import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 
 interface VelorouteDetailsProps {
-    parent: HTMLElement | null;
-    lang: string;
+    lang: LangCode;
 }
 
-export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
+export const VelorouteDetails = ({ lang }: VelorouteDetailsProps) => {
     const dispatch = useAppDispatch();
 
     const labels = useSelector(selectLang);
@@ -44,11 +42,7 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
     };
 
     return (
-        <ScrollContent
-            parentEl={parent}
-            transitionComplete={true}
-            id="veloroute-details"
-        >
+        <div id="veloroute-details">
             <div id="veloroute" className="details">
                 {activeVeloroute && (
                     <div>
@@ -91,7 +85,14 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
                                                     hoverVelorouteSection(e)
                                                 }
                                             >
-                                                <div>{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}</div>
+                                                <span
+                                                    className={
+                                                        activeVelorouteSectionIdx ===
+                                                        idx
+                                                            ? "active"
+                                                            : ""
+                                                    }
+                                                >{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}</span>
                                             </li>
                                         ),
                                     )}
@@ -102,6 +103,6 @@ export const VelorouteDetails = ({ parent, lang }: VelorouteDetailsProps) => {
                     </div>
                 )}
             </div>
-        </ScrollContent>
+        </div>
     );
 };

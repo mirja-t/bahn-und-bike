@@ -1,8 +1,7 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { ScrollContent } from "../stateless/scrollcontent/ScrollContent";
-import { selectLang, useAppDispatch } from "../../AppSlice";
+import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
 import {
     selectVelorouteList,
     selectActiveVeloroute,
@@ -12,29 +11,32 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    setTrainLinesAlongVeloroute,
+    selectTrainroutesAlongVeloroute,
+    setTrainroutesAlongVeloroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
+import { Fragment } from "react";
 
 interface DestinationDetailsProps {
-    parent: HTMLElement | null;
-    lang: string;
+    lang: LangCode;
 }
 
-export const DestinationDetails = ({
-    parent,
-    lang,
-}: DestinationDetailsProps) => {
+export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
     const labels = useSelector(selectLang);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
+    const trainLinesAlongVeloroute = useSelector(
+        selectTrainroutesAlongVeloroute,
+    );
 
-    const headline = activeSection
-        ? `${labels[lang].from} ${activeSection?.firstStation.stop_name} ${labels[lang].to} ${activeSection?.lastStation.stop_name}`
-        : null;
+    const getHeadline = (section: typeof activeSection) =>
+        section
+            ? `${section?.trainlines.join(", ")}: ${labels[lang].to} ${section?.lastStation.stop_name}`
+            : null;
     const trainList =
         activeSection &&
         activeSection.trainlines.map((train, idx) => (
@@ -70,66 +72,68 @@ export const DestinationDetails = ({
     const dispatch = useAppDispatch();
 
     const setVelorouteActive = (vroute: Veloroute) => {
-        dispatch(setTrainLinesAlongVeloroute([]));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(loadVeloroute(vroute));
+        if (vroute.len !== undefined) {
+            dispatch(setTrainroutesAlongVeloroute([]));
+            dispatch(setActiveVelorouteSection(null));
+            dispatch(loadVeloroute(vroute as Veloroute));
+        }
     };
+    const trainSections = activeSection
+        ? [activeSection]
+        : [...trainLinesAlongVeloroute];
 
     return (
-        <ScrollContent
-            parentEl={parent}
-            transitionComplete={true}
-            id="destination-details"
-        >
+        <div id="destination-details">
             <div id="destination" className="details">
-                {activeSection && (
-                    <>
-                        <header>
-                            <div className="details-headline">
-                                <PinIcon size="large">
-                                    <TrainIcon />
-                                </PinIcon>
-                                <h2>
-                                    {`${headline}  `}
-                                    {train}
-                                </h2>
-                            </div>
-                        </header>
+                <>
+                    {trainSections.map((section, idx) => (
+                        <Fragment key={idx}>
+                            <header>
+                                <div className="details-headline">
+                                    <PinIcon size="large">
+                                        <TrainIcon />
+                                    </PinIcon>
+                                    <h2>
+                                        {`${getHeadline(section)}  `}
+                                        {train}
+                                    </h2>
+                                </div>
+                            </header>
 
+                            <section className="section">
+                                <div>
+                                    <h5>{labels[lang].traveltime}</h5>
+                                    <p>{getTime(section.dur, lang)}</p>
+                                </div>
+                            </section>
+                        </Fragment>
+                    ))}
+
+                    {activeSection && activeSection.connection && (
                         <section className="section">
                             <div>
-                                <h5>{labels[lang].traveltime}</h5>
+                                <h5>{labels[lang].trainconnection}</h5>
                                 {activeSection && (
-                                    <p>{getTime(activeSection.dur, lang)}</p>
+                                    <p>{activeSection.connection.stop_name}</p>
                                 )}
                             </div>
                         </section>
+                    )}
 
-                        {activeSection && activeSection.connection && (
-                            <section className="section">
-                                <div>
-                                    <h5>{labels[lang].trainconnection}</h5>
-                                    {activeSection && (
-                                        <p>
-                                            {activeSection.connection.stop_name}
-                                        </p>
-                                    )}
-                                </div>
-                            </section>
+                    <section className="section">
+                        <h5>{labels[lang].veloroutes}</h5>
+                        {veloroutes.length < 1 && (
+                            <p>{`${labels[lang].nomatch}`}</p>
                         )}
-
-                        <section className="section">
-                            <h5>{labels[lang].veloroutes}</h5>
-                            <ItemList
-                                items={veloroutes}
-                                lang={lang}
-                                activeItem={activeVeloroute}
-                                fn={setVelorouteActive}
-                            />
-                        </section>
-                    </>
-                )}
+                        <ItemList
+                            items={veloroutes}
+                            activeItem={activeVeloroute}
+                            fn={setVelorouteActive}
+                            icon={<VelorouteIcon />}
+                        />
+                    </section>
+                </>
             </div>
-        </ScrollContent>
+        </div>
     );
 };

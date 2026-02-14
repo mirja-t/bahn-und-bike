@@ -3,10 +3,11 @@ import { mapRatio, svgWidth, svgHeight } from "../utils/svgMap";
 import { getLongestDistance } from "../utils/getLongestDistance";
 import { getCenterPosition } from "../utils/getCenterPosition";
 import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
+import type { Veloroute } from "../components/map/veloroutes/VeloroutesSlice";
 
 export const useZoom = (
     journeys: CurrentTrainroute[],
-    vrouteposition: number | null,
+    vrouteposition: Pick<Veloroute, "route"> | null,
     value: number,
     mapContainer: HTMLDivElement | null,
     mapSize: [number, number],
@@ -51,13 +52,13 @@ export const useZoom = (
                 journeys,
                 "x",
                 xStart,
-                vrouteposition || null,
+                vrouteposition || undefined,
             );
             const distY: number = getLongestDistance(
                 journeys,
                 "y",
                 yStart,
-                vrouteposition || null,
+                vrouteposition || undefined,
             );
 
             // get viewport ratio
