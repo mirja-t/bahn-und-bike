@@ -30,6 +30,7 @@ import { Error } from "./components/stateless/error/Error";
 import { Privacy } from "./components/privacy/Privacy";
 import { Imprint } from "./components/imprint/Imprint";
 import { Container } from "./components/container/Container";
+import { Panel } from "./components/stateless/panel/Panel";
 export function App() {
     const theme = useSelector(selectTheme);
     const [classes, setClasses] = useState("");
@@ -88,7 +89,7 @@ export function App() {
                     >
                         <Logo />
                     </Link>
-                    <div style={{ display: "flex", gap: "0.5em" }}>
+                    <Panel>
                         <Switcher
                             setValue={setLanguage}
                             values={[
@@ -149,7 +150,7 @@ export function App() {
                                 },
                             ]}
                         />
-                    </div>
+                    </Panel>
                 </Header>
                 <Routes>
                     <Route path="/" element={<Home lang={lang} />} />

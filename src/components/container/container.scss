@@ -1,5 +1,6 @@
 @use "../../scss/variables/breakpoints.scss" as breakpoints;
 @use "../../scss/mixins/caret.scss" as caret;
+@use "../../scss/variables/spacing.scss" as spacing;
 
 $sidebarwidth: 15em;
 $transition: width 0.5s ease;
@@ -11,6 +12,8 @@ $transition: width 0.5s ease;
     position: relative;
     height: 100%;
     overflow: hidden;
+    gap: spacing.$padding-s;
+    padding: spacing.$padding-s;
 }
 #container {
     position: relative;

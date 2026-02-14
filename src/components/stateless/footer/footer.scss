@@ -1,7 +1,6 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 
 #footer {
-    padding: spacing.$padding-xs spacing.$padding-l;
     z-index: 3;
     a {
         font-size: 85%;
