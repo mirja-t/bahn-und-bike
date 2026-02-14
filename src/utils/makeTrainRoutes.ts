@@ -132,7 +132,7 @@ export const makeTrainRoutes = (
                     const connectingRoute = {
                         route: {
                             id: currentRoute.route.stopIds.join("-"),
-                            name: `${currentRoute.route.firstStation} + ${currentRoute.route.lastStation}`,
+                            name: `${currentRoute.route.firstStation.stop_name} + ${currentRoute.route.lastStation.stop_name}`,
                             connection: {
                                 stop_name: stop.destination_name,
                                 initial_trains: currentRoute.route.trainlines,
