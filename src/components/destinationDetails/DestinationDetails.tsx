@@ -123,7 +123,7 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
                     <section className="section">
                         <h5>{labels[lang].veloroutes}</h5>
                         {veloroutes.length < 1 && (
-                            <li>{`${labels[lang].nomatch}`}</li>
+                            <p>{`${labels[lang].nomatch}`}</p>
                         )}
                         <ItemList
                             items={veloroutes}

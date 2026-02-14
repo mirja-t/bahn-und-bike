@@ -42,7 +42,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
             <div id="trainline" className="details">
                 <section className="section">
                     {trainRoutes.length < 1 && (
-                        <li>{`${labels[lang].nomatch}`}</li>
+                        <p>{`${labels[lang].nomatch}`}</p>
                     )}
                     {/* <h5>{labels[lang].trains}</h5> */}
                     <ItemList
