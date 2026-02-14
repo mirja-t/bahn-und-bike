@@ -7,6 +7,13 @@ export const useResponsiveSize = (element: HTMLElement | null) => {
     });
     useEffect(() => {
         if (!element) return;
+        
+        // Set initial size before observing
+        setSize({
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+        });
+        
         const resizeObserver = new ResizeObserver(() => {
             setSize({
                 width: element.offsetWidth,
@@ -17,7 +24,7 @@ export const useResponsiveSize = (element: HTMLElement | null) => {
         resizeObserver.observe(element);
 
         return () => {
-            resizeObserver.unobserve(element);
+            resizeObserver.disconnect();
         };
     }, [element]);
     return size;
