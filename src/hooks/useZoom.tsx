@@ -7,7 +7,7 @@ import type { Veloroute } from "../components/map/veloroutes/VeloroutesSlice";
 
 export const useZoom = (
     journeys: CurrentTrainroute[],
-    vrouteposition: Veloroute | null | undefined,
+    vrouteposition: Pick<Veloroute, "route"> | null | undefined,
     value: number,
     mapContainer: HTMLDivElement | null,
     mapSize: [number, number],
