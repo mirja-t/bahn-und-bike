@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 export const useResponsiveSize = (element: HTMLElement | null) => {
     const [size, setSize] = useState({
         width: 0,
         height: 0,
     });
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!element) return;
         
         // Set initial size before observing
