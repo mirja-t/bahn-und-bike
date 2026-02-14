@@ -15,7 +15,7 @@ import {
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { loadDestinations } from "../destinationDetails/destinationDetailsSlice";
+import { loadDestinations } from "../destinationDetails/DestinationDetailsSlice";
 
 interface DestinationDetailsProps {
     lang: LangCode;

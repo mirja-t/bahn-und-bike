@@ -8,8 +8,7 @@ import trainroutesReducer, {
 } from "./components/map/trainroutes/TrainroutesSlice.tsx";
 import destinationsReducer, {
     type DestinationsState,
-} from "./components/destinationDetails/destinationDetailsSlice.tsx";
-
+} from "./components/destinationDetails/DestinationDetailsSlice.tsx";
 export interface RootState {
     app: AppState;
     destinations: DestinationsState;

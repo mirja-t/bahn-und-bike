@@ -35,7 +35,7 @@ export const loadDestinations = createAsyncThunk<
     return destination;
 });
 
-export const destinationsSlice = createSlice({
+export const destinationDetailsSlice = createSlice({
     name: "destinations",
     initialState: {
         activeDestinations: null,
@@ -64,4 +64,4 @@ export const destinationsSlice = createSlice({
 export const selectActiveDestinations = (state: RootState) =>
     state.destinations.activeDestinations;
 
-export default destinationsSlice.reducer;
+export default destinationDetailsSlice.reducer;
