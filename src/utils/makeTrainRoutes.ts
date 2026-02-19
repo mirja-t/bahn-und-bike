@@ -203,7 +203,7 @@ export const makeTrainRoutes = (
         const queue: RouteNode[] = [routeTree];
         while (queue.length) {
             const current = queue.shift()!;
-            const connectedTrainlines = [];
+            const connectedTrainlines: Trainline[] = [];
             let idx = 0;
             for (const trainline of trainlinesWithoutStartDest) {
                 const isConnected = trainline.stops.some(
