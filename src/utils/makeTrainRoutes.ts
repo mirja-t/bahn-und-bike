@@ -221,7 +221,6 @@ export const makeTrainRoutes = (
                     initial_trains: current.route.trainlines,
                     stop_name: current.route.lastStation.stop_name,
                 };
-                console.log("Found connection at", connection.stop_name);
                 buildTree(connectedTrips, current, connection);
             }
             if (current.nextRoutes.length > 0) {
