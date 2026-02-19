@@ -2,8 +2,8 @@
 @use "../../../scss/variables/borders.scss" as borders;
 .panel-wrapper {
     display: flex;
-    gap: spacing.$padding-xl;
-    padding: spacing.$padding-s spacing.$padding-l;
+    gap: spacing.$padding-s;
+    padding: spacing.$padding-s spacing.$padding-m;
     position: relative;
     height: 100%;
     overflow: hidden;

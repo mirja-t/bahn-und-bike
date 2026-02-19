@@ -1,9 +1,10 @@
 import "./pins.scss";
 import styles from "./velorouteIcon.module.scss";
+import iconstyles from "./icons.module.scss";
 
 export const VelorouteIcon = () => {
     return (
-        <div className={styles.velorouteIcon}>
+        <div className={`${styles.velorouteIcon} ${iconstyles.icon}`}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"

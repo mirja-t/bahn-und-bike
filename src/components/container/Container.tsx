@@ -95,7 +95,6 @@ export const Container = ({ lang }: ContainerProps) => {
         <>
             <div id="container" ref={container}>
                 <div
-                    className="box"
                     style={{
                         position: "relative",
                         zIndex: 2,
@@ -118,7 +117,9 @@ export const Container = ({ lang }: ContainerProps) => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name="Radwege"
-                                    disabled={!activeSection}
+                                    disabled={
+                                        !activeSection && !activeVeloroute
+                                    }
                                 >
                                     <DestinationDetails lang={lang} />
                                 </Tabs.Tab>
@@ -147,7 +148,7 @@ export const Container = ({ lang }: ContainerProps) => {
                     </div>
                 </main>
             </div>
-            <div className="box">
+            <div>
                 <Panel>
                     <TravelDuration handleSubmit={handleSubmit} lang={lang} />
                 </Panel>

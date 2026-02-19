@@ -33,42 +33,6 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
         selectTrainroutesAlongVeloroute,
     );
 
-    const getHeadline = (section: typeof activeSection) =>
-        section
-            ? `${section?.trainlines.join(", ")}: ${labels[lang].to} ${section?.lastStation.stop_name}`
-            : null;
-    const trainList =
-        activeSection &&
-        activeSection.trainlines.map((train, idx) => (
-            <span key={idx} className="train">
-                {train}
-            </span>
-        ));
-
-    const initialTrains =
-        activeSection &&
-        activeSection.connection &&
-        activeSection.connection.initial_trains.map((train, idx) => (
-            <span key={idx} className="train">
-                {train}
-            </span>
-        ));
-    const connectingTrain = activeSection && activeSection.connection && (
-        <span className="train">
-            {activeSection.connection.connecting_train}
-        </span>
-    );
-    const train =
-        activeSection && activeSection.connection ? (
-            <>
-                {initialTrains}
-                <span className="train connection"> + </span>
-                {connectingTrain}
-            </>
-        ) : (
-            trainList
-        );
-
     const dispatch = useAppDispatch();
 
     const setVelorouteActive = (vroute: Veloroute) => {
@@ -93,10 +57,7 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
                                     <PinIcon size="large">
                                         <TrainIcon />
                                     </PinIcon>
-                                    <h2>
-                                        {`${getHeadline(section)}  `}
-                                        {train}
-                                    </h2>
+                                    <h2>{section.name}</h2>
                                 </div>
                             </header>
 

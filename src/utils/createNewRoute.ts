@@ -43,9 +43,10 @@ export function createNewRoute(
             parseFloat(stop.lat),
             germanyBounds,
         );
+    const name = `${startDest.trainline_id}: ${startDest.destination_name}`;
     return {
         id: startDest.destination_id,
-        name: [startDest.destination_id, lastDest.destination_id].join("-"),
+        name,
         connection: null,
         dur: getDuration(route),
         trainlines: [startDest.trainline_id],
