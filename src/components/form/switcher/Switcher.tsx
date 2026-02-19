@@ -6,14 +6,17 @@ interface SwitcherProps<T> {
     values: { label: string | React.ReactNode; value: T }[];
 }
 
-export const Switcher = <T,>({ setValue, values }: SwitcherProps<T>) => {
+export const Switcher = <T extends string>({
+    setValue,
+    values,
+}: SwitcherProps<T>) => {
     const [checkedRadioBtn, setCheckedRadioBtn] = useState(values[0].value);
 
     const handleRadioChange = ({
         target,
     }: React.ChangeEvent<HTMLInputElement>) => {
-        setCheckedRadioBtn(target.value);
-        setValue(target.value);
+        setCheckedRadioBtn(target.value as T);
+        setValue(target.value as T);
     };
 
     return (
