@@ -1,21 +1,17 @@
-import {
-    createSlice,
-    createAsyncThunk,
-    type ActionCreatorWithPayload,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
 import {
     setActiveSection,
     loadTrainroutesAlongVeloroute,
 } from "../trainroutes/TrainroutesSlice";
 import { getRoutePath } from "../../../utils/getRoutePath";
-import { addXYValues } from "../../../utils/addXYValues";
 import {
     groupVeloroute,
     makeVeloRoute,
     makeTrainlinesArray,
 } from "../../../utils/makeVeloRoute";
 import type { RootState } from "../../../store";
+import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
 
 export type VelorouteStop = {
     stop_id: string;
@@ -80,6 +76,17 @@ export const loadVeloroutes = createAsyncThunk<
     return veloroutes;
 });
 
+type ResponseStop = {
+    id: string;
+    dest_name: string;
+    dist: number;
+    lat: string;
+    lon: string;
+    stop_number: number;
+    trainlines: string[];
+    trainstop?: string;
+    veloroute_id: string;
+};
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
     Veloroute,
@@ -87,13 +94,27 @@ export const loadVeloroute = createAsyncThunk<
 >("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
     const { id, name, len } = vroute;
     const velorouteQuery = "veloroute/" + id;
-    const veloroute = await fetch(`${VITE_API_URL}${velorouteQuery}`, {
-        headers: headers,
-    }).then((response) => response.json());
+    const responseStops: ResponseStop[] = await fetch(
+        `${VITE_API_URL}${velorouteQuery}`,
+        {
+            headers: headers,
+        },
+    ).then((response) => response.json());
 
     const trainlines = thunkAPI.getState().trainroutes.trainlineList;
-    let velorouteStops = addXYValues(veloroute);
-    velorouteStops = makeTrainlinesArray(velorouteStops);
+    const addXY = (stop: ResponseStop) => {
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            parseFloat(stop.lon),
+            parseFloat(stop.lat),
+            germanyBounds,
+        );
+        return {
+            ...stop,
+            x,
+            y,
+        };
+    };
+    const velorouteStops = makeTrainlinesArray(responseStops.map(addXY));
     const velorouteStopsGrouped = groupVeloroute(velorouteStops, trainlines);
     const path = getRoutePath(velorouteStopsGrouped);
     const route = makeVeloRoute(velorouteStopsGrouped);
@@ -108,7 +129,7 @@ export const loadVeloroute = createAsyncThunk<
 });
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
-    return (dispatch: ActionCreatorWithPayload<unknown, string>) => {
+    return (dispatch) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));
