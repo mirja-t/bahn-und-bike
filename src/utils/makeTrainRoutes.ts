@@ -47,8 +47,20 @@ export const makeTrainRoutes = (
                     stop.destination_id ===
                     currentRoute.route.lastStation.stop_id
                 ) {
-                    // Add trainline to existing route
+                    // Add trainline to connecting route
                     if (
+                        connection &&
+                        !currentRoute.route.connection?.connecting_trains.includes(
+                            stop.trainline_id,
+                        )
+                    ) {
+                        currentRoute.route.connection?.connecting_trains.push(
+                            stop.trainline_id,
+                        );
+                        currentRoute.route.name = `${currentRoute.route.trainlines.join(", ")} + ${connection.connecting_trains.join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
+                    }
+                    // Add trainline to existing route
+                    else if (
                         !currentRoute.route.trainlines.includes(
                             stop.trainline_id,
                         )
@@ -68,11 +80,15 @@ export const makeTrainRoutes = (
                         ...currentRoute.route.stopIds,
                         stop.destination_id,
                     ];
+                    let name = `${stop.trainline_id}: ${stop.destination_name}`;
+                    if (connection) {
+                        name = `${stop.trainline_id} + ${connection.connecting_trains.join(", ")}: ${stop.destination_name}`;
+                    }
                     currentRoute.nextRoutes.push({
                         route: {
                             connection,
                             id: stopIds.join("-"),
-                            name: `${stop.trainline_id}: ${stop.destination_name}`,
+                            name,
                             dur: currentRoute.route.dur + stop.dur,
                             trainlines: [stop.trainline_id],
                             firstStation: routeTree.route.firstStation,
