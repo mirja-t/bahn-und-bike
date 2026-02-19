@@ -4,16 +4,6 @@ import type {
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { getPathLengthFromPoints } from "./getPathLength";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
-import { removeWords } from "./utils";
-
-const wordsToRemove = [
-    "Bahnhof",
-    "Hbf",
-    "Hauptbahnhof",
-    "Bhf",
-    "S-Bahn",
-    "Busbahnhof",
-];
 
 export function createNewRoute(
     startDest: ResponseStop,
@@ -50,7 +40,7 @@ export function createNewRoute(
         dur: getDuration(route),
         trainlines: [startDest.trainline_id],
         firstStation: {
-            stop_name: removeWords(startDest.destination_name, wordsToRemove),
+            stop_name: startDest.destination_name,
             stop_id: startDest.destination_id,
             lat: parseFloat(startDest.lat),
             lon: parseFloat(startDest.lon),
@@ -58,7 +48,7 @@ export function createNewRoute(
             y: getMapPosition(startDest)[1],
         },
         lastStation: {
-            stop_name: removeWords(lastDest.destination_name, wordsToRemove),
+            stop_name: lastDest.destination_name,
             stop_id: lastDest.destination_id,
             lat: parseFloat(lastDest.lat),
             lon: parseFloat(lastDest.lon),
