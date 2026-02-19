@@ -3,14 +3,18 @@ import { headers, VITE_API_URL } from "./config/config.tsx";
 import type { AppDispatch, RootState } from "./store";
 import { useDispatch } from "react-redux";
 
-export enum Theme {
-    Light = "light",
-    Dark = "dark",
-}
-export enum LangCode {
-    DE = "de",
-    EN = "en",
-}
+export const Theme = {
+    Light: "light",
+    Dark: "dark",
+} as const;
+export type Theme = (typeof Theme)[keyof typeof Theme];
+
+export const LangCode = {
+    DE: "de",
+    EN: "en",
+} as const;
+export type LangCode = (typeof LangCode)[keyof typeof LangCode];
+
 export type Labels = Record<LangCode, Record<string, string>>;
 export type Lang = { id: string } & { [key in LangCode]: string };
 
