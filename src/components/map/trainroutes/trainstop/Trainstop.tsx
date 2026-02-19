@@ -1,13 +1,10 @@
 import "./trainstop.scss";
 import { useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-    setActiveSpot,
-    type Trainstop as TrainstopType,
-} from "../TrainroutesSlice";
+import { setActiveSpot, type CurrentTrainroute } from "../TrainroutesSlice";
 
 interface TrainstopProps {
-    item: TrainstopType;
+    item: CurrentTrainroute["lastStation"];
     strokeScale: number;
     styles: {
         scale: number;
@@ -17,7 +14,10 @@ interface TrainstopProps {
 
 export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
     const dispatch = useDispatch();
-    const hoverSpot = (e: React.MouseEvent, spot?: TrainstopType) => {
+    const hoverSpot = (
+        e: React.MouseEvent,
+        spot?: CurrentTrainroute["lastStation"],
+    ) => {
         if (e.type === "mouseenter" && spot) dispatch(setActiveSpot(spot));
         else if (e.type === "mouseleave") dispatch(setActiveSpot(null));
     };
