@@ -46,10 +46,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
                     )}
                     {/* <h5>{labels[lang].trains}</h5> */}
                     <ItemList
-                        items={trainRoutes.map((route) => ({
-                            ...route,
-                            name: `${route.trainlines.map((line) => line).join(", ")}: ${route.lastStation.stop_name}`,
-                        }))}
+                        items={trainRoutes}
                         activeItem={activeSection}
                         fn={setTrainlineActive}
                         icon={<TrainIcon />}
