@@ -87,8 +87,12 @@ export const Container = ({ lang }: ContainerProps) => {
     }, [wrapper]);
 
     useEffect(() => {
-        activeSection && setActiveTabId("veloroutes");
-        activeVeloroute && setActiveTabId("leg");
+        if (activeSection) {
+            setActiveTabId("veloroutes");
+        }
+        if (activeVeloroute) {
+            setActiveTabId("leg");
+        }
     }, [activeSection, activeVeloroute]);
 
     return (

@@ -94,9 +94,16 @@ export const Trainroutes = memo(function Trainroutes({
             )}
             {activeVeloroute && <Veloroutes strokeScale={strokeScale} />}
 
-            {(activeSpot || activeVelorouteStop) && (
+            {(!!activeSpot || !!activeVelorouteStop) && (
                 <Label
-                    item={(activeSpot || activeVelorouteStop)!}
+                    item={
+                        activeSpot ||
+                        activeVelorouteStop || {
+                            x: 0,
+                            y: 0,
+                            stop_name: "",
+                        }
+                    }
                     className={activeSpot ? "train" : "veloroute"}
                     strokeScale={strokeScale}
                 />

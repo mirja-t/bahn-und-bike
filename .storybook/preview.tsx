@@ -1,7 +1,6 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import "../src/index.scss";
 import "../src/App.scss";
-import { Story } from "storybook/internal/csf";
 
 export const globalTypes = {
     theme: {

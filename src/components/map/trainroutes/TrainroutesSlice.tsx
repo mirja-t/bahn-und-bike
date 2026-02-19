@@ -45,7 +45,7 @@ export type CurrentTrainroutes = CurrentTrainroute[];
 export interface TrainroutesState {
     startPos: string;
     travelInterval: number;
-    trainlineList: Record<string, any> | string[] | null;
+    trainlineList: string[] | null;
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
@@ -134,7 +134,7 @@ export const trainroutesSlice = createSlice({
     initialState: {
         startPos: "8011160",
         travelInterval: 30,
-        trainlineList: {},
+        trainlineList: null,
         currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
@@ -168,9 +168,6 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroute[] },
         ) => {
             state.trainroutesAlongVeloroute = action.payload;
-        },
-        setTrainlinesNames: (state, action: { payload: any }) => {
-            state.trainlineNames = action.payload;
         },
         setStartPos: (state, action: { payload: string }) => {
             state.startPos = action.payload;

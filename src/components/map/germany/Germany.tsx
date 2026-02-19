@@ -11,8 +11,6 @@ export const Germany = () => {
                 x="0px"
                 y="0px"
                 viewBox="0 0 918 1240.7"
-                // @ts-expect-error
-                style={{ enableBackground: "new 0 0 918 1240.7" }}
                 xmlSpace="preserve"
             >
                 <g id="sea">
