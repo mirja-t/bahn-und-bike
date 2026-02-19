@@ -196,52 +196,44 @@ export const makeTrainRoutes = (
 
     buildTree(trainlinesWithStartStopsArr, routeTree);
 
-    const trainlinesWithoutStartDest = trainlinesArr.filter(
-        (line) => line.startStopIdx < 0,
-    );
     if (!direct) {
-        const queue: RouteNode[] = [routeTree];
-        while (queue.length) {
-            const current = queue.shift()!;
-            const connectedTrainlines: Trainline[] = [];
-            let idx = 0;
-            for (const trainline of trainlinesWithoutStartDest) {
-                const isConnected = trainline.stops.some(
+        const trainlinesWithoutStartDest = trainlinesArr.filter(
+            (line) => line.startStopIdx < 0,
+        );
+        while (trainlinesWithoutStartDest.length > 0) {
+            const trainlineToAdd = trainlinesWithoutStartDest.shift()!;
+            const queue: RouteNode[] = [routeTree];
+            while (queue.length) {
+                const current = queue.shift()!;
+                const isConnected = trainlineToAdd.stops.some(
                     (stop) =>
                         stop.destination_id ===
                         current.route.lastStation.stop_id,
                 );
                 if (isConnected) {
-                    // Remove from list
-                    const connectingTrainline =
-                        trainlinesWithoutStartDest.splice(idx, 1)[0];
-                    // Set startStopIdx for the connecting trainline
-                    connectingTrainline.startStopIdx =
-                        connectingTrainline.stops.findIndex(
+                    trainlineToAdd.startStopIdx =
+                        trainlineToAdd.stops.findIndex(
                             (stop) =>
                                 stop.destination_id ===
                                 current.route.lastStation.stop_id,
-                        );
-                    connectedTrainlines.push(connectingTrainline);
+                        )!;
+                    const connectedTrips = [trainlineToAdd]
+                        .map(createNestedStopsGroups)
+                        .flat();
+                    connectedTrips.forEach((connectedTrip) => {
+                        const connection = {
+                            connecting_trains: [connectedTrip[0].trainline_id],
+                            initial_trains: current.route.trainlines,
+                            stop_name: current.route.lastStation.stop_name,
+                        };
+                        buildTree(connectedTrips, current, connection);
+                    });
+                    break;
                 }
-                idx++;
-            }
-            const connectedTrips = connectedTrainlines
-                .map(createNestedStopsGroups)
-                .flat();
-            if (connectedTrips.length > 0) {
-                const connection = {
-                    connecting_trains: connectedTrainlines.map(
-                        (line) => line.trainline_id,
-                    ),
-                    initial_trains: current.route.trainlines,
-                    stop_name: current.route.lastStation.stop_name,
-                };
-                buildTree(connectedTrips, current, connection);
-            }
-            if (current.nextRoutes.length > 0) {
-                for (const nextRoute of current.nextRoutes) {
-                    queue.push(nextRoute);
+                if (current.nextRoutes.length > 0) {
+                    for (const nextRoute of current.nextRoutes) {
+                        queue.push(nextRoute);
+                    }
                 }
             }
         }
