@@ -17,6 +17,20 @@ type RouteNode = {
     nextRoutes: RouteNode[];
 };
 
+const fallbackRouteNode: RouteNode = {
+    route: createNewRoute({
+        name: "",
+        lat: "0",
+        lon: "0",
+        destination_id: "",
+        destination_name: "",
+        dur: 0,
+        stop_number: 0,
+        trainline_id: "",
+    }),
+    nextRoutes: [],
+};
+
 export const makeTrainRoutes = (
     stops: ResponseStop[],
     start: string,
@@ -29,9 +43,9 @@ export const makeTrainRoutes = (
         connection: CurrentTrainroute["connection"] | null = null,
     ) {
         while (groupedStops.length) {
-            let currentGroup = groupedStops.shift();
+            const currentGroup = groupedStops.shift() || [];
             let currentRoute = startNode;
-            for (const stop of currentGroup!) {
+            for (const stop of currentGroup) {
                 // break if duration limit exceeded
                 if (currentRoute.route.dur + stop.dur > durationLimit) break;
 
@@ -201,10 +215,14 @@ export const makeTrainRoutes = (
             (line) => line.startStopIdx < 0,
         );
         while (trainlinesWithoutStartDest.length > 0) {
-            const trainlineToAdd = trainlinesWithoutStartDest.shift()!;
+            const trainlineToAdd = trainlinesWithoutStartDest.shift() || {
+                stops: [],
+                trainline_id: "",
+                startStopIdx: -1,
+            };
             const queue: RouteNode[] = [routeTree];
             while (queue.length) {
-                const current = queue.shift()!;
+                const current = queue.shift() || fallbackRouteNode;
                 const isConnected = trainlineToAdd.stops.some(
                     (stop) =>
                         stop.destination_id ===
@@ -216,7 +234,7 @@ export const makeTrainRoutes = (
                             (stop) =>
                                 stop.destination_id ===
                                 current.route.lastStation.stop_id,
-                        )!;
+                        );
                     const connectedTrips = [trainlineToAdd]
                         .map(createNestedStopsGroups)
                         .flat();
@@ -243,7 +261,7 @@ export const makeTrainRoutes = (
     // Breadth traverse route tree to extract routes
     const queue: RouteNode[] = [routeTree];
     while (queue.length) {
-        const current = queue.shift()!;
+        const current = queue.shift() || fallbackRouteNode;
         if (current.nextRoutes.length === 0) {
             routes.push(current.route);
         } else {
