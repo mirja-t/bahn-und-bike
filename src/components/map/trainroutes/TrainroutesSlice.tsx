@@ -26,7 +26,7 @@ type Trainstop = {
 type Connection = {
     stop_name: string;
     initial_trains: string[];
-    connecting_train: string;
+    connecting_trains: string[];
 };
 export type CurrentTrainroute = {
     id: string;
