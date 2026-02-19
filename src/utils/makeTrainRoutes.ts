@@ -116,7 +116,7 @@ export const makeTrainRoutes = (
     }
     function createNestedStopsGroups(trainlineStopsArr: Trainline) {
         const groupedDirectStops: ResponseStop[][] = [];
-        const { startStopIdx, stops: stopsRef } = trainlineStopsArr; // Take the first trainline as reference for grouping (arbitrary choice, as all trainlines should have the same start station)
+        const { startStopIdx, stops: stopsRef } = trainlineStopsArr; // Use this trainline's stops and start index to build forward and backward stop groups
         const stops = structuredClone(stopsRef); // Create a mutable copy of the stops array for this trainline
         if (startStopIdx >= 0) {
             const forwardRoute = stops.slice(startStopIdx); // forward direction
