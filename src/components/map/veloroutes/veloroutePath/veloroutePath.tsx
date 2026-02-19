@@ -25,7 +25,7 @@ export const VeloroutePath = ({
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null
+        activeVelorouteSectionIdx !== null && activeVeloroute
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
 
@@ -42,13 +42,13 @@ export const VeloroutePath = ({
         >
             <path
                 className={
-                    activeVelorouteSection === activeVeloroute.route[idx] ||
+                    activeVelorouteSection === activeVeloroute?.route[idx] ||
                     active
                         ? "veloroute-section active"
                         : "veloroute-section"
                 }
                 strokeWidth={
-                    activeVelorouteSection === activeVeloroute.route[idx] ||
+                    activeVelorouteSection === activeVeloroute?.route[idx] ||
                     active
                         ? 1.5 / strokeScale
                         : 1 / strokeScale
