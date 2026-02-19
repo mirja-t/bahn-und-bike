@@ -204,27 +204,29 @@ export const makeTrainRoutes = (
         while (queue.length) {
             const current = queue.shift()!;
             const connectedTrainlines: Trainline[] = [];
-            let idx = 0;
-            for (const trainline of trainlinesWithoutStartDest) {
+            for (
+                let idx = trainlinesWithoutStartDest.length - 1;
+                idx >= 0;
+                idx--
+            ) {
+                const trainline = trainlinesWithoutStartDest[idx];
                 const isConnected = trainline.stops.some(
                     (stop) =>
                         stop.destination_id ===
                         current.route.lastStation.stop_id,
                 );
                 if (isConnected) {
-                    // Remove from list
-                    const connectingTrainline =
-                        trainlinesWithoutStartDest.splice(idx, 1)[0];
-                    // Set startStopIdx for the connecting trainline
-                    connectingTrainline.startStopIdx =
-                        connectingTrainline.stops.findIndex(
-                            (stop) =>
-                                stop.destination_id ===
-                                current.route.lastStation.stop_id,
-                        );
-                    connectedTrainlines.push(connectingTrainline);
+                    // Set startStopIdx before removing from list
+                    trainline.startStopIdx = trainline.stops.findIndex(
+                        (stop) =>
+                            stop.destination_id ===
+                            current.route.lastStation.stop_id,
+                    );
+                    // Remove from list (safe: splice at idx only shifts higher indices,
+                    // which have already been processed in this reverse iteration)
+                    trainlinesWithoutStartDest.splice(idx, 1);
+                    connectedTrainlines.push(trainline);
                 }
-                idx++;
             }
             const connectedTrips = connectedTrainlines
                 .map(createNestedStopsGroups)
