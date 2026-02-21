@@ -1,68 +1,90 @@
-/**
- * activeVeloroute
- * id: string, 
- * name: string,
- * len: number,
- * route: { stop_id: string, stop_name: string, x: number, y: number, lat: number, lon: number }[][],
- * path: string
- */
-
+import type {
+    ResponseStop,
+    Veloroute,
+    VelorouteStop,
+} from "../components/map/veloroutes/VeloroutesSlice";
+import { getRoutePath } from "./getRoutePath";
+import { germanyBounds, SvgMapBuilder } from "./svgMap";
 import { removeWords } from "./utils";
 
-const wordsToRemove = ['Bahnhof', 'Hbf', 'Hauptbahnhof', 'Bhf', 'S-Bahn', 'Busbahnhof'];
+const wordsToRemove = [
+    "Bahnhof",
+    "Hbf",
+    "Hauptbahnhof",
+    "Bhf",
+    "S-Bahn",
+    "Busbahnhof",
+];
 
-export const makeVeloRoute = stopsGroup => {
-    const route = [];
+const addXY = (stop: ResponseStop) => {
+    const [x, y] = SvgMapBuilder.getMapPosition(
+        parseFloat(stop.lon),
+        parseFloat(stop.lat),
+        germanyBounds,
+    );
+    return {
+        ...stop,
+        x,
+        y,
+    };
+};
 
-    stopsGroup.forEach(stops => {
-        let currentLeg = [];
-        let dist = 0;
-        stops.forEach(stop => {
-            const routestop = {
-                stop_id: stop.id,
-                stop_name: removeWords(stop.dest_name, wordsToRemove),
-                trainlines: stop.trainlines,
-                x: stop.x,
-                y: stop.y
+export const makeVeloRoute = (
+    stops: ResponseStop[],
+    name: string,
+    trainlines: string[] | null,
+): Veloroute => {
+    stops.sort((a, b) => a.stop_number - b.stop_number);
+    const velorouteStops = convertVelorouteStops(stops);
+    const legs = velorouteStops.reduce(
+        (acc: { dist: number; leg: VelorouteStop[] }[], stop, idx, arr) => {
+            const lastLeg = acc[acc.length - 1];
+            if (!lastLeg) {
+                acc.push({ dist: 0, leg: [stop] });
+            } else if (
+                stop.trainlines?.some((trainline) =>
+                    !trainlines ? true : trainlines.includes(trainline),
+                ) &&
+                idx !== arr.length - 1
+            ) {
+                acc.push({ dist: 0, leg: [stop] });
+                lastLeg.leg.push(stop);
+                lastLeg.dist =
+                    Math.round((lastLeg.dist + stop.dist) * 100) / 100;
+            } else {
+                lastLeg.leg.push(stop);
+                lastLeg.dist =
+                    Math.round((lastLeg.dist + stop.dist) * 100) / 100;
             }
-            if(stop.trainstop) routestop.trainstop = stop.trainstop;
-            if(currentLeg.length) dist += Number(stop.dist);
-            currentLeg.push(routestop);
-        });
-        
-        route.push({
-            dist: parseFloat(dist.toFixed(2)),
-            leg: currentLeg
-        });
-        dist = 0;
-        currentLeg = [];
-    });
-    return route
-}
+            return acc;
+        },
+        [],
+    );
+    return {
+        id: stops[0].veloroute_id,
+        name,
+        len: stops.reduce((acc, stop) => acc + stop.dist, 0),
+        path: getRoutePath(
+            legs.map(({ leg }) => leg.map(({ x, y }) => ({ x, y })).flat()),
+        ),
+        route: legs,
+    };
+};
 
-export const groupVeloroute = (stops, trainlines) => {
-
-    let currentLeg = [];
-    const route = [];
-
-    stops.forEach((stop, idx) => {
-        currentLeg.push(stop);
-        if(idx === stops.length-1) {
-            route.push(currentLeg);
+export const convertVelorouteStops = (
+    stops: ResponseStop[],
+): (VelorouteStop & { dist: number })[] => {
+    return stops.map((stop) => {
+        const copiedStop: VelorouteStop & { dist: number } = {
+            stop_id: stop.id,
+            stop_name: removeWords(stop.dest_name, wordsToRemove),
+            x: addXY(stop).x,
+            y: addXY(stop).y,
+            dist: stop.dist,
+        };
+        if (stop.trainlines) {
+            copiedStop.trainlines = stop.trainlines.split(",");
         }
-        else if(stop.trainlines !== null && currentLeg.length > 1) {
-            if(trainlines && !stop.trainlines.some(trainline => trainlines.includes(trainline))) return;
-            route.push(currentLeg);
-            currentLeg = [stop];
-        }
-        
+        return copiedStop;
     });
-    return route
-}
-
-export const makeTrainlinesArray = stops => {
-    stops.forEach(stop => {
-        if(stop.trainlines) stop.trainlines = stop.trainlines.split(',');
-    });
-    return stops
-}
+};
