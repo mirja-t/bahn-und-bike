@@ -11,6 +11,7 @@ php-errors.log
 
 # production
 /build
+/dist
 
 # data
 /src/data
