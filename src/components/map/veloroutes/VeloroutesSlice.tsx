@@ -109,22 +109,25 @@ export type ResponseStop = {
 };
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
-    Veloroute,
+    VelorouteList[number],
     { state: RootState }
->("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
-    const { id, name } = vroute;
-    const velorouteQuery = "veloroute/" + id;
-    const responseStops: ResponseStop[] = await fetch(
-        `${VITE_API_URL}${velorouteQuery}`,
-        {
-            headers: headers,
-        },
-    ).then((response) => response.json());
+>(
+    "veloroutes/setVeloroute",
+    async (vroute: VelorouteList[number], thunkAPI) => {
+        const { id, name } = vroute;
+        const velorouteQuery = "veloroute/" + id;
+        const responseStops: ResponseStop[] = await fetch(
+            `${VITE_API_URL}${velorouteQuery}`,
+            {
+                headers: headers,
+            },
+        ).then((response) => response.json());
 
-    const trainlines = thunkAPI.getState().trainroutes.trainlineList;
+        const trainlines = thunkAPI.getState().trainroutes.trainlineList;
 
-    return makeVeloRoute(responseStops, name, trainlines);
-});
+        return makeVeloRoute(responseStops, name, trainlines);
+    },
+);
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
     return (dispatch: AppDispatch) => {

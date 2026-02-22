@@ -55,7 +55,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
                     <ItemList
                         loading={velorouteListIsLoading}
                         items={filteredTrainroutes}
-                        activeItem={activeSection}
+                        activeId={activeSection?.id}
                         fn={setTrainlineActive}
                         icon={<TrainIcon />}
                     />

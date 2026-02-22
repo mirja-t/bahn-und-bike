@@ -10,14 +10,14 @@ type Item<T> = {
 interface ItemListProps<T> {
     items: Item<T>[];
     icon?: React.ReactNode;
-    activeItem: Item<T> | null;
+    activeId?: string;
     fn: (item: Item<T>) => void;
     loading?: boolean;
 }
 
 export const ItemList = <T,>({
     items,
-    activeItem,
+    activeId,
     icon,
     fn,
     loading = false,
@@ -40,9 +40,7 @@ export const ItemList = <T,>({
                     key={item.id}
                     onClick={() => fn(item)}
                     className={
-                        activeItem && item.id === activeItem?.id
-                            ? styles.active
-                            : ""
+                        activeId && item.id === activeId ? styles.active : ""
                     }
                 >
                     {icon && icon}
