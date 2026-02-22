@@ -1,16 +1,16 @@
 import "./label.scss";
 
-interface LabelProps {
+interface LabelProps<T> {
     item: {
         x: number;
         y: number;
         stop_name: string;
-    };
+    } & { [key in keyof T]?: T[key] };
     className: string;
     strokeScale: number;
 }
 
-export const Label = ({ item, className, strokeScale }: LabelProps) => {
+export const Label = <T,>({ item, className, strokeScale }: LabelProps<T>) => {
     return (
         <text
             className={`${className} destinationLabel`}

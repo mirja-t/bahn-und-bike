@@ -45,7 +45,7 @@ export type CurrentTrainroutes = CurrentTrainroute[];
 export interface TrainroutesState {
     startPos: string;
     travelInterval: number;
-    trainlineList: Record<string, any> | string[] | null;
+    trainlineList: string[] | null;
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
@@ -108,7 +108,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         : undefined;
 
     const connections: CurrentTrainroutes = [];
-    const fetchConnection = async (id: string | undefined) => {
+    const fetchConnection = async (id: string): Promise<ResponseStop[]> => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
@@ -121,8 +121,10 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         return connection;
     };
 
-    const connectionStart: ResponseStop[] = await fetchConnection(startId);
-    const connectionEnd: ResponseStop[] = await fetchConnection(endId);
+    const connectionStart: ResponseStop[] = await fetchConnection(
+        startId || "",
+    );
+    const connectionEnd: ResponseStop[] = await fetchConnection(endId || "");
     connections.push(createNewRoute(connectionStart[0], connectionStart)); // duration is not correct, but we need the trainlines and stopIds for the veloroute section
     connections.push(createNewRoute(connectionEnd[0], connectionEnd));
 
@@ -134,7 +136,7 @@ export const trainroutesSlice = createSlice({
     initialState: {
         startPos: "8011160",
         travelInterval: 30,
-        trainlineList: {},
+        trainlineList: null,
         currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
@@ -168,9 +170,6 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroute[] },
         ) => {
             state.trainroutesAlongVeloroute = action.payload;
-        },
-        setTrainlinesNames: (state, action: { payload: any }) => {
-            state.trainlineNames = action.payload;
         },
         setStartPos: (state, action: { payload: string }) => {
             state.startPos = action.payload;

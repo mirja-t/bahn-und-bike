@@ -27,7 +27,7 @@ export const CombinedVelorouteDetails = ({
 
     const hoverVeloStop = (
         { type }: React.MouseEvent,
-        velorouteStop?: VelorouteStop,
+        velorouteStop: VelorouteStop | null = null,
     ) => {
         if (type === "mouseenter") {
             return dispatch(setActiveVelorouteStop(velorouteStop));

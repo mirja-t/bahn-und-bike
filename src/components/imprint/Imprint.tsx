@@ -1,10 +1,10 @@
-import { selectLang } from "../../AppSlice";
+import { LangCode, selectLang } from "../../AppSlice";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from "../stateless/button/Button";
 
 interface ImprintProps {
-    lang: string;
+    lang: LangCode;
     resetState: () => void;
 }
 export const Imprint = ({ lang, resetState }: ImprintProps) => {

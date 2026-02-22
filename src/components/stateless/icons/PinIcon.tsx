@@ -3,7 +3,7 @@ import { type ReactNode } from "react";
 
 interface PinIconProps {
     children: ReactNode;
-    size: string;
+    size?: string;
 }
 
 export const PinIcon = ({ children, size }: PinIconProps) => {

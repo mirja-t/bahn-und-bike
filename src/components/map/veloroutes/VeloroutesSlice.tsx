@@ -1,26 +1,16 @@
-import {
-    createSlice,
-    createAsyncThunk,
-    type ActionCreatorWithPayload,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../../config/config";
 import {
     setActiveSection,
     loadTrainroutesAlongVeloroute,
 } from "../trainroutes/TrainroutesSlice";
-import { getRoutePath } from "../../../utils/getRoutePath";
-import { addXYValues } from "../../../utils/addXYValues";
-import {
-    groupVeloroute,
-    makeVeloRoute,
-    makeTrainlinesArray,
-} from "../../../utils/makeVeloRoute";
-import type { RootState } from "../../../store";
+import { makeVeloRoute } from "../../../utils/makeVeloRoute";
+import type { AppDispatch, RootState } from "../../../store";
 
 export type VelorouteStop = {
     stop_id: string;
     stop_name: string;
-    trainlines: string[];
+    trainlines?: string[];
     trainstop?: string;
     x: number;
     y: number;
@@ -80,35 +70,38 @@ export const loadVeloroutes = createAsyncThunk<
     return veloroutes;
 });
 
+export type ResponseStop = {
+    id: string;
+    dest_name: string;
+    dist: number;
+    lat: string;
+    lon: string;
+    stop_number: number;
+    trainlines?: string; // comma separated string of trainline_ids from API
+    trainstop?: string;
+    veloroute_id: string;
+};
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
     Veloroute,
     { state: RootState }
 >("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
-    const { id, name, len } = vroute;
+    const { id, name } = vroute;
     const velorouteQuery = "veloroute/" + id;
-    const veloroute = await fetch(`${VITE_API_URL}${velorouteQuery}`, {
-        headers: headers,
-    }).then((response) => response.json());
+    const responseStops: ResponseStop[] = await fetch(
+        `${VITE_API_URL}${velorouteQuery}`,
+        {
+            headers: headers,
+        },
+    ).then((response) => response.json());
 
     const trainlines = thunkAPI.getState().trainroutes.trainlineList;
-    let velorouteStops = addXYValues(veloroute);
-    velorouteStops = makeTrainlinesArray(velorouteStops);
-    const velorouteStopsGrouped = groupVeloroute(velorouteStops, trainlines);
-    const path = getRoutePath(velorouteStopsGrouped);
-    const route = makeVeloRoute(velorouteStopsGrouped);
 
-    return {
-        id,
-        name,
-        len,
-        route,
-        path,
-    };
+    return makeVeloRoute(responseStops, name, trainlines);
 });
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
-    return (dispatch: ActionCreatorWithPayload<unknown, string>) => {
+    return (dispatch: AppDispatch) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));

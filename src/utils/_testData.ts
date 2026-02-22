@@ -1,19 +1,27 @@
-export const mockedTrainroutes = [
+import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
+
+export const mockedTrainroutes: CurrentTrainroute[] = [
     {
+        id: "1",
+        name: "S+U Berlin - Nauen",
         dur: 36,
-        line: ["RB10"],
+        trainlines: ["RB10"],
         pathLength: 224,
         firstStation: {
             stop_name: "S+U Berlin",
             stop_id: "8011160",
             x: 700,
             y: 400,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         lastStation: {
             stop_name: "Nauen",
             stop_id: "8010239",
             x: 690,
             y: 410,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         stopIds: [
             "8011160",
@@ -30,20 +38,26 @@ export const mockedTrainroutes = [
         connection: null,
     },
     {
+        id: "2",
+        name: "S+U Berlin - Rathenow",
         dur: 47,
-        line: ["RE4"],
+        trainlines: ["RE4"],
         pathLength: 422,
         firstStation: {
             stop_name: "S+U Berlin",
             stop_id: "8011160",
             x: 740,
             y: 420,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         lastStation: {
             stop_name: "Rathenow",
             stop_id: "9210771",
             x: 640,
             y: 410,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         stopIds: [
             "8011160",
@@ -61,20 +75,26 @@ export const mockedTrainroutes = [
         connection: null,
     },
     {
+        id: "3",
+        name: "S+U Berlin - Lutherstadt Wittenberg",
         dur: 83,
-        line: ["RE3"],
+        trainlines: ["RE3"],
         pathLength: 1089,
         firstStation: {
             stop_name: "S+U Berlin",
             stop_id: "8011160",
             x: 720,
             y: 400,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         lastStation: {
             stop_name: "Lutherstadt Wittenberg",
             stop_id: "8010222",
             x: 670,
             y: 530,
+            lat: 52.52437,
+            lon: 13.41053,
         },
         stopIds: [
             "8011160",

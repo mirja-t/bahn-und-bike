@@ -18,7 +18,7 @@ type TabsProps = {
     setActiveTabId?: (id: string) => void;
 };
 
-const Tab = ({ children, id, disabled }: TabProps) => {
+const Tab = ({ children, id }: TabProps) => {
     return (
         <div data-testid={`tab-${id}`} className="tab">
             {children}
@@ -67,8 +67,9 @@ const Tabs = ({ children, height, activeTabId, setActiveTabId }: TabsProps) => {
                                     key={tab.props.id}
                                     onClick={() => {
                                         setActiveId(tab.props.id);
-                                        setActiveTabId &&
+                                        if (setActiveTabId) {
                                             setActiveTabId(tab.props.id);
+                                        }
                                     }}
                                     disabled={tab.props.disabled}
                                     label={tab.props.name}
