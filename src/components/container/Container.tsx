@@ -10,8 +10,10 @@ import {
     selectStartPos,
     loadTrainroutes,
     selectActiveSection,
+    selectCurrentTrainroutes,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
+    loadVeloroutes,
     selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
@@ -34,6 +36,7 @@ export const Container = ({ lang }: ContainerProps) => {
     const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
+    const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
@@ -53,6 +56,17 @@ export const Container = ({ lang }: ContainerProps) => {
         },
         [userScale],
     );
+
+    const handleTabClick = (tabId: string) => {
+        if (tabId === "trainlines") {
+            dispatch(setActiveSection(null));
+            dispatch(setActiveVeloroute(null));
+            dispatch(setActiveVelorouteSection(null));
+            dispatch(setTrainroutesAlongVeloroute([]));
+            dispatch(loadVeloroutes(trainRoutes));
+        }
+        setActiveTabId(tabId);
+    };
 
     const handleSubmit = (
         e: React.SubmitEvent,
@@ -113,7 +127,7 @@ export const Container = ({ lang }: ContainerProps) => {
                             <Tabs
                                 height={sidebarHeight.toString() + "px"}
                                 activeTabId={activeTabId}
-                                setActiveTabId={setActiveTabId}
+                                handleTabClick={handleTabClick}
                             >
                                 <Tabs.Tab id="trainlines" name="Bahnlinien">
                                     <TrainlineDetails lang={lang} />

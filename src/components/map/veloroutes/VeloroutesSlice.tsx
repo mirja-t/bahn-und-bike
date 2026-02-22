@@ -28,7 +28,9 @@ export type Veloroute = {
     path: string[];
 };
 
-export type VelorouteList = Omit<Veloroute, "route" | "path">[];
+export type VelorouteList = (Omit<Veloroute, "route" | "path"> & {
+    trainStopIds: string[];
+})[];
 
 export interface VeloroutesState {
     velorouteList: VelorouteList;
@@ -52,19 +54,30 @@ export const loadVeloroutes = createAsyncThunk<
     "veloroutes/setVelorouteList",
     async (trainroutes: CurrentTrainroute[], thunkAPI) => {
         const startDestinations = thunkAPI.getState().trainroutes.startPos;
-        const activeIds = trainroutes
-            .map((route) => route.stopIds)
-            .flat()
-            .filter((line) => line !== startDestinations);
 
-        const veloroutesQuery =
-            "veloroutes/ids[]=" +
-            activeIds
-                .filter((s) => !startDestinations.includes(s))
-                .join("&ids[]=");
-        const veloroutes = await fetch(`${VITE_API_URL}${veloroutesQuery}`, {
-            headers: headers,
-        }).then((response) => response.json());
+        const veloroutes: VelorouteList = [];
+        for (const trainroute of trainroutes) {
+            const activeIds = trainroute.stopIds.filter(
+                (id) => id !== startDestinations,
+            );
+            const veloroutesQuery =
+                "veloroutes/ids[]=" +
+                activeIds
+                    .filter((s) => !startDestinations.includes(s))
+                    .join("&ids[]=");
+            const routeVeloroutes: VelorouteList = await fetch(
+                `${VITE_API_URL}${veloroutesQuery}`,
+                {
+                    headers: headers,
+                },
+            ).then((response) => response.json());
+            veloroutes.push(
+                ...routeVeloroutes.map((vr) => ({
+                    ...vr,
+                    trainStopIds: trainroute.stopIds,
+                })),
+            );
+        }
 
         return veloroutes;
     },
