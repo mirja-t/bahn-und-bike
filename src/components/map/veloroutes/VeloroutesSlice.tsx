@@ -28,7 +28,8 @@ export type Veloroute = {
     path: string[];
 };
 
-export type VelorouteList = (Omit<Veloroute, "route" | "path"> & {
+type VelorouteListResponse = Omit<Veloroute, "route" | "path">;
+export type VelorouteList = (VelorouteListResponse & {
     trainRouteIds: string[];
 })[];
 
@@ -71,7 +72,7 @@ export const loadVeloroutes = createAsyncThunk<
             }
             const veloroutesQuery =
                 "veloroutes/ids[]=" + filteredActiveIds.join("&ids[]=");
-            const routeVeloroutes: VelorouteList = await fetch(
+            const routeVeloroutes: VelorouteListResponse[] = await fetch(
                 `${VITE_API_URL}${veloroutesQuery}`,
                 {
                     headers: headers,
