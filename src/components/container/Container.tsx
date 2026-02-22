@@ -135,9 +135,7 @@ export const Container = ({ lang }: ContainerProps) => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name="Radwege"
-                                    disabled={
-                                        !activeSection && !activeVeloroute
-                                    }
+                                    disabled={trainRoutes.length < 1}
                                 >
                                     <DestinationDetails lang={lang} />
                                 </Tabs.Tab>

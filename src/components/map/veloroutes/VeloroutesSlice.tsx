@@ -29,7 +29,7 @@ export type Veloroute = {
 };
 
 export type VelorouteList = (Omit<Veloroute, "route" | "path"> & {
-    trainStopIds: string[];
+    trainRouteIds: string[];
 })[];
 
 export interface VeloroutesState {
@@ -55,7 +55,9 @@ export const loadVeloroutes = createAsyncThunk<
     async (trainroutes: CurrentTrainroute[], thunkAPI) => {
         const startDestinations = thunkAPI.getState().trainroutes.startPos;
 
-        const veloroutes: VelorouteList = [];
+        const vroutes: {
+            [id: string]: VelorouteList[number];
+        } = {};
         for (const trainroute of trainroutes) {
             const activeIds = trainroute.stopIds.filter(
                 (id) => id !== startDestinations,
@@ -71,14 +73,20 @@ export const loadVeloroutes = createAsyncThunk<
                     headers: headers,
                 },
             ).then((response) => response.json());
-            veloroutes.push(
-                ...routeVeloroutes.map((vr) => ({
+            routeVeloroutes.forEach((vr) => {
+                const currentVR = vroutes[vr.id] || {
                     ...vr,
-                    trainStopIds: trainroute.stopIds,
-                })),
-            );
+                    trainRouteIds: [],
+                };
+                currentVR.id = vr.id;
+                currentVR.name = vr.name;
+                currentVR.len = vr.len;
+                currentVR.trainRouteIds.push(trainroute.id);
+                vroutes[vr.id] = currentVR;
+            });
         }
 
+        const veloroutes: VelorouteList = Object.values(vroutes);
         return veloroutes;
     },
 );

@@ -28,11 +28,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const velorouteList = useSelector(selectVelorouteList);
     const filteredTrainroutes = trainRoutes.filter((trainroute) =>
-        velorouteList.some((vr) =>
-            vr.trainStopIds.every((stopId) =>
-                trainroute.stopIds.includes(stopId),
-            ),
-        ),
+        velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
     );
 
     const dispatch = useAppDispatch();
