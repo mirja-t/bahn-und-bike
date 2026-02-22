@@ -64,15 +64,12 @@ export const loadVeloroutes = createAsyncThunk<
             const activeIds = trainroute.stopIds.filter(
                 (id) => id !== startDestinations,
             );
-            const filteredActiveIds = activeIds.filter(
-                (s) => !startDestinations.includes(s),
-            );
-            if (filteredActiveIds.length === 0) {
+            if (activeIds.length === 0) {
                 continue;
             }
             const veloroutesQuery =
-                "veloroutes/ids[]=" + filteredActiveIds.join("&ids[]=");
-            const routeVeloroutes: VelorouteListResponse[] = await fetch(
+                "veloroutes/ids[]=" + activeIds.join("&ids[]=");
+            const routeVeloroutes: VelorouteListResponse = await fetch(
                 `${VITE_API_URL}${veloroutesQuery}`,
                 {
                     headers: headers,
