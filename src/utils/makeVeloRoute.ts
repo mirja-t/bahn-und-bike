@@ -85,6 +85,9 @@ export const convertVelorouteStops = (
         if (stop.trainlines) {
             copiedStop.trainlines = stop.trainlines.split(",");
         }
+        if (stop.trainstop) {
+            copiedStop.trainstop = stop.trainstop;
+        }
         return copiedStop;
     });
 };
