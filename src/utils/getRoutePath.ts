@@ -10,9 +10,10 @@ export const getRoutePath = (arr: Coordinates[][]): string[] => {
         if (path.length < 1) return "";
 
         const getBezier = (s: number[], idx: number) => {
+            const nextNext = path[idx + 2];
             const distFromPrevToNextPos = {
-                x: (path[idx][0] - path[idx + 2][0]) / 4,
-                y: (path[idx][1] - path[idx + 2][1]) / 4,
+                x: nextNext !== undefined ? (path[idx][0] - nextNext[0]) / 4 : 0,
+                y: nextNext !== undefined ? (path[idx][1] - nextNext[1]) / 4 : 0,
             };
             const Qx = s[0] + distFromPrevToNextPos.x;
             const Qy = s[1] + distFromPrevToNextPos.y;
