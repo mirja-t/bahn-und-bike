@@ -30,14 +30,13 @@ const meta = {
     // More on argTypes: https://storybook.js.org/docs/api/argtypes
     argTypes: {
         items: { control: "object" },
-        activeItem: { control: "object" },
+        activeId: { control: "text" },
         fn: { action: "clicked" },
         icon: { control: "text" },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         items: mockItems,
-        activeItem: null,
         fn: fn(),
         icon: <VelorouteIcon />,
     },
@@ -50,14 +49,12 @@ type Story = StoryObj<typeof meta>;
 export const Veloroute: Story = {
     args: {
         items: mockItems,
-        activeItem: null,
         icon: <VelorouteIcon />,
     },
 };
 export const Train: Story = {
     args: {
         items: mockItems,
-        activeItem: null,
         icon: <TrainIcon />,
     },
 };
@@ -65,7 +62,7 @@ export const Train: Story = {
 export const WithActiveItem: Story = {
     args: {
         items: mockItems,
-        activeItem: mockItems[0],
+        activeId: mockItems[0].id,
         icon: <VelorouteIcon />,
     },
 };
