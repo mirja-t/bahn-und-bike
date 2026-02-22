@@ -34,7 +34,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
         dispatch(loadDestinations({ ids: line.stopIds }));
-        dispatch(loadVeloroutes(line.stopIds));
+        dispatch(loadVeloroutes([line]));
     };
 
     return (

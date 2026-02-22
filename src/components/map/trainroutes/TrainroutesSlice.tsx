@@ -88,9 +88,7 @@ export const loadTrainroutes = createAsyncThunk<
         ? currentTrainroutes.map((route) => route.trainlines).flat()
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
-    thunkAPI.dispatch(
-        loadVeloroutes(currentTrainroutes.map((route) => route.stopIds).flat()),
-    );
+    thunkAPI.dispatch(loadVeloroutes(currentTrainroutes));
 
     return currentTrainroutes;
 });

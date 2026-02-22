@@ -3,6 +3,7 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import {
     setActiveSection,
     loadTrainroutesAlongVeloroute,
+    type CurrentTrainroute,
 } from "../trainroutes/TrainroutesSlice";
 import { makeVeloRoute } from "../../../utils/makeVeloRoute";
 import type { AppDispatch, RootState } from "../../../store";
@@ -27,21 +28,11 @@ export type Veloroute = {
     path: string[];
 };
 
-export type CombinedVeloroute = {
-    id: string;
-    route_id: string;
-    veloroute_name: string;
-    name: string;
-    route: {
-        dist: number;
-        leg: VelorouteStop[];
-    }[];
-    path: string[];
-};
+export type VelorouteList = Omit<Veloroute, "route" | "path">[];
 
 export interface VeloroutesState {
-    velorouteList: Veloroute[];
-    crossingVelorouteList: Veloroute[];
+    velorouteList: VelorouteList;
+    crossingVelorouteList: VelorouteList;
     isLoading: boolean;
     hasError: boolean;
     crossingRoutesLoading: boolean;
@@ -54,21 +45,30 @@ export interface VeloroutesState {
 }
 
 export const loadVeloroutes = createAsyncThunk<
-    Veloroute[],
-    string[],
+    VelorouteList,
+    CurrentTrainroute[],
     { state: RootState }
->("veloroutes/setVelorouteList", async (activeIds: string[], thunkAPI) => {
-    const startDestinations = thunkAPI.getState().trainroutes.startPos;
+>(
+    "veloroutes/setVelorouteList",
+    async (trainroutes: CurrentTrainroute[], thunkAPI) => {
+        const startDestinations = thunkAPI.getState().trainroutes.startPos;
+        const activeIds = trainroutes
+            .map((route) => route.stopIds)
+            .flat()
+            .filter((line) => line !== startDestinations);
 
-    const veloroutesQuery =
-        "veloroutes/ids[]=" +
-        activeIds.filter((s) => !startDestinations.includes(s)).join("&ids[]=");
-    const veloroutes = await fetch(`${VITE_API_URL}${veloroutesQuery}`, {
-        headers: headers,
-    }).then((response) => response.json());
+        const veloroutesQuery =
+            "veloroutes/ids[]=" +
+            activeIds
+                .filter((s) => !startDestinations.includes(s))
+                .join("&ids[]=");
+        const veloroutes = await fetch(`${VITE_API_URL}${veloroutesQuery}`, {
+            headers: headers,
+        }).then((response) => response.json());
 
-    return veloroutes;
-});
+        return veloroutes;
+    },
+);
 
 export type ResponseStop = {
     id: string;

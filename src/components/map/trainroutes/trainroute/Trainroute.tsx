@@ -27,7 +27,7 @@ export const Trainroute = memo(
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
-            dispatch(loadVeloroutes(line.stopIds));
+            dispatch(loadVeloroutes([line]));
         };
 
         return (
