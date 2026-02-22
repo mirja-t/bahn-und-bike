@@ -6,6 +6,7 @@ import {
     setActiveVeloroute,
     loadVeloroutes,
     selectVelorouteList,
+    selectVelorouteListIsLoading,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -26,6 +27,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
     const labels = useSelector(selectLang);
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
+    const velorouteListIsLoading = useSelector(selectVelorouteListIsLoading);
     const velorouteList = useSelector(selectVelorouteList);
     const filteredTrainroutes = trainRoutes.filter((trainroute) =>
         velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
@@ -51,6 +53,7 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
                     )}
                     {/* <h5>{labels[lang].trains}</h5> */}
                     <ItemList
+                        loading={velorouteListIsLoading}
                         items={filteredTrainroutes}
                         activeItem={activeSection}
                         fn={setTrainlineActive}

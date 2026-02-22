@@ -12,6 +12,7 @@ interface ItemListProps<T> {
     icon?: React.ReactNode;
     activeItem: Item<T> | null;
     fn: (item: Item<T>) => void;
+    loading?: boolean;
 }
 
 export const ItemList = <T,>({
@@ -19,9 +20,11 @@ export const ItemList = <T,>({
     activeItem,
     icon,
     fn,
+    loading = false,
 }: ItemListProps<T>) => {
     return (
         <ul className={styles.itemlist}>
+            {loading && <p>Loading...</p>}
             {items.map((item, idx) => (
                 <motion.li
                     initial={{

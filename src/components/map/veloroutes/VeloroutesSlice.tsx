@@ -34,6 +34,7 @@ export type VelorouteList = (Omit<Veloroute, "route" | "path"> & {
 
 export interface VeloroutesState {
     velorouteList: VelorouteList;
+    velorouteListIsLoading: boolean;
     crossingVelorouteList: VelorouteList;
     isLoading: boolean;
     hasError: boolean;
@@ -144,6 +145,7 @@ export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
         velorouteList: [],
+        velorouteListIsLoading: false,
         crossingVelorouteList: [],
         isLoading: false,
         hasError: false,
@@ -183,16 +185,16 @@ export const veloroutesSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(loadVeloroutes.pending, (state) => {
-                state.isLoading = true;
+                state.velorouteListIsLoading = true;
                 state.hasError = false;
             })
             .addCase(loadVeloroutes.fulfilled, (state, action) => {
                 state.velorouteList = action.payload;
-                state.isLoading = false;
+                state.velorouteListIsLoading = false;
                 state.hasError = false;
             })
             .addCase(loadVeloroutes.rejected, (state) => {
-                state.isLoading = false;
+                state.velorouteListIsLoading = false;
                 state.hasError = true;
             })
             .addCase(loadVeloroute.pending, (state) => {
@@ -223,6 +225,8 @@ export const selectActiveVelorouteStop = (state: RootState) =>
     state.veloroutes.activeVelorouteStop;
 export const selectVeloroutesLoading = (state: RootState) =>
     state.veloroutes.isLoading;
+export const selectVelorouteListIsLoading = (state: RootState) =>
+    state.veloroutes.velorouteListIsLoading;
 export const selectCrossingVeloroutesLoading = (state: RootState) =>
     state.veloroutes.crossingRoutesLoading;
 export const selectHoveredVelorouteSection = (state: RootState) =>
