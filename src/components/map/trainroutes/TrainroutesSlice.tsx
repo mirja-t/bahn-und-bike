@@ -3,6 +3,7 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
+import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
     destination_id: string;
@@ -87,6 +88,9 @@ export const loadTrainroutes = createAsyncThunk<
         ? currentTrainroutes.map((route) => route.trainlines).flat()
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
+    thunkAPI.dispatch(
+        loadVeloroutes(currentTrainroutes.map((route) => route.stopIds).flat()),
+    );
 
     return currentTrainroutes;
 });

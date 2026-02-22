@@ -4,6 +4,7 @@ import {
     type CurrentTrainroute,
 } from "../TrainroutesSlice";
 import {
+    loadVeloroutes,
     setActiveVeloroute,
     setActiveVelorouteSection,
 } from "../../veloroutes/VeloroutesSlice";
@@ -26,6 +27,7 @@ export const Trainroute = memo(
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
+            dispatch(loadVeloroutes(line.stopIds));
         };
 
         return (

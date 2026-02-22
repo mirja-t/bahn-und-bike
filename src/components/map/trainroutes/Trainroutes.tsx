@@ -1,5 +1,5 @@
 import "./trainroutes.scss";
-import { memo, useEffect } from "react";
+import { memo } from "react";
 import { useSelector } from "react-redux";
 import {
     selectCurrentTrainroutes,
@@ -9,14 +9,12 @@ import {
 } from "./TrainroutesSlice";
 import {
     selectActiveVeloroute,
-    loadVeloroutes,
     selectActiveVelorouteStop,
 } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
 import { Veloroutes } from "../veloroutes/Veloroutes";
 import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
-import { useAppDispatch } from "../../../AppSlice";
 
 interface TrainroutesProps {
     zoom: {
@@ -33,7 +31,6 @@ export const Trainroutes = memo(function Trainroutes({
 }: TrainroutesProps) {
     const { containerHeight } = zoom;
 
-    const dispatch = useAppDispatch();
     const journeys = useSelector(selectCurrentTrainroutes);
     const activeSection = useSelector(selectActiveSection);
     const activeVeloroute = useSelector(selectActiveVeloroute);
@@ -43,11 +40,6 @@ export const Trainroutes = memo(function Trainroutes({
         selectTrainroutesAlongVeloroute,
     );
     const strokeScale = containerHeight / 1080 / 2;
-
-    useEffect(() => {
-        if (!activeSection?.stopIds) return;
-        dispatch(loadVeloroutes(activeSection?.stopIds));
-    }, [dispatch, activeSection]);
 
     const getClassName = (item: typeof activeSection) => {
         if (!activeSection && !trainlinesAlongVeloroute.length) {
