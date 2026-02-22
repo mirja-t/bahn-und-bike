@@ -15,7 +15,7 @@ type TabsProps = {
     children: ReactNode | ReactNode[];
     height?: string;
     activeTabId?: string;
-    setActiveTabId?: (id: string) => void;
+    handleTabClick?: (id: string) => void;
 };
 
 const Tab = ({ children, id }: TabProps) => {
@@ -30,7 +30,7 @@ const TabHeader = ({ children }: TabHeaderProps) => {
     return <div className="tabheader">{children}</div>;
 };
 
-const Tabs = ({ children, height, activeTabId, setActiveTabId }: TabsProps) => {
+const Tabs = ({ children, height, activeTabId, handleTabClick }: TabsProps) => {
     const tabs = React.Children.toArray(children).filter(
         (child) => React.isValidElement(child) && child.type === Tab,
     ) as React.ReactElement<TabProps>[];
@@ -67,8 +67,8 @@ const Tabs = ({ children, height, activeTabId, setActiveTabId }: TabsProps) => {
                                     key={tab.props.id}
                                     onClick={() => {
                                         setActiveId(tab.props.id);
-                                        if (setActiveTabId) {
-                                            setActiveTabId(tab.props.id);
+                                        if (handleTabClick) {
+                                            handleTabClick(tab.props.id);
                                         }
                                     }}
                                     disabled={tab.props.disabled}
