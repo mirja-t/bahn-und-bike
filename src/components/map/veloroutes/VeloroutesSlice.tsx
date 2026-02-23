@@ -69,7 +69,7 @@ export const loadVeloroutes = createAsyncThunk<
             }
             const veloroutesQuery =
                 "veloroutes/ids[]=" + activeIds.join("&ids[]=");
-            const routeVeloroutes: VelorouteListResponse = await fetch(
+            const routeVeloroutes: VelorouteListResponse[] = await fetch(
                 `${VITE_API_URL}${veloroutesQuery}`,
                 {
                     headers: headers,
