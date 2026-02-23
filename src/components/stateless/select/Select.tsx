@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./select.module.scss";
 
-interface Select<T> {
+interface SelectProps<T> {
     options: {
         value: T;
         label: string;
@@ -18,7 +18,7 @@ export const Select = <T extends string>({
     label,
     onChange,
     preselectedValue,
-}: Select<T>) => {
+}: SelectProps<T>) => {
     const [selected, setSelected] = useState<{
         value: T;
         label: string;
