@@ -9,13 +9,7 @@ interface Select<T> {
     name: string;
     label?: string;
     onChange?: (value: T) => void;
-
-    readOnly?: boolean;
     preselectedValue?: T | undefined;
-    disabled?: boolean;
-    id?: string;
-    required?: boolean;
-    error?: string | string[];
 }
 
 export const Select = <T extends string>({
