@@ -5,12 +5,17 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -b && vite build",
         "lint": "eslint .",
+        "typecheck": "tsc -p tsconfig.app.json --noEmit",
+        "check": "npm run typecheck && npm run lint",
+        "build": "npm run check && vite build",
         "preview": "vite preview",
         "storybook": "storybook dev -p 6006",
         "build-storybook": "storybook build",
         "test": "vitest run"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "npm run check"
     },
     "dependencies": {
         "@reduxjs/toolkit": "^2.11.2",
@@ -47,6 +52,7 @@
         "globals": "^16.5.0",
         "jsdom": "^28.0.0",
         "playwright": "^1.58.2",
+        "simple-git-hooks": "^2.13.1",
         "storybook": "^10.2.7",
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.54.0",
