@@ -1,3 +1,4 @@
+import { Loading } from "../loading/Loading";
 import styles from "./itemlist.module.scss";
 import { motion } from "framer-motion";
 
@@ -24,7 +25,7 @@ export const ItemList = <T,>({
 }: ItemListProps<T>) => {
     return (
         <ul className={styles.itemlist}>
-            {loading && <p>Loading...</p>}
+            {loading && <Loading />}
             {items.map((item, idx) => (
                 <motion.li
                     initial={{

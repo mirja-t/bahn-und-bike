@@ -55,7 +55,7 @@ export const Map = ({
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <Loading lang={lang} />
+                        <Loading />
                     </motion.div>
                 )}
             </AnimatePresence>
