@@ -68,6 +68,10 @@ export const Select = <T extends string>({
                         </option>
                     ))}
                 </select>
+                {/* spacer for fieldset: 
+                if absolute positioned label is present 
+                and exceeds the width of the longest option
+                the spacer expands the fieldset width */}
                 <div
                     style={{
                         width: label ? label.length + "ch" : "auto",
