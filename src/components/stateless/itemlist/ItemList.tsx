@@ -12,7 +12,7 @@ interface ItemListProps<T> {
     items: Item<T>[];
     icon?: React.ReactNode;
     activeId?: string;
-    fn: (item: Item<T>) => void;
+    fn?: (item: Item<T>) => void;
     loading?: boolean;
 }
 
@@ -39,7 +39,7 @@ export const ItemList = <T,>({
                         duration: 1,
                     }}
                     key={item.id}
-                    onClick={() => fn(item)}
+                    onClick={() => fn && fn(item)}
                     className={
                         activeId && item.id === activeId ? styles.active : ""
                     }
