@@ -20,6 +20,7 @@ export type Lang = { id: string } & { [key in LangCode]: string };
 
 export interface AppState {
     lang: Labels;
+    currentLang: LangCode;
     theme: Theme;
     langLoading: boolean;
     langError: boolean;
@@ -52,6 +53,7 @@ export const appSlice = createSlice({
     name: "app",
     initialState: {
         lang: {},
+        currentLang: "de",
         theme: "light",
         langLoading: true,
         langError: false,
@@ -59,6 +61,9 @@ export const appSlice = createSlice({
     reducers: {
         setTheme: (state, action: { payload: Theme }) => {
             state.theme = action.payload;
+        },
+        setLang: (state, action: { payload: LangCode }) => {
+            state.currentLang = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -83,8 +88,9 @@ export const selectLang = (state: RootState) => state.app.lang;
 export const selectTheme = (state: RootState) => state.app.theme;
 export const selectLangLoading = (state: RootState) => state.app.langLoading;
 export const selectLangError = (state: RootState) => state.app.langError;
+export const selectCurrentLang = (state: RootState) => state.app.currentLang;
 
-export const { setTheme } = appSlice.actions;
+export const { setTheme, setLang } = appSlice.actions;
 
 export default appSlice.reducer;
 export const useAppDispatch: () => AppDispatch = useDispatch;
