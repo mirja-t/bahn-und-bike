@@ -20,7 +20,7 @@ export const Switcher = <T extends string>({
     };
 
     return (
-        <form className="switcher">
+        <div className="switcher">
             <fieldset
                 className={
                     checkedRadioBtn === values[0].value ? "val-1" : "val-2"
@@ -57,6 +57,6 @@ export const Switcher = <T extends string>({
                     </label>
                 </div>
             </fieldset>
-        </form>
+        </div>
     );
 };

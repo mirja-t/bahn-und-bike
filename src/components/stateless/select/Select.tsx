@@ -1,32 +1,41 @@
 import { useEffect, useState } from "react";
 import styles from "./select.module.scss";
 
-interface Select {
-    options: { value: string; label: string }[];
+interface Select<T> {
+    options: {
+        value: T;
+        label: string;
+    }[];
+    name: string;
     label?: string;
-    fn: (value: string) => void;
+    onChange?: (value: T) => void;
 
     readOnly?: boolean;
-    preselectedValue?: string | undefined;
+    preselectedValue?: T | undefined;
     disabled?: boolean;
     id?: string;
     required?: boolean;
     error?: string | string[];
 }
 
-export const Select = ({ options, label, fn, preselectedValue }: Select) => {
+export const Select = <T extends string>({
+    options,
+    name,
+    label,
+    onChange,
+    preselectedValue,
+}: Select<T>) => {
     const [selected, setSelected] = useState<{
-        value: string;
+        value: T;
         label: string;
     } | null>(null);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { target } = event;
-        console.log("Selected value:", target.value);
         const selectedOption =
             options.find((option) => option.value === target.value) || null;
         setSelected(selectedOption);
-        if (fn) fn(target.value);
+        if (onChange) onChange(target.value as T);
     };
 
     useEffect(() => {
@@ -39,28 +48,32 @@ export const Select = ({ options, label, fn, preselectedValue }: Select) => {
     }, [preselectedValue, options]);
 
     return (
-        <fieldset className={styles.fieldset}>
-            <div
-                className={
-                    selected
-                        ? `${styles.selected} ${styles.selectwrapper}`
-                        : styles.selectwrapper
-                }
-            >
-                {label && <label htmlFor={label}>{label}</label>}
+        <div className={styles.selectwrapper}>
+            <fieldset className={selected ? styles.selected : ""}>
+                {label && <label htmlFor={name}>{label}</label>}
                 <select
                     className={styles.select}
-                    id={label}
+                    id={name}
                     onChange={handleChange}
                     value={selected?.value || ""}
                 >
+                    {!label && !preselectedValue && (
+                        <option key="empty" value="">
+                            ---
+                        </option>
+                    )}
                     {options.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
                     ))}
                 </select>
-            </div>
-        </fieldset>
+                <div
+                    style={{
+                        width: label ? label.length + "ch" : "auto",
+                    }}
+                />
+            </fieldset>
+        </div>
     );
 };

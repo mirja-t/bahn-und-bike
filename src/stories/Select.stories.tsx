@@ -10,10 +10,10 @@ const meta = {
     argTypes: {
         options: { control: "object" },
         label: { control: "text" },
-        fn: { action: "selection-changed" },
+        onChange: { action: "selection-changed" },
     },
     args: {
-        fn: fn(),
+        onChange: fn(),
     },
 } satisfies Meta<typeof Select>;
 
@@ -31,6 +31,7 @@ export const WithLabel: Story = {
             { value: "cologne", label: "Cologne" },
             { value: "frankfurt", label: "Frankfurt" },
         ],
+        name: "city-select",
     },
 };
 export const WithoutLabel: Story = {
@@ -42,6 +43,7 @@ export const WithoutLabel: Story = {
             { value: "cologne", label: "Cologne" },
             { value: "frankfurt", label: "Frankfurt" },
         ],
+        name: "city-select",
     },
 };
 export const WithPreselectedValue: Story = {
@@ -55,5 +57,19 @@ export const WithPreselectedValue: Story = {
         ],
         preselectedValue: "munich",
         label: "Select City",
+        name: "city-select",
+    },
+};
+export const WithLongLabel: Story = {
+    args: {
+        options: [
+            { value: "berlin", label: "Berlin" },
+            { value: "hamburg", label: "Hamburg" },
+            { value: "munich", label: "Munich" },
+            { value: "cologne", label: "Cologne" },
+            { value: "frankfurt", label: "Frankfurt" },
+        ],
+        label: "Select City with a Long Label",
+        name: "city-select",
     },
 };
