@@ -10,8 +10,7 @@
 }
 .theme-light {
     .panel-wrapper {
-        background: rgba(var(--bg), 1);
-        background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg) 90%);
+        background: var(--bg-light);
         transition: all 0.25s ease;
         border-radius: borders.$borderradius * 2;
         box-shadow:

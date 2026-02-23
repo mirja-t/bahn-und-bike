@@ -8,9 +8,9 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
         position: relative;
         background: var(--linklist-bg);
         border-radius: var(--linklist-border-radius);
-        box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.05);
-        padding: 0.125em;
-        margin: 0.25em 0;
+        border-bottom: 1px solid var(--linklist-bg-active);
+        box-shadow: var(--linklist-boxshadow);
+        padding: 0.2em;
         transition: all 0.35s ease;
         cursor: pointer;
         display: flex;
@@ -26,6 +26,7 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
         &:hover {
             transition: all 0.35s ease;
             background: var(--linklist-bg-active);
+            box-shadow: var(--linklist-boxshadow-active);
             h4 {
                 color: var(--linklist-active);
             }
