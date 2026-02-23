@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
+import { expect, within, userEvent } from "storybook/test";
 
 import { Select } from "../components/stateless/select/Select";
 
@@ -32,6 +33,19 @@ export const WithLabel: Story = {
             { value: "frankfurt", label: "Frankfurt" },
         ],
         name: "city-select",
+    },
+    play: async ({ canvasElement, step }) => {
+        const canvas = within(canvasElement);
+        const select = canvas.getByRole("combobox");
+
+        expect(select).toHaveValue("berlin");
+        await step(
+            "Select shows the correct value after selection",
+            async () => {
+                await userEvent.selectOptions(select, "munich");
+                expect(select).toHaveValue("munich");
+            },
+        );
     },
 };
 export const WithoutLabel: Story = {

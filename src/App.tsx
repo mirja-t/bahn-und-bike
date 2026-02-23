@@ -45,7 +45,6 @@ export function App() {
     };
 
     const setPageTheme = (value: Theme) => {
-        setTheme(value);
         dispatch(setTheme(value));
     };
 

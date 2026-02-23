@@ -35,17 +35,17 @@ export const Select = <T extends string>({
         const selectedOption =
             options.find((option) => option.value === target.value) || null;
         setSelected(selectedOption);
-        if (onChange) onChange(target.value as T);
+        if (onChange && selectedOption) onChange(selectedOption.value);
     };
 
     useEffect(() => {
-        if (preselectedValue) {
+        if (preselectedValue && !selected) {
             const preselectedOption = options.find(
                 (option) => option.value === preselectedValue,
             );
             setSelected(preselectedOption || null);
         }
-    }, [preselectedValue, options]);
+    }, [preselectedValue, options, selected]);
 
     return (
         <div className={styles.selectwrapper}>
