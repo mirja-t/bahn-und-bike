@@ -5,6 +5,8 @@ import { fn } from "storybook/test";
 import Tabs from "../components/stateless/tabs/Tabs";
 import { ItemList } from "../components/stateless/itemlist/ItemList";
 import { Panel } from "../components/stateless/panel/Panel";
+import { Provider } from "react-redux";
+import { mockStore } from "./MockSlice";
 
 // Mock content components for demonstration
 const MockTrainContent = () => (
@@ -51,6 +53,13 @@ const meta = {
     title: "Stateless/Tabs",
     component: Tabs,
     tags: ["autodocs"],
+    decorators: [
+        (Story) => (
+            <Provider store={mockStore}>
+                <Story />
+            </Provider>
+        ),
+    ],
     argTypes: {
         children: { control: false },
         height: { control: "text" },
