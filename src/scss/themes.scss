@@ -52,17 +52,18 @@ $themes: (
                 colors.$background-darker 0%,
                 colors.$xlightgray 70%
             ),
-        "dropdown-bg": linear-gradient(
-                0deg,
-                colors.$background-darker,
-                transparent
-            ),
+        "dropdown-bg": colors.$background,
         "dropdown-bg-hover": linear-gradient(
                 0deg,
                 colors.$background-darker,
                 transparent
             ),
-        "dropdown-box-shadow": shadows.$boxshadow,
+        "dropdown-box-shadow": shadows.$dropdownshadow,
+        "dropdown-label-bg": linear-gradient(
+                0deg,
+                var(--bg-light) 0%,
+                var(--bg-dark) 90%
+            ),
         "map-fill": colors.$background-lighter,
         "map-stroke": colors.$background-darker,
         "map-river": #cae4ef,
@@ -114,6 +115,7 @@ $themes: (
         "dropdown-bg": colors.$lightblue,
         "dropdown-bg-hover": colors.$gold-dark,
         "dropdown-box-shadow": none,
+        "dropdown-label-bg": colors.$dark-darker,
         "map-fill": colors.$map-dark-bg,
         "map-stroke": colors.$background-dark,
         "map-river": colors.$background-dark,

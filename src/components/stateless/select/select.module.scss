@@ -1,0 +1,70 @@
+@use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/mixins/caret.scss" as caret;
+
+.fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.selectwrapper {
+    position: relative;
+
+    &::before {
+        @include caret.caret();
+
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        right: 0.25em;
+        transform: scale(0.5) translateY(-50%);
+        z-index: 2;
+    }
+
+    &:has(select:focus),
+    &.selected {
+        label {
+            transform: translateY(-50%) scale(0.65);
+            transform-origin: left center;
+            background: var(--bg);
+            padding: 0.2em;
+            display: inline-block;
+            height: auto;
+            width: auto;
+            left: 0.75em;
+            box-shadow: none;
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: var(--bg);
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        pointer-events: none;
+        touch-action: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        background: var(--dropdown-label-bg);
+        border-radius: var(--border-radius);
+        padding-right: spacing.$padding-s;
+        box-shadow: var(--dropdown-box-shadow);
+    }
+}
+.select {
+    cursor: pointer;
+    color: var(--secondary);
+    background: var(--dropdown-bg);
+    width: 100%;
+    appearance: none;
+    border-radius: var(--border-radius);
+    min-width: calc(3em + 0.5vw);
+    padding: spacing.$padding-m spacing.$padding-xl;
+    border: none;
+    border: 2px solid var(--bg-dark);
+}
