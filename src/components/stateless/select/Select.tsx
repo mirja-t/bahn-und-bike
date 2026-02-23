@@ -57,7 +57,7 @@ export const Select = <T extends string>({
                     onChange={handleChange}
                     value={selected?.value || ""}
                 >
-                    {!label && !preselectedValue && (
+                    {!selected && !preselectedValue && (
                         <option key="empty" value="">
                             ---
                         </option>

@@ -38,7 +38,7 @@ export const WithLabel: Story = {
         const canvas = within(canvasElement);
         const select = canvas.getByRole("combobox");
 
-        expect(select).toHaveValue("berlin");
+        expect(select).toHaveValue("");
         await step(
             "Select shows the correct value after selection",
             async () => {
