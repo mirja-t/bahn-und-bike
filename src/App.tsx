@@ -109,7 +109,7 @@ export function App() {
                                 { label: "dark", value: "dark" },
                             ]}
                             name={"Select Theme"}
-                            preselectedValue="light"
+                            preselectedValue={theme}
                             onChange={setPageTheme}
                             label="theme"
                         />
