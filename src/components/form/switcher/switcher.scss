@@ -9,12 +9,13 @@ $radioTransitionSpeed: 0.35s;
 $langSwitcherPadding: 0.4em;
 $langSwitcherBorderRadius: 2em;
 
-form.switcher {
+.switcher {
     pointer-events: all;
     align-self: flex-start;
     padding: 0.15em;
+    display: inline-block;
 }
-form.switcher fieldset {
+.switcher fieldset {
     display: flex;
     position: relative;
     height: $radiobtn-height;
@@ -89,7 +90,7 @@ form.switcher fieldset {
 }
 
 .theme-light {
-    form.switcher {
+    .switcher {
         border-radius: $langSwitcherBorderRadius;
         background-color: var(--muted);
         box-shadow:
@@ -98,7 +99,7 @@ form.switcher fieldset {
             5px 8px 15px rgba(0, 0, 0, 0.1),
             -5px -3px 15px white;
     }
-    form.switcher fieldset {
+    .switcher fieldset {
         border-radius: $langSwitcherBorderRadius;
 
         &:after,
@@ -178,7 +179,7 @@ form.switcher fieldset {
 }
 
 .theme-dark {
-    form.switcher {
+    .switcher {
         fieldset {
             .inputRadiowrapper {
                 label {

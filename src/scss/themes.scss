@@ -44,6 +44,8 @@ $themes: (
         "label-active-bg": transparent,
         "input-border": transparent,
         "logo-color": colors.$darkgray,
+        "button-boxshadow": shadows.$button-boxshadow,
+        "button-boxshadow-inset": shadows.$button-boxshadow-inset,
         "button-bg": linear-gradient(
                 180deg,
                 colors.$background-lighter 0%,
@@ -54,17 +56,18 @@ $themes: (
                 colors.$background 0%,
                 colors.$xlightgray 70%
             ),
-        "dropdown-bg": linear-gradient(
-                0deg,
-                colors.$background-darker,
-                transparent
-            ),
+        "dropdown-bg": colors.$background,
         "dropdown-bg-hover": linear-gradient(
                 0deg,
                 colors.$background-darker,
                 transparent
             ),
-        "dropdown-box-shadow": shadows.$boxshadow,
+        "dropdown-box-shadow": shadows.$dropdownshadow,
+        "dropdown-label-bg": linear-gradient(
+                0deg,
+                var(--bg-light) 0%,
+                var(--bg-dark) 90%
+            ),
         "map-fill": colors.$background-lighter,
         "map-stroke": colors.$background-darker,
         "map-river": #cae4ef,
@@ -105,7 +108,7 @@ $themes: (
         "linklist-border-radius": borders.$borderradius-dark,
         "linklist": colors.$gold-light,
         "linklist-active": white,
-        "label": colors.$lightblue,
+        "label": colors.$gold,
         "label-active": colors.$gold-light,
         "label-inactive": colors.$lightblue,
         "label-bg": colors.$dark-darker,
@@ -113,11 +116,14 @@ $themes: (
         "label-inactive-bg": colors.$lightblue,
         "input-border": colors.$dark-darker,
         "logo-color": colors.$gold,
+        "button-boxshadow": none,
+        "button-boxshadow-inset": none,
         "button-bg": colors.$lightblue,
         "button-bg-hover": colors.$gold-dark,
         "dropdown-bg": colors.$lightblue,
         "dropdown-bg-hover": colors.$gold-dark,
         "dropdown-box-shadow": none,
+        "dropdown-label-bg": colors.$dark-darker,
         "map-fill": colors.$map-dark-bg,
         "map-stroke": colors.$background-dark,
         "map-river": colors.$background-dark,

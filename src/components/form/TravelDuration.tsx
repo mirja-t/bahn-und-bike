@@ -5,7 +5,6 @@ import { LangCode, selectLang } from "../../AppSlice";
 import { Button } from "../stateless/button/Button";
 import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
-//import { DestinationPicker } from './destinationPicker/DestinationPicker';
 
 interface TravelDurationProps {
     lang: LangCode;
