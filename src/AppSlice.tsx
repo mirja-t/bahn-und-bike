@@ -26,7 +26,8 @@ export interface AppState {
     langError: boolean;
 }
 
-export const loadLang = createAsyncThunk<Labels>("app/loadLang", async () => {
+export const loadLang = createAsyncThunk("app/loadLang", async () => {
+    // const { default: lang } = await import("./i18n/lang.json");
     const query = "lang";
     const lang = await fetch(`${VITE_API_URL}${query}`, { headers: headers })
         .then((response) => {
@@ -53,8 +54,8 @@ export const appSlice = createSlice({
     name: "app",
     initialState: {
         lang: {},
-        currentLang: "de",
-        theme: "light",
+        currentLang: LangCode.DE,
+        theme: Theme.Light,
         langLoading: true,
         langError: false,
     } as AppState,
