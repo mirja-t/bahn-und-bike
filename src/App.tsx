@@ -4,10 +4,9 @@ import {
     setTheme,
     LangCode,
     Theme,
-    selectLangLoading,
-    selectLangError,
-    loadLang,
     useAppDispatch,
+    setLangCode,
+    selectLangCode,
 } from "./AppSlice";
 import { useEffect, useState } from "react";
 import { Header } from "./components/stateless/header/Header";
@@ -26,7 +25,6 @@ import {
 } from "./components/map/veloroutes/VeloroutesSlice";
 import { Footer } from "./components/stateless/footer/Footer";
 import { Home } from "./components/home/Home";
-import { Error } from "./components/stateless/error/Error";
 import { Privacy } from "./components/privacy/Privacy";
 import { Imprint } from "./components/imprint/Imprint";
 import { Container } from "./components/container/Container";
@@ -36,22 +34,13 @@ import ErrorBoundary from "./components/stateless/errorBoundary/ErrorBoundary";
 export function App() {
     const theme = useSelector(selectTheme);
     const [classes, setClasses] = useState("");
-    const dispatch = useAppDispatch();
-    const [langCode, setLangCode] = useState<LangCode>(LangCode.DE);
-    const languagesLoading = useSelector(selectLangLoading);
-    const languagesError = useSelector(selectLangError);
     const location = useLocation();
-    const setLanguage = (lang: LangCode) => {
-        setLangCode(lang);
-    };
+    const dispatch = useAppDispatch();
+    const langCode = useSelector(selectLangCode);
 
     const setPageTheme = (value: Theme) => {
         dispatch(setTheme(value));
     };
-
-    useEffect(() => {
-        dispatch(loadLang());
-    }, [dispatch]);
 
     useEffect(() => {
         const lastSlugSegment = location.pathname.match(/[^\/]*$/);
@@ -72,9 +61,6 @@ export function App() {
         dispatch(setTrainroutesAlongVeloroute([]));
     };
 
-    if (languagesLoading) return <div className="App">Loading...</div>;
-    if (languagesError) return <Error />;
-
     return (
         <ErrorBoundary>
             <div className={`App theme-${theme}`}>
@@ -83,7 +69,7 @@ export function App() {
                         <Link
                             to="/"
                             title={
-                                langCode === "de"
+                                langCode === LangCode.DE
                                     ? "Zur Startseite"
                                     : "Back to Homepage"
                             }
@@ -93,7 +79,9 @@ export function App() {
                         </Link>
                         <Panel>
                             <Switcher
-                                setValue={setLanguage}
+                                setValue={(langCode: LangCode) =>
+                                    dispatch(setLangCode(langCode))
+                                }
                                 values={[
                                     {
                                         value: LangCode.DE,
@@ -118,28 +106,18 @@ export function App() {
                         </Panel>
                     </Header>
                     <Routes>
-                        <Route path="/" element={<Home lang={langCode} />} />
+                        <Route path="/" element={<Home />} />
                         <Route
                             path="routefinder"
                             element={<Container lang={langCode} />}
                         />
                         <Route
                             path="datenschutz"
-                            element={
-                                <Privacy
-                                    lang={langCode}
-                                    resetState={resetState}
-                                />
-                            }
+                            element={<Privacy resetState={resetState} />}
                         />
                         <Route
                             path="impressum"
-                            element={
-                                <Imprint
-                                    lang={langCode}
-                                    resetState={resetState}
-                                />
-                            }
+                            element={<Imprint resetState={resetState} />}
                         />
                     </Routes>
                     <Footer>

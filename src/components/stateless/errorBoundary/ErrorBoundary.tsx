@@ -20,8 +20,6 @@ interface ErrorBoundaryState {
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-    private resetTimeoutId: number | null = null;
-
     constructor(props: ErrorBoundaryProps) {
         super(props);
         this.state = {
@@ -64,19 +62,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             // errorReportingService.captureException(error, { extra: errorInfo, tags: { eventId } });
         }
     }
-
-    resetErrorBoundary = () => {
-        if (this.resetTimeoutId) {
-            clearTimeout(this.resetTimeoutId);
-        }
-
-        this.setState({
-            hasError: false,
-            error: null,
-            errorInfo: null,
-            eventId: null,
-        });
-    };
 
     handleReload = () => {
         window.location.reload();

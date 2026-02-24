@@ -8,17 +8,13 @@ import ErrorBoundary from "../components/stateless/errorBoundary/ErrorBoundary";
  * The fallback prop now accepts a render function that receives:
  * - error: The caught error object
  * - errorInfo: React ErrorInfo with componentStack
- * - resetErrorBoundary: Function to reset the error state
- * - eventId: Unique identifier for this error occurrence
  *
  * Usage:
  * ```tsx
  * <ErrorBoundary
- *   fallback={({ error, errorInfo, resetErrorBoundary, eventId }) => (
+ *   fallback={({ error, errorInfo }) => (
  *     <CustomErrorUI
  *       error={error}
- *       onRetry={resetErrorBoundary}
- *       eventId={eventId}
  *     />
  *   )}
  * >
@@ -63,7 +59,7 @@ const meta = {
         fallback: {
             control: false,
             description:
-                "Render function that receives error, errorInfo, resetErrorBoundary, and eventId props",
+                "Render function that receives error and errorInfo props",
         },
         onError: { action: "error-caught" },
     },

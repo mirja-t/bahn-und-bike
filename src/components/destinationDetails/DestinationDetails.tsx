@@ -1,7 +1,8 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
+import { selectLangCode, useAppDispatch } from "../../AppSlice";
+import { useTranslation } from "../../utils/i18n";
 import {
     selectVelorouteList,
     selectActiveVeloroute,
@@ -20,12 +21,9 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Fragment } from "react";
 
-interface DestinationDetailsProps {
-    lang: LangCode;
-}
-
-export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
-    const labels = useSelector(selectLang);
+export const DestinationDetails = () => {
+    const langCode = useSelector(selectLangCode);
+    const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
@@ -63,8 +61,8 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
 
                             <section className="section">
                                 <div>
-                                    <h5>{labels[lang].traveltime}</h5>
-                                    <p>{getTime(section.dur, lang)}</p>
+                                    <h5>{t("traveltime")}</h5>
+                                    <p>{getTime(section.dur, langCode)}</p>
                                 </div>
                             </section>
                         </Fragment>
@@ -73,7 +71,7 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
                     {activeSection && activeSection.connection && (
                         <section className="section">
                             <div>
-                                <h5>{labels[lang].trainconnection}</h5>
+                                <h5>{t("trainconnection")}</h5>
                                 {activeSection && (
                                     <p>{activeSection.connection.stop_name}</p>
                                 )}
@@ -82,10 +80,8 @@ export const DestinationDetails = ({ lang }: DestinationDetailsProps) => {
                     )}
 
                     <section className="section">
-                        <h5>{labels[lang].veloroutes}</h5>
-                        {veloroutes.length < 1 && (
-                            <p>{`${labels[lang].nomatch}`}</p>
-                        )}
+                        <h5>{t("veloroutes")}</h5>
+                        {veloroutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
                         <ItemList
                             items={veloroutes}
                             activeId={activeVeloroute?.id}

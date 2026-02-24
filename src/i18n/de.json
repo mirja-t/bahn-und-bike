@@ -62,5 +62,8 @@
     "traveltime": "Fahrtzeit",
     "upto": "Bis zu",
     "veloroutes": "Radfernwege",
-    "via": "Über"
+    "via": "Über",
+    "bikeroutes": "Radwege",
+    "trainconnections": "Bahnverbindungen",
+    "routelegs": "Abschnitte"
 }

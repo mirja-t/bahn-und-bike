@@ -1,7 +1,8 @@
 import "./velorouteDetails.scss";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
-import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
+import { useAppDispatch } from "../../AppSlice";
+import { useTranslation } from "../../utils/i18n";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
@@ -12,14 +13,10 @@ import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 
-interface VelorouteDetailsProps {
-    lang: LangCode;
-}
-
-export const VelorouteDetails = ({ lang }: VelorouteDetailsProps) => {
+export const VelorouteDetails = () => {
     const dispatch = useAppDispatch();
 
-    const labels = useSelector(selectLang);
+    const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
@@ -55,11 +52,9 @@ export const VelorouteDetails = ({ lang }: VelorouteDetailsProps) => {
                             </div>
                         </header>
                         <section className="veloroute-details">
-                            <h5>{`${labels[lang].totaldistance}`}</h5>
+                            <h5>{`${t("totaldistance")}`}</h5>
                             <p>{activeVeloroute.len}km</p>
-                            <Collapse
-                                title={`${labels[lang].cyclingroutelegs}`}
-                            >
+                            <Collapse title={`${t("cyclingroutelegs")}`}>
                                 <ol className="veloroute-stops">
                                     {activeVeloroute.route.map(
                                         (
@@ -99,7 +94,7 @@ export const VelorouteDetails = ({ lang }: VelorouteDetailsProps) => {
                                 </ol>
                             </Collapse>
                         </section>
-                        {!activeVelorouteSection && labels[lang].nolegchosen}
+                        {!activeVelorouteSection && t("nolegchosen")}
                     </div>
                 )}
             </div>

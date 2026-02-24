@@ -2,7 +2,7 @@ import "./map.scss";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
-import { type LangCode, selectLang } from "../../AppSlice";
+import { useTranslation } from "../../utils/i18n";
 import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
@@ -17,19 +17,12 @@ interface MapProps {
     value: number;
     mapContainer: HTMLDivElement | null;
     mapSize: [number, number];
-    lang: LangCode;
     fn: (dir: "+" | "-") => void;
     userScale: number;
 }
-export const Map = ({
-    value,
-    mapContainer,
-    mapSize,
-    lang,
-    userScale,
-}: MapProps) => {
+export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
-    const labels = useSelector(selectLang);
+    const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroute = useSelector(selectActiveVeloroute);
@@ -83,7 +76,7 @@ export const Map = ({
                                 journeys.length === 0 &&
                                 !isLoading && (
                                     <div className="instructions">
-                                        <p>{labels[lang].instruction}</p>
+                                        <p>{t("instruction")}</p>
                                     </div>
                                 )}
                             <Trainroutes zoom={zoom} />

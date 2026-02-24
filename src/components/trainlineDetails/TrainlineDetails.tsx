@@ -1,6 +1,7 @@
 // import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
-import { type LangCode, selectLang, useAppDispatch } from "../../AppSlice";
+import { useAppDispatch } from "../../AppSlice";
+import { useTranslation } from "../../utils/i18n";
 import {
     setActiveVelorouteSection,
     setActiveVeloroute,
@@ -19,12 +20,8 @@ import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { loadDestinations } from "../destinationDetails/DestinationDetailsSlice";
 
-interface DestinationDetailsProps {
-    lang: LangCode;
-}
-
-export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
-    const labels = useSelector(selectLang);
+export const TrainlineDetails = () => {
+    const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const velorouteListIsLoading = useSelector(selectVelorouteListIsLoading);
@@ -48,10 +45,8 @@ export const TrainlineDetails = ({ lang }: DestinationDetailsProps) => {
         <div id="trainline-details">
             <div id="trainline" className="details">
                 <section className="section">
-                    {trainRoutes.length < 1 && (
-                        <p>{`${labels[lang].nomatch}`}</p>
-                    )}
-                    {/* <h5>{labels[lang].trains}</h5> */}
+                    {trainRoutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
+                    {/* <h5>{t("trains")}</h5> */}
                     <ItemList
                         loading={velorouteListIsLoading}
                         items={filteredTrainroutes}

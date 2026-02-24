@@ -62,5 +62,8 @@
     "traveltime": "travel time",
     "upto": "Up to",
     "veloroutes": "cycling routes",
-    "via": "Via"
+    "via": "Via",
+    "bikeroutes": "Cycling routes",
+    "trainconnections": "Train connections",
+    "routelegs": "Route legs"
 }
