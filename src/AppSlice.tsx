@@ -41,10 +41,7 @@ export const appSlice = createSlice({
     },
 });
 
-export const selectLang = (state: RootState) => state.app.lang;
 export const selectTheme = (state: RootState) => state.app.theme;
-export const selectLangLoading = (state: RootState) => state.app.langLoading;
-export const selectLangError = (state: RootState) => state.app.langError;
 export const selectLangCode = (state: RootState) => state.app.langCode;
 
 export const { setTheme, setLangCode } = appSlice.actions;
