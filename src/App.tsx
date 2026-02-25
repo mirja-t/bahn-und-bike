@@ -62,8 +62,8 @@ export function App() {
     };
 
     return (
-        <ErrorBoundary>
-            <div className={`App theme-${theme}`}>
+        <div className={`App theme-${theme}`}>
+            <ErrorBoundary>
                 <div id="wrapper" className={classes}>
                     <Header>
                         <Link
@@ -134,7 +134,7 @@ export function App() {
                         </Link>
                     </Footer>
                 </div>
-            </div>
-        </ErrorBoundary>
+            </ErrorBoundary>
+        </div>
     );
 }

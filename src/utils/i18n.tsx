@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectLangCode } from "../AppSlice";
+import { LangCode, selectLangCode } from "../AppSlice";
 import enLabels from "../i18n/en.json";
 import deLabels from "../i18n/de.json";
 
@@ -20,7 +20,7 @@ export const useTranslation = () => {
 };
 
 // For use outside of components (if needed)
-export const getTranslation = (langCode: "en" | "de", key: string): string => {
+export const getTranslation = (langCode: LangCode, key: string): string => {
     const langData = translations[langCode];
     return langData[key as keyof typeof langData] || key;
 };

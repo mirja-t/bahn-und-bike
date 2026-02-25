@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "../../../scss/variables/fonts.scss" as fonts;
+@use "../../../scss/variables/spacing.scss" as spacing;
 
 $buttonsize: 0.85;
 
@@ -122,4 +123,7 @@ input[type="submit"],
             }
         }
     }
+}
+.button-wrapper {
+    padding: spacing.$padding-m;
 }
