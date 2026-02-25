@@ -20,12 +20,7 @@ interface MapProps {
     fn: (dir: "+" | "-") => void;
     userScale: number;
 }
-export default function Map({
-    value,
-    mapContainer,
-    mapSize,
-    userScale,
-}: MapProps) {
+export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
     const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
@@ -92,4 +87,4 @@ export default function Map({
             </div>
         </>
     );
-}
+};
