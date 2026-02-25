@@ -1,0 +1,23 @@
+.errorBoundary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    .icon {
+        margin-bottom: 1.5rem;
+        color: var(--error, #dc3545);
+
+        svg {
+            width: 64px;
+            height: 64px;
+        }
+    }
+    .container {
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        .innerWrapper {
+            width: 100%;
+        }
+    }
+}
