@@ -1,16 +1,14 @@
 import "./loading.scss";
-import { useSelector } from "react-redux";
-import { selectCurrentLang, selectLang } from "../../../AppSlice";
+import { useTranslation } from "../../../utils/i18n";
 
 // to do: add animation, maybe use framer-motion for fade in/out and a simple loading animation
 
 export const Loading = () => {
-    const labels = useSelector(selectLang);
-    const lang = useSelector(selectCurrentLang);
+    const { t } = useTranslation();
 
     return (
         <div id="loader">
-            <p>{labels[lang]?.loading || "loading..."}</p>
+            <p>{t("loading") || "loading..."}</p>
         </div>
     );
 };

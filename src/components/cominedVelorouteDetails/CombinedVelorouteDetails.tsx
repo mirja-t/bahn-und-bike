@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { type LangCode, selectLang } from "../../AppSlice";
+import { useTranslation } from "../../utils/i18n";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
@@ -8,15 +8,9 @@ import {
     type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
 
-interface CombinedVelorouteDetailsProps {
-    lang: LangCode;
-}
-
-export const CombinedVelorouteDetails = ({
-    lang,
-}: CombinedVelorouteDetailsProps) => {
+export const CombinedVelorouteDetails = () => {
     const dispatch = useDispatch();
-    const labels = useSelector(selectLang);
+    const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
@@ -41,8 +35,7 @@ export const CombinedVelorouteDetails = ({
                 <span>{idx}</span>
             </div>
             <span>
-                {idx === 1 ? labels[lang].from : labels[lang].to}{" "}
-                {stop.stop_name}
+                {idx === 1 ? t("from") : t("to")} {stop.stop_name}
                 {stop.trainlines &&
                     stop.trainlines.map((s, i) => (
                         <span key={i} className="train">
@@ -57,7 +50,7 @@ export const CombinedVelorouteDetails = ({
             <div id="veloroute" className="details">
                 {activeVelorouteSection !== null && (
                     <section className="veloroute-details veloroute-section-details">
-                        <h5>{`${labels[lang].leg}`}</h5>
+                        <h5>{`${t("leg")}`}</h5>
                         {sectionHeadline(activeVelorouteSection.leg[0], 1)}
                         {sectionHeadline(
                             activeVelorouteSection.leg[
@@ -67,7 +60,7 @@ export const CombinedVelorouteDetails = ({
                         )}
                         {activeVelorouteSection.leg.length > 2 && (
                             <>
-                                <h6>{labels[lang].via}</h6>
+                                <h6>{t("via")}</h6>
                                 <ul className="veloroute-stops">
                                     {activeVelorouteSection.leg
                                         .slice(1, -1)
@@ -103,7 +96,7 @@ export const CombinedVelorouteDetails = ({
                                 </ul>
                             </>
                         )}
-                        <h6>{labels[lang].distance}</h6>
+                        <h6>{t("distance")}</h6>
                         <p>{activeVelorouteSection.dist} km</p>
                     </section>
                 )}

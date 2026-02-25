@@ -1,10 +1,10 @@
 import "./error.scss";
 
-export const Error = () => {
+export const Error = ({ children }: { children?: React.ReactNode }) => {
     return (
         <div className="error">
             <div id="error">
-                <p>Failed to load</p>
+                <p>{children || "Failed to load"}</p>
             </div>
         </div>
     );

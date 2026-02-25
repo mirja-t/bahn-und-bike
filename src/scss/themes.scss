@@ -2,6 +2,10 @@
 @use "./variables/borders.scss" as borders;
 @use "./variables/shadows.scss" as shadows;
 
+$colors: (
+    error: colors.$error,
+);
+
 $themes: (
     light: (
         "border-radius": borders.$borderradius-light,

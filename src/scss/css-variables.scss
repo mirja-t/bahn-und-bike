@@ -7,3 +7,8 @@
         }
     }
 }
+@each $name, $value in themes.$colors {
+    body {
+        --#{$name}: #{$value};
+    }
+}

@@ -4,10 +4,9 @@ import {
     setTheme,
     LangCode,
     Theme,
-    selectLangLoading,
-    selectLangError,
-    loadLang,
     useAppDispatch,
+    setLangCode,
+    selectLangCode,
 } from "./AppSlice";
 import { useEffect, useState } from "react";
 import { Header } from "./components/stateless/header/Header";
@@ -26,31 +25,22 @@ import {
 } from "./components/map/veloroutes/VeloroutesSlice";
 import { Footer } from "./components/stateless/footer/Footer";
 import { Home } from "./components/home/Home";
-import { Error } from "./components/stateless/error/Error";
 import { Privacy } from "./components/privacy/Privacy";
 import { Imprint } from "./components/imprint/Imprint";
 import { Container } from "./components/container/Container";
 import { Panel } from "./components/stateless/panel/Panel";
 import { Select } from "./components/stateless/select/Select";
+import ErrorBoundary from "./components/stateless/errorBoundary/ErrorBoundary";
 export function App() {
     const theme = useSelector(selectTheme);
     const [classes, setClasses] = useState("");
-    const dispatch = useAppDispatch();
-    const [lang, setLang] = useState<LangCode>(LangCode.DE);
-    const languagesLoading = useSelector(selectLangLoading);
-    const languagesError = useSelector(selectLangError);
     const location = useLocation();
-    const setLanguage = (lang: LangCode) => {
-        setLang(lang);
-    };
+    const dispatch = useAppDispatch();
+    const langCode = useSelector(selectLangCode);
 
     const setPageTheme = (value: Theme) => {
         dispatch(setTheme(value));
     };
-
-    useEffect(() => {
-        dispatch(loadLang());
-    }, [dispatch]);
 
     useEffect(() => {
         const lastSlugSegment = location.pathname.match(/[^\/]*$/);
@@ -71,79 +61,80 @@ export function App() {
         dispatch(setTrainroutesAlongVeloroute([]));
     };
 
-    if (languagesLoading) return <div className="App">Loading...</div>;
-    if (languagesError) return <Error />;
-
     return (
         <div className={`App theme-${theme}`}>
-            <div id="wrapper" className={classes}>
-                <Header>
-                    <Link
-                        to="/"
-                        title={
-                            lang === "de"
-                                ? "Zur Startseite"
-                                : "Back to Homepage"
-                        }
-                        onClick={resetState}
-                    >
-                        <Logo />
-                    </Link>
-                    <Panel>
-                        <Switcher
-                            setValue={setLanguage}
-                            values={[
-                                {
-                                    value: LangCode.DE,
-                                    label: "de",
-                                },
-                                {
-                                    value: LangCode.EN,
-                                    label: "en",
-                                },
-                            ]}
+            <ErrorBoundary>
+                <div id="wrapper" className={classes}>
+                    <Header>
+                        <Link
+                            to="/"
+                            title={
+                                langCode === LangCode.DE
+                                    ? "Zur Startseite"
+                                    : "Back to Homepage"
+                            }
+                            onClick={resetState}
+                        >
+                            <Logo />
+                        </Link>
+                        <Panel>
+                            <Switcher
+                                setValue={(langCode: LangCode) =>
+                                    dispatch(setLangCode(langCode))
+                                }
+                                values={[
+                                    {
+                                        value: LangCode.DE,
+                                        label: "de",
+                                    },
+                                    {
+                                        value: LangCode.EN,
+                                        label: "en",
+                                    },
+                                ]}
+                            />
+                            <Select
+                                options={[
+                                    { label: "light", value: "light" },
+                                    { label: "dark", value: "dark" },
+                                ]}
+                                name={"Select Theme"}
+                                preselectedValue={theme}
+                                onChange={setPageTheme}
+                                label="theme"
+                            />
+                        </Panel>
+                    </Header>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="routefinder"
+                            element={<Container lang={langCode} />}
                         />
-                        <Select
-                            options={[
-                                { label: "light", value: "light" },
-                                { label: "dark", value: "dark" },
-                            ]}
-                            name={"Select Theme"}
-                            preselectedValue={theme}
-                            onChange={setPageTheme}
-                            label="theme"
+                        <Route
+                            path="datenschutz"
+                            element={<Privacy resetState={resetState} />}
                         />
-                    </Panel>
-                </Header>
-                <Routes>
-                    <Route path="/" element={<Home lang={lang} />} />
-                    <Route
-                        path="routefinder"
-                        element={<Container lang={lang} />}
-                    />
-                    <Route
-                        path="datenschutz"
-                        element={
-                            <Privacy lang={lang} resetState={resetState} />
-                        }
-                    />
-                    <Route
-                        path="impressum"
-                        element={
-                            <Imprint lang={lang} resetState={resetState} />
-                        }
-                    />
-                </Routes>
-                <Footer>
-                    <Link to="datenschutz">
-                        {lang === LangCode.DE ? "Datenschutz" : "Privacy"}
-                    </Link>
-                    &nbsp;&nbsp;
-                    <Link to="impressum">
-                        {lang === LangCode.DE ? "Impressum" : "Legal Notes"}
-                    </Link>
-                </Footer>
-            </div>
+                        <Route
+                            path="impressum"
+                            element={<Imprint resetState={resetState} />}
+                        />
+                    </Routes>
+                    <Footer>
+                        <Link to="datenschutz">
+                            {langCode === LangCode.DE
+                                ? "Datenschutz"
+                                : "Privacy"}
+                        </Link>
+                        &nbsp;&nbsp;
+                        <Link to="impressum">
+                            {langCode === LangCode.DE
+                                ? "Impressum"
+                                : "Legal Notes"}
+                        </Link>
+                    </Footer>
+                </div>
+            </ErrorBoundary>
         </div>
     );
 }
