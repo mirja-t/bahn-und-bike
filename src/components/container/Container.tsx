@@ -27,12 +27,13 @@ import { Panel } from "../stateless/panel/Panel";
 import Tabs from "../stateless/tabs/Tabs";
 import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
 import { useResponsiveSize } from "../../hooks/useResponsiveSize";
+import { useTranslation } from "../../utils/i18n";
 
 interface ContainerProps {
     lang: LangCode;
 }
 
-export const Container = ({ lang }: ContainerProps) => {
+export const Container = ({}: ContainerProps) => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
@@ -45,6 +46,7 @@ export const Container = ({ lang }: ContainerProps) => {
     const sidebarRef = useRef<HTMLElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const [activeTabId, setActiveTabId] = useState<string | undefined>();
+    const { t } = useTranslation();
 
     const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
@@ -130,23 +132,26 @@ export const Container = ({ lang }: ContainerProps) => {
                                 activeTabId={activeTabId}
                                 handleTabClick={handleTabClick}
                             >
-                                <Tabs.Tab id="trainlines" name="Bahnlinien">
-                                    <TrainlineDetails lang={lang} />
+                                <Tabs.Tab
+                                    id="trainlines"
+                                    name={t("trainconnections")}
+                                >
+                                    <TrainlineDetails />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="veloroutes"
-                                    name="Radwege"
+                                    name={t("bikeroutes")}
                                     disabled={trainRoutes.length < 1}
                                 >
-                                    <DestinationDetails lang={lang} />
+                                    <DestinationDetails />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="leg"
-                                    name="Abschnitte"
+                                    name={t("routelegs")}
                                     disabled={!activeVeloroute}
                                 >
-                                    <VelorouteDetails lang={lang} />
-                                    <CombinedVelorouteDetails lang={lang} />
+                                    <VelorouteDetails />
+                                    <CombinedVelorouteDetails />
                                 </Tabs.Tab>
                             </Tabs>
                         </aside>
@@ -158,7 +163,6 @@ export const Container = ({ lang }: ContainerProps) => {
                             value={submitVal}
                             mapSize={memoizedMapSize}
                             mapContainer={wrapper}
-                            lang={lang}
                             fn={memoizedZoomMap}
                             userScale={userScale}
                         />
@@ -167,7 +171,7 @@ export const Container = ({ lang }: ContainerProps) => {
             </div>
             <div>
                 <Panel>
-                    <TravelDuration handleSubmit={handleSubmit} lang={lang} />
+                    <TravelDuration handleSubmit={handleSubmit} />
                 </Panel>
             </div>
         </>

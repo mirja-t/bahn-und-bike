@@ -1,26 +1,19 @@
 import { motion } from "framer-motion";
 import "./checkbox.scss";
+import { useTranslation } from "../../../utils/i18n";
 
 interface CheckBoxProps {
-    lang: string;
-    labels: Record<string, Record<string, string>>;
     value: boolean;
     handleCheckboxChange: () => void;
 }
-export const CheckBox = ({
-    lang,
-    labels,
-    value,
-    handleCheckboxChange,
-}: CheckBoxProps) => {
+export const CheckBox = ({ value, handleCheckboxChange }: CheckBoxProps) => {
+    const { t } = useTranslation();
     const unchecked = "11.3,15 15,15 18.7,15 ";
     const checked = "9.3,15 13.3,19 21.8,9.8 ";
 
     return (
         <fieldset className="directconnection">
-            <label htmlFor="directconnection">
-                {labels[lang].direct_trains_only}
-            </label>
+            <label htmlFor="directconnection">{t("direct_trains_only")}</label>
             <div className={value ? "active inputCheckbox" : "inputCheckbox"}>
                 <motion.svg
                     className={value ? "active check" : "check"}

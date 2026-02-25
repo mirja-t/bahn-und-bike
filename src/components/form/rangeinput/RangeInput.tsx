@@ -1,10 +1,10 @@
-import type { Labels, LangCode } from "../../../AppSlice";
+import { useTranslation } from "../../../utils/i18n";
 import { getTime } from "../../../utils/getTime";
 import "./rangeinput.scss";
 import { useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectLangCode } from "../../../AppSlice";
 interface RangeInputProps {
-    lang: LangCode;
-    labels: Labels;
     min: number;
     max: number;
     value: number;
@@ -12,8 +12,6 @@ interface RangeInputProps {
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 export const RangeInput = ({
-    lang,
-    labels,
     min,
     max,
     value,
@@ -21,6 +19,8 @@ export const RangeInput = ({
     handleInputChange,
 }: RangeInputProps) => {
     const ref = useRef<HTMLInputElement>(null);
+    const langCode = useSelector(selectLangCode);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!ref.current) return;
@@ -48,10 +48,10 @@ export const RangeInput = ({
 
     return (
         <fieldset className="range-slider">
-            <label htmlFor="fahrtzeit">{labels[lang].traveltime}:</label>
+            <label htmlFor="fahrtzeit">{t("traveltime")}:</label>
             <span>
                 {" "}
-                {labels[lang].upto} {getTime(value * 30, lang)}
+                {t("upto")} {getTime(value * 30, langCode)}
             </span>
             <div>
                 <input

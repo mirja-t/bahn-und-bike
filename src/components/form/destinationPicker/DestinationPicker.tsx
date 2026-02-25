@@ -1,7 +1,7 @@
 import "./destinationpicker.scss";
 import { useDispatch } from "react-redux";
 import { setStartPos } from "../../map/trainroutes/TrainroutesSlice";
-import type { LangCode, Labels } from "../../../AppSlice";
+import { useTranslation } from "../../../utils/i18n";
 
 const startDest = {
     berlin: "8011160",
@@ -9,13 +9,9 @@ const startDest = {
     schwerin: "8010324",
 };
 
-interface DestinationPickerProps {
-    labels: Labels;
-    lang: LangCode;
-}
-
-export const DestinationPicker = ({ labels, lang }: DestinationPickerProps) => {
+export const DestinationPicker = () => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { target } = event;
@@ -25,7 +21,7 @@ export const DestinationPicker = ({ labels, lang }: DestinationPickerProps) => {
 
     return (
         <fieldset className="startdestination">
-            <label htmlFor="startdest">{labels[lang].startdest}:</label>
+            <label htmlFor="startdest">{t("startdest")}:</label>
             <div className="selectwrapper">
                 <select name="dest" id="startdest" onChange={handleChange}>
                     <option value="berlin">Berlin</option>
