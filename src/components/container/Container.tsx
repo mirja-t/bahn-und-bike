@@ -20,7 +20,8 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
-import { Map } from "../map/Map";
+import { lazy } from "react";
+const Map = lazy(() => import("../map/Map"));
 import { useAppDispatch, type LangCode } from "../../AppSlice";
 import { Panel } from "../stateless/panel/Panel";
 import Tabs from "../stateless/tabs/Tabs";
