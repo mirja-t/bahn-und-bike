@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         // Generate a unique event ID for this error
-        const eventId = `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const eventId = `err_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
         this.setState({
             error,
