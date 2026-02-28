@@ -24,7 +24,7 @@ type Trainstop = {
     x: number;
     y: number;
 };
-type Train = {
+export type Train = {
     trainline_id: string;
     trainline_name: string;
 };

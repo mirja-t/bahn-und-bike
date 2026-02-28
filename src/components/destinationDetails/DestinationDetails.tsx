@@ -15,6 +15,7 @@ import {
     selectTrainroutesAlongVeloroute,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
+    type Train,
 } from "../map/trainroutes/TrainroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
@@ -22,7 +23,27 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useStopNames } from "../../hooks/useStopNames";
+import { useAgencyNames } from "../../hooks/useAgencyNames";
 
+interface TrainInfoProps {
+    trainline: Train;
+}
+const TrainInfo = ({ trainline }: TrainInfoProps) => {
+    const { agencyName, loading, error } = useAgencyNames(
+        trainline.trainline_id,
+    );
+
+    if (loading) return <span>Loading...</span>;
+    if (error) return <span>Error loading trainline</span>;
+
+    return (
+        <div className="trainline-info">
+            <span>
+                {trainline.trainline_name}:&nbsp;{agencyName}
+            </span>
+        </div>
+    );
+};
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -37,7 +58,15 @@ const Section = ({ section }: SectionProps) => {
                     <PinIcon size="large">
                         <TrainIcon />
                     </PinIcon>
-                    <h2>{section.name}</h2>
+                    <div>
+                        <h2>{section.name}</h2>
+                        {section.trainlines.map((trainline) => (
+                            <TrainInfo
+                                key={trainline.trainline_id}
+                                trainline={trainline}
+                            />
+                        ))}
+                    </div>
                 </div>
             </header>
 
@@ -54,7 +83,7 @@ const Section = ({ section }: SectionProps) => {
             ) : error ? (
                 "error loading stop names"
             ) : (
-                <Collapse title={`${t("cyclingroutelegs")}`}>
+                <Collapse title={`${t("journey")}`}>
                     <ol>
                         {section.stopIds.map((id) => (
                             <li key={id}>{stopNames[id]}</li>
