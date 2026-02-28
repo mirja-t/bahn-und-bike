@@ -14,15 +14,58 @@ import {
     selectActiveSection,
     selectTrainroutesAlongVeloroute,
     setTrainroutesAlongVeloroute,
+    type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
-import { Fragment } from "react";
+import { Collapse } from "../stateless/collapse/Collapse";
+import { useStopNames } from "../../hooks/useStopNames";
 
-export const DestinationDetails = () => {
+interface SectionProps {
+    section: CurrentTrainroute;
+}
+const Section = ({ section }: SectionProps) => {
+    const { t } = useTranslation();
     const langCode = useSelector(selectLangCode);
+    const { names: stopNames, loading, error } = useStopNames(section.stopIds);
+    return (
+        <>
+            <header>
+                <div className="details-headline">
+                    <PinIcon size="large">
+                        <TrainIcon />
+                    </PinIcon>
+                    <h2>{section.name}</h2>
+                </div>
+            </header>
+
+            {section.dur && (
+                <section className="section">
+                    <div>
+                        <h5>{t("traveltime")}</h5>
+                        <p>{getTime(section.dur, langCode)}</p>
+                    </div>
+                </section>
+            )}
+            {loading ? (
+                "loading..."
+            ) : error ? (
+                "error loading stop names"
+            ) : (
+                <Collapse title={`${t("cyclingroutelegs")}`}>
+                    <ol>
+                        {stopNames.map((name) => (
+                            <li key={name}>{name}</li>
+                        ))}
+                    </ol>
+                </Collapse>
+            )}
+        </>
+    );
+};
+export const DestinationDetails = () => {
     const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
@@ -49,23 +92,7 @@ export const DestinationDetails = () => {
             <div id="destination" className="details">
                 <>
                     {trainSections.map((section, idx) => (
-                        <Fragment key={idx}>
-                            <header>
-                                <div className="details-headline">
-                                    <PinIcon size="large">
-                                        <TrainIcon />
-                                    </PinIcon>
-                                    <h2>{section.name}</h2>
-                                </div>
-                            </header>
-
-                            <section className="section">
-                                <div>
-                                    <h5>{t("traveltime")}</h5>
-                                    <p>{getTime(section.dur, langCode)}</p>
-                                </div>
-                            </section>
-                        </Fragment>
+                        <Section key={idx} section={section} />
                     ))}
 
                     {activeSection && activeSection.connection && (
