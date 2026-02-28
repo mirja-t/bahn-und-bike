@@ -1,4 +1,4 @@
-import "./collapse.scss";
+import styles from "./collapse.module.scss";
 import { useState, type ReactNode } from "react";
 
 interface CollapseProps {
@@ -10,16 +10,22 @@ export const Collapse = ({ children, title }: CollapseProps) => {
     const [toggle, setToggle] = useState(false);
 
     return (
-        <div className="collapse">
+        <div className={styles.collapse}>
             <h5
                 onClick={() => setToggle((prev) => !prev)}
-                className={toggle ? "toggle on" : "toggle off"}
+                className={
+                    toggle
+                        ? `${styles.toggle} ${styles.on}`
+                        : `${styles.toggle} ${styles.off}`
+                }
             >
                 {title}
             </h5>
             <div
                 className={
-                    toggle ? "toggle-container on" : "toggle-container off"
+                    toggle
+                        ? `${styles.toggleContainer} ${styles.on}`
+                        : `${styles.toggleContainer} ${styles.off}`
                 }
             >
                 {children}
