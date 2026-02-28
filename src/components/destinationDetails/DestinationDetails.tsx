@@ -66,6 +66,16 @@ const Section = ({ section }: SectionProps) => {
                                 trainline={trainline}
                             />
                         ))}
+                        {section.connection &&
+                            section.connection.connecting_trains &&
+                            section.connection.connecting_trains.map(
+                                (trainline) => (
+                                    <TrainInfo
+                                        key={trainline.trainline_id}
+                                        trainline={trainline}
+                                    />
+                                ),
+                            )}
                     </div>
                 </div>
             </header>

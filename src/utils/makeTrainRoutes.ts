@@ -102,7 +102,7 @@ export const makeTrainRoutes = (
                     let name = `${stop.name}: ${stop.destination_name}`;
                     let trainlines: Train[] = [];
                     if (connection) {
-                        name = `${stop.name} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.destination_name}`;
+                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.destination_name}`;
                         trainlines = connection.initial_trains;
                     } else {
                         trainlines.push({
