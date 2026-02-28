@@ -64,23 +64,27 @@ export const makeTrainRoutes = (
                     // Add trainline to connecting route
                     if (
                         connection &&
-                        !currentRoute.route.connection?.connecting_trains.includes(
-                            stop.trainline_id,
-                        )
+                        !currentRoute.route.connection?.connecting_trains
+                            .map((t) => t.trainline_id)
+                            .includes(stop.trainline_id)
                     ) {
-                        currentRoute.route.connection?.connecting_trains.push(
-                            stop.trainline_id,
-                        );
-                        currentRoute.route.name = `${currentRoute.route.trainlines.join(", ")} + ${connection.connecting_trains.join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
+                        currentRoute.route.connection?.connecting_trains.push({
+                            trainline_id: stop.trainline_id,
+                            trainline_name: stop.name,
+                        });
+                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
                     }
                     // Add trainline to existing route
                     else if (
-                        !currentRoute.route.trainlines.includes(
-                            stop.trainline_id,
-                        )
+                        !currentRoute.route.trainlines
+                            .map((t) => t.trainline_id)
+                            .includes(stop.trainline_id)
                     ) {
-                        currentRoute.route.trainlines.push(stop.trainline_id);
-                        currentRoute.route.name = `${currentRoute.route.trainlines.join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
+                        currentRoute.route.trainlines.push({
+                            trainline_id: stop.trainline_id,
+                            trainline_name: stop.name,
+                        });
+                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
                     }
                 } else {
                     // create new route
@@ -94,9 +98,9 @@ export const makeTrainRoutes = (
                         ...currentRoute.route.stopIds,
                         stop.destination_id,
                     ];
-                    let name = `${stop.trainline_id}: ${stop.destination_name}`;
+                    let name = `${stop.name}: ${stop.destination_name}`;
                     if (connection) {
-                        name = `${stop.trainline_id} + ${connection.connecting_trains.join(", ")}: ${stop.destination_name}`;
+                        name = `${stop.name} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.destination_name}`;
                     }
                     currentRoute.nextRoutes.push({
                         route: {
@@ -104,7 +108,12 @@ export const makeTrainRoutes = (
                             id: stopIds.join("-"),
                             name,
                             dur: currentRoute.route.dur + stop.dur,
-                            trainlines: [stop.trainline_id],
+                            trainlines: [
+                                {
+                                    trainline_id: stop.trainline_id,
+                                    trainline_name: stop.name,
+                                },
+                            ],
                             firstStation: routeTree.route.firstStation,
                             lastStation: {
                                 stop_name: stop.destination_name,
@@ -240,7 +249,12 @@ export const makeTrainRoutes = (
                         .flat();
                     connectedTrips.forEach((connectedTrip) => {
                         const connection = {
-                            connecting_trains: [connectedTrip[0].trainline_id],
+                            connecting_trains: [
+                                {
+                                    trainline_id: connectedTrip[0].trainline_id,
+                                    trainline_name: connectedTrip[0].name,
+                                },
+                            ],
                             initial_trains: current.route.trainlines,
                             stop_name: current.route.lastStation.stop_name,
                         };

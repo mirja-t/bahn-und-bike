@@ -24,16 +24,20 @@ type Trainstop = {
     x: number;
     y: number;
 };
+type Train = {
+    trainline_id: string;
+    trainline_name: string;
+};
 type Connection = {
     stop_name: string;
-    initial_trains: string[];
-    connecting_trains: string[];
+    initial_trains: Train[];
+    connecting_trains: Train[];
 };
 export type CurrentTrainroute = {
     id: string;
     name: string;
     dur: number;
-    trainlines: string[];
+    trainlines: Train[];
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
@@ -85,11 +89,12 @@ export const loadTrainroutes = createAsyncThunk<
         direct,
     );
     const trainlineList = direct
-        ? currentTrainroutes.map((route) => route.trainlines).flat()
+        ? currentTrainroutes
+              .map((route) => route.trainlines.map((t) => t.trainline_id))
+              .flat()
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
     thunkAPI.dispatch(loadVeloroutes(currentTrainroutes));
-
     return currentTrainroutes;
 });
 
@@ -136,7 +141,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: "8011160",
+        startPos: "2975",
         travelInterval: 30,
         trainlineList: null,
         currentTrainroutes: [],

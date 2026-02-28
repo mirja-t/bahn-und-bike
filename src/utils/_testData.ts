@@ -5,7 +5,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         id: "1",
         name: "S+U Berlin - Nauen",
         dur: 36,
-        trainlines: ["RB10"],
+        trainlines: [{ trainline_id: "RE4", trainline_name: "RE4" }],
         pathLength: 224,
         firstStation: {
             stop_name: "S+U Berlin",
@@ -41,7 +41,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         id: "2",
         name: "S+U Berlin - Rathenow",
         dur: 47,
-        trainlines: ["RE4"],
+        trainlines: [{ trainline_id: "RE4", trainline_name: "RE4" }],
         pathLength: 422,
         firstStation: {
             stop_name: "S+U Berlin",
@@ -78,7 +78,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         id: "3",
         name: "S+U Berlin - Lutherstadt Wittenberg",
         dur: 83,
-        trainlines: ["RE3"],
+        trainlines: [{ trainline_id: "RE3", trainline_name: "RE3" }],
         pathLength: 1089,
         firstStation: {
             stop_name: "S+U Berlin",
