@@ -1,7 +1,9 @@
-@mixin caret($color: var(--secondary)) {
+@mixin caret($color: inherit) {
     width: 0;
     height: 0;
     border-left: 0.5em solid transparent;
     border-right: 0.5em solid transparent;
-    border-top: 0.5em solid $color;
+    border-top-width: 0.5em;
+    border-top-style: solid;
+    border-top-color: $color;
 }
