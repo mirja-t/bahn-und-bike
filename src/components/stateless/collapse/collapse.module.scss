@@ -1,13 +1,6 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 @use "../../../scss/mixins/caret.scss" as caret;
 
-// .caret {
-//     width: 0;
-//     height: 0;
-//     border-left: .35em solid transparent;
-//     border-right: .35em solid transparent;
-//     border-top: .35em solid var(--bike);
-// }
 .collapse {
     .toggle {
         cursor: pointer;
@@ -16,7 +9,7 @@
             content: "";
             position: absolute;
             margin-left: spacing.$padding-xs;
-            @include caret.caret(var(--bike));
+            @include caret.caret();
             top: 50%;
         }
         &.on {
@@ -30,7 +23,7 @@
             }
         }
     }
-    .toggle-container {
+    .toggleContainer {
         overflow: hidden;
         &.off {
             height: 0;
