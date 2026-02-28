@@ -1,6 +1,7 @@
 import type {
     CurrentTrainroute,
     ResponseStop,
+    Train,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { createNewRoute } from "./createNewRoute";
 import { getPathLengthFromPoints } from "./getPathLength";
@@ -99,8 +100,15 @@ export const makeTrainRoutes = (
                         stop.destination_id,
                     ];
                     let name = `${stop.name}: ${stop.destination_name}`;
+                    let trainlines: Train[] = [];
                     if (connection) {
                         name = `${stop.name} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.destination_name}`;
+                        trainlines = connection.initial_trains;
+                    } else {
+                        trainlines.push({
+                            trainline_id: stop.trainline_id,
+                            trainline_name: stop.name,
+                        });
                     }
                     currentRoute.nextRoutes.push({
                         route: {
@@ -108,12 +116,7 @@ export const makeTrainRoutes = (
                             id: stopIds.join("-"),
                             name,
                             dur: currentRoute.route.dur + stop.dur,
-                            trainlines: [
-                                {
-                                    trainline_id: stop.trainline_id,
-                                    trainline_name: stop.name,
-                                },
-                            ],
+                            trainlines,
                             firstStation: routeTree.route.firstStation,
                             lastStation: {
                                 stop_name: stop.destination_name,
