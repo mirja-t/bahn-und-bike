@@ -56,8 +56,8 @@ const Section = ({ section }: SectionProps) => {
             ) : (
                 <Collapse title={`${t("cyclingroutelegs")}`}>
                     <ol>
-                        {stopNames.map((name) => (
-                            <li key={name}>{name}</li>
+                        {section.stopIds.map((id) => (
+                            <li key={id}>{stopNames[id]}</li>
                         ))}
                     </ol>
                 </Collapse>
