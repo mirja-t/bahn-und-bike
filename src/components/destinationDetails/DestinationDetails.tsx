@@ -12,6 +12,7 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
+    selectTrainroutesAlongVeloroute,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
     type ResponseTrainLine,
@@ -117,9 +118,9 @@ export const DestinationDetails = () => {
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
     // to do: fix route for trainlines along veloroute, name and stopIds currently not working
-    // const trainLinesAlongVeloroute = useSelector(
-    //     selectTrainroutesAlongVeloroute,
-    // );
+    const trainLinesAlongVeloroute = useSelector(
+        selectTrainroutesAlongVeloroute,
+    );
 
     const dispatch = useAppDispatch();
 
@@ -136,10 +137,10 @@ export const DestinationDetails = () => {
             <div id="destination" className="details">
                 <>
                     {activeSection && <Section section={activeSection} />}
-                    {/* {trainLinesAlongVeloroute.length > 0 &&
+                    {trainLinesAlongVeloroute.length > 0 &&
                         trainLinesAlongVeloroute.map((trainline) => (
                             <Section key={trainline.id} section={trainline} />
-                        ))} */}
+                        ))}
                     {/* if not direct connection */}
                     {activeSection && activeSection.connection && (
                         <section className="section">
