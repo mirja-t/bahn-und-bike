@@ -4,33 +4,36 @@ import type { ResponseStop } from "../components/map/trainroutes/TrainroutesSlic
 import { mockStops } from "./_testData";
 
 const {
-    parisStop,
-    bruxellesStop,
-    berlinStop,
-    warsawStop,
-    moscowStop,
-    vilniusStop,
-    warsawStop2,
-    bratislavaStop,
-    viennaStop,
-    berlinStop2,
-    warsawStop3,
+    parisStopSNCF,
+    bruxellesStopSNCF,
+    berlinStopSNCF,
+    warsawStopSNCF,
+    moscowStopSNCF,
+    vilniusStopPR,
+    warsawStopPR,
+    bratislavaStopPR,
+    viennaStopPR,
+    berlinStopDB,
+    warsawStopDB,
 } = mockStops;
-const mockedAPIResponse: ResponseStop[] = [
-    parisStop,
-    bruxellesStop,
-    berlinStop,
-    warsawStop,
-    moscowStop,
+const tgvRouteParisMoscow: ResponseStop[] = [
+    parisStopSNCF,
+    bruxellesStopSNCF,
+    berlinStopSNCF,
+    warsawStopSNCF,
+    moscowStopSNCF,
+];
+const dbRouteBerlinWarsaw: ResponseStop[] = [berlinStopDB, warsawStopDB];
+const prRouteVilniusVienna: ResponseStop[] = [
+    vilniusStopPR,
+    warsawStopPR,
+    bratislavaStopPR,
+    viennaStopPR,
 ];
 const mockedAPIResponseWithConnections: ResponseStop[] = [
-    ...mockedAPIResponse,
-    vilniusStop,
-    warsawStop2,
-    bratislavaStop,
-    viennaStop,
-    berlinStop2,
-    warsawStop3,
+    ...tgvRouteParisMoscow,
+    ...dbRouteBerlinWarsaw,
+    ...prRouteVilniusVienna,
 ];
 
 describe("makeTrainRoutes", () => {
@@ -41,7 +44,7 @@ describe("makeTrainRoutes", () => {
 
         // Act
         const result = makeTrainRoutes(
-            mockedAPIResponse,
+            tgvRouteParisMoscow,
             start,
             durationLimit,
             true,
@@ -95,5 +98,27 @@ describe("makeTrainRoutes", () => {
                 { trainline_id: "PR", trainline_name: "Polish Railways" },
             ],
         });
+    });
+    it("should return route with correct name for route with connection", () => {
+        // Arrange
+        const start = "berlin";
+        const durationLimit = 6000;
+
+        // Act
+        const result = makeTrainRoutes(
+            mockedAPIResponseWithConnections,
+            start,
+            durationLimit,
+            false,
+        );
+
+        // Assert - Check that route name is correct
+        const vilniusRoute = result.find(
+            (r) => r.lastStation.stop_id === "vilnius",
+        );
+        expect(vilniusRoute).toBeDefined();
+        expect(vilniusRoute?.name).toBe(
+            "SNCF, Deutsche Bahn + Polish Railways: Vilnius",
+        );
     });
 });

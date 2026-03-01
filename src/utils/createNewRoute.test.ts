@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 import { mockStops } from "./_testData";
 import { createNewRoute } from "./createNewRoute";
 
-const { parisStop, bruxellesStop, berlinStop } = mockStops;
+const { parisStopSNCF, bruxellesStopSNCF, berlinStopSNCF } = mockStops;
 describe("createNewRoute", () => {
     it("returns a new route with correct stop IDs", () => {
         //arrange
-        const stops = [parisStop, bruxellesStop, berlinStop];
+        const stops = [parisStopSNCF, bruxellesStopSNCF, berlinStopSNCF];
 
         //act
-        const actualValue = createNewRoute(parisStop, stops);
+        const actualValue = createNewRoute(parisStopSNCF, stops);
 
         //assert
         expect(actualValue.stopIds).toEqual(["paris", "bruxelles", "berlin"]);
