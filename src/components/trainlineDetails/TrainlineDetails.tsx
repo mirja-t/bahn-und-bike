@@ -6,11 +6,11 @@ import {
     setActiveVelorouteSection,
     setActiveVeloroute,
     loadVeloroutes,
-    selectVelorouteListIsLoading,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
     selectCurrentTrainroutes,
+    selectTrainrouteListLoading,
     setActiveSection,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
@@ -23,7 +23,7 @@ export const TrainlineDetails = () => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
-    const velorouteListIsLoading = useSelector(selectVelorouteListIsLoading);
+    const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
     // check costs of fetching all related veloroutes when no trainline is selected
     // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
     //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
@@ -46,7 +46,7 @@ export const TrainlineDetails = () => {
                 <section className="section">
                     {trainRoutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
                     <ItemList
-                        loading={velorouteListIsLoading}
+                        loading={trainlineListIsLoading}
                         items={trainRoutes}
                         activeId={activeSection?.id}
                         fn={setTrainlineActive}
