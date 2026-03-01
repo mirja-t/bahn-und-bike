@@ -4,6 +4,7 @@ import { useTranslation } from "../../utils/i18n";
 import { Button } from "../stateless/button/Button";
 import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
+import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 
 interface TravelDurationProps {
     handleSubmit: (
@@ -33,9 +34,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
             id="travelduration"
             onSubmit={(e) => handleSubmit(e, value, direct)}
         >
-            {/* <DestinationPicker
-                    labels={labels}
-                    lang={lang}/> */}
+            <DestinationPicker />
             <CheckBox
                 value={direct}
                 handleCheckboxChange={handleCheckboxChange}

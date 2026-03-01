@@ -3,7 +3,6 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
-import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
     destination_id: string;
@@ -24,16 +23,25 @@ type Trainstop = {
     x: number;
     y: number;
 };
+export type Train = {
+    trainline_id: string;
+    trainline_name: string;
+};
+export type ResponseTrainLine = {
+    id: string;
+    name: string;
+    agency_name: string;
+};
 type Connection = {
     stop_name: string;
-    initial_trains: string[];
-    connecting_trains: string[];
+    initial_trains: Train[];
+    connecting_trains: Train[];
 };
 export type CurrentTrainroute = {
     id: string;
     name: string;
     dur: number;
-    trainlines: string[];
+    trainlines: Train[];
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
@@ -85,11 +93,13 @@ export const loadTrainroutes = createAsyncThunk<
         direct,
     );
     const trainlineList = direct
-        ? currentTrainroutes.map((route) => route.trainlines).flat()
+        ? currentTrainroutes
+              .map((route) => route.trainlines.map((t) => t.trainline_id))
+              .flat()
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
-    thunkAPI.dispatch(loadVeloroutes(currentTrainroutes));
-
+    // check costs of fetching all related veloroutes when no trainline is selected
+    // thunkAPI.dispatch(loadVeloroutes(currentTrainroutes));
     return currentTrainroutes;
 });
 
@@ -110,7 +120,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         : undefined;
 
     const connections: CurrentTrainroutes = [];
-    const fetchConnection = async (id: string): Promise<ResponseStop[]> => {
+    const fetchConnection = async (id: string): Promise<CurrentTrainroute> => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
@@ -120,15 +130,17 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
             }
             return response.json();
         });
-        return connection;
+        const reversedConnection = [...connection].reverse();
+        const route = createNewRoute(reversedConnection[0], reversedConnection);
+        return route;
     };
 
-    const connectionStart: ResponseStop[] = await fetchConnection(
+    const connectionStart: CurrentTrainroute = await fetchConnection(
         startId || "",
     );
-    const connectionEnd: ResponseStop[] = await fetchConnection(endId || "");
-    connections.push(createNewRoute(connectionStart[0], connectionStart)); // duration is not correct, but we need the trainlines and stopIds for the veloroute section
-    connections.push(createNewRoute(connectionEnd[0], connectionEnd));
+    const connectionEnd: CurrentTrainroute = await fetchConnection(endId || "");
+    connections.push(connectionStart);
+    connections.push(connectionEnd);
 
     return connections;
 });
@@ -136,7 +148,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: "8011160",
+        startPos: "2975",
         travelInterval: 30,
         trainlineList: null,
         currentTrainroutes: [],

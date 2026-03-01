@@ -65,5 +65,6 @@
     "via": "Via",
     "bikeroutes": "Cycling routes",
     "trainconnections": "Train connections",
-    "routelegs": "Route legs"
+    "routelegs": "Route legs",
+    "journey": "Journey"
 }

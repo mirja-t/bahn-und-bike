@@ -1,11 +1,186 @@
-import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
+import type {
+    CurrentTrainroute,
+    ResponseStop,
+} from "../components/map/trainroutes/TrainroutesSlice";
+import { expect } from "vitest";
 
+const parisCoordinates = [48.8589384, 2.2644619];
+const berlinCoordinates = [52.525605, 13.369075];
+const bruxellesCoordinates = [50.836389, 4.336389];
+const warsawCoordinates = [52.2296756, 21.0122287];
+const moscowCoordinates = [55.755826, 37.6173];
+
+const parisStopSNCF: ResponseStop = {
+    destination_id: "paris",
+    trainline_id: "TGV",
+    dur: 0,
+    stop_number: 0,
+    destination_name: "Paris, Gare du Nord",
+    name: "SNCF",
+    lat: parisCoordinates[0].toString(),
+    lon: parisCoordinates[1].toString(),
+};
+const bruxellesStopSNCF: ResponseStop = {
+    destination_id: "bruxelles",
+    trainline_id: "TGV",
+    dur: 30,
+    stop_number: 1,
+    destination_name: "Bruxelles, Midi",
+    name: "SNCF",
+    lat: bruxellesCoordinates[0].toString(),
+    lon: bruxellesCoordinates[1].toString(),
+};
+const berlinStopSNCF: ResponseStop = {
+    destination_id: "berlin",
+    trainline_id: "TGV",
+    dur: 300,
+    stop_number: 2,
+    destination_name: "S+U Berlin Hauptbahnhof",
+    name: "SNCF",
+    lat: berlinCoordinates[0].toString(),
+    lon: berlinCoordinates[1].toString(),
+};
+const berlinStopDB: ResponseStop = {
+    destination_id: "berlin",
+    trainline_id: "DB",
+    dur: 0,
+    stop_number: 0,
+    destination_name: "S+U Berlin Hauptbahnhof",
+    name: "Deutsche Bahn",
+    lat: berlinCoordinates[0].toString(),
+    lon: berlinCoordinates[1].toString(),
+};
+const warsawStopSNCF: ResponseStop = {
+    destination_id: "warsaw",
+    trainline_id: "TGV",
+    dur: 300,
+    stop_number: 3,
+    destination_name: "Warszawa Centralna",
+    name: "SNCF",
+    lat: warsawCoordinates[0].toString(),
+    lon: warsawCoordinates[1].toString(),
+};
+const moscowStopSNCF: ResponseStop = {
+    destination_id: "moscow",
+    trainline_id: "TGV",
+    dur: 600,
+    stop_number: 4,
+    destination_name: "Moscow, Leningradsky",
+    name: "SNCF",
+    lat: moscowCoordinates[0].toString(),
+    lon: moscowCoordinates[1].toString(),
+};
+const vilniusStopPR: ResponseStop = {
+    destination_id: "vilnius",
+    trainline_id: "PR",
+    dur: 0,
+    stop_number: 0,
+    destination_name: "Vilnius",
+    name: "Polish Railways",
+    lat: "54.687157",
+    lon: "25.279652",
+};
+const warsawStopPR: ResponseStop = {
+    destination_id: "warsaw",
+    trainline_id: "PR",
+    dur: 500,
+    stop_number: 1,
+    destination_name: "Warszawa Centralna",
+    name: "Polish Railways",
+    lat: warsawCoordinates[0].toString(),
+    lon: warsawCoordinates[1].toString(),
+};
+const warsawStopDB: ResponseStop = {
+    destination_id: "warsaw",
+    trainline_id: "DB",
+    dur: 500,
+    stop_number: 1,
+    destination_name: "Warszawa Centralna",
+    name: "Deutsche Bahn",
+    lat: warsawCoordinates[0].toString(),
+    lon: warsawCoordinates[1].toString(),
+};
+const bratislavaStopPR: ResponseStop = {
+    destination_id: "bratislava",
+    trainline_id: "PR",
+    dur: 200,
+    stop_number: 2,
+    destination_name: "Bratislava, Hlavná stanica",
+    name: "Polish Railways",
+    lat: "48.148598",
+    lon: "17.107748",
+};
+const viennaStopPR: ResponseStop = {
+    destination_id: "vienna",
+    trainline_id: "PR",
+    dur: 300,
+    stop_number: 3,
+    destination_name: "Vienna, Hauptbahnhof",
+    name: "Polish Railways",
+    lat: "48.185867",
+    lon: "16.373064",
+};
+export const mockStops = {
+    parisStopSNCF,
+    bruxellesStopSNCF,
+    berlinStopSNCF,
+    berlinStopDB,
+    warsawStopSNCF,
+    warsawStopPR,
+    warsawStopDB,
+    moscowStopSNCF,
+    vilniusStopPR,
+    bratislavaStopPR,
+    viennaStopPR,
+};
+export const mockedCoordinates = {
+    paris: parisCoordinates,
+    bruxelles: bruxellesCoordinates,
+    berlin: berlinCoordinates,
+    warsaw: warsawCoordinates,
+    moscow: moscowCoordinates,
+};
+export const parisBerlinRoute: CurrentTrainroute = {
+    id: "parisBerlinRoute",
+    name: "TGV: Berlin",
+    dur: 330,
+    trainlines: [
+        {
+            trainline_id: parisStopSNCF.trainline_id,
+            trainline_name: parisStopSNCF.name,
+        },
+    ],
+    pathLength: expect.any(Number),
+    firstStation: {
+        stop_name: parisStopSNCF.destination_name,
+        stop_id: parisStopSNCF.destination_id,
+        x: expect.any(Number),
+        y: expect.any(Number),
+        lat: parseFloat(parisStopSNCF.lat),
+        lon: parseFloat(parisStopSNCF.lon),
+    },
+    lastStation: {
+        stop_name: berlinStopSNCF.destination_name,
+        stop_id: berlinStopSNCF.destination_id,
+        x: expect.any(Number),
+        y: expect.any(Number),
+        lat: parseFloat(berlinStopSNCF.lat),
+        lon: parseFloat(berlinStopSNCF.lon),
+    },
+    stopIds: [
+        parisStopSNCF.destination_id,
+        bruxellesStopSNCF.destination_id,
+        berlinStopSNCF.destination_id,
+    ],
+    points: expect.any(String),
+    connection: null,
+};
 export const mockedTrainroutes: CurrentTrainroute[] = [
     {
         id: "1",
         name: "S+U Berlin - Nauen",
         dur: 36,
-        trainlines: ["RB10"],
+        trainlines: [{ trainline_id: "RE4", trainline_name: "RE4" }],
         pathLength: 224,
         firstStation: {
             stop_name: "S+U Berlin",
@@ -41,7 +216,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         id: "2",
         name: "S+U Berlin - Rathenow",
         dur: 47,
-        trainlines: ["RE4"],
+        trainlines: [{ trainline_id: "RE4", trainline_name: "RE4" }],
         pathLength: 422,
         firstStation: {
             stop_name: "S+U Berlin",
@@ -78,7 +253,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         id: "3",
         name: "S+U Berlin - Lutherstadt Wittenberg",
         dur: 83,
-        trainlines: ["RE3"],
+        trainlines: [{ trainline_id: "RE3", trainline_name: "RE3" }],
         pathLength: 1089,
         firstStation: {
             stop_name: "S+U Berlin",

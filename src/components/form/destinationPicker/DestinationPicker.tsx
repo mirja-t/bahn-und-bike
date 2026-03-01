@@ -1,34 +1,45 @@
 import "./destinationpicker.scss";
-import { useDispatch } from "react-redux";
-import { setStartPos } from "../../map/trainroutes/TrainroutesSlice";
+import {
+    selectStartPos,
+    setStartPos,
+} from "../../map/trainroutes/TrainroutesSlice";
 import { useTranslation } from "../../../utils/i18n";
-
-const startDest = {
-    berlin: "8011160",
-    hameln: "NDS000110215",
-    schwerin: "8010324",
-};
+import { useAppDispatch } from "../../../AppSlice";
+import { Select } from "../../stateless/select/Select";
+import { useSelector } from "react-redux";
 
 export const DestinationPicker = () => {
-    const dispatch = useDispatch();
     const { t } = useTranslation();
+    const dispatch = useAppDispatch();
+    const startPos = useSelector(selectStartPos);
 
-    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const { target } = event;
-        const start = startDest[target.value as keyof typeof startDest];
-        dispatch(setStartPos(start));
+    const handleStartChange = (id: string) => {
+        dispatch(setStartPos(id));
     };
 
+    const options = [
+        { label: "Berlin", value: "2975" },
+        { label: "Hamburg", value: "482873" },
+        { label: "München", value: "609678" },
+        { label: "Hameln", value: "513416" },
+        { label: "Schwerin", value: "680461" },
+        { label: "Hannover", value: "363803" },
+        { label: "Kassel", value: "249812" },
+        { label: "Düsseldorf", value: "596878" },
+        { label: "Stuttgart", value: "131805" },
+        { label: "Freiburg", value: "378216" },
+        { label: "Frankfurt", value: "632406" },
+        { label: "Erfurt", value: "492446" },
+        { label: "Dresden", value: "243649" },
+    ];
+
     return (
-        <fieldset className="startdestination">
-            <label htmlFor="startdest">{t("startdest")}:</label>
-            <div className="selectwrapper">
-                <select name="dest" id="startdest" onChange={handleChange}>
-                    <option value="berlin">Berlin</option>
-                    <option value="hameln">Hameln</option>
-                    <option value="schwerin">Schwerin</option>
-                </select>
-            </div>
-        </fieldset>
+        <Select
+            options={options}
+            name="startdest"
+            preselectedValue={startPos}
+            onChange={handleStartChange}
+            label={t("startdest")}
+        />
     );
 };

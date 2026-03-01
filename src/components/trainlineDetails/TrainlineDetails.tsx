@@ -6,29 +6,27 @@ import {
     setActiveVelorouteSection,
     setActiveVeloroute,
     loadVeloroutes,
-    selectVelorouteList,
-    selectVelorouteListIsLoading,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
     selectCurrentTrainroutes,
+    selectTrainrouteListLoading,
     setActiveSection,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { loadDestinations } from "../destinationDetails/DestinationDetailsSlice";
 
 export const TrainlineDetails = () => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
-    const velorouteListIsLoading = useSelector(selectVelorouteListIsLoading);
-    const velorouteList = useSelector(selectVelorouteList);
-    const filteredTrainroutes = trainRoutes.filter((trainroute) =>
-        velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
-    );
+    const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
+    // check costs of fetching all related veloroutes when no trainline is selected
+    // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
+    //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
+    // );
 
     const dispatch = useAppDispatch();
 
@@ -37,7 +35,6 @@ export const TrainlineDetails = () => {
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
-        dispatch(loadDestinations({ ids: line.stopIds }));
         dispatch(loadVeloroutes([line]));
     };
 
@@ -46,10 +43,9 @@ export const TrainlineDetails = () => {
             <div id="trainline" className="details">
                 <section className="section">
                     {trainRoutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
-                    {/* <h5>{t("trains")}</h5> */}
                     <ItemList
-                        loading={velorouteListIsLoading}
-                        items={filteredTrainroutes}
+                        loading={trainlineListIsLoading}
+                        items={trainRoutes}
                         activeId={activeSection?.id}
                         fn={setTrainlineActive}
                         icon={<TrainIcon />}
