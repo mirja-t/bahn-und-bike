@@ -106,10 +106,7 @@ export const Container = ({}: ContainerProps) => {
         if (activeSection) {
             setActiveTabId("veloroutes");
         }
-        if (activeVeloroute) {
-            setActiveTabId("leg");
-        }
-    }, [activeSection, activeVeloroute]);
+    }, [activeSection]);
 
     return (
         <>
@@ -140,7 +137,9 @@ export const Container = ({}: ContainerProps) => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name={t("bikeroutes")}
-                                    disabled={trainRoutes.length < 1}
+                                    disabled={
+                                        trainRoutes.length < 1 || !activeSection
+                                    }
                                 >
                                     <DestinationDetails />
                                 </Tabs.Tab>
