@@ -1,12 +1,14 @@
 import "./destinationpicker.scss";
-import { setStartPos } from "../../map/trainroutes/TrainroutesSlice";
+import { setStartPos, selectStartPos } from "../../map/trainroutes/TrainroutesSlice";
 import { useTranslation } from "../../../utils/i18n";
 import { useAppDispatch } from "../../../AppSlice";
+import { useSelector } from "react-redux";
 import { Select } from "../../stateless/select/Select";
 
 export const DestinationPicker = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+    const startPos = useSelector(selectStartPos);
 
     const handleStartChange = (id: string) => {
         dispatch(setStartPos(id));
@@ -24,7 +26,7 @@ export const DestinationPicker = () => {
         <Select
             options={options}
             name="startdest"
-            preselectedValue={"2975"}
+            preselectedValue={startPos}
             onChange={handleStartChange}
             label={t("startdest")}
         />

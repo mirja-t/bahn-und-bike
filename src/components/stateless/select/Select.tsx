@@ -33,13 +33,14 @@ export const Select = <T extends string>({
     };
 
     useEffect(() => {
-        if (preselectedValue && !selected) {
+        if (preselectedValue && preselectedValue !== selected?.value) {
             const preselectedOption = options.find(
                 (option) => option.value === preselectedValue,
             );
             setSelected(preselectedOption || null);
         }
-    }, [preselectedValue, options, selected]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [preselectedValue, options]);
 
     return (
         <div className={styles.selectwrapper}>
