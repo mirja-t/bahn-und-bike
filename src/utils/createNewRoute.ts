@@ -43,15 +43,30 @@ export function createNewRoute(
             parseFloat(stop.lat),
             germanyBounds,
         );
-    const name = `${startDest.name}: ${startDest.destination_name}`;
+    const trainlines = [
+        {
+            trainline_id: startDest.trainline_id,
+            trainline_name: startDest.name,
+        },
+    ];
+    const stopIds = [startDest.destination_id];
+    let name = `${startDest.name}: ${startDest.destination_name}`;
+    if (route && route.length > 1) {
+        name += ` - ${lastDest.destination_name}`;
+        route.slice(1).forEach((stop) => {
+            trainlines.push({
+                trainline_id: stop.trainline_id,
+                trainline_name: stop.name,
+            });
+            stopIds.push(stop.destination_id);
+        });
+    }
     return {
         id: startDest.destination_id,
         name,
         connection: null,
         dur: getDuration(route),
-        trainlines: [
-            { trainline_id: startDest.trainline_id, trainline_name: name },
-        ],
+        trainlines: trainlines,
         firstStation: {
             stop_name: removeWords(startDest.destination_name, wordsToRemove),
             stop_id: startDest.destination_id,
@@ -68,7 +83,7 @@ export function createNewRoute(
             x: getMapPosition(lastDest)[0],
             y: getMapPosition(lastDest)[1],
         },
-        stopIds: [startDest.destination_id],
+        stopIds: stopIds,
         points: svgPathPoints,
         pathLength: getPathLengthFromPoints(svgPathPoints),
     };
