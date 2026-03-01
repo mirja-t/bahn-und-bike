@@ -25,6 +25,8 @@ import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
 import type { ActiveDestination } from "./DestinationDetailsSlice";
 import { useMemo } from "react";
+import { Loading } from "../stateless/loading/Loading";
+import { Error } from "../stateless/error/Error";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -65,25 +67,27 @@ const Section = ({ section }: SectionProps) => {
                     </PinIcon>
                     <div>
                         <h2>{section.name}</h2>
-                        {loadingTrainlinesWithAgencyNames
-                            ? "loading trainline info..."
-                            : errorTrainlinesWithAgencyNames
-                              ? "error loading trainline info"
-                              : trainlinesWithAgencyNames.map(
-                                    // to do: find out why there are duplicates
-                                    (trainline, idx) => (
-                                        <div
-                                            key={`${trainline.id}-${idx}`}
-                                            className="trainline-info"
-                                        >
-                                            <span>
-                                                {trainline.name}
-                                                :&nbsp;
-                                                {trainline.agency_name}
-                                            </span>
-                                        </div>
-                                    ),
-                                )}
+                        {loadingTrainlinesWithAgencyNames ? (
+                            <Loading />
+                        ) : errorTrainlinesWithAgencyNames ? (
+                            <Error />
+                        ) : (
+                            trainlinesWithAgencyNames.map(
+                                // to do: find out why there are duplicates
+                                (trainline, idx) => (
+                                    <div
+                                        key={`${trainline.id}-${idx}`}
+                                        className="trainline-info"
+                                    >
+                                        <span>
+                                            {trainline.name}
+                                            :&nbsp;
+                                            {trainline.agency_name}
+                                        </span>
+                                    </div>
+                                ),
+                            )
+                        )}
                     </div>
                 </div>
             </header>
@@ -97,9 +101,9 @@ const Section = ({ section }: SectionProps) => {
                 </section>
             )}
             {loadingStopNames ? (
-                "loading..."
+                <Loading />
             ) : errorStopNames ? (
-                "error loading stop names"
+                <Error />
             ) : (
                 <Collapse title={`${t("journey")}`}>
                     <ol>
