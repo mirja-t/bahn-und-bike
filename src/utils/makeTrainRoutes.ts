@@ -65,7 +65,8 @@ export const makeTrainRoutes = (
                     // Add trainline to connecting route
                     if (
                         connection &&
-                        !currentRoute.route.connection?.connecting_trains
+                        currentRoute.route.connection &&
+                        !currentRoute.route.connection.connecting_trains
                             .map((t) => t.trainline_id)
                             .includes(stop.trainline_id)
                     ) {
