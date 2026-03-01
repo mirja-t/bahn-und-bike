@@ -11,12 +11,14 @@ import {
     loadTrainroutes,
     selectActiveSection,
     selectCurrentTrainroutes,
+    setCurrentTrainroutes,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
     selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
@@ -77,10 +79,13 @@ export const Container = ({}: ContainerProps) => {
     ) => {
         e.preventDefault();
         prevValue.current = value;
+        dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
+        dispatch(setVelorouteList([]));
+        setActiveTabId("trainlines");
         setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);
