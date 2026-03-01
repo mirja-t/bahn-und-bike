@@ -6,7 +6,6 @@ import {
     setActiveVelorouteSection,
     setActiveVeloroute,
     loadVeloroutes,
-    selectVelorouteList,
     selectVelorouteListIsLoading,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
@@ -25,10 +24,10 @@ export const TrainlineDetails = () => {
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const velorouteListIsLoading = useSelector(selectVelorouteListIsLoading);
-    const velorouteList = useSelector(selectVelorouteList);
-    const filteredTrainroutes = trainRoutes.filter((trainroute) =>
-        velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
-    );
+    // check costs of fetching all related veloroutes when no trainline is selected
+    // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
+    //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
+    // );
 
     const dispatch = useAppDispatch();
 
@@ -46,10 +45,9 @@ export const TrainlineDetails = () => {
             <div id="trainline" className="details">
                 <section className="section">
                     {trainRoutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
-                    {/* <h5>{t("trains")}</h5> */}
                     <ItemList
                         loading={velorouteListIsLoading}
-                        items={filteredTrainroutes}
+                        items={trainRoutes}
                         activeId={activeSection?.id}
                         fn={setTrainlineActive}
                         icon={<TrainIcon />}

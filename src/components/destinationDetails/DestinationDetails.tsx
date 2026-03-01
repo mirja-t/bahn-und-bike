@@ -12,45 +12,49 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    selectTrainroutesAlongVeloroute,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
-    type Train,
+    type ResponseTrainLine,
 } from "../map/trainroutes/TrainroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
-import { useStopNames } from "../../hooks/useStopNames";
-import { useAgencyNames } from "../../hooks/useAgencyNames";
-
-interface TrainInfoProps {
-    trainline: Train;
-}
-const TrainInfo = ({ trainline }: TrainInfoProps) => {
-    const { agencyName, loading, error } = useAgencyNames(
-        trainline.trainline_id,
-    );
-
-    if (loading) return <span>Loading...</span>;
-    if (error) return <span>Error loading trainline</span>;
-
-    return (
-        <div className="trainline-info">
-            <span>
-                {trainline.trainline_name}:&nbsp;{agencyName}
-            </span>
-        </div>
-    );
-};
+import { useFetchBatch } from "../../hooks/useFetchBatch";
+import type { ActiveDestination } from "./DestinationDetailsSlice";
+import { useMemo } from "react";
 interface SectionProps {
     section: CurrentTrainroute;
 }
 const Section = ({ section }: SectionProps) => {
     const { t } = useTranslation();
     const langCode = useSelector(selectLangCode);
-    const { names: stopNames, loading, error } = useStopNames(section.stopIds);
+
+    const trainlineIds = useMemo(() => {
+        const ids = section.trainlines
+            .map((trainline) => trainline.trainline_id)
+            .flat();
+        if (section.connection) {
+            ids.push(
+                ...section.connection.connecting_trains.map(
+                    (train) => train.trainline_id,
+                ),
+            );
+        }
+        return ids;
+    }, [section]);
+    const {
+        assets: stops,
+        loading: loadingStopNames,
+        error: errorStopNames,
+    } = useFetchBatch<ActiveDestination>(section.stopIds, "destinations");
+    const {
+        assets: trainlinesWithAgencyNames,
+        loading: loadingTrainlinesWithAgencyNames,
+        error: errorTrainlinesWithAgencyNames,
+    } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
+
     return (
         <>
             <header>
@@ -60,22 +64,24 @@ const Section = ({ section }: SectionProps) => {
                     </PinIcon>
                     <div>
                         <h2>{section.name}</h2>
-                        {section.trainlines.map((trainline) => (
-                            <TrainInfo
-                                key={trainline.trainline_id}
-                                trainline={trainline}
-                            />
-                        ))}
-                        {section.connection &&
-                            section.connection.connecting_trains &&
-                            section.connection.connecting_trains.map(
-                                (trainline) => (
-                                    <TrainInfo
-                                        key={trainline.trainline_id}
-                                        trainline={trainline}
-                                    />
-                                ),
-                            )}
+                        {loadingTrainlinesWithAgencyNames
+                            ? "loading trainline info..."
+                            : errorTrainlinesWithAgencyNames
+                              ? "error loading trainline info"
+                              : trainlinesWithAgencyNames.map(
+                                    (trainline, idx) => (
+                                        <div
+                                            key={`${trainline.trainline_id}-${idx}`}
+                                            className="trainline-info"
+                                        >
+                                            <span>
+                                                {trainline.name}
+                                                :&nbsp;
+                                                {trainline.agency_name}
+                                            </span>
+                                        </div>
+                                    ),
+                                )}
                     </div>
                 </div>
             </header>
@@ -88,15 +94,15 @@ const Section = ({ section }: SectionProps) => {
                     </div>
                 </section>
             )}
-            {loading ? (
+            {loadingStopNames ? (
                 "loading..."
-            ) : error ? (
+            ) : errorStopNames ? (
                 "error loading stop names"
             ) : (
                 <Collapse title={`${t("journey")}`}>
                     <ol>
-                        {section.stopIds.map((id) => (
-                            <li key={id}>{stopNames[id]}</li>
+                        {stops.map((stop) => (
+                            <li key={stop.id}>{stop.name}</li>
                         ))}
                     </ol>
                 </Collapse>
@@ -109,9 +115,10 @@ export const DestinationDetails = () => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
-    const trainLinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
+    // to do: fix route for trainlines along veloroute, name and stopIds currently not working
+    // const trainLinesAlongVeloroute = useSelector(
+    //     selectTrainroutesAlongVeloroute,
+    // );
 
     const dispatch = useAppDispatch();
 
@@ -122,25 +129,22 @@ export const DestinationDetails = () => {
             dispatch(loadVeloroute(vroute as VelorouteList[number]));
         }
     };
-    const trainSections = activeSection
-        ? [activeSection]
-        : [...trainLinesAlongVeloroute];
 
     return (
         <div id="destination-details">
             <div id="destination" className="details">
                 <>
-                    {trainSections.map((section, idx) => (
-                        <Section key={idx} section={section} />
-                    ))}
-
+                    {activeSection && <Section section={activeSection} />}
+                    {/* {trainLinesAlongVeloroute.length > 0 &&
+                        trainLinesAlongVeloroute.map((trainline) => (
+                            <Section key={trainline.id} section={trainline} />
+                        ))} */}
+                    {/* if not direct connection */}
                     {activeSection && activeSection.connection && (
                         <section className="section">
                             <div>
                                 <h5>{t("trainconnection")}</h5>
-                                {activeSection && (
-                                    <p>{activeSection.connection.stop_name}</p>
-                                )}
+                                <p>{activeSection.connection.stop_name}</p>
                             </div>
                         </section>
                     )}
