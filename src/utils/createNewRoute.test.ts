@@ -1,7 +1,6 @@
-import { expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { mockStops } from "./_testData";
 import { createNewRoute } from "./createNewRoute";
-import { describe } from "node:test";
 
 const { parisStop, bruxellesStop, berlinStop } = mockStops;
 describe("createNewRoute", () => {
