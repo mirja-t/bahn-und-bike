@@ -76,11 +76,12 @@ export const makeTrainRoutes = (
                         });
                         currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
                     }
-                    // Add trainline to existing route
+                    // Add trainline to existing route - only if it is not the connecting trainline
                     else if (
                         !currentRoute.route.trainlines
                             .map((t) => t.trainline_id)
-                            .includes(stop.trainline_id)
+                            .includes(stop.trainline_id) &&
+                        !connection
                     ) {
                         currentRoute.route.trainlines.push({
                             trainline_id: stop.trainline_id,
