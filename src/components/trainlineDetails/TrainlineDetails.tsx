@@ -17,7 +17,6 @@ import {
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { loadDestinations } from "../destinationDetails/DestinationDetailsSlice";
 
 export const TrainlineDetails = () => {
     const { t } = useTranslation();
@@ -36,7 +35,6 @@ export const TrainlineDetails = () => {
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
-        dispatch(loadDestinations({ ids: line.stopIds }));
         dispatch(loadVeloroutes([line]));
     };
 
