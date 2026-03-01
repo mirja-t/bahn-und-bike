@@ -28,7 +28,7 @@ export type Train = {
     trainline_name: string;
 };
 export type ResponseTrainLine = {
-    trainline_id: string;
+    id: string;
     name: string;
     agency_name: string;
 };

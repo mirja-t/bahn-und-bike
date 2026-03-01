@@ -69,9 +69,10 @@ const Section = ({ section }: SectionProps) => {
                             : errorTrainlinesWithAgencyNames
                               ? "error loading trainline info"
                               : trainlinesWithAgencyNames.map(
+                                    // to do: find out why there are duplicates
                                     (trainline, idx) => (
                                         <div
-                                            key={`${trainline.trainline_id}-${idx}`}
+                                            key={`${trainline.id}-${idx}`}
                                             className="trainline-info"
                                         >
                                             <span>

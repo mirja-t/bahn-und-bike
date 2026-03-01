@@ -7,11 +7,11 @@ export interface UseFetchBatchReturn<T> {
     error: boolean;
 }
 
-export const useFetchBatch = <T,>(
+export const useFetchBatch = <T extends { id: string }>(
     ids: string[],
     assetsEndpoint: string,
 ): UseFetchBatchReturn<T> => {
-    const [assets, setAssets] = useState<T[]>([]);
+    const [assetsMap, setAssetsMap] = useState<Map<string, T>>(new Map());
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
 
@@ -44,7 +44,13 @@ export const useFetchBatch = <T,>(
                 const fetchedAssets: T[] = await response.json();
 
                 if (!isCancelled) {
-                    setAssets(fetchedAssets);
+                    // Create hashmap of id -> asset for O(1) lookup
+                    const newMap = new Map<string, T>();
+                    fetchedAssets.forEach((asset) => {
+                        newMap.set(asset.id, asset);
+                    });
+
+                    setAssetsMap(newMap);
                     setLoading(false);
                     setError(false);
                 }
@@ -62,6 +68,11 @@ export const useFetchBatch = <T,>(
             isCancelled = true;
         };
     }, [ids, assetsEndpoint]);
+
+    // Map IDs to assets in original order, filter out missing assets
+    const assets = ids
+        .map((id) => assetsMap.get(id))
+        .filter((asset): asset is T => asset !== undefined);
 
     return {
         assets,
