@@ -11,12 +11,15 @@ import {
     loadTrainroutes,
     selectActiveSection,
     selectCurrentTrainroutes,
+    setCurrentTrainroutes,
+    selectTrainroutesAlongVeloroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
     selectActiveVeloroute,
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
@@ -36,6 +39,9 @@ export const Container = ({}: ContainerProps) => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
+    const trainroutesAlongVeloroute = useSelector(
+        selectTrainroutesAlongVeloroute,
+    );
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
@@ -77,10 +83,13 @@ export const Container = ({}: ContainerProps) => {
     ) => {
         e.preventDefault();
         prevValue.current = value;
+        dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
+        dispatch(setVelorouteList([]));
+        setActiveTabId("trainlines");
         setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);
@@ -106,7 +115,10 @@ export const Container = ({}: ContainerProps) => {
         if (activeSection) {
             setActiveTabId("veloroutes");
         }
-    }, [activeSection]);
+        if (activeVeloroute) {
+            setActiveTabId("leg");
+        }
+    }, [activeSection, activeVeloroute]);
 
     return (
         <>
@@ -138,7 +150,9 @@ export const Container = ({}: ContainerProps) => {
                                     id="veloroutes"
                                     name={t("bikeroutes")}
                                     disabled={
-                                        trainRoutes.length < 1 || !activeSection
+                                        trainRoutes.length < 1 ||
+                                        (!activeSection &&
+                                            !trainroutesAlongVeloroute.length)
                                     }
                                 >
                                     <DestinationDetails />

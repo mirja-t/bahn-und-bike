@@ -182,6 +182,9 @@ export const veloroutesSlice = createSlice({
         setCrossingVelorouteSection: (state) => {
             state.crossingVelorouteSection = [];
         },
+        setVelorouteList: (state, action: { payload: VelorouteList }) => {
+            state.velorouteList = action.payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -239,6 +242,7 @@ export const {
     setHoveredVelorouteSection,
     setActiveVelorouteStop,
     setCrossingVelorouteSection,
+    setVelorouteList,
 } = veloroutesSlice.actions;
 
 export default veloroutesSlice.reducer;
