@@ -15,6 +15,7 @@ import { Trainroute } from "./trainroute/Trainroute";
 import { Veloroutes } from "../veloroutes/Veloroutes";
 import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
+import { VelorouteFromGpx } from "../testVeloroutes/VelorouteFromGpx";
 
 interface TrainroutesProps {
     zoom: {
@@ -60,6 +61,7 @@ export const Trainroutes = memo(function Trainroutes({
             preserveAspectRatio="xMidYMid meet"
             xmlSpace="preserve"
         >
+            <VelorouteFromGpx strokeScale={strokeScale} />
             {journeys.map((item, idx) => (
                 <Trainroute
                     key={idx}
