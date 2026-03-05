@@ -1,10 +1,17 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 @use "../../../scss/mixins/caret.scss" as caret;
+@use "../../../index.scss";
 
 .collapse {
     .toggle {
         cursor: pointer;
         position: relative;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        text-align: left;
+        @extend .h5;
+        color: inherit;
         &:after {
             content: "";
             position: absolute;

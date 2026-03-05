@@ -139,7 +139,7 @@ export const DestinationDetails = () => {
     return (
         <div id="destination-details">
             <div id="destination" className="details">
-                <>
+                <div className="train-details">
                     {activeSection && <Section section={activeSection} />}
                     {trainLinesAlongVeloroute.length > 0 &&
                         trainLinesAlongVeloroute.map((trainline) => (
@@ -165,7 +165,7 @@ export const DestinationDetails = () => {
                             icon={<VelorouteIcon />}
                         />
                     </section>
-                </>
+                </div>
             </div>
         </div>
     );

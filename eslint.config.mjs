@@ -1,6 +1,7 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook";
 import hooksPlugin from "eslint-plugin-react-hooks";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 // @ts-check
 
 import tseslint from "typescript-eslint";
@@ -8,6 +9,10 @@ import tseslint from "typescript-eslint";
 export default [
     ...tseslint.configs.strict,
     { ignores: ["**/*.js"] },
+    {
+        ...jsxA11y.flatConfigs.recommended,
+        files: ["**/*.{jsx,tsx}"],
+    },
     {
         rules: {
             "@typescript-eslint/no-explicit-any": "error",

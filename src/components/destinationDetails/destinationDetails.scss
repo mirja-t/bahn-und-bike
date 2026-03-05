@@ -3,24 +3,12 @@
 @use "../../scss/variables/colors.scss" as colors;
 
 .details {
-    color: var(--text);
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        color: var(--train-headline);
+    color: var(--train-headline);
+    .veloroute-details {
+        color: var(--bike);
     }
-    .veloroute-section-details {
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            color: var(--bike);
-        }
+    .train-details {
+        color: var(--train-headline);
     }
 }
 .details {
