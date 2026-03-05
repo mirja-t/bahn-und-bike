@@ -12,6 +12,7 @@ import {
     selectActiveSection,
     selectCurrentTrainroutes,
     setCurrentTrainroutes,
+    selectTrainroutesAlongVeloroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
@@ -38,6 +39,9 @@ export const Container = ({}: ContainerProps) => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
+    const trainroutesAlongVeloroute = useSelector(
+        selectTrainroutesAlongVeloroute,
+    );
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
@@ -111,7 +115,10 @@ export const Container = ({}: ContainerProps) => {
         if (activeSection) {
             setActiveTabId("veloroutes");
         }
-    }, [activeSection]);
+        if (activeVeloroute) {
+            setActiveTabId("leg");
+        }
+    }, [activeSection, activeVeloroute]);
 
     return (
         <>
@@ -143,7 +150,9 @@ export const Container = ({}: ContainerProps) => {
                                     id="veloroutes"
                                     name={t("bikeroutes")}
                                     disabled={
-                                        trainRoutes.length < 1 || !activeSection
+                                        trainRoutes.length < 1 ||
+                                        (!activeSection &&
+                                            !trainroutesAlongVeloroute.length)
                                     }
                                 >
                                     <DestinationDetails />
