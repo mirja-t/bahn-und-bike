@@ -1,51 +1,25 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook";
-
+import hooksPlugin from "eslint-plugin-react-hooks";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 // @ts-check
 
 import tseslint from "typescript-eslint";
 
-export default [...tseslint.configs.strict, { ignores: ["**/*.js"] }, {
-    rules: {
-        "@typescript-eslint/no-explicit-any": "error",
+export default [
+    ...tseslint.configs.strict,
+    { ignores: ["**/*.js"] },
+    {
+        ...jsxA11y.flatConfigs.recommended,
+        files: ["**/*.{jsx,tsx}"],
     },
-}, ...storybook.configs["flat/recommended"]];
-
-// import tseslint, { parser } from "typescript-eslint";
-// import reactHooks from "eslint-plugin-react-hooks";
-
-// export default [
-//     {
-//         ignores: [
-//             "**/*.test.ts",
-//             "**/*.test.tsx",
-//             "**/stories/**",
-//             "**/__mocks__/*",
-//             "**/assets/**",
-//             "**/.storybook/**",
-//         ],
-//     },
-//     {
-//         files: ["**/*.tsx", "**/*.ts"],
-//         plugins: {
-//             tseslint,
-//             "react-hooks": reactHooks,
-//         },
-//         languageOptions: {
-//             parser,
-//         },
-//         rules: {
-//             "@typescript-eslint/no-explicit-any": "error",
-//             "no-unused-vars": [
-//                 "warn",
-//                 {
-//                     argsIgnorePattern: "^_", // Allows unused args like (_dark)
-//                     varsIgnorePattern: "^_",
-//                     ignoreRestSiblings: true,
-//                 },
-//             ],
-//             "react-hooks/rules-of-hooks": "error",
-//             "react-hooks/exhaustive-deps": "warn",
-//         },
-//     },
-// ];
+    {
+        rules: {
+            "@typescript-eslint/no-explicit-any": "error",
+            "react-hooks/rules-of-hooks": "error",
+            "react-hooks/exhaustive-deps": "error",
+        },
+        plugins: { "react-hooks": hooksPlugin },
+    },
+    ...storybook.configs["flat/recommended"],
+];

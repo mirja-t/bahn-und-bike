@@ -11,7 +11,8 @@ export const Collapse = ({ children, title }: CollapseProps) => {
 
     return (
         <div className={styles.collapse}>
-            <h5
+            <button
+                type="button"
                 onClick={() => setToggle((prev) => !prev)}
                 className={
                     toggle
@@ -20,7 +21,7 @@ export const Collapse = ({ children, title }: CollapseProps) => {
                 }
             >
                 {title}
-            </h5>
+            </button>
             <div
                 className={
                     toggle
