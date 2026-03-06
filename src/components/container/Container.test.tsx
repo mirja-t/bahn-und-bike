@@ -1,11 +1,15 @@
 import { Provider } from "react-redux";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
+import {
+    fireEvent,
+    render,
+    screen,
+    waitFor,
+    within,
+} from "@testing-library/react";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Container } from "./Container";
 import { LangCode } from "../../AppSlice";
-// import { type CurrentTrainroute } from "../map/trainroutes/TrainroutesSlice";
-import { mockStore } from "../../stories/MockSlice";
-
+import { createMockStore } from "../../stories/MockSlice";
 vi.mock("../../utils/i18n", () => ({
     useTranslation: () => ({ t: (key: string) => key }),
 }));
@@ -18,109 +22,122 @@ vi.mock("../map/Map", () => ({
     Map: () => <div data-testid="map" />,
 }));
 
-vi.mock("../form/TravelDuration", () => ({
-    TravelDuration: ({
-        handleSubmit,
-    }: {
-        handleSubmit: (
-            e: React.SubmitEvent<HTMLFormElement>,
-            value: number,
-            direct: boolean,
-        ) => void;
-    }) => (
-        <form
-            onSubmit={(e) =>
-                handleSubmit(e as React.SubmitEvent<HTMLFormElement>, 2, true)
-            }
-        >
-            <button type="submit">search</button>
-        </form>
-    ),
-}));
-/*
-const staleTrainroute: CurrentTrainroute = {
-    id: "route-1",
-    name: "Stale Train Route",
-    dur: 60,
-    trainlines: [{ trainline_id: "tl-1", trainline_name: "RE1" }],
-    pathLength: 10,
-    firstStation: {
-        stop_name: "Berlin Hbf",
-        stop_id: "2975",
-        trainline_id: "tl-1",
-        lat: 0,
-        lon: 0,
-        x: 0,
-        y: 0,
-    },
-    lastStation: {
-        stop_name: "Potsdam",
-        stop_id: "1234",
-        trainline_id: "tl-1",
-        lat: 1,
-        lon: 1,
-        x: 1,
-        y: 1,
-    },
-    stopIds: ["2975", "1234"],
-    points: "0,0 1,1",
-    connection: null,
-};*/
-
 describe("Container search reset", () => {
     beforeEach(() => {
-        vi.spyOn(globalThis, "fetch").mockResolvedValue({
-            status: 200,
-            json: async () => [],
-        } as Response);
+        vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+            const url = String(input);
+            if (url.includes("trainstops/")) {
+                return {
+                    status: 200,
+                    json: async () => [
+                        {
+                            destination_id: "2975",
+                            destination_name: "Berlin Hbf",
+                            dur: 0,
+                            lat: "52.525084",
+                            lon: "13.369402",
+                            name: "RE1",
+                            stop_number: 0,
+                            trainline_id: "re1",
+                        },
+                        {
+                            destination_id: "1234",
+                            destination_name: "Potsdam",
+                            dur: 10,
+                            lat: "52.390569",
+                            lon: "13.064473",
+                            name: "RE1",
+                            stop_number: 1,
+                            trainline_id: "re1",
+                        },
+                    ],
+                } as Response;
+            }
+
+            return {
+                status: 200,
+                json: async () => [],
+            } as Response;
+        });
     });
 
-    afterEach(() => {
-        vi.restoreAllMocks();
-    });
-
-    it("resets tab, veloroutes state, trainroutes state, and clears stale route data on Search", async () => {
+    const renderContainer = () => {
+        const mockStore = createMockStore();
         render(
             <Provider store={mockStore}>
                 <Container lang={LangCode.DE} />
             </Provider>,
         );
 
-        const veloroutesTabButton = screen.getByRole("button", {
-            name: "bikeroutes",
+        const travelDurationForm = screen.getByRole("form");
+        const durationSlider = within(travelDurationForm).getByRole("slider", {
+            name: /traveltime/i,
         });
-        const trainlinesTabButton = screen.getByRole("button", {
+        const searchButton = screen.getByRole("button", { name: "search" });
+        const tabs = screen.getByRole("navigation");
+        const btnTab1 = within(tabs).getByRole("button", {
             name: "trainconnections",
         });
+        const btnTab2 = within(tabs).getByRole("button", {
+            name: "bikeroutes",
+        });
+        const btnTab3 = within(tabs).getByRole("button", { name: "routelegs" });
+        return {
+            travelDurationForm,
+            durationSlider,
+            searchButton,
+            tabs,
+            btnTab1,
+            btnTab2,
+            btnTab3,
+        };
+    };
+
+    it("sets 2nd tab active when trainroute is selected", async () => {
+        const { durationSlider, searchButton, btnTab1, btnTab2 } =
+            renderContainer();
 
         await waitFor(() => {
-            expect(
-                veloroutesTabButton.closest("li")?.classList.contains("active"),
-            ).toBe(true);
-            expect(screen.queryByText("Stale Train Route")).not.toBeNull();
-            expect(screen.queryByText("Stale Bike Route")).not.toBeNull();
+            expect(btnTab1.closest("li")?.classList.contains("active")).toBe(
+                true,
+            );
         });
 
-        fireEvent.click(screen.getByRole("button", { name: "search" }));
+        fireEvent.change(durationSlider, { target: { value: "1" } });
+        fireEvent.click(searchButton);
+
+        const firstEntryTitle = await screen.findByRole("heading", {
+            name: "RE1: Potsdam",
+        });
+        fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
 
         await waitFor(() => {
-            expect(
-                trainlinesTabButton.closest("li")?.classList.contains("active"),
-            ).toBe(true);
-            expect(
-                veloroutesTabButton.closest("li")?.classList.contains("active"),
-            ).toBe(false);
+            expect(btnTab2.closest("li")?.classList.contains("active")).toBe(
+                true,
+            );
+        });
+    });
+
+    it("resets tab, veloroutes state, trainroutes state, and clears stale route data on Search", async () => {
+        const { durationSlider, searchButton, btnTab1 } = renderContainer();
+
+        await waitFor(() => {
+            expect(btnTab1.closest("li")?.classList.contains("active")).toBe(
+                true,
+            );
         });
 
-        // const state = store.getState();
-        // expect(state.veloroutes.velorouteList).toEqual([]);
-        // expect(state.veloroutes.activeVeloroute).toBeNull();
-        // expect(state.veloroutes.activeVelorouteSection).toBeNull();
-        // expect(state.trainroutes.currentTrainroutes).toEqual([]);
-        // expect(state.trainroutes.activeSection).toBeNull();
-        // expect(state.trainroutes.trainroutesAlongVeloroute).toEqual([]);
-
-        // expect(screen.queryByText("Stale Train Route")).toBeNull();
-        // expect(screen.queryByText("Stale Bike Route")).toBeNull();
+        fireEvent.change(durationSlider, { target: { value: "1" } });
+        fireEvent.click(searchButton);
+        const firstEntryTitle = await screen.findByRole("heading", {
+            name: "RE1: Potsdam",
+        });
+        fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
+        fireEvent.click(searchButton);
+        await waitFor(() => {
+            expect(btnTab1.closest("li")?.classList.contains("active")).toBe(
+                true,
+            );
+        });
     });
 });

@@ -6,5 +6,8 @@ export default defineConfig({
         setupFiles: ["src/setupTests.js"],
         include: ["src/**/*.{test,spec}.{ts,tsx}"],
         exclude: ["**/.storybook/**", "**/*.stories.*"],
+        clearMocks: true,
+        mockReset: true,
+        restoreMocks: true,
     },
 });

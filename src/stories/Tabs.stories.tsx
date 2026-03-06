@@ -6,7 +6,7 @@ import Tabs from "../components/stateless/tabs/Tabs";
 import { ItemList } from "../components/stateless/itemlist/ItemList";
 import { Panel } from "../components/stateless/panel/Panel";
 import { Provider } from "react-redux";
-import { mockStore } from "./MockSlice";
+import { createMockStore } from "./MockSlice";
 
 // Mock content components for demonstration
 const MockTrainContent = () => (
@@ -55,7 +55,7 @@ const meta = {
     tags: ["autodocs"],
     decorators: [
         (Story) => (
-            <Provider store={mockStore}>
+            <Provider store={createMockStore()}>
                 <Story />
             </Provider>
         ),
