@@ -10,6 +10,15 @@ const dirname =
         : path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+    optimizeDeps: {
+        // Prevent first-run re-optimization reloads that can break browser-mode Storybook tests in CLI.
+        include: [
+            "react",
+            "react-dom",
+            "react-dom/client",
+            "react/jsx-dev-runtime",
+        ],
+    },
     test: {
         projects: [
             {
