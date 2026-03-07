@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-
 import { Loading } from "../components/stateless/loading/Loading";
 import { Provider } from "react-redux";
-import { mockStore } from "./MockSlice";
+import { createMockStore } from "./MockSlice";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -10,7 +9,7 @@ const meta = {
     component: Loading,
     decorators: [
         (Story) => (
-            <Provider store={mockStore}>
+            <Provider store={createMockStore()}>
                 <Story />
             </Provider>
         ),
