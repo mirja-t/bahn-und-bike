@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
+import React from "react";
 import "../src/index.scss";
 import "../src/App.scss";
 
