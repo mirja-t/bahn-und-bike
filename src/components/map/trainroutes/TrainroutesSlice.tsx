@@ -135,12 +135,13 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         return route;
     };
 
-    const connectionStart: CurrentTrainroute = await fetchConnection(
-        startId || "",
-    );
-    const connectionEnd: CurrentTrainroute = await fetchConnection(endId || "");
-    connections.push(connectionStart);
-    connections.push(connectionEnd);
+    if (startId && endId) {
+        const connectionStart: CurrentTrainroute =
+            await fetchConnection(startId);
+        const connectionEnd: CurrentTrainroute = await fetchConnection(endId);
+        connections.push(connectionStart);
+        connections.push(connectionEnd);
+    }
 
     return connections;
 });

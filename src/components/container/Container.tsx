@@ -24,18 +24,14 @@ import {
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
 import { Map } from "../map/Map";
-import { useAppDispatch, type LangCode } from "../../AppSlice";
+import { useAppDispatch } from "../../AppSlice";
 import { Panel } from "../stateless/panel/Panel";
 import Tabs from "../stateless/tabs/Tabs";
 import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
 import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 import { useTranslation } from "../../utils/i18n";
 
-interface ContainerProps {
-    lang: LangCode;
-}
-
-export const Container = ({}: ContainerProps) => {
+export const Container = () => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
     const activeSection = useSelector(selectActiveSection);
