@@ -108,13 +108,14 @@ export const Container = () => {
     }, [wrapper]);
 
     useEffect(() => {
-        if (activeSection) {
-            setActiveTabId("veloroutes");
-        }
         if (activeVeloroute) {
             setActiveTabId("leg");
         }
     }, [activeSection, activeVeloroute]);
+
+    const handleTrainrouteSelect = () => {
+        setActiveTabId("veloroutes");
+    };
 
     return (
         <>
@@ -140,7 +141,9 @@ export const Container = () => {
                                     id="trainlines"
                                     name={t("trainconnections")}
                                 >
-                                    <TrainlineDetails />
+                                    <TrainlineDetails
+                                        fn={handleTrainrouteSelect}
+                                    />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="veloroutes"

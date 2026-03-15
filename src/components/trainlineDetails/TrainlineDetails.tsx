@@ -17,12 +17,17 @@ import {
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { useState } from "react";
 
-export const TrainlineDetails = () => {
+interface TrainlineDetailsProps {
+    fn: () => void;
+}
+export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
+    const [activeSectionClicked, setActiveSectionClicked] = useState(false);
     // check costs of fetching all related veloroutes when no trainline is selected
     // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
     //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
@@ -30,12 +35,22 @@ export const TrainlineDetails = () => {
 
     const dispatch = useAppDispatch();
 
-    const setTrainlineActive = (line: CurrentTrainroute) => {
+    const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
+        if (trainroute) {
+            dispatch(setActiveSection(trainroute));
+        } else if (!activeSectionClicked) {
+            dispatch(setActiveSection(null));
+        }
+    };
+
+    const handleTrainrouteClick = (line: CurrentTrainroute) => {
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveSection(line));
         dispatch(loadVeloroutes([line]));
+        fn();
+        setActiveSectionClicked(true); // prevent deselect on hover after click
     };
 
     return (
@@ -49,7 +64,8 @@ export const TrainlineDetails = () => {
                         loading={trainlineListIsLoading}
                         items={trainRoutes}
                         activeId={activeSection?.id}
-                        fn={setTrainlineActive}
+                        fn={handleTrainrouteClick}
+                        onHover={handleTrainrouteHover}
                         icon={<TrainIcon />}
                     />
                 </section>

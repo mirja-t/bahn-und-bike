@@ -14,6 +14,7 @@ interface ItemListProps<T> {
     activeId?: string;
     fn?: (item: Item<T>) => void;
     loading?: boolean;
+    onHover?: (item: Item<T> | null) => void;
 }
 
 export const ItemList = <T,>({
@@ -22,6 +23,7 @@ export const ItemList = <T,>({
     icon,
     fn,
     loading = false,
+    onHover,
 }: ItemListProps<T>) => {
     return (
         <ul className={styles.itemlist}>
@@ -40,6 +42,8 @@ export const ItemList = <T,>({
                     }}
                     key={item.id}
                     onClick={() => fn && fn(item)}
+                    onMouseEnter={() => onHover && onHover(item)}
+                    onMouseLeave={() => onHover && onHover(null)}
                     className={
                         activeId && item.id === activeId ? styles.active : ""
                     }
