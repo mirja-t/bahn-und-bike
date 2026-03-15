@@ -32,6 +32,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     return (
         <form
             id="travelduration"
+            name="travel duration form"
             onSubmit={(e) => handleSubmit(e, value, direct)}
         >
             <DestinationPicker />

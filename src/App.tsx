@@ -107,10 +107,7 @@ export function App() {
                     </Header>
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route
-                            path="routefinder"
-                            element={<Container lang={langCode} />}
-                        />
+                        <Route path="routefinder" element={<Container />} />
                         <Route
                             path="datenschutz"
                             element={<Privacy resetState={resetState} />}

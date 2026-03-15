@@ -59,7 +59,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         }
 
         // In production, you might want to send this to an error reporting service
-        if (process.env.NODE_ENV === "production") {
+        if (import.meta.env.MODE === "production") {
             // Example: Send to error reporting service
             // errorReportingService.captureException(error, { extra: errorInfo, tags: { eventId } });
         }
@@ -119,7 +119,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                                     />
                                 </div>
 
-                                {process.env.NODE_ENV === "development" &&
+                                {import.meta.env.MODE === "development" &&
                                     this.state.error && (
                                         <details>
                                             <summary>

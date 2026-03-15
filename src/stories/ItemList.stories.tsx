@@ -3,9 +3,9 @@ import { fn } from "storybook/test";
 
 import { ItemList } from "../components/stateless/itemlist/ItemList";
 import { Provider } from "react-redux";
-import { mockStore } from "./MockSlice";
 import { VelorouteIcon } from "../components/stateless/icons/VelorouteIcon";
 import { TrainIcon } from "../components/stateless/icons/TrainIcon";
+import { createMockStore } from "./MockSlice";
 
 // Mock items data
 const mockItems = [
@@ -20,7 +20,7 @@ const meta = {
     component: ItemList,
     decorators: [
         (Story) => (
-            <Provider store={mockStore}>
+            <Provider store={createMockStore()}>
                 <Story />
             </Provider>
         ),
