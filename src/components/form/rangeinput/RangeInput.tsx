@@ -48,7 +48,7 @@ export const RangeInput = ({
 
     return (
         <fieldset className="range-slider">
-            <label htmlFor="fahrtzeit">{t("traveltime")}:</label>
+            <label htmlFor="traveltime">{t("traveltime")}:</label>
             <span>
                 {" "}
                 {t("upto")} {getTime(value * 30, langCode)}
@@ -57,7 +57,8 @@ export const RangeInput = ({
                 <input
                     ref={ref}
                     type="range"
-                    name="fahrtzeit"
+                    id="traveltime"
+                    name="traveltime"
                     min={min}
                     max={max}
                     value={value}

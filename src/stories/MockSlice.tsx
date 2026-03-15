@@ -1,32 +1,50 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import appReducer from "../AppSlice";
+import destinationsReducer from "../components/destinationDetails/DestinationDetailsSlice";
+import trainroutesReducer from "../components/map/trainroutes/TrainroutesSlice";
+import veloroutesReducer from "../components/map/veloroutes/VeloroutesSlice";
+import type { RootState } from "../store";
 
-export const mockSlice = createSlice({
-    name: "app",
-    initialState: {
-        theme: "light",
-        lang: "en",
-    },
-    reducers: {
-        setTheme: (state, action: { payload: string }) => {
-            state.theme = action.payload;
-        },
-        setLang: (state, action: { payload: string }) => {
-            state.lang = action.payload;
-        },
-    },
-});
+const reducers = {
+    app: appReducer,
+    destinations: destinationsReducer,
+    trainroutes: trainroutesReducer,
+    veloroutes: veloroutesReducer,
+};
 
-// Mock Redux store for Storybook
-const mockStore = configureStore({
-    reducer: {
-        app: mockSlice.reducer,
-    },
-    preloadedState: {
+const defaultMockState: RootState = {
+    app: appReducer(undefined, { type: "@@INIT" }),
+    destinations: destinationsReducer(undefined, { type: "@@INIT" }),
+    trainroutes: trainroutesReducer(undefined, { type: "@@INIT" }),
+    veloroutes: veloroutesReducer(undefined, { type: "@@INIT" }),
+};
+
+export const createMockStore = (preloadedState: Partial<RootState> = {}) => {
+    const mergedState: RootState = {
+        ...defaultMockState,
+        ...preloadedState,
         app: {
-            theme: "light",
-            lang: "en",
+            ...defaultMockState.app,
+            ...preloadedState.app,
         },
-    },
-});
+        destinations: {
+            ...defaultMockState.destinations,
+            ...preloadedState.destinations,
+        },
+        trainroutes: {
+            ...defaultMockState.trainroutes,
+            ...preloadedState.trainroutes,
+        },
+        veloroutes: {
+            ...defaultMockState.veloroutes,
+            ...preloadedState.veloroutes,
+        },
+    };
 
-export { mockStore };
+    return configureStore({
+        reducer: reducers,
+        preloadedState: mergedState,
+    });
+};
+
+export type MockStore = ReturnType<typeof createMockStore>;
