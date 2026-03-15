@@ -41,9 +41,9 @@ export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
         <>
             <AnimatePresence>
                 {isLoading && (
-                    <div className={styles.loading}>
+                    <motion.div className={styles.loading}>
                         <Loading />
-                    </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
             {/* <ZoomPanel fn={fn} /> */}
