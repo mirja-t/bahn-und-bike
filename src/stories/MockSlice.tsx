@@ -47,4 +47,4 @@ export const createMockStore = (preloadedState: Partial<RootState> = {}) => {
     });
 };
 
-export type mockStore = ReturnType<typeof createMockStore>;
+export type MockStore = ReturnType<typeof createMockStore>;
