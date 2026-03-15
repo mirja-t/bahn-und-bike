@@ -1,5 +1,4 @@
 import "./velorouteDetails.scss";
-import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
@@ -63,7 +62,7 @@ export const VelorouteDetails = () => {
                                             },
                                             idx: number,
                                         ) => (
-                                            <li key={uuidv4()}>
+                                            <li key={`${idx}-${obj.leg[0].stop_name}-${obj.leg[obj.leg.length - 1].stop_name}`}>
                                                 <button
                                                     type="button"
                                                     className={
