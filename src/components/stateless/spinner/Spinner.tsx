@@ -1,4 +1,4 @@
-import styles from "./Spinner.module.scss";
+import styles from "./spinner.module.scss";
 import { motion, useTime, useTransform } from "framer-motion";
 
 export const Spinner = () => {
