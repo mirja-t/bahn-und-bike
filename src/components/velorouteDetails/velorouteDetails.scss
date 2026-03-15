@@ -31,8 +31,14 @@
 ol.veloroute-stops,
 ul.veloroute-stops {
     padding-left: 1.5em;
-    span {
+    .veloroute-stop-button {
         cursor: pointer;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        padding: 0;
+        text-align: left;
         &.active,
         &:hover,
         &.hover {

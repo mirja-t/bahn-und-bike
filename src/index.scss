@@ -28,6 +28,7 @@ body {
     font-family: fonts.$global-font-family;
     font-size: fonts.$global-font-size;
     font-weight: 400;
+    color: var(--text);
 }
 
 h1,
@@ -35,43 +36,54 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
     font-family: fonts.$base-heading-font-family;
 }
 
 h1,
 h2,
-h3 {
+h3,
+.h1,
+.h2,
+.h3 {
     line-height: 1.3;
 }
 
 h2,
-h3 {
+h3,
+.h2,
+.h3 {
     font-size: fonts.$h2-font-size;
     margin-bottom: 0.33em;
-    color: var(--text);
     font-family: fonts.$global-font-family;
     font-weight: 400;
 }
 
-h3 {
+h3,
+.h3 {
     font-size: fonts.$h3-font-size;
     margin-bottom: 0;
 }
 
-h5 {
+h5,
+.h5 {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: fonts.$letterspacing;
-    color: var(--text);
     font-size: fonts.$h5-font-size;
     margin-bottom: 0.75em;
     margin-top: 1em;
 }
 
-h6 {
+h6,
+.h6 {
     font-size: fonts.$h6-font-size;
-    color: var(--text);
     margin-top: 0.75em;
 }
 

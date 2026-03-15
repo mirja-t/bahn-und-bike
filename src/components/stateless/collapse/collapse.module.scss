@@ -5,6 +5,11 @@
     .toggle {
         cursor: pointer;
         position: relative;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        text-align: left;
+        color: inherit;
         &:after {
             content: "";
             position: absolute;

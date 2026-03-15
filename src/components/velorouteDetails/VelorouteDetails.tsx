@@ -1,5 +1,4 @@
 import "./velorouteDetails.scss";
-import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
@@ -29,10 +28,10 @@ export const VelorouteDetails = () => {
     };
 
     const hoverVelorouteSection = (
-        { type }: React.MouseEvent,
+        { type }: React.MouseEvent | React.FocusEvent,
         idx?: number,
     ) => {
-        if (type === "mouseenter" && idx !== undefined) {
+        if ((type === "mouseenter" || type === "focus") && idx !== undefined) {
             return dispatch(setHoveredVelorouteSection(idx));
         }
         dispatch(setHoveredVelorouteSection(null));
@@ -63,31 +62,41 @@ export const VelorouteDetails = () => {
                                             },
                                             idx: number,
                                         ) => (
-                                            <li
-                                                key={uuidv4()}
-                                                onClick={() =>
-                                                    setVelorouteSectionActive(
-                                                        idx,
-                                                    )
-                                                }
-                                                onMouseEnter={(e) =>
-                                                    hoverVelorouteSection(
-                                                        e,
-                                                        idx,
-                                                    )
-                                                }
-                                                onMouseLeave={(e) =>
-                                                    hoverVelorouteSection(e)
-                                                }
-                                            >
-                                                <span
+                                            <li key={`${idx}-${obj.leg[0].stop_name}-${obj.leg[obj.leg.length - 1].stop_name}`}>
+                                                <button
+                                                    type="button"
                                                     className={
                                                         activeVelorouteSectionIdx ===
                                                         idx
-                                                            ? "active"
-                                                            : ""
+                                                            ? "veloroute-stop-button active"
+                                                            : "veloroute-stop-button"
                                                     }
-                                                >{`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}</span>
+                                                    onClick={() =>
+                                                        setVelorouteSectionActive(
+                                                            idx,
+                                                        )
+                                                    }
+                                                    onMouseEnter={(e) =>
+                                                        hoverVelorouteSection(
+                                                            e,
+                                                            idx,
+                                                        )
+                                                    }
+                                                    onMouseLeave={(e) =>
+                                                        hoverVelorouteSection(e)
+                                                    }
+                                                    onFocus={(e) =>
+                                                        hoverVelorouteSection(
+                                                            e,
+                                                            idx,
+                                                        )
+                                                    }
+                                                    onBlur={(e) =>
+                                                        hoverVelorouteSection(e)
+                                                    }
+                                                >
+                                                    {`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}
+                                                </button>
                                             </li>
                                         ),
                                     )}

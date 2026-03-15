@@ -1,5 +1,5 @@
 import styles from "./collapse.module.scss";
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 
 interface CollapseProps {
     children: ReactNode;
@@ -8,20 +8,29 @@ interface CollapseProps {
 
 export const Collapse = ({ children, title }: CollapseProps) => {
     const [toggle, setToggle] = useState(false);
+    const buttonId = useId();
+    const contentId = useId();
 
     return (
         <div className={styles.collapse}>
-            <h5
+            <button
+                id={buttonId}
+                type="button"
                 onClick={() => setToggle((prev) => !prev)}
+                aria-expanded={toggle}
+                aria-controls={contentId}
                 className={
                     toggle
-                        ? `${styles.toggle} ${styles.on}`
-                        : `${styles.toggle} ${styles.off}`
+                        ? `${styles.toggle} ${styles.on} h5`
+                        : `${styles.toggle} ${styles.off} h5`
                 }
             >
                 {title}
-            </h5>
+            </button>
             <div
+                id={contentId}
+                role="region"
+                aria-labelledby={buttonId}
                 className={
                     toggle
                         ? `${styles.toggleContainer} ${styles.on}`
