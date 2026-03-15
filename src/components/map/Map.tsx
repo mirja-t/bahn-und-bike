@@ -1,4 +1,4 @@
-import "./map.scss";
+import styles from "./map.module.scss";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
@@ -10,8 +10,8 @@ import {
 import { selectActiveVeloroute } from "./veloroutes/VeloroutesSlice";
 import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
-import { Loading } from "../stateless/loading/Loading";
 import { AnimatePresence, motion } from "framer-motion";
+import { Loading } from "../stateless/loading/Loading";
 
 interface MapProps {
     value: number;
@@ -41,20 +41,14 @@ export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
         <>
             <AnimatePresence>
                 {isLoading && (
-                    <motion.div
-                        className="loading"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
+                    <motion.div className={styles.loading}>
                         <Loading />
                     </motion.div>
                 )}
             </AnimatePresence>
             {/* <ZoomPanel fn={fn} /> */}
             <div
-                id="map-container"
+                className={styles.mapContainer}
                 ref={mapcontainerRef}
                 style={{
                     width: zoom.containerWidth,
@@ -68,7 +62,7 @@ export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
                         top: zoom.y,
                         touchAction: "none",
                     }}
-                    className="map-inner"
+                    className={styles.mapInner}
                 >
                     {!isLoading && (
                         <>
