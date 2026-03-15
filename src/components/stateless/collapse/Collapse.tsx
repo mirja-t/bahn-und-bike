@@ -16,8 +16,8 @@ export const Collapse = ({ children, title }: CollapseProps) => {
                 onClick={() => setToggle((prev) => !prev)}
                 className={
                     toggle
-                        ? `${styles.toggle} ${styles.on}`
-                        : `${styles.toggle} ${styles.off}`
+                        ? `${styles.toggle} ${styles.on} h5`
+                        : `${styles.toggle} ${styles.off} h5`
                 }
             >
                 {title}
