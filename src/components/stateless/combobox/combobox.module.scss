@@ -1,4 +1,5 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/mixins/caret.scss" as caret;
 
 .comboboxwrapper {
     display: flex;
@@ -73,7 +74,7 @@
     width: 100%;
     border-radius: var(--border-radius);
     min-width: calc(3em + 0.5vw);
-    padding: spacing.$padding-xs spacing.$padding-m;
+    padding: spacing.$padding-xs spacing.$padding-xl spacing.$padding-xs spacing.$padding-m;
     border: 2px solid var(--bg-dark);
     font-size: inherit;
     font-family: inherit;
@@ -87,9 +88,31 @@
     }
 }
 
+.caretButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: spacing.$padding-xl;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+        @include caret.caret();
+
+        content: "";
+        display: block;
+        transform: scale(0.5);
+    }
+}
+
 .listbox {
     position: absolute;
-    top: 100%;
     left: 0;
     right: 0;
     z-index: 10;
@@ -98,11 +121,21 @@
     list-style: none;
     background: var(--dropdown-bg);
     border: 2px solid var(--bg-dark);
-    border-top: none;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
     max-height: 12em;
     overflow-y: auto;
     box-shadow: var(--button-boxshadow);
+}
+
+.listboxBottom {
+    top: 100%;
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.listboxTop {
+    bottom: 100%;
+    border-bottom: none;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .option {

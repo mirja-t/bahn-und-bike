@@ -28,6 +28,10 @@ const meta = {
         value: { control: "text" },
         placeholder: { control: "text" },
         maxLength: { control: "number" },
+        dropdownPosition: {
+            control: "select",
+            options: ["bottom", "top"],
+        },
         onChange: { action: "value-changed" },
     },
     args: {
@@ -42,7 +46,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Basic combobox with a label. Type at least 2 characters to see filtered suggestions.
+ * Basic combobox with a label. Typing 2+ characters activates filtering.
+ * Clicking the caret button opens an unfiltered list of up to 10 options.
  */
 export const WithLabel: Story = {
     args: {
@@ -58,19 +63,9 @@ export const WithLabel: Story = {
         });
 
         await step(
-            "No suggestions shown for less than 2 characters",
+            "Filtered suggestions appear only after typing 2+ characters",
             async () => {
-                await userEvent.type(input, "B");
-                expect(
-                    canvas.queryByRole("listbox"),
-                ).not.toBeInTheDocument();
-            },
-        );
-
-        await step(
-            "Suggestions appear after typing 2+ characters",
-            async () => {
-                await userEvent.type(input, "e");
+                await userEvent.type(input, "Be");
                 const listbox = canvas.getByRole("listbox");
                 expect(listbox).toBeInTheDocument();
                 // "Be" matches Berlin, Bremen
@@ -98,6 +93,43 @@ export const WithPrefilledValue: Story = {
     args: {
         label: "Search City",
         value: "Berlin",
+    },
+};
+
+/**
+ * Clicking the caret button opens a dropdown with up to 10 unfiltered options
+ * — no typing required.
+ */
+export const WithCaretDropdown: Story = {
+    args: {
+        label: "Search City",
+        placeholder: "Click caret or type to search…",
+    },
+    play: async ({ canvasElement, step }) => {
+        const canvas = within(canvasElement);
+
+        await step(
+            "Caret button opens unfiltered dropdown (max 10 items)",
+            async () => {
+                const caretBtn = canvas.getByRole("button", {
+                    name: /open suggestions/i,
+                });
+                await userEvent.click(caretBtn);
+                const listbox = canvas.getByRole("listbox");
+                expect(listbox).toBeInTheDocument();
+                expect(
+                    within(listbox).getAllByRole("option").length,
+                ).toBeLessThanOrEqual(10);
+            },
+        );
+
+        await step("Caret button closes the dropdown when open", async () => {
+            const caretBtn = canvas.getByRole("button", {
+                name: /close suggestions/i,
+            });
+            await userEvent.click(caretBtn);
+            expect(canvas.queryByRole("listbox")).not.toBeInTheDocument();
+        });
     },
 };
 
@@ -147,7 +179,38 @@ export const WithMaxLength: Story = {
 };
 
 /**
- * A large option list stressing the filter performance and scroll behaviour.
+ * The dropdown opens above the input when dropdownPosition is set to "top".
+ * Useful when the combobox is placed near the bottom of the viewport.
+ */
+export const DropdownPositionTop: Story = {
+    args: {
+        label: "Search City",
+        placeholder: "Dropdown opens above",
+        dropdownPosition: "top",
+    },
+    decorators: [
+        (Story) => (
+            <div style={{ paddingTop: "8em" }}>
+                <Story />
+            </div>
+        ),
+    ],
+    play: async ({ canvasElement, step }) => {
+        const canvas = within(canvasElement);
+
+        await step("Dropdown opens above the input", async () => {
+            const caretBtn = canvas.getByRole("button", {
+                name: /open suggestions/i,
+            });
+            await userEvent.click(caretBtn);
+            expect(canvas.getByRole("listbox")).toBeInTheDocument();
+        });
+    },
+};
+
+/**
+ * A large option list — the caret dropdown caps at 10 unfiltered items;
+ * typing narrows results via filtering.
  */
 export const LargeOptionList: Story = {
     args: {

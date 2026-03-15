@@ -3,6 +3,7 @@ import styles from "./combobox.module.scss";
 
 const MIN_FILTER_LENGTH = 2;
 const DEFAULT_MAX_LENGTH = 100;
+const MAX_UNFILTERED_OPTIONS = 10;
 
 interface ComboboxOption {
     value: string;
@@ -17,6 +18,7 @@ interface ComboboxProps {
     onChange: (value: string) => void;
     placeholder?: string;
     maxLength?: number;
+    dropdownPosition?: "bottom" | "top";
 }
 
 export const Combobox = ({
@@ -27,9 +29,11 @@ export const Combobox = ({
     onChange,
     placeholder,
     maxLength = DEFAULT_MAX_LENGTH,
+    dropdownPosition = "bottom",
 }: ComboboxProps) => {
     const [inputValue, setInputValue] = useState(value);
     const [isOpen, setIsOpen] = useState(false);
+    const [isFiltering, setIsFiltering] = useState(false);
     const listboxId = useId();
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -51,20 +55,21 @@ export const Combobox = ({
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const filteredOptions =
-        inputValue.length >= MIN_FILTER_LENGTH
+    const displayedOptions =
+        isFiltering && inputValue.length >= MIN_FILTER_LENGTH
             ? options.filter((option) =>
                   option.label
                       .toLowerCase()
                       .includes(inputValue.toLowerCase()),
               )
-            : [];
+            : options.slice(0, MAX_UNFILTERED_OPTIONS);
 
-    const showDropdown = isOpen && filteredOptions.length > 0;
+    const showDropdown = isOpen && displayedOptions.length > 0;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value.slice(0, maxLength);
         setInputValue(newValue);
+        setIsFiltering(newValue.length >= MIN_FILTER_LENGTH);
         setIsOpen(true);
         onChange(newValue);
     };
@@ -72,7 +77,13 @@ export const Combobox = ({
     const handleOptionSelect = (option: ComboboxOption) => {
         setInputValue(option.label);
         setIsOpen(false);
-        onChange(option.value);
+        setIsFiltering(false);
+        onChange(option.label);
+    };
+
+    const handleCaretClick = () => {
+        setIsFiltering(false);
+        setIsOpen((prev) => !prev);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -121,6 +132,8 @@ export const Combobox = ({
     };
 
     const hasValue = inputValue.length > 0;
+    const listboxPositionClass =
+        dropdownPosition === "top" ? styles.listboxTop : styles.listboxBottom;
 
     return (
         <div className={styles.comboboxwrapper} ref={wrapperRef}>
@@ -132,7 +145,6 @@ export const Combobox = ({
                     id={name}
                     value={inputValue}
                     onChange={handleInputChange}
-                    onFocus={() => setIsOpen(true)}
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
                     maxLength={maxLength}
@@ -143,19 +155,33 @@ export const Combobox = ({
                     aria-controls={listboxId}
                     aria-haspopup="listbox"
                 />
+                <button
+                    type="button"
+                    className={styles.caretButton}
+                    onClick={handleCaretClick}
+                    aria-label={isOpen ? "Close suggestions" : "Open suggestions"}
+                    tabIndex={-1}
+                />
                 {showDropdown && (
                     <ul
-                        className={styles.listbox}
+                        className={`${styles.listbox} ${listboxPositionClass}`}
                         id={listboxId}
                         role="listbox"
                         aria-label={label}
                     >
-                        {filteredOptions.map((option, index) => (
+                        {displayedOptions.map((option, index) => (
                             <li
                                 key={option.value}
                                 role="option"
                                 aria-selected={option.label === inputValue}
-                                className={[styles.option, option.label === inputValue ? styles.optionSelected : ""].filter(Boolean).join(" ")}
+                                className={[
+                                    styles.option,
+                                    option.label === inputValue
+                                        ? styles.optionSelected
+                                        : "",
+                                ]
+                                    .filter(Boolean)
+                                    .join(" ")}
                                 tabIndex={0}
                                 onMouseDown={(e) => e.preventDefault()}
                                 onClick={() => handleOptionSelect(option)}
