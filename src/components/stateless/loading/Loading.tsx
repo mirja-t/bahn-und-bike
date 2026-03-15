@@ -15,10 +15,8 @@ export const Loading = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
         >
-            <div className={styles.loader}>
-                <Spinner />
-                <p>{t("loading") || "loading..."}</p>
-            </div>
+            <Spinner />
+            <p>{t("loading") || "loading..."}</p>
         </motion.div>
     );
 };
