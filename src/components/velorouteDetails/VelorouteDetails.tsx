@@ -29,10 +29,10 @@ export const VelorouteDetails = () => {
     };
 
     const hoverVelorouteSection = (
-        { type }: React.MouseEvent,
+        { type }: React.MouseEvent | React.FocusEvent,
         idx?: number,
     ) => {
-        if (type === "mouseenter" && idx !== undefined) {
+        if ((type === "mouseenter" || type === "focus") && idx !== undefined) {
             return dispatch(setHoveredVelorouteSection(idx));
         }
         dispatch(setHoveredVelorouteSection(null));
@@ -84,6 +84,15 @@ export const VelorouteDetails = () => {
                                                         )
                                                     }
                                                     onMouseLeave={(e) =>
+                                                        hoverVelorouteSection(e)
+                                                    }
+                                                    onFocus={(e) =>
+                                                        hoverVelorouteSection(
+                                                            e,
+                                                            idx,
+                                                        )
+                                                    }
+                                                    onBlur={(e) =>
                                                         hoverVelorouteSection(e)
                                                     }
                                                 >
