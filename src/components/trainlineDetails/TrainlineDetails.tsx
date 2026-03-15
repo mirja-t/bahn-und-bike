@@ -42,7 +42,9 @@ export const TrainlineDetails = () => {
         <div id="trainline-details">
             <div id="trainline" className="details">
                 <section className="section">
-                    {trainRoutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
+                    {trainRoutes.length < 1 && !trainlineListIsLoading && (
+                        <p>{`${t("nomatch")}`}</p>
+                    )}
                     <ItemList
                         loading={trainlineListIsLoading}
                         items={trainRoutes}
