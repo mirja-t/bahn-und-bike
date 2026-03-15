@@ -42,7 +42,6 @@ export default defineConfig({
                 ],
                 test: {
                     name: "storybook",
-                    environment: "jsdom",
                     setupFiles: [".storybook/vitest.setup.ts"],
                     browser: {
                         enabled: true,

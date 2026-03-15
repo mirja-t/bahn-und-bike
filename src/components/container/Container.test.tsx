@@ -10,6 +10,7 @@ import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Container } from "./Container";
 import { LangCode } from "../../AppSlice";
 import { createMockStore } from "../../stories/MockSlice";
+
 vi.mock("../../utils/i18n", () => ({
     useTranslation: () => ({ t: (key: string) => key }),
 }));
