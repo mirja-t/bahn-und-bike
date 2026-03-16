@@ -9,14 +9,13 @@ import {
     setTrainroutesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
-    selectActiveSection,
     selectCurrentTrainroutes,
     setCurrentTrainroutes,
-    selectTrainroutesAlongVeloroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
     selectActiveVeloroute,
+    selectVelorouteList,
     setActiveVeloroute,
     setActiveVelorouteSection,
     setVelorouteList,
@@ -39,10 +38,7 @@ import { useTranslation } from "../../utils/i18n";
 export const Container = () => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
-    const activeSection = useSelector(selectActiveSection);
-    const trainroutesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
+    const veloroutes = useSelector(selectVelorouteList);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
@@ -149,11 +145,7 @@ export const Container = () => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name={t("bikeroutes")}
-                                    disabled={
-                                        trainRoutes.length < 1 ||
-                                        (!activeSection &&
-                                            !trainroutesAlongVeloroute.length)
-                                    }
+                                    disabled={!veloroutes}
                                 >
                                     <DestinationDetails />
                                 </Tabs.Tab>
