@@ -59,11 +59,12 @@ export const loadVeloroutes = createAsyncThunk<
     string[],
     { state: RootState }
 >("veloroutes/setVelorouteList", async (ids: string[], thunkAPI) => {
-    const veloroutesQuery = "veloroutes/ids[]=" + ids.join("&ids[]=");
     const velorouteStops: ResponseStop[] = await fetch(
-        `${VITE_API_URL}${veloroutesQuery}`,
+        `${VITE_API_URL}veloroutes`,
         {
+            method: "POST",
             headers: headers,
+            body: JSON.stringify({ ids }),
         },
     ).then((response) => {
         if (response.status !== 200) {
