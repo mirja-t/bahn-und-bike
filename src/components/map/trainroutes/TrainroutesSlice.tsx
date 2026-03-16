@@ -171,6 +171,8 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroutes },
         ) => {
             state.currentTrainroutes = action.payload;
+            // Reset previewSection to avoid holding a stale reference
+            state.previewSection = null;
         },
         setTrainlineList: (state, action: { payload: string[] | null }) => {
             state.trainlineList = action.payload;
@@ -183,6 +185,10 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroute | null },
         ) => {
             state.activeSection = action.payload;
+            // When clearing the active section, also clear any preview
+            if (action.payload === null) {
+                state.previewSection = null;
+            }
         },
         setPreviewSection: (
             state,
