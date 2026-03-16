@@ -1,4 +1,5 @@
 // import "./destinationDetails.scss";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
@@ -12,13 +13,17 @@ import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
     setActiveSection,
+    setPreviewSection,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
 
-export const TrainlineDetails = () => {
+interface TrainlineDetailsProps {
+    fn: () => void;
+}
+export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
@@ -30,12 +35,30 @@ export const TrainlineDetails = () => {
 
     const dispatch = useAppDispatch();
 
-    const setTrainlineActive = (line: CurrentTrainroute) => {
+    useEffect(() => {
+        return () => {
+            // Ensure any hover preview is cleared when this component unmounts
+            dispatch(setPreviewSection(null));
+        };
+    }, [dispatch]);
+
+    const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
+        if (trainroute) {
+            dispatch(setPreviewSection(trainroute));
+        } else {
+            dispatch(setPreviewSection(null));
+        }
+    };
+
+    const handleTrainrouteClick = (line: CurrentTrainroute) => {
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        // Clear any hover preview when a route is explicitly selected
+        dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));
         dispatch(loadVeloroutes([line]));
+        fn();
     };
 
     return (
@@ -49,7 +72,8 @@ export const TrainlineDetails = () => {
                         loading={trainlineListIsLoading}
                         items={trainRoutes}
                         activeId={activeSection?.id}
-                        fn={setTrainlineActive}
+                        fn={handleTrainrouteClick}
+                        onHover={handleTrainrouteHover}
                         icon={<TrainIcon />}
                     />
                 </section>

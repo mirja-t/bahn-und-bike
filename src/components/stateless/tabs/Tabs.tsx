@@ -4,21 +4,24 @@ import { Button } from "../button/Button";
 import "./tabs.scss";
 import ScrollContainer from "../scrollcontainer/ScrollContainer";
 
-type TabProps = {
-    id: string;
+type TabProps<T extends React.Key | null | undefined> = {
+    id: T;
     name: string;
     children: ReactNode | ReactNode[];
     active?: boolean;
     disabled?: boolean;
 };
-type TabsProps = {
+type TabsProps<T extends React.Key | null | undefined> = {
     children: ReactNode | ReactNode[];
     height?: string;
-    activeTabId?: string;
-    handleTabClick?: (id: string) => void;
+    activeTabId?: TabProps<T>["id"];
+    handleTabClick?: (id: T) => void;
 };
 
-const Tab = ({ children, id }: TabProps) => {
+const Tab = <T extends React.Key | null | undefined>({
+    children,
+    id,
+}: TabProps<T>) => {
     return (
         <div data-testid={`tab-${id}`} className="tab">
             {children}
@@ -30,16 +33,21 @@ const TabHeader = ({ children }: TabHeaderProps) => {
     return <div className="tabheader">{children}</div>;
 };
 
-const Tabs = ({ children, height, activeTabId, handleTabClick }: TabsProps) => {
+const Tabs = <T extends React.Key | null | undefined>({
+    children,
+    height,
+    activeTabId,
+    handleTabClick,
+}: TabsProps<T>) => {
     const tabs = React.Children.toArray(children).filter(
         (child) => React.isValidElement(child) && child.type === Tab,
-    ) as React.ReactElement<TabProps>[];
-    const [activeId, setActiveId] = useState<string>(() => {
+    ) as React.ReactElement<TabProps<T>>[];
+    const [activeId, setActiveId] = useState<T>(() => {
         // Set the initial active tab to the first one or the one with active prop
         const activeTab = tabs.find((tab) => tab.props.active);
         return activeTab
             ? activeTab.props.id
-            : (tabs[0] && tabs[0].props.id) || "";
+            : ((tabs[0] && tabs[0].props.id) as T);
     });
     useEffect(() => {
         if (activeTabId) {

@@ -6,6 +6,7 @@ import {
     selectActiveSection,
     selectTrainroutesAlongVeloroute,
     selectActiveSpot,
+    selectPreviewSection,
 } from "./TrainroutesSlice";
 import {
     selectActiveVeloroute,
@@ -32,7 +33,9 @@ export const Trainroutes = memo(function Trainroutes({
     const { containerHeight } = zoom;
 
     const journeys = useSelector(selectCurrentTrainroutes);
-    const activeSection = useSelector(selectActiveSection);
+    const clickedSection = useSelector(selectActiveSection);
+    const hoveredSection = useSelector(selectPreviewSection);
+    const activeSection = hoveredSection || clickedSection;
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);

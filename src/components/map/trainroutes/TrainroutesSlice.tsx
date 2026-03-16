@@ -60,6 +60,7 @@ export interface TrainroutesState {
     trainroutesError: boolean;
     activeSpot: Trainstop | null;
     activeSection: CurrentTrainroute | null;
+    previewSection: CurrentTrainroute | null;
     trainroutesAlongVeloroute: CurrentTrainroute[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
@@ -159,6 +160,7 @@ export const trainroutesSlice = createSlice({
         trainroutesError: false,
         activeSpot: null,
         activeSection: null,
+        previewSection: null,
         trainroutesAlongVeloroute: [],
         trainroutesAlongVelorouteLoading: false,
         trainroutesAlongVelorouteError: false,
@@ -169,6 +171,8 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroutes },
         ) => {
             state.currentTrainroutes = action.payload;
+            // Reset previewSection to avoid holding a stale reference
+            state.previewSection = null;
         },
         setTrainlineList: (state, action: { payload: string[] | null }) => {
             state.trainlineList = action.payload;
@@ -181,6 +185,16 @@ export const trainroutesSlice = createSlice({
             action: { payload: CurrentTrainroute | null },
         ) => {
             state.activeSection = action.payload;
+            // When clearing the active section, also clear any preview
+            if (action.payload === null) {
+                state.previewSection = null;
+            }
+        },
+        setPreviewSection: (
+            state,
+            action: { payload: CurrentTrainroute | null },
+        ) => {
+            state.previewSection = action.payload;
         },
         setTrainroutesAlongVeloroute: (
             state,
@@ -230,6 +244,8 @@ export const selectActiveSpot = (state: RootState) =>
     state.trainroutes.activeSpot;
 export const selectActiveSection = (state: RootState) =>
     state.trainroutes.activeSection;
+export const selectPreviewSection = (state: RootState) =>
+    state.trainroutes.previewSection;
 export const selectTrainroutesAlongVeloroute = (state: RootState) =>
     state.trainroutes.trainroutesAlongVeloroute;
 export const selectTrainrouteListLoading = (state: RootState) =>
@@ -245,6 +261,7 @@ export const selectTrainlineList = (state: RootState) =>
 export const {
     setActiveSpot,
     setActiveSection,
+    setPreviewSection,
     setTrainroutesAlongVeloroute,
     setStartPos,
     setCurrentTrainroutes,
