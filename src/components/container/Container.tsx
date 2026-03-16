@@ -110,9 +110,6 @@ export const Container = () => {
     const handleTrainrouteSelect = () => {
         setActiveTabId("veloroutes");
     };
-    const handleVelorouteSelect = () => {
-        setActiveTabId("leg");
-    };
 
     return (
         <>
@@ -151,9 +148,7 @@ export const Container = () => {
                                             !trainroutesAlongVeloroute.length)
                                     }
                                 >
-                                    <DestinationDetails
-                                        fn={handleVelorouteSelect}
-                                    />
+                                    <DestinationDetails />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="leg"
