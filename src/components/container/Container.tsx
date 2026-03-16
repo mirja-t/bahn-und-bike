@@ -24,7 +24,12 @@ import {
 import { mapRatio } from "../../utils/svgMap";
 import { TravelDuration } from "../form/TravelDuration";
 import { Map } from "../map/Map";
-import { useAppDispatch } from "../../AppSlice";
+import {
+    selectActiveTab,
+    setActiveTab,
+    useAppDispatch,
+    type TabIds,
+} from "../../AppSlice";
 import { Panel } from "../stateless/panel/Panel";
 import Tabs from "../stateless/tabs/Tabs";
 import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
@@ -46,7 +51,7 @@ export const Container = () => {
     const [userScale, setUserScale] = useState(1);
     const sidebarRef = useRef<HTMLElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
-    const [activeTabId, setActiveTabId] = useState<string | undefined>();
+    const activeTabId = useSelector(selectActiveTab);
     const { t } = useTranslation();
 
     const container = useRef<HTMLDivElement | null>(null);
@@ -61,7 +66,7 @@ export const Container = () => {
         [userScale],
     );
 
-    const handleTabClick = (tabId: string) => {
+    const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
@@ -69,7 +74,7 @@ export const Container = () => {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(loadVeloroutes(trainRoutes));
         }
-        setActiveTabId(tabId);
+        dispatch(setActiveTab(tabId));
     };
 
     const handleSubmit = (
@@ -85,7 +90,7 @@ export const Container = () => {
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));
-        setActiveTabId("trainlines");
+        dispatch(setActiveTab("trainlines"));
         setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);
@@ -108,7 +113,7 @@ export const Container = () => {
     }, [wrapper]);
 
     const handleTrainrouteSelect = () => {
-        setActiveTabId("veloroutes");
+        dispatch(setActiveTab("veloroutes"));
     };
 
     return (

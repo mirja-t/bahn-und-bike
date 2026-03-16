@@ -10,7 +10,7 @@ import {
 } from "../../veloroutes/VeloroutesSlice";
 import { Trainstop } from "../trainstop/Trainstop";
 import { memo } from "react";
-import { useAppDispatch } from "../../../../AppSlice";
+import { setActiveTab, useAppDispatch } from "../../../../AppSlice";
 
 interface TrainrouteProps {
     item: CurrentTrainroute;
@@ -28,6 +28,7 @@ export const Trainroute = memo(
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
             dispatch(loadVeloroutes([line]));
+            dispatch(setActiveTab("veloroutes"));
         };
 
         return (
