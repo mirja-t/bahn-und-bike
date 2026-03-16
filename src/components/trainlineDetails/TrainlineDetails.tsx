@@ -1,4 +1,5 @@
 // import "./destinationDetails.scss";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
@@ -34,6 +35,13 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
 
     const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        return () => {
+            // Ensure any hover preview is cleared when this component unmounts
+            dispatch(setPreviewSection(null));
+        };
+    }, [dispatch]);
+
     const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
         if (trainroute) {
             dispatch(setPreviewSection(trainroute));
@@ -46,6 +54,8 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        // Clear any hover preview when a route is explicitly selected
+        dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));
         dispatch(loadVeloroutes([line]));
         fn();
