@@ -23,11 +23,12 @@ export const Trainroute = memo(
         const dispatch = useAppDispatch();
 
         const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
+            const stopIds = line.stopIds;
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setActiveSection(line));
-            dispatch(loadVeloroutes([line]));
+            dispatch(loadVeloroutes(stopIds));
             dispatch(setActiveTab("veloroutes"));
         };
 

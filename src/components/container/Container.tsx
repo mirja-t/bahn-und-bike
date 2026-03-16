@@ -68,11 +68,13 @@ export const Container = () => {
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
+            const stopIds = trainRoutes.map((route) => route.stopIds).flat();
+            dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(loadVeloroutes(trainRoutes));
+            dispatch(loadVeloroutes(stopIds));
         }
         dispatch(setActiveTab(tabId));
     };

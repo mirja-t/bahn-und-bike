@@ -13,6 +13,7 @@ describe("makeVeloRoute", () => {
             lon: "0",
             stop_number: 1,
             veloroute_id: "route_1",
+            name: "Route 1",
         },
         {
             id: "1",
@@ -24,6 +25,7 @@ describe("makeVeloRoute", () => {
             trainstop: "trainstop_a",
             trainlines: "line_1, line_2",
             veloroute_id: "route_1",
+            name: "Route 1",
         },
         {
             id: "2",
@@ -33,6 +35,7 @@ describe("makeVeloRoute", () => {
             lon: "2",
             stop_number: 3,
             veloroute_id: "route_1",
+            name: "Route 1",
         },
         {
             id: "3",
@@ -44,6 +47,7 @@ describe("makeVeloRoute", () => {
             trainstop: "trainstop_c",
             trainlines: "line_3",
             veloroute_id: "route_1",
+            name: "Route 1",
         },
         {
             id: "4",
@@ -55,6 +59,7 @@ describe("makeVeloRoute", () => {
             trainstop: "trainstop_d",
             trainlines: "line_4",
             veloroute_id: "route_1",
+            name: "Route 1",
         },
     ];
     it("should return an array of routes with 2 legs when start and end have trainlines", () => {
@@ -112,12 +117,12 @@ describe("makeVeloRoute", () => {
             ],
         };*/
 
-        const result = makeVeloRoute(stops.slice(1), "Route 1", trainlines);
+        const result = makeVeloRoute(stops.slice(1), trainlines);
         expect(result.route.length).toBe(2);
         // expect(result).toEqual(expectedRoute);
     });
     it("should return an array of routes with 3 legs when start does not have trainlines", () => {
-        const result = makeVeloRoute(stops, "Route 1", trainlines);
+        const result = makeVeloRoute(stops, trainlines);
         expect(result.route.length).toBe(3);
     });
 });

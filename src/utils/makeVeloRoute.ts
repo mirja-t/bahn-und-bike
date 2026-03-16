@@ -31,7 +31,6 @@ const addXY = (stop: ResponseStop) => {
 
 export const makeVeloRoute = (
     stops: ResponseStop[],
-    name: string,
     trainlines: string[] | null,
 ): Veloroute => {
     stops.sort((a, b) => a.stop_number - b.stop_number);
@@ -62,7 +61,7 @@ export const makeVeloRoute = (
     );
     return {
         id: stops[0].veloroute_id,
-        name,
+        name: stops[0].name,
         len: stops.reduce((acc, stop) => acc + stop.dist, 0),
         path: getRoutePath(
             legs.map(({ leg }) => leg.map(({ x, y }) => ({ x, y })).flat()),

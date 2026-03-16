@@ -8,7 +8,7 @@ import {
     selectActiveVeloroute,
     setActiveVelorouteSection,
     loadVeloroute,
-    type VelorouteList,
+    type Veloroute,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -128,11 +128,11 @@ export const DestinationDetails = () => {
 
     const dispatch = useAppDispatch();
 
-    const setVelorouteActive = (vroute: VelorouteList[number]) => {
+    const setVelorouteActive = (vroute: Veloroute) => {
         if (vroute.len !== undefined) {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
-            dispatch(loadVeloroute(vroute as VelorouteList[number]));
+            dispatch(loadVeloroute(vroute));
         }
     };
 
