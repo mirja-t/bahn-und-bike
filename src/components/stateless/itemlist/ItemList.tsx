@@ -41,9 +41,12 @@ export const ItemList = <T,>({
                         duration: 1,
                     }}
                     key={item.id}
+                    tabIndex={0}
                     onClick={() => fn && fn(item)}
                     onMouseEnter={() => onHover && onHover(item)}
                     onMouseLeave={() => onHover && onHover(null)}
+                    onFocus={() => onHover && onHover(item)}
+                    onBlur={() => onHover && onHover(null)}
                     className={
                         activeId && item.id === activeId ? styles.active : ""
                     }
