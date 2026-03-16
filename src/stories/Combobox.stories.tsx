@@ -3,7 +3,10 @@ import { fn } from "storybook/test";
 import { expect, within, userEvent } from "storybook/test";
 import { useState } from "react";
 
-import { Combobox } from "../components/stateless/combobox/Combobox";
+import {
+    Combobox,
+    type ComboboxOption,
+} from "../components/stateless/combobox/Combobox";
 
 const cityOptions = [
     { value: "berlin", label: "Berlin" },
@@ -37,7 +40,7 @@ const meta = {
     args: {
         onChange: fn(),
         options: cityOptions,
-        value: "",
+        value: { value: "berlin", label: "Berlin" },
         name: "city-combobox",
     },
 } satisfies Meta<typeof Combobox>;
@@ -92,7 +95,7 @@ export const WithoutLabel: Story = {
 export const WithPrefilledValue: Story = {
     args: {
         label: "Search City",
-        value: "Berlin",
+        value: { value: "berlin", label: "Berlin" },
     },
 };
 
@@ -139,7 +142,10 @@ export const WithCaretDropdown: Story = {
  */
 export const Controlled: Story = {
     render: (args) => {
-        const [value, setValue] = useState("Ham");
+        const [value, setValue] = useState<ComboboxOption | null>({
+            value: "ham",
+            label: "Hamburg",
+        });
         return (
             <Combobox
                 {...args}
@@ -173,7 +179,9 @@ export const WithMaxLength: Story = {
 
         await step("Input is truncated at maxLength", async () => {
             await userEvent.type(input, "This is a very long string");
-            expect((input as HTMLInputElement).value.length).toBeLessThanOrEqual(10);
+            expect(
+                (input as HTMLInputElement).value.length,
+            ).toBeLessThanOrEqual(10);
         });
     },
 };

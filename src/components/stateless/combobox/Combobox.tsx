@@ -5,7 +5,7 @@ const MIN_FILTER_LENGTH = 2;
 const DEFAULT_MAX_LENGTH = 100;
 const MAX_UNFILTERED_OPTIONS = 10;
 
-interface ComboboxOption {
+export interface ComboboxOption {
     value: string;
     label: string;
 }
@@ -14,8 +14,8 @@ interface ComboboxProps {
     options: ComboboxOption[];
     name: string;
     label?: string;
-    value: string;
-    onChange: (value: string) => void;
+    value: ComboboxOption | null;
+    onChange: (value: ComboboxOption | null) => void;
     placeholder?: string;
     maxLength?: number;
     dropdownPosition?: "bottom" | "top";
@@ -31,14 +31,14 @@ export const Combobox = ({
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
 }: ComboboxProps) => {
-    const [inputValue, setInputValue] = useState(value);
+    const [inputValue, setInputValue] = useState<ComboboxOption | null>(value);
     const [isOpen, setIsOpen] = useState(false);
     const [isFiltering, setIsFiltering] = useState(false);
     const listboxId = useId();
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setInputValue(value);
+        if (value?.value) setInputValue(value);
     }, [value]);
 
     useEffect(() => {
@@ -56,29 +56,32 @@ export const Combobox = ({
     }, []);
 
     const displayedOptions =
-        isFiltering && inputValue.length >= MIN_FILTER_LENGTH
+        isFiltering && (inputValue?.label.length || 0) >= MIN_FILTER_LENGTH
             ? options.filter((option) =>
                   option.label
                       .toLowerCase()
-                      .includes(inputValue.toLowerCase()),
+                      .includes(inputValue?.label.toLowerCase() || ""),
               )
             : options.slice(0, MAX_UNFILTERED_OPTIONS);
 
     const showDropdown = isOpen && displayedOptions.length > 0;
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value.slice(0, maxLength);
+        const newValue = options.find(
+            (option) => option.value === event.target.value,
+        );
+        if (!newValue) return;
         setInputValue(newValue);
-        setIsFiltering(newValue.length >= MIN_FILTER_LENGTH);
+        setIsFiltering(newValue?.label.length >= MIN_FILTER_LENGTH);
         setIsOpen(true);
         onChange(newValue);
     };
 
     const handleOptionSelect = (option: ComboboxOption) => {
-        setInputValue(option.label);
+        setInputValue(option);
         setIsOpen(false);
         setIsFiltering(false);
-        onChange(option.label);
+        onChange(option);
     };
 
     const handleCaretClick = () => {
@@ -90,9 +93,10 @@ export const Combobox = ({
         if (event.key === "Escape") {
             setIsOpen(false);
         } else if (event.key === "ArrowDown" && showDropdown) {
-            const firstOption = wrapperRef.current?.querySelector<HTMLElement>(
-                `[role="option"]`,
-            );
+            const firstOption =
+                wrapperRef.current?.querySelector<HTMLElement>(
+                    `[role="option"]`,
+                );
             firstOption?.focus();
         }
     };
@@ -107,9 +111,10 @@ export const Combobox = ({
             handleOptionSelect(option);
         } else if (event.key === "ArrowDown") {
             event.preventDefault();
-            const next = wrapperRef.current?.querySelectorAll<HTMLElement>(
-                `[role="option"]`,
-            )[index + 1];
+            const next =
+                wrapperRef.current?.querySelectorAll<HTMLElement>(
+                    `[role="option"]`,
+                )[index + 1];
             next?.focus();
         } else if (event.key === "ArrowUp") {
             event.preventDefault();
@@ -118,32 +123,31 @@ export const Combobox = ({
                     ?.querySelector<HTMLElement>(`#${name}`)
                     ?.focus();
             } else {
-                const prev = wrapperRef.current?.querySelectorAll<HTMLElement>(
-                    `[role="option"]`,
-                )[index - 1];
+                const prev =
+                    wrapperRef.current?.querySelectorAll<HTMLElement>(
+                        `[role="option"]`,
+                    )[index - 1];
                 prev?.focus();
             }
         } else if (event.key === "Escape") {
             setIsOpen(false);
-            wrapperRef.current
-                ?.querySelector<HTMLElement>(`#${name}`)
-                ?.focus();
+            wrapperRef.current?.querySelector<HTMLElement>(`#${name}`)?.focus();
         }
     };
 
-    const hasValue = inputValue.length > 0;
     const listboxPositionClass =
         dropdownPosition === "top" ? styles.listboxTop : styles.listboxBottom;
 
     return (
         <div className={styles.comboboxwrapper} ref={wrapperRef}>
-            <fieldset className={hasValue ? styles.selected : ""}>
+            <fieldset className={!!inputValue ? styles.selected : ""}>
+                <div className={styles.selectedOverlay}>{value?.label}</div>
                 {label && <label htmlFor={name}>{label}</label>}
                 <input
                     type="text"
                     className={styles.input}
                     id={name}
-                    value={inputValue}
+                    value={inputValue?.value || ""}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     placeholder={placeholder}
@@ -159,7 +163,9 @@ export const Combobox = ({
                     type="button"
                     className={styles.caretButton}
                     onClick={handleCaretClick}
-                    aria-label={isOpen ? "Close suggestions" : "Open suggestions"}
+                    aria-label={
+                        isOpen ? "Close suggestions" : "Open suggestions"
+                    }
                     tabIndex={-1}
                 />
                 {showDropdown && (
@@ -173,10 +179,12 @@ export const Combobox = ({
                             <li
                                 key={option.value}
                                 role="option"
-                                aria-selected={option.label === inputValue}
+                                aria-selected={
+                                    option.value === inputValue?.value
+                                }
                                 className={[
                                     styles.option,
-                                    option.label === inputValue
+                                    option.value === inputValue?.value
                                         ? styles.optionSelected
                                         : "",
                                 ]

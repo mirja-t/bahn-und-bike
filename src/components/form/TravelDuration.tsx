@@ -1,4 +1,4 @@
-import "./travelduration.scss";
+import styles from "./travelduration.module.scss";
 import { useState } from "react";
 import { useTranslation } from "../../utils/i18n";
 import { Button } from "../stateless/button/Button";
@@ -31,7 +31,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
 
     return (
         <form
-            id="travelduration"
+            className={styles.travelduration}
             name="travel duration form"
             onSubmit={(e) => handleSubmit(e, value, direct)}
         >

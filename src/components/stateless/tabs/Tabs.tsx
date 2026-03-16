@@ -48,83 +48,87 @@ const Tabs = ({ children, height, activeTabId, handleTabClick }: TabsProps) => {
     }, [activeTabId]);
 
     return (
-        <ScrollContainer className="tabs" height={height}>
-            <ScrollContainer.FitContent className="tabs-fit-content">
-                <nav
-                    aria-label="Tabs"
-                    data-testid="tabs"
-                    className="flex -mb-5 justify-between"
-                >
-                    <ul className="flex space-x-1">
-                        {tabs.map((tab) => (
-                            <li
-                                key={tab.props.id}
-                                className={
-                                    tab.props.id === activeId ? "active" : ""
-                                }
-                            >
-                                <Button
+        <div style={{ overflow: "hidden" }}>
+            <ScrollContainer className="tabs" height={height}>
+                <ScrollContainer.FitContent className="tabs-fit-content">
+                    <nav
+                        aria-label="Tabs"
+                        data-testid="tabs"
+                        className="flex -mb-5 justify-between"
+                    >
+                        <ul className="flex space-x-1">
+                            {tabs.map((tab) => (
+                                <li
                                     key={tab.props.id}
-                                    onClick={() => {
-                                        setActiveId(tab.props.id);
-                                        if (handleTabClick) {
-                                            handleTabClick(tab.props.id);
-                                        }
-                                    }}
-                                    disabled={tab.props.disabled}
-                                    label={tab.props.name}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            </ScrollContainer.FitContent>
+                                    className={
+                                        tab.props.id === activeId
+                                            ? "active"
+                                            : ""
+                                    }
+                                >
+                                    <Button
+                                        key={tab.props.id}
+                                        onClick={() => {
+                                            setActiveId(tab.props.id);
+                                            if (handleTabClick) {
+                                                handleTabClick(tab.props.id);
+                                            }
+                                        }}
+                                        disabled={tab.props.disabled}
+                                        label={tab.props.name}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </ScrollContainer.FitContent>
 
-            <ScrollContainer.ScrollContent className="tabs-scroll-content">
-                <div className="">
+                <ScrollContainer.ScrollContent className="tabs-scroll-content">
                     <div className="">
-                        <AnimatePresence mode="popLayout">
-                            {tabs.map(
-                                (tab) =>
-                                    tab.props.id === activeId && (
-                                        <motion.div
-                                            key={tab.props.id}
-                                            initial={{
-                                                scale: 0.8,
-                                                opacity: 0,
-                                                x: "-50%",
-                                            }}
-                                            animate={{
-                                                scale: 1,
-                                                opacity: 1,
-                                                x: 0,
-                                            }}
-                                            exit={{
-                                                scale: 0.8,
-                                                opacity: 0,
-                                                x: "50%",
-                                            }}
-                                            transition={{
-                                                type: "tween",
-                                                duration: 0.2,
-                                            }}
-                                        >
-                                            <Tab
-                                                id={tab.props.id}
-                                                name={tab.props.name}
+                        <div className="">
+                            <AnimatePresence mode="popLayout">
+                                {tabs.map(
+                                    (tab) =>
+                                        tab.props.id === activeId && (
+                                            <motion.div
+                                                key={tab.props.id}
+                                                initial={{
+                                                    scale: 0.8,
+                                                    opacity: 0,
+                                                    x: "-50%",
+                                                }}
+                                                animate={{
+                                                    scale: 1,
+                                                    opacity: 1,
+                                                    x: 0,
+                                                }}
+                                                exit={{
+                                                    scale: 0.8,
+                                                    opacity: 0,
+                                                    x: "50%",
+                                                }}
+                                                transition={{
+                                                    type: "tween",
+                                                    duration: 0.2,
+                                                }}
                                             >
-                                                {tab.props.children}
-                                            </Tab>
-                                        </motion.div>
-                                    ),
-                            )}
-                        </AnimatePresence>
+                                                <Tab
+                                                    id={tab.props.id}
+                                                    name={tab.props.name}
+                                                >
+                                                    {tab.props.children}
+                                                </Tab>
+                                            </motion.div>
+                                        ),
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
-                </div>
-                {/* overlay for round borders beneath scrollbar */}
-                <div className=""></div>
-            </ScrollContainer.ScrollContent>
-        </ScrollContainer>
+                    {/* overlay for round borders beneath scrollbar */}
+                    <div className=""></div>
+                </ScrollContainer.ScrollContent>
+            </ScrollContainer>
+        </div>
     );
 };
 
