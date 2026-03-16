@@ -107,14 +107,11 @@ export const Container = () => {
         };
     }, [wrapper]);
 
-    useEffect(() => {
-        if (activeVeloroute) {
-            setActiveTabId("leg");
-        }
-    }, [activeSection, activeVeloroute]);
-
     const handleTrainrouteSelect = () => {
         setActiveTabId("veloroutes");
+    };
+    const handleVelorouteSelect = () => {
+        setActiveTabId("leg");
     };
 
     return (
@@ -154,7 +151,9 @@ export const Container = () => {
                                             !trainroutesAlongVeloroute.length)
                                     }
                                 >
-                                    <DestinationDetails />
+                                    <DestinationDetails
+                                        fn={handleVelorouteSelect}
+                                    />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="leg"

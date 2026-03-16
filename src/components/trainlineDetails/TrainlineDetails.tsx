@@ -12,12 +12,12 @@ import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
     setActiveSection,
+    setPreviewSection,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { useState } from "react";
 
 interface TrainlineDetailsProps {
     fn: () => void;
@@ -27,7 +27,6 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
-    const [activeSectionClicked, setActiveSectionClicked] = useState(false);
     // check costs of fetching all related veloroutes when no trainline is selected
     // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
     //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
@@ -37,9 +36,9 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
 
     const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
         if (trainroute) {
-            dispatch(setActiveSection(trainroute));
-        } else if (!activeSectionClicked) {
-            dispatch(setActiveSection(null));
+            dispatch(setPreviewSection(trainroute));
+        } else {
+            dispatch(setPreviewSection(null));
         }
     };
 
@@ -50,7 +49,6 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
         dispatch(setActiveSection(line));
         dispatch(loadVeloroutes([line]));
         fn();
-        setActiveSectionClicked(true); // prevent deselect on hover after click
     };
 
     return (
