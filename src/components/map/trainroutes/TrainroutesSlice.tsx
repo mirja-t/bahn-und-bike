@@ -102,9 +102,16 @@ export const loadTrainroutes = createAsyncThunk<
     thunkAPI.dispatch(setTrainlineList(trainlineList));
     // check costs of fetching all related veloroutes when no trainline is selected
     const stopIds = [
-        ...new Set(currentTrainroutes.map((t) => t.stopIds).flat()),
+        ...new Set(
+            currentTrainroutes
+                .map((t) => t.stopIds)
+                .flat()
+                .filter((id) => id !== start),
+        ),
     ];
-    thunkAPI.dispatch(loadVeloroutes(stopIds));
+    if (stopIds.length > 0) {
+        thunkAPI.dispatch(loadVeloroutes(stopIds));
+    }
     return currentTrainroutes;
 });
 
