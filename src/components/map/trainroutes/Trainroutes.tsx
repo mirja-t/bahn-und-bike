@@ -8,10 +8,7 @@ import {
     selectActiveSpot,
     selectPreviewSection,
 } from "./TrainroutesSlice";
-import {
-    selectActiveVeloroute,
-    selectActiveVelorouteStop,
-} from "../veloroutes/VeloroutesSlice";
+import { selectActiveVelorouteStop } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
 import { Veloroutes } from "../veloroutes/Veloroutes";
 import { Label } from "../label/Label";
@@ -36,7 +33,6 @@ export const Trainroutes = memo(function Trainroutes({
     const clickedSection = useSelector(selectActiveSection);
     const hoveredSection = useSelector(selectPreviewSection);
     const activeSection = hoveredSection || clickedSection;
-    const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const trainlinesAlongVeloroute = useSelector(
@@ -87,7 +83,7 @@ export const Trainroutes = memo(function Trainroutes({
                     strokeScale={strokeScale}
                 />
             )}
-            {activeVeloroute && <Veloroutes strokeScale={strokeScale} />}
+            <Veloroutes strokeScale={strokeScale} />
 
             {(!!activeSpot || !!activeVelorouteStop) && (
                 <Label

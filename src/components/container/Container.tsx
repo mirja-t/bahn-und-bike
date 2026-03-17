@@ -9,14 +9,13 @@ import {
     setTrainroutesAlongVeloroute,
     selectStartPos,
     loadTrainroutes,
-    selectActiveSection,
     selectCurrentTrainroutes,
     setCurrentTrainroutes,
-    selectTrainroutesAlongVeloroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
     selectActiveVeloroute,
+    selectVelorouteList,
     setActiveVeloroute,
     setActiveVelorouteSection,
     setVelorouteList,
@@ -39,10 +38,7 @@ import { useTranslation } from "../../utils/i18n";
 export const Container = () => {
     const dispatch = useAppDispatch();
     const start = useSelector(selectStartPos);
-    const activeSection = useSelector(selectActiveSection);
-    const trainroutesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
+    const veloroutes = useSelector(selectVelorouteList);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
@@ -68,11 +64,20 @@ export const Container = () => {
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
+            const stopIds = Array.from(
+                new Set(
+                    trainRoutes
+                        .map((route) => route.stopIds)
+                        .flat()
+                        .filter((id) => id !== null && id !== undefined && id !== ""),
+                ),
+            );
+            dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(loadVeloroutes(trainRoutes));
+            dispatch(loadVeloroutes(stopIds));
         }
         dispatch(setActiveTab(tabId));
     };
@@ -147,11 +152,7 @@ export const Container = () => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name={t("bikeroutes")}
-                                    disabled={
-                                        trainRoutes.length < 1 ||
-                                        (!activeSection &&
-                                            !trainroutesAlongVeloroute.length)
-                                    }
+                                    disabled={veloroutes.length === 0}
                                 >
                                     <DestinationDetails />
                                 </Tabs.Tab>

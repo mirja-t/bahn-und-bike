@@ -3,6 +3,7 @@ import { headers, VITE_API_URL } from "../../../config/config";
 import type { RootState } from "../../../store";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
+import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
     destination_id: string;
@@ -100,7 +101,17 @@ export const loadTrainroutes = createAsyncThunk<
         : null;
     thunkAPI.dispatch(setTrainlineList(trainlineList));
     // check costs of fetching all related veloroutes when no trainline is selected
-    // thunkAPI.dispatch(loadVeloroutes(currentTrainroutes));
+    const stopIds = [
+        ...new Set(
+            currentTrainroutes
+                .map((t) => t.stopIds)
+                .flat()
+                .filter((id) => id !== start),
+        ),
+    ];
+    if (stopIds.length > 0) {
+        thunkAPI.dispatch(loadVeloroutes(stopIds));
+    }
     return currentTrainroutes;
 });
 

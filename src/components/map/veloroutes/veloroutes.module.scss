@@ -5,40 +5,41 @@
     circle,
     g {
         cursor: pointer;
-        &:hover,
-        &.hover {
-            path.veloroute-section {
-                stroke-dasharray: 0;
+        &:hover {
+            path.velorouteSection {
+                opacity: 1;
                 stroke: var(--bike);
+                &.current {
+                    stroke-dasharray: 0;
+                }
             }
         }
     }
-    path.veloroute-section {
-        stroke: var(--bike);
+    path.velorouteSection {
         stroke-dasharray: 2;
         fill: none;
+        stroke: var(--bike-inactive);
+        &.current,
+        &.hover,
+        &.active {
+            stroke: var(--bike);
+        }
         &.active {
             stroke-dasharray: 0;
         }
-    }
-    path.crossing-veloroute-section {
-        stroke: colors.$lightgray;
-        stroke-dasharray: 2;
-        fill: none;
-        &.active {
-            stroke-dasharray: 0;
-            stroke: var(--bike-hover);
+        &.preview {
+            opacity: 0.5;
         }
     }
-    path.veloroute-section-large {
+    path.velorouteSectionLarge {
         stroke: transparent;
         fill: none;
     }
 }
-.veloroute-details {
+.velorouteDetails {
     display: block;
     padding: 0;
-    .veloroute-stops {
+    .velorouteStops {
         font-size: 80%;
     }
 }

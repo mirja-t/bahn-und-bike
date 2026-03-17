@@ -57,7 +57,7 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
         // Clear any hover preview when a route is explicitly selected
         dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));
-        dispatch(loadVeloroutes([line]));
+        dispatch(loadVeloroutes(line.stopIds));
         fn();
     };
 
