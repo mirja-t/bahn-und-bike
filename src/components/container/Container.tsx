@@ -64,7 +64,14 @@ export const Container = () => {
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
-            const stopIds = trainRoutes.map((route) => route.stopIds).flat();
+            const stopIds = Array.from(
+                new Set(
+                    trainRoutes
+                        .map((route) => route.stopIds)
+                        .flat()
+                        .filter((id) => id !== null && id !== undefined && id !== ""),
+                ),
+            );
             dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
