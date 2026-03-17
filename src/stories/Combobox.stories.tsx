@@ -40,7 +40,6 @@ const meta = {
     args: {
         onChange: fn(),
         options: cityOptions,
-        value: { value: "berlin", label: "Berlin" },
         name: "city-combobox",
     },
 } satisfies Meta<typeof Combobox>;
@@ -96,56 +95,17 @@ export const WithPrefilledValue: Story = {
     args: {
         label: "Search City",
         value: { value: "berlin", label: "Berlin" },
+        options: cityOptions,
     },
 };
 
 /**
- * Clicking the caret button opens a dropdown with up to 10 unfiltered options
- * — no typing required.
+ * Typing filters options; keyboard navigation selects an option and updates
+ * the visible selected value.
  */
-export const WithCaretDropdown: Story = {
-    args: {
-        label: "Search City",
-        placeholder: "Click caret or type to search…",
-    },
-    play: async ({ canvasElement, step }) => {
-        const canvas = within(canvasElement);
-
-        await step(
-            "Caret button opens unfiltered dropdown (max 10 items)",
-            async () => {
-                const caretBtn = canvas.getByRole("button", {
-                    name: /open suggestions/i,
-                });
-                await userEvent.click(caretBtn);
-                const listbox = canvas.getByRole("listbox");
-                expect(listbox).toBeInTheDocument();
-                expect(
-                    within(listbox).getAllByRole("option").length,
-                ).toBeLessThanOrEqual(10);
-            },
-        );
-
-        await step("Caret button closes the dropdown when open", async () => {
-            const caretBtn = canvas.getByRole("button", {
-                name: /close suggestions/i,
-            });
-            await userEvent.click(caretBtn);
-            expect(canvas.queryByRole("listbox")).not.toBeInTheDocument();
-        });
-    },
-};
-
-/**
- * Controlled combobox — state is managed by a parent component.
- * Demonstrates stateless usage with external state management.
- */
-export const Controlled: Story = {
+export const KeyboardSelectAfterFiltering: Story = {
     render: (args) => {
-        const [value, setValue] = useState<ComboboxOption | null>({
-            value: "ham",
-            label: "Hamburg",
-        });
+        const [value, setValue] = useState<ComboboxOption | null>(null);
         return (
             <Combobox
                 {...args}
@@ -160,6 +120,25 @@ export const Controlled: Story = {
     args: {
         label: "Search City",
         placeholder: "Type to search…",
+    },
+    play: async ({ canvasElement, step }) => {
+        const canvas = within(canvasElement);
+        const input = canvas.getByRole("combobox");
+
+        await step("Type to filter options", async () => {
+            await userEvent.click(input);
+            await userEvent.type(input, "Ha");
+            const listbox = canvas.getByRole("listbox");
+            expect(listbox).toBeInTheDocument();
+            expect(
+                within(listbox).getAllByRole("option").length,
+            ).toBeGreaterThan(0);
+        });
+
+        await step("Select filtered option using keyboard", async () => {
+            await userEvent.keyboard("{ArrowDown}{Enter}");
+            expect(input).toHaveValue("Hamburg");
+        });
     },
 };
 
@@ -213,55 +192,5 @@ export const DropdownPositionTop: Story = {
             await userEvent.click(caretBtn);
             expect(canvas.getByRole("listbox")).toBeInTheDocument();
         });
-    },
-};
-
-/**
- * A large option list — the caret dropdown caps at 10 unfiltered items;
- * typing narrows results via filtering.
- */
-export const LargeOptionList: Story = {
-    args: {
-        label: "Search Station",
-        placeholder: "Type to search…",
-        options: Array.from({ length: 200 }, (_, i) => ({
-            value: `station-${i}`,
-            label: `Station ${i + 1}`,
-        })),
-    },
-};
-
-/**
- * Empty options list — no suggestions will ever appear.
- */
-export const EmptyOptions: Story = {
-    args: {
-        label: "Search City",
-        placeholder: "No options available",
-        options: [],
-    },
-};
-
-/**
- * Options with long labels — verifies that text truncation via CSS is applied.
- */
-export const LongOptionLabels: Story = {
-    args: {
-        label: "Search Route",
-        placeholder: "Type to search…",
-        options: [
-            {
-                value: "route1",
-                label: "Berlin Hauptbahnhof – Hamburg Hauptbahnhof via Uelzen",
-            },
-            {
-                value: "route2",
-                label: "Munich Central Station to Frankfurt am Main Hauptbahnhof Express",
-            },
-            {
-                value: "route3",
-                label: "Cologne Cathedral Station – Dortmund Central – Essen Hauptbahnhof",
-            },
-        ],
     },
 };

@@ -12,7 +12,7 @@ interface ComboboxProps {
     options: ComboboxOption[];
     name: string;
     label?: string;
-    value: ComboboxOption | null;
+    value?: ComboboxOption | null;
     onChange: (value: ComboboxOption | null) => void;
     placeholder?: string;
     maxLength?: number;
