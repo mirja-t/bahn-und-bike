@@ -67,11 +67,7 @@ $themes: (
                 transparent
             ),
         "dropdown-box-shadow": shadows.$dropdownshadow,
-        "dropdown-label-bg": linear-gradient(
-                0deg,
-                var(--bg-light) 0%,
-                var(--bg-dark) 90%
-            ),
+        "dropdown-label-bg": var(--bg-light),
         "map-fill": colors.$background-lighter,
         "map-stroke": colors.$background-darker,
         "map-river": #cae4ef,

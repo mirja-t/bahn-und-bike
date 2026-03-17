@@ -1,0 +1,155 @@
+@use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/mixins/caret.scss" as caret;
+
+.comboboxwrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        pointer-events: all;
+        touch-action: auto;
+
+        box-shadow: var(--button-boxshadow-inset);
+        &::after {
+            content: "";
+            pointer-events: none;
+            touch-action: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--button-boxshadow);
+        }
+
+        &:has(input:focus),
+        &.selected {
+            label {
+                transform: translateY(-50%) scale(0.65);
+                transform-origin: left center;
+                background: var(--bg);
+                padding: 0 0.2em;
+                display: inline-block;
+                height: auto;
+                width: auto;
+                left: 0.75em;
+                box-shadow: none;
+                z-index: 3;
+            }
+        }
+
+        label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: var(--bg);
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            pointer-events: none;
+            touch-action: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            background: var(--dropdown-label-bg);
+            border-radius: var(--border-radius);
+            padding-left: spacing.$padding-m;
+            padding-right: spacing.$padding-xl;
+            box-shadow: var(--dropdown-box-shadow);
+            color: var(--label);
+            white-space: nowrap;
+        }
+    }
+}
+
+.input {
+    color: var(--text);
+    background: var(--dropdown-bg);
+    width: 100%;
+    border-radius: var(--border-radius);
+    padding: spacing.$padding-xs spacing.$padding-xl spacing.$padding-xs
+        spacing.$padding-m;
+    border: 2px solid var(--bg-dark);
+    font-size: inherit;
+    font-family: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:focus {
+        outline: none;
+        border-color: var(--secondary);
+    }
+}
+
+.caretButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: spacing.$padding-xl;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::after {
+        @include caret.caret();
+
+        content: "";
+        display: block;
+        transform: scale(0.5);
+    }
+}
+
+.listbox {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--dropdown-bg);
+    border: 1px solid var(--bg-dark);
+    max-height: 12em;
+    overflow-y: auto;
+}
+
+.listboxBottom {
+    top: calc(100% + 0.5em);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.listboxTop {
+    bottom: calc(100% + 0.5em);
+    border-bottom: none;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.option {
+    padding: spacing.$padding-xs spacing.$padding-m;
+    cursor: pointer;
+    color: var(--secondary);
+
+    &:hover,
+    &:focus {
+        color: var(--label-active);
+        background: var(--dropdown-label-bg);
+        outline: none;
+    }
+}
+
+.optionSelected {
+    font-weight: bold;
+}
