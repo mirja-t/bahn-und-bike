@@ -128,7 +128,7 @@ export const Combobox = ({
         if (event.key === "Escape") {
             setIsOpen(false);
             setIsFiltering(false);
-        } else if (event.key === "ArrowDown") {
+        } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
             const firstOption =
                 wrapperRef.current?.querySelector<HTMLElement>(
                     `[role="option"]`,
