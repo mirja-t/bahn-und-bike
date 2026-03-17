@@ -84,8 +84,6 @@ export const Combobox = ({
         ) {
             setVisibleValue(label || inputValue?.label || "");
         }
-        setIsFiltering(false);
-        setIsOpen(false);
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +104,8 @@ export const Combobox = ({
         setVisibleValue(option.label);
         onChange(option);
         handleBlur(option.label);
+        setIsOpen(false);
+        setIsFiltering(false);
     };
 
     const handleCaretClick = () => {
@@ -116,7 +116,7 @@ export const Combobox = ({
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Escape") {
             setIsOpen(false);
-        } else if (event.key === "ArrowDown" && showDropdown) {
+        } else if (event.key === "ArrowDown") {
             const firstOption =
                 wrapperRef.current?.querySelector<HTMLElement>(
                     `[role="option"]`,
@@ -133,6 +133,8 @@ export const Combobox = ({
         if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
             handleOptionSelect(option);
+            setIsOpen(false);
+            setIsFiltering(false);
         } else if (event.key === "ArrowDown") {
             event.preventDefault();
             const next =
