@@ -31,15 +31,21 @@ export const Combobox = ({
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
 }: ComboboxProps) => {
-    const [inputValue, setInputValue] = useState<ComboboxOption | null>(value);
+    const [inputValue, setInputValue] = useState<ComboboxOption | null>(null);
+    const [visibleValue, setVisibleValue] = useState<string>(
+        value?.label || "",
+    );
     const [isOpen, setIsOpen] = useState(false);
     const [isFiltering, setIsFiltering] = useState(false);
     const listboxId = useId();
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (value?.value) setInputValue(value);
-    }, [value]);
+        if (value?.value && !inputValue) {
+            setInputValue(value);
+            setVisibleValue(value.label);
+        }
+    }, [value, inputValue]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -56,32 +62,50 @@ export const Combobox = ({
     }, []);
 
     const displayedOptions =
-        isFiltering && (inputValue?.label.length || 0) >= MIN_FILTER_LENGTH
+        isFiltering && visibleValue.length >= MIN_FILTER_LENGTH
             ? options.filter((option) =>
                   option.label
                       .toLowerCase()
-                      .includes(inputValue?.label.toLowerCase() || ""),
+                      .includes(visibleValue.toLowerCase()),
               )
             : options.slice(0, MAX_UNFILTERED_OPTIONS);
 
     const showDropdown = isOpen && displayedOptions.length > 0;
 
+    const handleFocus = () => {
+        setVisibleValue("");
+        setIsOpen(true);
+    };
+
+    const handleBlur = (label?: string) => {
+        if (
+            inputValue &&
+            !options.map((option) => option.label).includes(visibleValue)
+        ) {
+            setVisibleValue(label || inputValue?.label || "");
+        }
+        setIsFiltering(false);
+        setIsOpen(false);
+    };
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = options.find(
-            (option) => option.value === event.target.value,
+        setVisibleValue(event.target.value);
+        setIsOpen(true);
+        const newValue = options.find((option) =>
+            option.label
+                .toLowerCase()
+                .includes(event.target.value.toLowerCase()),
         );
         if (!newValue) return;
-        setInputValue(newValue);
         setIsFiltering(newValue?.label.length >= MIN_FILTER_LENGTH);
-        setIsOpen(true);
         onChange(newValue);
     };
 
     const handleOptionSelect = (option: ComboboxOption) => {
         setInputValue(option);
-        setIsOpen(false);
-        setIsFiltering(false);
+        setVisibleValue(option.label);
         onChange(option);
+        handleBlur(option.label);
     };
 
     const handleCaretClick = () => {
@@ -141,15 +165,16 @@ export const Combobox = ({
     return (
         <div className={styles.comboboxwrapper} ref={wrapperRef}>
             <fieldset className={!!inputValue ? styles.selected : ""}>
-                <div className={styles.selectedOverlay}>{value?.label}</div>
                 {label && <label htmlFor={name}>{label}</label>}
                 <input
                     type="text"
                     className={styles.input}
                     id={name}
-                    value={inputValue?.value || ""}
+                    value={visibleValue}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
+                    onFocus={handleFocus}
+                    onBlur={() => handleBlur()}
                     placeholder={placeholder}
                     maxLength={maxLength}
                     autoComplete="off"
