@@ -1,7 +1,7 @@
 @use "../../scss/variables/spacing.scss" as spacing;
 @use "../../scss/variables/borders.scss" as borders;
 
-#travelduration {
+.travelduration {
     position: relative;
     display: flex;
     flex-grow: 1;
@@ -9,8 +9,4 @@
     input {
         align-self: center;
     }
-}
-
-fieldset {
-    border: none;
 }

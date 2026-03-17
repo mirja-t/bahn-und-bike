@@ -5,16 +5,21 @@ import {
 } from "../../map/trainroutes/TrainroutesSlice";
 import { useTranslation } from "../../../utils/i18n";
 import { useAppDispatch } from "../../../AppSlice";
-import { Select } from "../../stateless/select/Select";
 import { useSelector } from "react-redux";
+import {
+    Combobox,
+    type ComboboxOption,
+} from "../../stateless/combobox/Combobox";
 
 export const DestinationPicker = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const startPos = useSelector(selectStartPos);
 
-    const handleStartChange = (id: string) => {
-        dispatch(setStartPos(id));
+    const handleStartChange = (value: ComboboxOption | null) => {
+        if (value) {
+            dispatch(setStartPos(value.value));
+        }
     };
 
     const options = [
@@ -34,10 +39,11 @@ export const DestinationPicker = () => {
     ];
 
     return (
-        <Select
+        <Combobox
+            dropdownPosition="top"
             options={options}
             name="startdest"
-            preselectedValue={startPos}
+            value={options.find((option) => option.value === startPos) || null}
             onChange={handleStartChange}
             label={t("startdest")}
         />
