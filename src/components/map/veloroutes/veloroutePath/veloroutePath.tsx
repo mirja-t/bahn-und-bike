@@ -1,62 +1,39 @@
-import { useSelector } from "react-redux";
-import {
-    selectHoveredVelorouteSection,
-    selectActiveVeloroute,
-    selectActiveVelorouteSection,
-    setVelorouteSectionActiveThunk,
-} from "../VeloroutesSlice";
-import { useAppDispatch } from "../../../../AppSlice";
+import styles from "../veloroutes.module.scss";
 
 interface VeloroutePathProps {
+    id: string;
     idx: number;
     strokeScale: number;
     path: string;
     active?: boolean;
+    onClick?: (id: string, idx: number) => void;
+    className?: string;
 }
 
 export const VeloroutePath = ({
+    id,
     idx,
     strokeScale,
     path,
     active,
+    onClick,
+    className,
 }: VeloroutePathProps) => {
-    const dispatch = useAppDispatch();
-    const hoveredVrouteSection = useSelector(selectHoveredVelorouteSection);
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute
-            ? activeVeloroute.route[activeVelorouteSectionIdx]
-            : null;
-
-    const setVelorouteSectionActive = (idx: number) => {
-        dispatch(setVelorouteSectionActiveThunk(idx));
-    };
-
     return (
         <g
-            className={idx === hoveredVrouteSection ? "hover" : ""}
             onClick={() => {
-                setVelorouteSectionActive(idx);
+                if (onClick) {
+                    onClick(id, idx);
+                }
             }}
         >
             <path
-                className={
-                    activeVelorouteSection === activeVeloroute?.route[idx] ||
-                    active
-                        ? "veloroute-section active"
-                        : "veloroute-section"
-                }
-                strokeWidth={
-                    activeVelorouteSection === activeVeloroute?.route[idx] ||
-                    active
-                        ? 1.5 / strokeScale
-                        : 1 / strokeScale
-                }
+                className={`${styles.velorouteSection} ${active ? styles.active : ""} ${className || ""}`}
+                strokeWidth={active ? 1.5 / strokeScale : 1 / strokeScale}
                 d={path}
             />
             <path
-                className="veloroute-section-large"
+                className={styles.velorouteSectionLarge}
                 strokeWidth={12 / strokeScale}
                 d={path}
             />

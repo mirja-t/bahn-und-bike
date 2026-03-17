@@ -7,8 +7,9 @@ import {
     selectVelorouteList,
     selectActiveVeloroute,
     setActiveVelorouteSection,
-    loadVeloroute,
     type Veloroute,
+    setActiveVeloroute,
+    setPreviewVeloroute,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -132,7 +133,15 @@ export const DestinationDetails = () => {
         if (vroute.len !== undefined) {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
-            dispatch(loadVeloroute(vroute));
+            dispatch(setActiveVeloroute(vroute.id));
+        }
+    };
+
+    const handleVelorouteHover = (vroute: Veloroute | null) => {
+        if (vroute) {
+            dispatch(setPreviewVeloroute(vroute.id));
+        } else {
+            dispatch(setPreviewVeloroute(null));
         }
     };
 
@@ -162,6 +171,7 @@ export const DestinationDetails = () => {
                             items={veloroutes}
                             activeId={activeVeloroute?.id}
                             fn={setVelorouteActive}
+                            onHover={handleVelorouteHover}
                             icon={<VelorouteIcon />}
                         />
                     </section>

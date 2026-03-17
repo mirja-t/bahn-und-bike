@@ -48,6 +48,7 @@ export interface VeloroutesState {
     crossingRoutesLoading: boolean;
     crossingRoutesError: boolean;
     activeVeloroute: Veloroute | null;
+    previewVeloroute: Veloroute | null;
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
     activeVelorouteStop: VelorouteStop | null;
@@ -136,13 +137,29 @@ export const veloroutesSlice = createSlice({
         crossingRoutesLoading: false,
         crossingRoutesError: false,
         activeVeloroute: null,
+        previewVeloroute: null,
         activeVelorouteSection: null,
         hoveredVelorouteSection: null,
         activeVelorouteStop: null,
     } as VeloroutesState,
     reducers: {
-        setActiveVeloroute: (state, action: { payload: Veloroute | null }) => {
-            state.activeVeloroute = action.payload;
+        setActiveVeloroute: (
+            state,
+            action: { payload: Veloroute["id"] | null },
+        ) => {
+            const selectedRoute = state.velorouteList.find(
+                (route) => route.id === action.payload,
+            );
+            state.activeVeloroute = selectedRoute || null;
+        },
+        setPreviewVeloroute: (
+            state,
+            action: { payload: Veloroute["id"] | null },
+        ) => {
+            const selectedRoute = state.velorouteList.find(
+                (route) => route.id === action.payload,
+            );
+            state.previewVeloroute = selectedRoute || null;
         },
         setActiveVelorouteSection: (
             state,
@@ -183,19 +200,6 @@ export const veloroutesSlice = createSlice({
             .addCase(loadVeloroutes.rejected, (state) => {
                 state.velorouteListIsLoading = false;
                 state.hasError = true;
-            })
-            .addCase(loadVeloroute.pending, (state) => {
-                state.isLoading = true;
-                state.hasError = false;
-            })
-            .addCase(loadVeloroute.fulfilled, (state, action) => {
-                state.activeVeloroute = action.payload;
-                state.isLoading = false;
-                state.hasError = false;
-            })
-            .addCase(loadVeloroute.rejected, (state) => {
-                state.isLoading = false;
-                state.hasError = true;
             });
     },
 });
@@ -206,6 +210,8 @@ export const selectCrossingVelorouteList = (state: RootState) =>
     state.veloroutes.crossingVelorouteList;
 export const selectActiveVeloroute = (state: RootState) =>
     state.veloroutes.activeVeloroute;
+export const selectPreviewVeloroute = (state: RootState) =>
+    state.veloroutes.previewVeloroute;
 export const selectActiveVelorouteSection = (state: RootState) =>
     state.veloroutes.activeVelorouteSection;
 export const selectActiveVelorouteStop = (state: RootState) =>
@@ -221,6 +227,7 @@ export const selectHoveredVelorouteSection = (state: RootState) =>
 
 export const {
     setActiveVeloroute,
+    setPreviewVeloroute,
     setActiveVelorouteSection,
     setHoveredVelorouteSection,
     setActiveVelorouteStop,
