@@ -145,7 +145,7 @@ export const Container = () => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name={t("bikeroutes")}
-                                    disabled={!veloroutes}
+                                    disabled={veloroutes.length === 0}
                                 >
                                     <DestinationDetails />
                                 </Tabs.Tab>
