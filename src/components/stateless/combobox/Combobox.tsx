@@ -1,9 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import styles from "./combobox.module.scss";
 
-const MIN_FILTER_LENGTH = 2;
 const DEFAULT_MAX_LENGTH = 100;
-const MAX_UNFILTERED_OPTIONS = 10;
 
 export interface ComboboxOption {
     value: string;
@@ -61,14 +59,15 @@ export const Combobox = ({
             document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const displayedOptions =
-        isFiltering && visibleValue.length >= MIN_FILTER_LENGTH
-            ? options.filter((option) =>
+    const displayedOptions = isFiltering
+        ? options
+              .filter((option) =>
                   option.label
                       .toLowerCase()
                       .includes(visibleValue.toLowerCase()),
               )
-            : options.slice(0, MAX_UNFILTERED_OPTIONS);
+              .slice(0, maxLength)
+        : options.slice(0, maxLength);
 
     const showDropdown = isOpen && displayedOptions.length > 0;
 
@@ -77,25 +76,37 @@ export const Combobox = ({
         setIsOpen(true);
     };
 
-    const handleBlur = (label?: string) => {
+    const handleBlur = (
+        event: React.FocusEvent<HTMLInputElement>,
+        label?: string,
+    ) => {
+        const nextFocused = event.relatedTarget as Node | null;
+
+        if (nextFocused && wrapperRef.current?.contains(nextFocused)) {
+            return;
+        }
+
         if (
             inputValue &&
             !options.map((option) => option.label).includes(visibleValue)
         ) {
             setVisibleValue(label || inputValue?.label || "");
         }
+
+        setIsOpen(false);
+        setIsFiltering(false);
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVisibleValue(event.target.value);
         setIsOpen(true);
+        setIsFiltering(true);
         const newValue = options.find((option) =>
             option.label
                 .toLowerCase()
                 .includes(event.target.value.toLowerCase()),
         );
         if (!newValue) return;
-        setIsFiltering(newValue?.label.length >= MIN_FILTER_LENGTH);
         onChange(newValue);
     };
 
@@ -103,7 +114,7 @@ export const Combobox = ({
         setInputValue(option);
         setVisibleValue(option.label);
         onChange(option);
-        handleBlur(option.label);
+        handleBlur({} as React.FocusEvent<HTMLInputElement>, option.label);
         setIsOpen(false);
         setIsFiltering(false);
     };
@@ -116,6 +127,7 @@ export const Combobox = ({
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Escape") {
             setIsOpen(false);
+            setIsFiltering(false);
         } else if (event.key === "ArrowDown") {
             const firstOption =
                 wrapperRef.current?.querySelector<HTMLElement>(
@@ -136,6 +148,7 @@ export const Combobox = ({
             setIsOpen(false);
             setIsFiltering(false);
         } else if (event.key === "ArrowDown") {
+            setIsFiltering(true);
             event.preventDefault();
             const next =
                 wrapperRef.current?.querySelectorAll<HTMLElement>(
@@ -143,6 +156,7 @@ export const Combobox = ({
                 )[index + 1];
             next?.focus();
         } else if (event.key === "ArrowUp") {
+            setIsFiltering(true);
             event.preventDefault();
             if (index === 0) {
                 wrapperRef.current
@@ -157,6 +171,7 @@ export const Combobox = ({
             }
         } else if (event.key === "Escape") {
             setIsOpen(false);
+            setIsFiltering(false);
             wrapperRef.current?.querySelector<HTMLElement>(`#${name}`)?.focus();
         }
     };
@@ -176,7 +191,7 @@ export const Combobox = ({
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
                     onFocus={handleFocus}
-                    onBlur={() => handleBlur()}
+                    onBlur={handleBlur}
                     placeholder={placeholder}
                     maxLength={maxLength}
                     autoComplete="off"
