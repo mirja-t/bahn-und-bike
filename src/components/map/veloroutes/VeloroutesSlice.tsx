@@ -93,10 +93,9 @@ export const loadVeloroutes = createAsyncThunk<
 
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
-    Veloroute,
+    string,
     { state: RootState }
->("veloroutes/setVeloroute", async (vroute: Veloroute, thunkAPI) => {
-    const { id } = vroute;
+>("veloroutes/setVeloroute", async (id: string, thunkAPI) => {
     const velorouteQuery = "veloroute/" + id;
     const responseStops: ResponseStop[] = await fetch(
         `${VITE_API_URL}${velorouteQuery}`,
