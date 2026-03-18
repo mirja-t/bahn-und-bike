@@ -66,7 +66,9 @@ export const DestinationPicker = () => {
             });
         }
     };
-    const fetchDestinations = async (value: string) => {
+    const fetchDestinations = async (
+        value: string,
+    ): Promise<Destination[]> => {
         const res = await fetch(
             VITE_API_URL +
                 "destinations?str=" +
@@ -76,23 +78,33 @@ export const DestinationPicker = () => {
                 headers: headers,
             },
         );
-        return res.json();
+        if (!res.ok) {
+            throw new Error(
+                `Failed to fetch destinations: ${res.status} ${res.statusText}`,
+            );
+        }
+        return res.json() as Promise<Destination[]>;
     };
     const handleInputChange = (value: string) => {
         if (value.length < 2) {
             return;
         }
-        debounce(
-            () =>
-                fetchDestinations(value).then((destinations: Destination[]) => {
+        debounce(() => {
+            fetchDestinations(value)
+                .then((destinations: Destination[]) => {
                     const options = destinations.map((dest: Destination) => ({
                         label: dest.name,
                         value: dest.id,
                     }));
                     setOptions(options);
-                }),
-            500,
-        )();
+                })
+                .catch((error) => {
+                    // On error, fall back to preset options to avoid stale/invalid entries.
+                    // eslint-disable-next-line no-console
+                    console.error(error);
+                    setOptions(presetOptions);
+                });
+        }, 500)();
     };
 
     return (
