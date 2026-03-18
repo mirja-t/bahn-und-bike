@@ -83,7 +83,7 @@ There are good apps for getting train connections and for planning and tracking 
 
 The API provides several REST endpoints (examples based on codebase analysis):
 
-- `GET /destinations/ids[]=123&ids[]=456` - Batch destination lookup
+- `GET /destinations?str=filterstr&trainstop=true` - Destinations filtered by name and trainstop
 - `GET /trainstops/{startId}` - Direct train connections
 - `GET /connections/{startId}` - Train connections with transfers
 - `GET /connection/{start}&{end}` - Point-to-point connections
