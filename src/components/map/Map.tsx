@@ -2,6 +2,7 @@ import styles from "./map.module.scss";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
+import { useDrag } from "../../hooks/useDrag";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectCurrentTrainroutes,
@@ -37,6 +38,8 @@ export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
         isLoading,
     );
 
+    const drag = useDrag(value);
+
     return (
         <>
             <AnimatePresence>
@@ -57,9 +60,13 @@ export const Map = ({ value, mapContainer, mapSize, userScale }: MapProps) => {
                 }}
             >
                 <motion.div
+                    drag
+                    dragMomentum={false}
                     style={{
                         left: zoom.x,
                         top: zoom.y,
+                        x: drag.x,
+                        y: drag.y,
                         touchAction: "none",
                     }}
                     className={styles.mapInner}
