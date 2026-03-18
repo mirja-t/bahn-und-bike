@@ -14,6 +14,7 @@ interface ComboboxProps {
     label?: string;
     value?: ComboboxOption | null;
     onChange: (value: ComboboxOption | null) => void;
+    onInputChange?: (value: string) => void;
     placeholder?: string;
     maxLength?: number;
     dropdownPosition?: "bottom" | "top";
@@ -25,6 +26,7 @@ export const Combobox = ({
     label,
     value,
     onChange,
+    onInputChange,
     placeholder,
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
@@ -101,13 +103,9 @@ export const Combobox = ({
         setVisibleValue(event.target.value);
         setIsOpen(true);
         setIsFiltering(true);
-        const newValue = options.find((option) =>
-            option.label
-                .toLowerCase()
-                .includes(event.target.value.toLowerCase()),
-        );
-        if (!newValue) return;
-        onChange(newValue);
+        if (onInputChange) {
+            onInputChange(event.target.value);
+        }
     };
 
     const handleOptionSelect = (option: ComboboxOption) => {
