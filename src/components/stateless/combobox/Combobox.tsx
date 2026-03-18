@@ -1,6 +1,5 @@
-import { useTranslation } from "../../../utils/i18n";
-import ScrollContainer from "../scrollcontainer/ScrollContainer";
 import styles from "./combobox.module.scss";
+import ScrollContainer from "../scrollcontainer/ScrollContainer";
 import { useEffect, useId, useRef, useState } from "react";
 
 const DEFAULT_MAX_LENGTH = 100;
@@ -33,7 +32,6 @@ export const Combobox = ({
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
 }: ComboboxProps) => {
-    const { t } = useTranslation();
     const [inputValue, setInputValue] = useState<ComboboxOption | null>(null);
     const [visibleValue, setVisibleValue] = useState<string>(
         value?.label || "",
@@ -184,9 +182,6 @@ export const Combobox = ({
         <div className={styles.comboboxwrapper} ref={wrapperRef}>
             <fieldset className={!!inputValue ? styles.selected : ""}>
                 {label && <label htmlFor={name}>{label}</label>}
-                {!visibleValue && (
-                    <span className={styles.placeholder}>{t("search")}</span>
-                )}
                 <input
                     type="text"
                     className={styles.input}

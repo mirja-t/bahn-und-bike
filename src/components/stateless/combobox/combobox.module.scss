@@ -154,13 +154,3 @@
     border-left: 5px solid var(--label);
     background: var(--dropdown-label-bg);
 }
-.placeholder {
-    position: absolute;
-    left: spacing.$padding-l;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--label);
-    pointer-events: none;
-    touch-action: none;
-    opacity: 0.6;
-}

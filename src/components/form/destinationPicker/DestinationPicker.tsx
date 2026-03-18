@@ -66,9 +66,7 @@ export const DestinationPicker = () => {
             });
         }
     };
-    const fetchDestinations = async (
-        value: string,
-    ): Promise<Destination[]> => {
+    const fetchDestinations = async (value: string): Promise<Destination[]> => {
         const res = await fetch(
             VITE_API_URL +
                 "destinations?str=" +
@@ -116,6 +114,7 @@ export const DestinationPicker = () => {
             onChange={handleStartChange}
             onInputChange={handleInputChange}
             label={t("startdest")}
+            placeholder={t("search")}
         />
     );
 };
