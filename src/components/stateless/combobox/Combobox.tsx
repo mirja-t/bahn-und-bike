@@ -1,5 +1,7 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useTranslation } from "../../../utils/i18n";
+import ScrollContainer from "../scrollcontainer/ScrollContainer";
 import styles from "./combobox.module.scss";
+import { useEffect, useId, useRef, useState } from "react";
 
 const DEFAULT_MAX_LENGTH = 100;
 
@@ -31,6 +33,7 @@ export const Combobox = ({
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
 }: ComboboxProps) => {
+    const { t } = useTranslation();
     const [inputValue, setInputValue] = useState<ComboboxOption | null>(null);
     const [visibleValue, setVisibleValue] = useState<string>(
         value?.label || "",
@@ -181,6 +184,9 @@ export const Combobox = ({
         <div className={styles.comboboxwrapper} ref={wrapperRef}>
             <fieldset className={!!inputValue ? styles.selected : ""}>
                 {label && <label htmlFor={name}>{label}</label>}
+                {!visibleValue && (
+                    <span className={styles.placeholder}>{t("search")}</span>
+                )}
                 <input
                     type="text"
                     className={styles.input}
@@ -209,38 +215,50 @@ export const Combobox = ({
                     tabIndex={-1}
                 />
                 {showDropdown && (
-                    <ul
+                    <ScrollContainer
+                        height="fit-content"
                         className={`${styles.listbox} ${listboxPositionClass}`}
-                        id={listboxId}
-                        role="listbox"
-                        aria-label={label}
                     >
-                        {displayedOptions.map((option, index) => (
-                            <li
-                                key={option.value}
-                                role="option"
-                                aria-selected={
-                                    option.value === inputValue?.value
-                                }
-                                className={[
-                                    styles.option,
-                                    option.value === inputValue?.value
-                                        ? styles.optionSelected
-                                        : "",
-                                ]
-                                    .filter(Boolean)
-                                    .join(" ")}
-                                tabIndex={0}
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={() => handleOptionSelect(option)}
-                                onKeyDown={(e) =>
-                                    handleOptionKeyDown(e, option, index)
-                                }
+                        <ScrollContainer.ScrollContent>
+                            <ul
+                                id={listboxId}
+                                role="listbox"
+                                aria-label={label}
                             >
-                                {option.label}
-                            </li>
-                        ))}
-                    </ul>
+                                {displayedOptions.map((option, index) => (
+                                    <li
+                                        key={option.value}
+                                        role="option"
+                                        aria-selected={
+                                            option.value === inputValue?.value
+                                        }
+                                        className={[
+                                            styles.option,
+                                            option.value === inputValue?.value
+                                                ? styles.optionSelected
+                                                : "",
+                                        ]
+                                            .filter(Boolean)
+                                            .join(" ")}
+                                        tabIndex={0}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() =>
+                                            handleOptionSelect(option)
+                                        }
+                                        onKeyDown={(e) =>
+                                            handleOptionKeyDown(
+                                                e,
+                                                option,
+                                                index,
+                                            )
+                                        }
+                                    >
+                                        {option.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        </ScrollContainer.ScrollContent>
+                    </ScrollContainer>
                 )}
             </fieldset>
         </div>
