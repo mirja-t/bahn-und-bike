@@ -12,7 +12,7 @@ import {
 } from "../../stateless/combobox/Combobox";
 import { debounce } from "../../../utils/utils";
 import { headers, VITE_API_URL } from "../../../config/config";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Destination } from "../../destinationDetails/DestinationDetailsSlice";
 
 const presetOptions: ComboboxOption[] = [
@@ -83,11 +83,9 @@ export const DestinationPicker = () => {
         }
         return res.json() as Promise<Destination[]>;
     };
-    const handleInputChange = (value: string) => {
-        if (value.length < 2) {
-            return;
-        }
-        debounce(() => {
+    const debouncedFetchRef = useRef<((value: string) => void) | null>(null);
+    if (debouncedFetchRef.current === null) {
+        debouncedFetchRef.current = debounce((value: string) => {
             fetchDestinations(value)
                 .then((destinations: Destination[]) => {
                     const options = destinations.map((dest: Destination) => ({
@@ -102,7 +100,16 @@ export const DestinationPicker = () => {
                     console.error(error);
                     setOptions(presetOptions);
                 });
-        }, 500)();
+        }, 500);
+    }
+
+    const handleInputChange = (value: string) => {
+        if (value.length < 2) {
+            return;
+        }
+        if (debouncedFetchRef.current) {
+            debouncedFetchRef.current(value);
+        }
     };
 
     return (
