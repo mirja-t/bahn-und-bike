@@ -212,13 +212,14 @@ export const Combobox = ({
                 {showDropdown && (
                     <ScrollContainer
                         height="fit-content"
-                        className={`${styles.listbox} ${listboxPositionClass}`}
+                        className={listboxPositionClass}
                     >
                         <ScrollContainer.ScrollContent>
                             <ul
                                 id={listboxId}
                                 role="listbox"
                                 aria-label={label}
+                                className={styles.listbox}
                             >
                                 {displayedOptions.map((option, index) => (
                                     <li
