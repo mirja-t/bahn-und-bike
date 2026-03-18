@@ -212,7 +212,7 @@ export const Combobox = ({
                 {showDropdown && (
                     <ScrollContainer
                         height="fit-content"
-                        className={listboxPositionClass}
+                        className={`${styles.listboxWrapper} ${listboxPositionClass}`}
                     >
                         <ScrollContainer.ScrollContent>
                             <ul
