@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
+import { usePinch } from "../../hooks/usePinch";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectCurrentTrainroutes,
@@ -30,8 +31,12 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
 
     const handleMapZoom = (dir: "+" | "-") => {
         const factor = dir === "+" ? 1 : -1;
-        setUserScale(Math.max(0.1, userScale + factor * 0.2));
+        setUserScale(prev =>
+            Math.max(0.1, Number((prev + factor * 0.2).toFixed(1))),
+        );
     };
+
+    usePinch(mapcontainerRef, userScale, setUserScale);
 
     const zoom = useZoom(
         journeys,
