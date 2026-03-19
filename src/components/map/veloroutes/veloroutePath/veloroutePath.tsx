@@ -27,15 +27,15 @@ export const VeloroutePath = ({
                 }
             }}
         >
-            <path
+            <polyline
                 className={`${styles.velorouteSection} ${active ? styles.active : ""} ${className || ""}`}
                 strokeWidth={active ? 1.5 / strokeScale : 1 / strokeScale}
-                d={path}
+                points={path}
             />
-            <path
+            <polyline
                 className={styles.velorouteSectionLarge}
                 strokeWidth={12 / strokeScale}
-                d={path}
+                points={path}
             />
         </g>
     );

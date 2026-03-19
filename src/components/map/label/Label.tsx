@@ -1,4 +1,4 @@
-import "./label.scss";
+import styles from "./label.module.scss";
 
 interface LabelProps<T> {
     item: {
@@ -13,7 +13,7 @@ interface LabelProps<T> {
 export const Label = <T,>({ item, className, strokeScale }: LabelProps<T>) => {
     return (
         <text
-            className={`${className} destinationLabel`}
+            className={`${styles[className]} ${styles.destinationLabel}`}
             x={item.x + 5 / strokeScale}
             y={item.y}
             style={{ fontSize: `${7 / strokeScale}px` }}

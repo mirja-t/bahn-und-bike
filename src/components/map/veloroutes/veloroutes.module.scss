@@ -2,6 +2,7 @@
 
 .veloroute {
     path,
+    polyline,
     circle,
     g {
         cursor: pointer;
@@ -15,7 +16,8 @@
             }
         }
     }
-    path.velorouteSection {
+    path.velorouteSection,
+    polyline.velorouteSection {
         stroke-dasharray: 2;
         fill: none;
         stroke: var(--bike-inactive);
@@ -31,15 +33,9 @@
             opacity: 0.5;
         }
     }
-    path.velorouteSectionLarge {
+    path.velorouteSectionLarge,
+    polyline.velorouteSectionLarge {
         stroke: transparent;
         fill: none;
-    }
-}
-.velorouteDetails {
-    display: block;
-    padding: 0;
-    .velorouteStops {
-        font-size: 80%;
     }
 }
