@@ -68,7 +68,7 @@ export const makeVeloRoute = (
     const polyline = legs.map(({ leg }) =>
         leg
             .map(({ gcs }) => {
-                const postitions = gcs
+                const positions = gcs
                     .split(" ")
                     .map((gcs) => {
                         const [lat, lon] = gcs.split(",").map(parseFloat);
@@ -81,7 +81,7 @@ export const makeVeloRoute = (
                     })
                     .filter(([x, y]) => !isNaN(x) && !isNaN(y))
                     .map(([x, y]) => `${x},${y}`);
-                return postitions.join(" ");
+                return positions.join(" ");
             })
             .join(" "),
     );
