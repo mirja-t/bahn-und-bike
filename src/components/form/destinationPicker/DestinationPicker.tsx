@@ -95,7 +95,6 @@ export const DestinationPicker = () => {
                 })
                 .catch((error) => {
                     // On error, fall back to preset options to avoid stale/invalid entries.
-                    // eslint-disable-next-line no-console
                     console.error(error);
                     setOptions(presetOptions);
                 });

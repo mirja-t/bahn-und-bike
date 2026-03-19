@@ -11,7 +11,7 @@ import {
 } from "./VeloroutesSlice";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { setActiveTab, useAppDispatch } from "../../../AppSlice";
-import { VeloroutePath } from "./veloroutePath/VeloroutePath";
+import { VeloroutePath } from "./veloroutePath/veloroutePath";
 
 interface VeloroutesProps {
     strokeScale: number;
