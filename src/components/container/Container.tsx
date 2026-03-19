@@ -1,5 +1,5 @@
 import "./container.scss";
-import { useRef, useEffect, useState, useMemo, useCallback } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -44,7 +44,7 @@ export const Container = () => {
     const [submitVal, setSubmitVal] = useState(0);
     const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
-    const [userScale, setUserScale] = useState(1);
+
     const sidebarRef = useRef<HTMLElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
@@ -54,13 +54,6 @@ export const Container = () => {
     const prevValue = useRef(0);
 
     const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
-    const memoizedZoomMap = useCallback(
-        (dir: "+" | "-") => {
-            const factor = dir === "+" ? 1 : -1;
-            setUserScale(userScale + factor * 0.2);
-        },
-        [userScale],
-    );
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
@@ -69,7 +62,10 @@ export const Container = () => {
                     trainRoutes
                         .map((route) => route.stopIds)
                         .flat()
-                        .filter((id) => id !== null && id !== undefined && id !== ""),
+                        .filter(
+                            (id) =>
+                                id !== null && id !== undefined && id !== "",
+                        ),
                 ),
             );
             dispatch(setVelorouteList([]));
@@ -96,7 +92,6 @@ export const Container = () => {
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));
         dispatch(setActiveTab("trainlines"));
-        setUserScale(1);
         dispatch(loadTrainroutes({ start, value, direct }));
         setSubmitVal(value);
     };
@@ -174,8 +169,6 @@ export const Container = () => {
                             value={submitVal}
                             mapSize={memoizedMapSize}
                             mapContainer={wrapper}
-                            fn={memoizedZoomMap}
-                            userScale={userScale}
                         />
                     </div>
                 </main>

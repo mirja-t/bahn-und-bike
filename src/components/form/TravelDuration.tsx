@@ -37,8 +37,9 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         >
             <DestinationPicker />
             <CheckBox
-                value={direct}
+                checked={direct}
                 handleCheckboxChange={handleCheckboxChange}
+                id={"directconnection"}
             />
             <RangeInput
                 min={0}

@@ -1,7 +1,6 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 @use "../../../scss/variables/fonts.scss" as fonts;
 @use "../../../scss/variables/borders.scss" as borders;
-@use "../checkBox/checkbox.scss" as checkbox;
 
 $radiobtn-height: 2em;
 $radiobtn-width: $radiobtn-height;
@@ -42,7 +41,7 @@ $langSwitcherBorderRadius: 2em;
     .inputRadiowrapper {
         position: relative;
         z-index: 2;
-        transition: all checkbox.$checkbox-transition-duration ease;
+        transition: all 0.35s ease;
         width: $radiobtn-width;
         height: $radiobtn-width;
         label {
@@ -57,7 +56,7 @@ $langSwitcherBorderRadius: 2em;
             text-shadow: none;
             text-align: center;
             cursor: pointer;
-            transition: all checkbox.$checkbox-transition-duration ease;
+            transition: all 0.35s ease;
         }
         &.active {
             input {
@@ -174,7 +173,7 @@ $langSwitcherBorderRadius: 2em;
         padding: spacing.$padding-xs;
         font-weight: 600;
         font-size: 0.8rem;
-        border-radius: checkbox.$checkbox-borderradius;
+        border-radius: var(--border-radius);
     }
 }
 

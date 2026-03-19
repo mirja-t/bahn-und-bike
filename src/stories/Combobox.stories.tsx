@@ -1,12 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
 import { expect, within, userEvent } from "storybook/test";
-import { useState } from "react";
 
-import {
-    Combobox,
-    type ComboboxOption,
-} from "../components/stateless/combobox/Combobox";
+import { Combobox } from "../components/stateless/combobox/Combobox";
 
 const cityOptions = [
     { value: "berlin", label: "Berlin" },
@@ -104,19 +100,6 @@ export const WithPrefilledValue: Story = {
  * the visible selected value.
  */
 export const KeyboardSelectAfterFiltering: Story = {
-    render: (args) => {
-        const [value, setValue] = useState<ComboboxOption | null>(null);
-        return (
-            <Combobox
-                {...args}
-                value={value}
-                onChange={(newValue) => {
-                    setValue(newValue);
-                    args.onChange(newValue);
-                }}
-            />
-        );
-    },
     args: {
         label: "Search City",
         placeholder: "Type to search…",
