@@ -12,6 +12,7 @@ export type ResponseStop = {
     name: string;
     dest_name: string;
     dist: number;
+    gcs: string;
     lat: string;
     lon: string;
     stop_number: number;
