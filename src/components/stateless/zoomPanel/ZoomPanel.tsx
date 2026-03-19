@@ -1,4 +1,5 @@
-import "./zoompanel.scss";
+import styles from "./zoompanel.module.scss";
+import { Panel } from "../panel/Panel";
 
 interface ZoomPanelProps {
     fn: (arg0: "+" | "-") => void;
@@ -6,21 +7,23 @@ interface ZoomPanelProps {
 
 export const ZoomPanel = ({ fn }: ZoomPanelProps) => {
     return (
-        <div id="zoompanel">
-            <button
-                onClick={() => {
-                    fn("+");
-                }}
-            >
-                +
-            </button>
-            <button
-                onClick={() => {
-                    fn("-");
-                }}
-            >
-                -
-            </button>
+        <div className={styles.zoompanel}>
+            <Panel direction="column">
+                <button
+                    onClick={() => {
+                        fn("+");
+                    }}
+                >
+                    +
+                </button>
+                <button
+                    onClick={() => {
+                        fn("-");
+                    }}
+                >
+                    -
+                </button>
+            </Panel>
         </div>
     );
 };

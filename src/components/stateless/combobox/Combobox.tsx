@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from "react";
 import styles from "./combobox.module.scss";
+import ScrollContainer from "../scrollcontainer/ScrollContainer";
+import { useEffect, useId, useRef, useState } from "react";
 
 const DEFAULT_MAX_LENGTH = 100;
 
@@ -14,6 +15,7 @@ interface ComboboxProps {
     label?: string;
     value?: ComboboxOption | null;
     onChange: (value: ComboboxOption | null) => void;
+    onInputChange?: (value: string) => void;
     placeholder?: string;
     maxLength?: number;
     dropdownPosition?: "bottom" | "top";
@@ -25,6 +27,7 @@ export const Combobox = ({
     label,
     value,
     onChange,
+    onInputChange,
     placeholder,
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
@@ -101,13 +104,9 @@ export const Combobox = ({
         setVisibleValue(event.target.value);
         setIsOpen(true);
         setIsFiltering(true);
-        const newValue = options.find((option) =>
-            option.label
-                .toLowerCase()
-                .includes(event.target.value.toLowerCase()),
-        );
-        if (!newValue) return;
-        onChange(newValue);
+        if (onInputChange) {
+            onInputChange(event.target.value);
+        }
     };
 
     const handleOptionSelect = (option: ComboboxOption) => {
@@ -211,38 +210,51 @@ export const Combobox = ({
                     tabIndex={-1}
                 />
                 {showDropdown && (
-                    <ul
-                        className={`${styles.listbox} ${listboxPositionClass}`}
-                        id={listboxId}
-                        role="listbox"
-                        aria-label={label}
+                    <ScrollContainer
+                        height="fit-content"
+                        className={`${styles.listboxWrapper} ${listboxPositionClass}`}
                     >
-                        {displayedOptions.map((option, index) => (
-                            <li
-                                key={option.value}
-                                role="option"
-                                aria-selected={
-                                    option.value === inputValue?.value
-                                }
-                                className={[
-                                    styles.option,
-                                    option.value === inputValue?.value
-                                        ? styles.optionSelected
-                                        : "",
-                                ]
-                                    .filter(Boolean)
-                                    .join(" ")}
-                                tabIndex={0}
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={() => handleOptionSelect(option)}
-                                onKeyDown={(e) =>
-                                    handleOptionKeyDown(e, option, index)
-                                }
+                        <ScrollContainer.ScrollContent>
+                            <ul
+                                id={listboxId}
+                                role="listbox"
+                                aria-label={label}
+                                className={styles.listbox}
                             >
-                                {option.label}
-                            </li>
-                        ))}
-                    </ul>
+                                {displayedOptions.map((option, index) => (
+                                    <li
+                                        key={option.value}
+                                        role="option"
+                                        aria-selected={
+                                            option.value === inputValue?.value
+                                        }
+                                        className={[
+                                            styles.option,
+                                            option.value === inputValue?.value
+                                                ? styles.optionSelected
+                                                : "",
+                                        ]
+                                            .filter(Boolean)
+                                            .join(" ")}
+                                        tabIndex={0}
+                                        onMouseDown={(e) => e.preventDefault()}
+                                        onClick={() =>
+                                            handleOptionSelect(option)
+                                        }
+                                        onKeyDown={(e) =>
+                                            handleOptionKeyDown(
+                                                e,
+                                                option,
+                                                index,
+                                            )
+                                        }
+                                    >
+                                        {option.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        </ScrollContainer.ScrollContent>
+                    </ScrollContainer>
                 )}
             </fieldset>
         </div>

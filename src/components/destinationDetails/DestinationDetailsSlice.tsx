@@ -2,28 +2,30 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../config/config";
 import type { RootState } from "../../store";
 
-export type ActiveDestination = {
+export type Destination = {
     id: string;
     name: string;
     lat: number;
     lon: number;
+    trainstop: boolean;
 };
 export interface DestinationsState {
-    activeDestinations: ActiveDestination[] | null;
+    activeDestinations: Destination[] | null;
     destinationsLoading: boolean;
     destinationsError: boolean;
 }
 
 export const loadDestinations = createAsyncThunk<
-    ActiveDestination[],
+    Destination[],
     { ids: string[] },
     { state: RootState }
 >("destinations/setDestination", async ({ ids }) => {
-    const destinationQuery = "destinations/ids[]=" + ids.join("&ids[]=");
-    const destination: ActiveDestination[] = await fetch(
-        `${VITE_API_URL}${destinationQuery}`,
+    const destinations: Destination[] = await fetch(
+        `${VITE_API_URL}destinations`,
         {
+            method: "POST",
             headers: headers,
+            body: JSON.stringify({ ids }),
         },
     ).then((response) => {
         if (response.status !== 200) {
@@ -32,7 +34,7 @@ export const loadDestinations = createAsyncThunk<
         return response.json();
     });
 
-    return destination;
+    return destinations;
 });
 
 export const destinationDetailsSlice = createSlice({

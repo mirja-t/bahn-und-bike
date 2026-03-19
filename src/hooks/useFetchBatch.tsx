@@ -10,6 +10,7 @@ export interface UseFetchBatchReturn<T> {
 export const useFetchBatch = <T extends { id: string }>(
     ids: string[],
     assetsEndpoint: string,
+    method: "POST" | "GET" = "GET",
 ): UseFetchBatchReturn<T> => {
     const [assetsMap, setAssetsMap] = useState<Map<string, T>>(new Map());
     const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ export const useFetchBatch = <T extends { id: string }>(
 
     // Fetch assetsEndpoint when needed
     useEffect(() => {
-        if (!ids.length || !assetsEndpoint) return;
+        if (!ids.length || !assetsEndpoint || !method) return;
 
         let isCancelled = false;
         setLoading(true);
@@ -30,12 +31,26 @@ export const useFetchBatch = <T extends { id: string }>(
                     setLoading(false);
                     return;
                 }
+                let assetQuery = `${assetsEndpoint}`;
+                const config: {
+                    method?: typeof method;
+                    headers: typeof headers;
+                    body?: string;
+                } = {
+                    headers,
+                };
+                if (method === "GET") {
+                    assetQuery += `?ids[]=${validIds.join("&ids[]=")}`;
+                }
+                if (method === "POST") {
+                    config.method = "POST";
+                    config.body = JSON.stringify({ ids: validIds });
+                }
 
-                const assetsQuery =
-                    `${assetsEndpoint}/ids[]=` + validIds.join("&ids[]=");
-                const response = await fetch(`${VITE_API_URL}${assetsQuery}`, {
-                    headers: headers,
-                });
+                const response = await fetch(
+                    `${VITE_API_URL}${assetQuery}`,
+                    config,
+                );
 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch ${assetsEndpoint}`);
@@ -67,7 +82,7 @@ export const useFetchBatch = <T extends { id: string }>(
         return () => {
             isCancelled = true;
         };
-    }, [ids, assetsEndpoint]);
+    }, [ids, assetsEndpoint, method]);
 
     // Map IDs to assets in original order, filter out missing assets
     const assets = ids

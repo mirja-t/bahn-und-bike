@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import styles from "./select.module.scss";
+import { useEffect, useState } from "react";
 
 interface SelectProps<T> {
     options: {
