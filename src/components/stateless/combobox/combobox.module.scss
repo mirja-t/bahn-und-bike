@@ -23,7 +23,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: var(--border-radius);
+            border-radius: var(--checkbox-border-radius);
             box-shadow: var(--button-boxshadow);
         }
 
@@ -58,10 +58,10 @@
             justify-content: center;
             flex-grow: 1;
             background: var(--dropdown-label-bg);
-            border-radius: var(--border-radius);
+            border-radius: var(--checkbox-border-radius);
             padding-left: spacing.$padding-m;
             padding-right: spacing.$padding-xl;
-            box-shadow: var(--dropdown-box-shadow);
+            box-shadow: var(--box-shadow);
             color: var(--label);
             white-space: nowrap;
         }
@@ -72,7 +72,7 @@
     color: var(--text);
     background: var(--dropdown-bg);
     width: 100%;
-    border-radius: var(--border-radius);
+    border-radius: var(--checkbox-border-radius);
     padding: spacing.$padding-xs spacing.$padding-xl spacing.$padding-xs
         spacing.$padding-m;
     border: 2px solid var(--bg-dark);
@@ -128,13 +128,15 @@
 .listboxBottom {
     top: calc(100% + 0.5em);
     border-top: none;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border-radius: 0 0 var(--checkbox-border-radius)
+        var(--checkbox-border-radius);
 }
 
 .listboxTop {
     bottom: calc(100% + 0.5em);
     border-bottom: none;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    border-radius: var(--checkbox-border-radius) var(--checkbox-border-radius) 0
+        0;
 }
 
 .option {
@@ -143,13 +145,10 @@
     color: var(--secondary);
 
     &:hover,
-    &:focus {
+    &:focus,
+    &.optionSelected {
         color: var(--label-active);
         background: var(--dropdown-label-bg);
         outline: none;
     }
-}
-
-.optionSelected {
-    font-weight: bold;
 }
