@@ -1,4 +1,4 @@
-import "./veloroutestop.scss";
+import styles from "./veloroutestop.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import {
     setActiveVelorouteStop,
@@ -34,7 +34,7 @@ export const VelorouteStop = ({
     return (
         <g>
             <motion.circle
-                className="veloroute-stop-outline"
+                className={styles.velorouteStopOutline}
                 strokeWidth={0.8 / strokeScale}
                 cx={item.x}
                 cy={item.y}
@@ -54,15 +54,15 @@ export const VelorouteStop = ({
             <circle
                 className={
                     type === "active"
-                        ? "veloroute-stop active"
-                        : "veloroute-stop"
+                        ? `${styles.velorouteStop} ${styles.active}`
+                        : styles.velorouteStop
                 }
                 cx={item.x}
                 cy={item.y}
                 r={
                     type === "active" ||
                     activeVelorouteStop?.stop_id === item.stop_id
-                        ? 2 / strokeScale
+                        ? 1 / strokeScale
                         : 1.2 / strokeScale
                 }
                 onMouseEnter={(e) => hoverVeloStop(e, item)}

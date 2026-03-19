@@ -14,6 +14,7 @@ describe("makeVeloRoute", () => {
             stop_number: 1,
             veloroute_id: "route_1",
             name: "Route 1",
+            gcs: "0,0",
         },
         {
             id: "1",
@@ -26,6 +27,7 @@ describe("makeVeloRoute", () => {
             trainlines: "line_1, line_2",
             veloroute_id: "route_1",
             name: "Route 1",
+            gcs: "1,1",
         },
         {
             id: "2",
@@ -36,6 +38,7 @@ describe("makeVeloRoute", () => {
             stop_number: 3,
             veloroute_id: "route_1",
             name: "Route 1",
+            gcs: "2,2",
         },
         {
             id: "3",
@@ -48,6 +51,7 @@ describe("makeVeloRoute", () => {
             trainlines: "line_3",
             veloroute_id: "route_1",
             name: "Route 1",
+            gcs: "3,3",
         },
         {
             id: "4",
@@ -60,6 +64,7 @@ describe("makeVeloRoute", () => {
             trainlines: "line_4",
             veloroute_id: "route_1",
             name: "Route 1",
+            gcs: "4,4",
         },
     ];
     it("should return an array of routes with 2 legs when start and end have trainlines", () => {

@@ -111,18 +111,21 @@
     }
 }
 
-.listbox {
+.listboxWrapper {
     position: absolute;
     left: 0;
     right: 0;
     z-index: 10;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.listbox {
     margin: 0;
     padding: 0;
     list-style: none;
     background: var(--dropdown-bg);
     border: 1px solid var(--bg-dark);
-    max-height: 12em;
-    overflow-y: auto;
 }
 
 .listboxBottom {
@@ -151,4 +154,9 @@
         background: var(--dropdown-label-bg);
         outline: none;
     }
+}
+
+.optionSelected {
+    border-left: 5px solid var(--label);
+    background: var(--dropdown-label-bg);
 }

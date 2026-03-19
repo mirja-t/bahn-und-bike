@@ -24,7 +24,7 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
-import type { ActiveDestination } from "./DestinationDetailsSlice";
+import type { Destination } from "./DestinationDetailsSlice";
 import { useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
@@ -52,7 +52,7 @@ const Section = ({ section }: SectionProps) => {
         assets: stops,
         loading: loadingStopNames,
         error: errorStopNames,
-    } = useFetchBatch<ActiveDestination>(section.stopIds, "destinations");
+    } = useFetchBatch<Destination>(section.stopIds, "destinations", "POST");
     const {
         assets: trainlinesWithAgencyNames,
         loading: loadingTrainlinesWithAgencyNames,

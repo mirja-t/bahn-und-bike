@@ -1,4 +1,4 @@
-.veloroute-stop {
+.velorouteStop {
     fill: var(--bike);
     transform: scale(1);
     &.hover {
@@ -8,13 +8,8 @@
         fill: var(--bike-hover);
     }
 }
-.veloroute.destinationLabel {
-    tspan {
-        fill: var(--bike-hover);
-    }
-}
 
-circle.veloroute-stop-outline {
+circle.velorouteStopOutline {
     stroke: var(--bike-hover);
     fill: var(--bg);
 }
