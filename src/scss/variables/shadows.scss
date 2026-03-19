@@ -15,4 +15,7 @@ $bevelshadow:
     -3px -3px 5px rgba(255, 255, 255, 1),
     inset -1px -1px 1px rgba(0, 0, 0, 0.08),
     3px 3px 5px rgba(0, 0, 0, 0.05);
-$insetshadow: inset 3px 3px 3px rgba(0, 0, 0, 0.08);
+$insetshadow:
+    -3px -3px 5px rgba(255, 255, 255, 0),
+    inset 3px 3px 3px rgba(0, 0, 0, 0.08),
+    3px 3px 5px rgba(0, 0, 0, 0);

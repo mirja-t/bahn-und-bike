@@ -1,0 +1,25 @@
+.zoompanel {
+    position: absolute;
+    z-index: 9;
+    bottom: 0;
+    right: 0;
+    button {
+        cursor: pointer;
+        color: var(--secondary);
+        height: 1.5em;
+        width: 1.5em;
+        padding: 0;
+        display: block;
+        font-size: 1.25em;
+        border-radius: var(--checkbox-border-radius);
+        box-shadow: var(--checkbox-boxshadow-bevel);
+        background-color: var(--checkbox-bg);
+        transition: all 0.5s ease;
+        &:hover {
+            box-shadow: var(--checkbox-boxshadow-inset);
+            background-color: var(--checkbox-bg-active);
+            color: var(--secondary-hover);
+            transition: all 0.5s ease;
+        }
+    }
+}
