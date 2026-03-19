@@ -1,4 +1,12 @@
 @use "./themes";
+@use "./variables/shadows.scss" as shadows;
+
+:root {
+    --box-shadow-bevel: shadows.$bevelshadow;
+    --border-radius: 10px;
+    --border-radius-xl: 24px;
+    --border-radius-xs: 5px;
+}
 
 @each $name, $map in themes.$themes {
     .theme-#{$name} {

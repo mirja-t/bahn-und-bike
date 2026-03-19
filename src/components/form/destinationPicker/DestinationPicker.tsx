@@ -1,4 +1,3 @@
-import "./destinationpicker.scss";
 import {
     selectStartPos,
     setStartPos,
