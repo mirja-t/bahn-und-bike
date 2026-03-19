@@ -1,22 +1,37 @@
+import styles from "./checkbox.module.scss";
 import { motion } from "framer-motion";
-import "./checkbox.scss";
 import { useTranslation } from "../../../utils/i18n";
 
 interface CheckBoxProps {
-    value: boolean;
+    checked: boolean;
     handleCheckboxChange: () => void;
+    id: string;
 }
-export const CheckBox = ({ value, handleCheckboxChange }: CheckBoxProps) => {
+export const CheckBox = ({
+    checked,
+    handleCheckboxChange,
+    id,
+}: CheckBoxProps) => {
     const { t } = useTranslation();
     const unchecked = "11.3,15 15,15 18.7,15 ";
-    const checked = "9.3,15 13.3,19 21.8,9.8 ";
+    const checkedPoints = "9.3,15 13.3,19 21.8,9.8 ";
 
     return (
-        <fieldset className="directconnection">
-            <label htmlFor="directconnection">{t("direct_trains_only")}</label>
-            <div className={value ? "active inputCheckbox" : "inputCheckbox"}>
+        <fieldset className={styles.checkboxWrapper}>
+            <label htmlFor={id}>{t("direct_trains_only")}</label>
+            <div
+                className={
+                    checked
+                        ? `${styles.checked} ${styles.inputCheckbox}`
+                        : styles.inputCheckbox
+                }
+            >
                 <motion.svg
-                    className={value ? "active check" : "check"}
+                    className={
+                        checked
+                            ? `${styles.checked} ${styles.check}`
+                            : styles.check
+                    }
                     xmlnsXlink="http://www.w3.org/1999/xlink"
                     x="0px"
                     y="0px"
@@ -25,18 +40,19 @@ export const CheckBox = ({ value, handleCheckboxChange }: CheckBoxProps) => {
                     <motion.polyline
                         fill="none"
                         strokeWidth="3"
-                        stroke="red"
                         points={unchecked}
                         initial={{ points: unchecked }}
-                        animate={{ points: value ? checked : unchecked }}
+                        animate={{
+                            points: checked ? checkedPoints : unchecked,
+                        }}
                         transition={{ duration: 0.3 }}
                     />
                 </motion.svg>
                 <input
-                    id="directconnection"
-                    name="directconnection"
+                    id={id}
+                    name={id}
                     type="checkbox"
-                    checked={value}
+                    checked={checked}
                     onChange={handleCheckboxChange}
                 />
             </div>
