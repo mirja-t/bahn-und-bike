@@ -72,6 +72,7 @@ $themes: (
         "map-river": #cae4ef,
         "map-labels": colors.$background-darker,
         "map-sea": #dae7ea,
+        "panel-border-radius": borders.$borderradius,
     ),
     dark: (
         "text": colors.$gold,
@@ -127,5 +128,6 @@ $themes: (
         "map-river": colors.$background-dark,
         "map-labels": colors.$background-dark,
         "map-sea": transparent,
+        "panel-border-radius": 0,
     ),
 );
