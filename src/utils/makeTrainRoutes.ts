@@ -43,7 +43,6 @@ export const makeTrainRoutes = (
         startNode: RouteNode,
         connection: CurrentTrainroute["connection"] | null = null,
     ) {
-        console.log("currentGroup:", connection);
         while (groupedStops.length) {
             const currentGroup = groupedStops.shift() || [];
             let currentRoute = startNode;
@@ -222,12 +221,7 @@ export const makeTrainRoutes = (
         route: createNewRoute(trainlinesWithStartStopsArr[0][0]), // Initialize with the start station of the first trainline (arbitrary choice, as all trainlines should have the same start station)
         nextRoutes: [],
     };
-    console.log(
-        "routeTree:",
-        routeTree,
-        trainlinesWithStartStopsArr[0],
-        trainlinesWithStartStopsArr[0][0],
-    );
+
     buildTree(trainlinesWithStartStopsArr, routeTree);
 
     if (!direct) {
