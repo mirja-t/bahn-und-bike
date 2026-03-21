@@ -120,13 +120,8 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
     number,
     { state: RootState }
 >("trainroutes/setTrainroutesAlongVeloroute", async (idx: number, thunkAPI) => {
-    console.log("setTrainroutesAlongVeloroute", idx);
     const startdestination = thunkAPI.getState().trainroutes.startPos;
     const activeVeloroute = thunkAPI.getState().veloroutes.activeVeloroute;
-    console.log(
-        "activeVeloroute?.route[idx].leg[0]",
-        activeVeloroute?.route[idx].leg[0],
-    );
     const startId = activeVeloroute
         ? activeVeloroute.route[idx].leg[0].trainstop
         : undefined;
@@ -151,11 +146,8 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         const route = createNewRoute(reversedConnection[0], reversedConnection);
         return route;
     };
-    console.log("startId", startId);
-    console.log("endId", endId);
     const seenIds = new Set<string>();
     for (const id of [startId, endId]) {
-        console.log("fetching connection for id", id);
         if (!id || seenIds.has(id)) {
             continue;
         }
@@ -163,7 +155,6 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         connections.push(route);
         seenIds.add(id);
     }
-    console.log("connections", connections);
     return connections;
 });
 
