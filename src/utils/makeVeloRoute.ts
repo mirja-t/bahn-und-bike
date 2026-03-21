@@ -1,5 +1,5 @@
 import type {
-    ResponseStop,
+    VeloroutesResponseStop,
     Veloroute,
     VelorouteStop,
 } from "../components/map/veloroutes/VeloroutesSlice";
@@ -15,7 +15,7 @@ const wordsToRemove = [
     "Busbahnhof",
 ];
 
-const addXY = (stop: ResponseStop) => {
+const addXY = (stop: VeloroutesResponseStop) => {
     const [x, y] = SvgMapBuilder.getMapPosition(
         parseFloat(stop.lon),
         parseFloat(stop.lat),
@@ -29,7 +29,7 @@ const addXY = (stop: ResponseStop) => {
 };
 
 export const makeVeloRoute = (
-    stops: ResponseStop[],
+    stops: VeloroutesResponseStop[],
     trainlines: string[] | null,
 ): Veloroute => {
     stops.sort((a, b) => a.stop_number - b.stop_number);
@@ -88,29 +88,29 @@ export const makeVeloRoute = (
     return {
         id: stops[0].veloroute_id,
         name: stops[0].name,
-        len: 0, //stops.reduce((acc, stop) => acc + stop.dist, 0),
+        len: stops.reduce((sum, stop) => sum + stop.dist, 0),
         path: polyline,
         route: legs,
     };
 };
 
 export const convertVelorouteStops = (
-    stops: ResponseStop[],
+    stops: VeloroutesResponseStop[],
 ): (VelorouteStop & { dist: number; gcs: string })[] => {
     return stops.map((stop) => {
         const copiedStop: VelorouteStop & { dist: number; gcs: string } = {
-            stop_id: stop.id,
+            stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
             stop_name: removeWords(stop.dest_name, wordsToRemove),
             x: addXY(stop).x,
             y: addXY(stop).y,
-            dist: 0, //stop.dist,
+            dist: stop.dist,
             gcs: stop.gcs,
         };
         if (stop.trainlines) {
             copiedStop.trainlines = stop.trainlines.split(",");
         }
-        if (stop.trainstop) {
-            copiedStop.trainstop = stop.trainstop;
+        if (stop.trainstops) {
+            copiedStop.trainstops = stop.trainstops.split(",");
         }
         return copiedStop;
     });

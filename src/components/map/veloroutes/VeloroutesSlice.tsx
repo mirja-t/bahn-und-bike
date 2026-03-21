@@ -7,8 +7,7 @@ import {
 import { makeVeloRoute } from "../../../utils/makeVeloRoute";
 import type { AppDispatch, RootState } from "../../../store";
 
-export type ResponseStop = {
-    id: string;
+export type VeloroutesResponseStop = {
     name: string;
     dest_name: string;
     dist: number;
@@ -16,8 +15,8 @@ export type ResponseStop = {
     lat: string;
     lon: string;
     stop_number: number;
-    trainlines?: string; // comma separated string of trainline_ids from API
-    trainstop?: string;
+    trainlines: string; // comma separated string of trainline_ids from API
+    trainstops: string; // comma separated string of trainstop_ids from API
     veloroute_id: string;
 };
 
@@ -25,7 +24,7 @@ export type VelorouteStop = {
     stop_id: string;
     stop_name: string;
     trainlines?: string[];
-    trainstop?: string;
+    trainstops?: string[];
     x: number;
     y: number;
 };
@@ -72,7 +71,7 @@ export const loadVeloroutes = createAsyncThunk<
         ),
     );
 
-    const velorouteStops: ResponseStop[] = await fetch(
+    const velorouteStops: VeloroutesResponseStop[] = await fetch(
         `${VITE_API_URL}veloroutes`,
         {
             method: "POST",
@@ -95,7 +94,7 @@ export const loadVeloroutes = createAsyncThunk<
             acc[stop.veloroute_id].push(stop);
             return acc;
         },
-        {} as Record<string, ResponseStop[]>,
+        {} as Record<string, VeloroutesResponseStop[]>,
     );
 
     return Object.values(stopsGroupedByRouteId).map((velorouteStops) =>
@@ -109,7 +108,7 @@ export const loadVeloroute = createAsyncThunk<
     { state: RootState }
 >("veloroutes/setVeloroute", async (id: string, thunkAPI) => {
     const velorouteQuery = "veloroute/" + id;
-    const responseStops: ResponseStop[] = await fetch(
+    const responseStops: VeloroutesResponseStop[] = await fetch(
         `${VITE_API_URL}${velorouteQuery}`,
         {
             headers: headers,
