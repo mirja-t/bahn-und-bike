@@ -31,8 +31,6 @@ export const VelorouteStop = ({
         dispatch(setActiveVelorouteStop(null));
     };
 
-    console.log("type:", type);
-
     return (
         <g>
             <motion.circle
