@@ -31,6 +31,8 @@ export const VelorouteStop = ({
         dispatch(setActiveVelorouteStop(null));
     };
 
+    console.log("type:", type);
+
     return (
         <g>
             <motion.circle
@@ -65,10 +67,19 @@ export const VelorouteStop = ({
                         ? 1 / strokeScale
                         : 1.2 / strokeScale
                 }
+                style={{
+                    transformOrigin: `${item.x}px ${item.y}px`,
+                }}
+            />
+            <circle
+                cx={item.x}
+                cy={item.y}
+                r={3 / strokeScale}
                 onMouseEnter={(e) => hoverVeloStop(e, item)}
                 onMouseLeave={hoverVeloStop}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
+                    fill: "transparent",
                 }}
             />
         </g>

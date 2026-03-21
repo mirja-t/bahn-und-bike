@@ -123,12 +123,12 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
     const startdestination = thunkAPI.getState().trainroutes.startPos;
     const activeVeloroute = thunkAPI.getState().veloroutes.activeVeloroute;
     const startId = activeVeloroute
-        ? activeVeloroute.route[idx].leg[0].trainstop
+        ? activeVeloroute.route[idx].leg[0].trainstops?.at(0)
         : undefined;
     const endId = activeVeloroute
         ? activeVeloroute.route[idx].leg[
               activeVeloroute.route[idx].leg.length - 1
-          ].trainstop
+          ].trainstops?.at(0)
         : undefined;
 
     const connections: CurrentTrainroutes = [];
