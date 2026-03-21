@@ -121,7 +121,6 @@ export const loadVeloroute = createAsyncThunk<
 });
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
-    console.log("setVelorouteSectionActiveThunk", idx);
     return (dispatch: AppDispatch) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
