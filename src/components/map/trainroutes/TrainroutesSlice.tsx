@@ -6,8 +6,8 @@ import { createNewRoute } from "../../../utils/createNewRoute";
 import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
-    destination_id: string;
-    destination_name: string;
+    station_id: string;
+    station_name: string;
     dur: number;
     lat: string;
     lon: string;
@@ -146,7 +146,6 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         const route = createNewRoute(reversedConnection[0], reversedConnection);
         return route;
     };
-
     const seenIds = new Set<string>();
     for (const id of [startId, endId]) {
         if (!id || seenIds.has(id)) {
@@ -156,7 +155,6 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         connections.push(route);
         seenIds.add(id);
     }
-
     return connections;
 });
 

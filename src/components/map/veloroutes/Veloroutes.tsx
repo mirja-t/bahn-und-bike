@@ -85,7 +85,7 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
                                 type={
                                     item === activeVRouteStops.start ||
                                     item === activeVRouteStops.end
-                                        ? styles.active
+                                        ? "active" 
                                         : ""
                                 }
                             />

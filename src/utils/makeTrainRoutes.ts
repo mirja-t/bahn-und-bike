@@ -23,8 +23,8 @@ const fallbackRouteNode: RouteNode = {
         name: "",
         lat: "0",
         lon: "0",
-        destination_id: "",
-        destination_name: "",
+        station_id: "",
+        station_name: "",
         dur: 0,
         stop_number: 0,
         trainline_id: "",
@@ -52,15 +52,14 @@ export const makeTrainRoutes = (
 
                 // find current route
                 const nextRoute = currentRoute.nextRoutes.find(
-                    (r) => r.route.lastStation.stop_id === stop.destination_id,
+                    (r) => r.route.lastStation.stop_id === stop.station_id,
                 );
                 if (nextRoute) {
                     currentRoute = nextRoute;
                 }
                 // if stop is already in route, add trainline to existing route
                 if (
-                    stop.destination_id ===
-                    currentRoute.route.lastStation.stop_id
+                    stop.station_id === currentRoute.route.lastStation.stop_id
                 ) {
                     // Add trainline to connecting route
                     if (
@@ -70,6 +69,12 @@ export const makeTrainRoutes = (
                             .map((t) => t.trainline_id)
                             .includes(stop.trainline_id)
                     ) {
+                        if (!stop.trainline_id || !stop.name) {
+                            console.warn(
+                                "makeTrainRoutes – Missing trainline_id or name for stop:",
+                                stop,
+                            );
+                        }
                         currentRoute.route.connection?.connecting_trains.push({
                             trainline_id: stop.trainline_id,
                             trainline_name: stop.name,
@@ -99,12 +104,12 @@ export const makeTrainRoutes = (
                     const points = `${currentRoute.route.points}${x},${y} `;
                     const stopIds = [
                         ...currentRoute.route.stopIds,
-                        stop.destination_id,
+                        stop.station_id,
                     ];
-                    let name = `${stop.name}: ${stop.destination_name}`;
+                    let name = `${stop.name}: ${stop.station_name}`;
                     let trainlines: Train[] = [];
                     if (connection) {
-                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.destination_name}`;
+                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.station_name}`;
                         trainlines = connection.initial_trains;
                     } else {
                         trainlines.push({
@@ -121,8 +126,8 @@ export const makeTrainRoutes = (
                             trainlines,
                             firstStation: routeTree.route.firstStation,
                             lastStation: {
-                                stop_name: stop.destination_name,
-                                stop_id: stop.destination_id,
+                                stop_name: stop.station_name,
+                                stop_id: stop.station_id,
                                 lat: parseFloat(stop.lat),
                                 lon: parseFloat(stop.lon),
                                 x,
@@ -181,7 +186,7 @@ export const makeTrainRoutes = (
                         stops: [],
                     };
                 }
-                if (stop.destination_id === start) {
+                if (stop.station_id === start) {
                     acc[stop.trainline_id].startStopIdx = stop.stop_number;
                 }
                 acc[stop.trainline_id].stops.push(stop);
@@ -204,6 +209,7 @@ export const makeTrainRoutes = (
      * }
      */
     const trainlinesArr = createTrainlineStopsArr(stops, start);
+
     const trainlinesWithStart = trainlinesArr.filter(
         (line) => line.startStopIdx >= 0,
     );
@@ -239,14 +245,13 @@ export const makeTrainRoutes = (
                 const current = queue.shift() || fallbackRouteNode;
                 const isConnected = trainlineToAdd.stops.some(
                     (stop) =>
-                        stop.destination_id ===
-                        current.route.lastStation.stop_id,
+                        stop.station_id === current.route.lastStation.stop_id,
                 );
                 if (isConnected) {
                     trainlineToAdd.startStopIdx =
                         trainlineToAdd.stops.findIndex(
                             (stop) =>
-                                stop.destination_id ===
+                                stop.station_id ===
                                 current.route.lastStation.stop_id,
                         );
                     const connectedTrips = [trainlineToAdd]

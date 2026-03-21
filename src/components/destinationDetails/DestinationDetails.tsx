@@ -52,7 +52,7 @@ const Section = ({ section }: SectionProps) => {
         assets: stops,
         loading: loadingStopNames,
         error: errorStopNames,
-    } = useFetchBatch<Destination>(section.stopIds, "destinations", "POST");
+    } = useFetchBatch<Destination>(section.stopIds, "trainstations", "POST");
     const {
         assets: trainlinesWithAgencyNames,
         loading: loadingTrainlinesWithAgencyNames,

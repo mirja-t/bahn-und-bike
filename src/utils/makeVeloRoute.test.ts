@@ -1,23 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { makeVeloRoute } from "./makeVeloRoute";
-import type { ResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
+import type { VeloroutesResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 describe("makeVeloRoute", () => {
     const trainlines = ["line_1", "line_2", "line_3", "line_4"];
-    const stops: ResponseStop[] = [
+    const stops: VeloroutesResponseStop[] = [
         {
-            id: "0",
+            name: "Route 1",
             dest_name: "Stop 0",
             dist: 0,
+            gcs: "0,0",
             lat: "0",
             lon: "0",
             stop_number: 1,
+            trainlines: "",
+            trainstop: "",
             veloroute_id: "route_1",
-            name: "Route 1",
-            gcs: "0,0",
         },
         {
-            id: "1",
             dest_name: "Stop A",
             dist: 5,
             lat: "1",
@@ -30,7 +30,6 @@ describe("makeVeloRoute", () => {
             gcs: "1,1",
         },
         {
-            id: "2",
             dest_name: "Stop B",
             dist: 5,
             lat: "2",
@@ -39,9 +38,10 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "2,2",
+            trainlines: "",
+            trainstop: "",
         },
         {
-            id: "3",
             dest_name: "Stop C",
             dist: 5,
             lat: "3",
@@ -54,7 +54,6 @@ describe("makeVeloRoute", () => {
             gcs: "3,3",
         },
         {
-            id: "4",
             dest_name: "Stop D",
             dist: 5,
             lat: "4",

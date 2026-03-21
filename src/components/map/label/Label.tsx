@@ -6,14 +6,16 @@ interface LabelProps<T> {
         y: number;
         stop_name: string;
     } & { [key in keyof T]?: T[key] };
-    className: string;
+    className: "train" | "veloroute";
     strokeScale: number;
 }
 
 export const Label = <T,>({ item, className, strokeScale }: LabelProps<T>) => {
     return (
         <text
-            className={`${styles[className]} ${styles.destinationLabel}`}
+            className={`${styles.destinationLabel}${
+                className === "veloroute" ? ` ${styles.veloroute}` : ""
+            }`}
             x={item.x + 5 / strokeScale}
             y={item.y}
             style={{ fontSize: `${7 / strokeScale}px` }}
