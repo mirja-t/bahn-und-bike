@@ -8,7 +8,6 @@ import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
 } from "./trainroutes/TrainroutesSlice";
-import { selectActiveVeloroute } from "./veloroutes/VeloroutesSlice";
 import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,7 +24,6 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
-    const veloroute = useSelector(selectActiveVeloroute);
     const [userScale, setUserScale] = useState(1);
 
     const handleMapZoom = (dir: "+" | "-") => {
@@ -35,7 +33,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
 
     const zoom = useZoom(
         journeys,
-        veloroute,
+        null,
         Number(value),
         mapContainer,
         mapSize,

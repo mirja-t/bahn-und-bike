@@ -5,7 +5,7 @@
         transform: scale(1.8);
     }
     &.active {
-        fill: var(--bike-hover);
+        fill: red; //var(--bike-hover);
     }
 }
 
