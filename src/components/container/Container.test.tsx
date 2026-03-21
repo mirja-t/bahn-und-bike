@@ -9,6 +9,7 @@ import {
 import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Container } from "./Container";
 import { createMockStore } from "../../stories/MockSlice";
+import type { ResponseStop } from "../map/trainroutes/TrainroutesSlice";
 
 vi.mock("../../utils/i18n", () => ({
     useTranslation: () => ({ t: (key: string) => key }),
@@ -23,34 +24,35 @@ vi.mock("../map/Map", () => ({
 }));
 
 describe("Container search reset", () => {
+    const responseStops: ResponseStop[] = [
+        {
+            station_id: "2975",
+            station_name: "Berlin Hbf",
+            dur: 0,
+            lat: "52.525084",
+            lon: "13.369402",
+            name: "RE1",
+            stop_number: 0,
+            trainline_id: "re1",
+        },
+        {
+            station_id: "1234",
+            station_name: "Potsdam",
+            dur: 10,
+            lat: "52.390569",
+            lon: "13.064473",
+            name: "RE1",
+            stop_number: 1,
+            trainline_id: "re1",
+        },
+    ];
     beforeEach(() => {
         vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
             const url = String(input);
             if (url.includes("trainstops/")) {
                 return {
                     status: 200,
-                    json: async () => [
-                        {
-                            destination_id: "2975",
-                            destination_name: "Berlin Hbf",
-                            dur: 0,
-                            lat: "52.525084",
-                            lon: "13.369402",
-                            name: "RE1",
-                            stop_number: 0,
-                            trainline_id: "re1",
-                        },
-                        {
-                            destination_id: "1234",
-                            destination_name: "Potsdam",
-                            dur: 10,
-                            lat: "52.390569",
-                            lon: "13.064473",
-                            name: "RE1",
-                            stop_number: 1,
-                            trainline_id: "re1",
-                        },
-                    ],
+                    json: async () => responseStops,
                 } as Response;
             }
 

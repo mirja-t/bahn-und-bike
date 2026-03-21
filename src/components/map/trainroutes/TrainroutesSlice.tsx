@@ -6,8 +6,8 @@ import { createNewRoute } from "../../../utils/createNewRoute";
 import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
-    destination_id: string;
-    destination_name: string;
+    station_id: string;
+    station_name: string;
     dur: number;
     lat: string;
     lon: string;
