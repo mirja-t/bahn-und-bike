@@ -69,6 +69,12 @@ export const makeTrainRoutes = (
                             .map((t) => t.trainline_id)
                             .includes(stop.trainline_id)
                     ) {
+                        if (!stop.trainline_id || !stop.name) {
+                            console.warn(
+                                "makeTrainRoutes – Missing trainline_id or name for stop:",
+                                stop,
+                            );
+                        }
                         currentRoute.route.connection?.connecting_trains.push({
                             trainline_id: stop.trainline_id,
                             trainline_name: stop.name,

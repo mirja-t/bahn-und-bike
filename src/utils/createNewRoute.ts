@@ -66,6 +66,12 @@ export function createNewRoute(
                     (trainline) => trainline.trainline_id === stop.trainline_id,
                 )
             ) {
+                if (!stop.trainline_id || !stop.name) {
+                    console.warn(
+                        "Missing trainline_id or name for stop:",
+                        stop,
+                    );
+                }
                 trainlines.push({
                     trainline_id: stop.trainline_id,
                     trainline_name: stop.name,
