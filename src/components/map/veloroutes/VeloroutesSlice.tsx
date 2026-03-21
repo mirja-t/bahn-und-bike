@@ -16,7 +16,7 @@ export type VeloroutesResponseStop = {
     lon: string;
     stop_number: number;
     trainlines: string; // comma separated string of trainline_ids from API
-    trainstops: string; // comma separated string of trainstop_ids from API
+    trainstop: string;
     veloroute_id: string;
 };
 
@@ -24,7 +24,7 @@ export type VelorouteStop = {
     stop_id: string;
     stop_name: string;
     trainlines?: string[];
-    trainstops?: string[];
+    trainstop?: string;
     x: number;
     y: number;
 };
@@ -121,6 +121,7 @@ export const loadVeloroute = createAsyncThunk<
 });
 
 export const setVelorouteSectionActiveThunk = (idx: number) => {
+    console.log("setVelorouteSectionActiveThunk", idx);
     return (dispatch: AppDispatch) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
