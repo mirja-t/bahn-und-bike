@@ -1,9 +1,10 @@
+import { useSelector } from "react-redux";
+import { selectUserScale } from "../../../../AppSlice";
 import styles from "../veloroutes.module.scss";
 
 interface VeloroutePathProps {
     id: string;
     idx: number;
-    strokeScale: number;
     path: string;
     active?: boolean;
     onClick?: (id: string, idx: number) => void;
@@ -13,12 +14,12 @@ interface VeloroutePathProps {
 export const VeloroutePath = ({
     id,
     idx,
-    strokeScale,
     path,
     active,
     onClick,
     className,
 }: VeloroutePathProps) => {
+    const userScale = useSelector(selectUserScale);
     return (
         <g
             onClick={() => {
@@ -29,12 +30,12 @@ export const VeloroutePath = ({
         >
             <polyline
                 className={`${styles.velorouteSection} ${active ? styles.active : ""} ${className || ""}`}
-                strokeWidth={active ? 1.5 / strokeScale : 1 / strokeScale}
+                strokeWidth={active ? 1.5 / userScale : 1 / userScale}
                 points={path}
             />
             <polyline
                 className={styles.velorouteSectionLarge}
-                strokeWidth={12 / strokeScale}
+                strokeWidth={12 / userScale}
                 points={path}
             />
         </g>

@@ -6,20 +6,17 @@ import {
     type VelorouteStop as VelorouteStopType,
 } from "../VeloroutesSlice";
 import { motion } from "framer-motion";
+import { selectUserScale } from "../../../../AppSlice";
 
 interface VelorouteStopProps {
     item: VelorouteStopType;
-    strokeScale: number;
     type: string;
 }
 
-export const VelorouteStop = ({
-    item,
-    strokeScale,
-    type,
-}: VelorouteStopProps) => {
+export const VelorouteStop = ({ item, type }: VelorouteStopProps) => {
     const dispatch = useDispatch();
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
+    const userScale = useSelector(selectUserScale);
 
     const hoverVeloStop = (
         { type }: React.MouseEvent<SVGCircleElement>,
@@ -35,10 +32,10 @@ export const VelorouteStop = ({
         <g>
             <motion.circle
                 className={styles.velorouteStopOutline}
-                strokeWidth={0.8 / strokeScale}
+                strokeWidth={0.8 / userScale}
                 cx={item.x}
                 cy={item.y}
-                r={4 / strokeScale}
+                r={4 / userScale}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
                 }}
@@ -62,8 +59,8 @@ export const VelorouteStop = ({
                 r={
                     type === "active" ||
                     activeVelorouteStop?.stop_id === item.stop_id
-                        ? 1 / strokeScale
-                        : 1.2 / strokeScale
+                        ? 1 / userScale
+                        : 1.2 / userScale
                 }
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
@@ -72,7 +69,7 @@ export const VelorouteStop = ({
             <circle
                 cx={item.x}
                 cy={item.y}
-                r={3 / strokeScale}
+                r={3 / userScale}
                 onMouseEnter={(e) => hoverVeloStop(e, item)}
                 onMouseLeave={hoverVeloStop}
                 style={{

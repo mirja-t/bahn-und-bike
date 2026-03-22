@@ -12,7 +12,14 @@ import {
 import { debounce } from "../../../utils/utils";
 import { headers, VITE_API_URL } from "../../../config/config";
 import { useRef, useState } from "react";
-import type { Destination } from "../../destinationDetails/DestinationDetailsSlice";
+
+type Trainstation = {
+    id: string;
+    name: string;
+    lat: number;
+    lon: number;
+    destination_id: string;
+};
 
 const presetOptions: ComboboxOption[] = [
     { label: "Berlin", value: "2975" },
@@ -65,12 +72,11 @@ export const DestinationPicker = () => {
             });
         }
     };
-    const fetchDestinations = async (value: string): Promise<Destination[]> => {
+    const fetchDestinations = async (
+        value: string,
+    ): Promise<Trainstation[]> => {
         const res = await fetch(
-            VITE_API_URL +
-                "destinations?str=" +
-                encodeURIComponent(value) +
-                "&trainstop=true",
+            VITE_API_URL + "trainstations?str=" + encodeURIComponent(value),
             {
                 headers: headers,
             },
@@ -80,17 +86,19 @@ export const DestinationPicker = () => {
                 `Failed to fetch destinations: ${res.status} ${res.statusText}`,
             );
         }
-        return res.json() as Promise<Destination[]>;
+        return res.json() as Promise<Trainstation[]>;
     };
     const debouncedFetchRef = useRef<((value: string) => void) | null>(null);
     if (debouncedFetchRef.current === null) {
         debouncedFetchRef.current = debounce((value: string) => {
             fetchDestinations(value)
-                .then((destinations: Destination[]) => {
-                    const options = destinations.map((dest: Destination) => ({
-                        label: dest.name,
-                        value: dest.id,
-                    }));
+                .then((trainstations: Trainstation[]) => {
+                    const options = trainstations.map(
+                        (station: Trainstation) => ({
+                            label: station.name,
+                            value: station.id,
+                        }),
+                    );
                     setOptions(options);
                 })
                 .catch((error) => {

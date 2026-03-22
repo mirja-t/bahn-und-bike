@@ -25,6 +25,7 @@ export interface AppState {
     activeTab: TabIds;
     langLoading: boolean;
     langError: boolean;
+    userScale: number;
 }
 
 export const appSlice = createSlice({
@@ -35,6 +36,7 @@ export const appSlice = createSlice({
         activeTab: "trainlines",
         langLoading: false,
         langError: false,
+        userScale: 1,
     } as AppState,
     reducers: {
         setTheme: (state, action: { payload: Theme }) => {
@@ -46,14 +48,23 @@ export const appSlice = createSlice({
         setActiveTab: (state, action: { payload: TabIds }) => {
             state.activeTab = action.payload;
         },
+        setUserScale: (state, action: { payload: number | "reset" }) => {
+            if (action.payload === "reset") {
+                state.userScale = 1;
+            } else if (typeof state.userScale === "number") {
+                state.userScale = state.userScale + action.payload;
+            }
+        },
     },
 });
 
 export const selectTheme = (state: RootState) => state.app.theme;
 export const selectLangCode = (state: RootState) => state.app.langCode;
 export const selectActiveTab = (state: RootState) => state.app.activeTab;
+export const selectUserScale = (state: RootState) => state.app.userScale;
 
-export const { setTheme, setLangCode, setActiveTab } = appSlice.actions;
+export const { setTheme, setLangCode, setActiveTab, setUserScale } =
+    appSlice.actions;
 
 export default appSlice.reducer;
 export const useAppDispatch: () => AppDispatch = useDispatch;

@@ -14,21 +14,7 @@ import { Veloroutes } from "../veloroutes/Veloroutes";
 import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
 
-interface TrainroutesProps {
-    zoom: {
-        containerHeight: number;
-        containerWidth: number;
-        x: number;
-        y: number;
-        scale: number;
-    };
-}
-
-export const Trainroutes = memo(function Trainroutes({
-    zoom,
-}: TrainroutesProps) {
-    const { containerHeight } = zoom;
-
+export const Trainroutes = memo(function Trainroutes() {
     const journeys = useSelector(selectCurrentTrainroutes);
     const clickedSection = useSelector(selectActiveSection);
     const hoveredSection = useSelector(selectPreviewSection);
@@ -38,7 +24,6 @@ export const Trainroutes = memo(function Trainroutes({
     const trainlinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
-    const strokeScale = containerHeight / 1080 / 2;
 
     const getClassName = (item: typeof activeSection) => {
         if (!activeSection && !trainlinesAlongVeloroute.length) {
@@ -64,7 +49,6 @@ export const Trainroutes = memo(function Trainroutes({
                     key={idx}
                     className={getClassName(item)}
                     item={item}
-                    strokeScale={strokeScale}
                 />
             ))}
 
@@ -73,17 +57,12 @@ export const Trainroutes = memo(function Trainroutes({
                     key={idx}
                     className="active trainlinesAlongVeloroute"
                     item={item}
-                    strokeScale={strokeScale}
                 />
             ))}
             {activeSection && (
-                <Trainroute
-                    className="active"
-                    item={activeSection}
-                    strokeScale={strokeScale}
-                />
+                <Trainroute className="active" item={activeSection} />
             )}
-            <Veloroutes strokeScale={strokeScale} />
+            <Veloroutes />
 
             {(!!activeSpot || !!activeVelorouteStop) && (
                 <Label
@@ -96,7 +75,6 @@ export const Trainroutes = memo(function Trainroutes({
                         }
                     }
                     className={activeSpot ? "train" : "veloroute"}
-                    strokeScale={strokeScale}
                 />
             )}
         </svg>
