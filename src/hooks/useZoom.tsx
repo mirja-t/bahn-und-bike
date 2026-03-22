@@ -11,14 +11,11 @@ export const useZoom = (
     value: number,
     mapContainer: HTMLDivElement | null,
     mapSize: [number, number],
-    userscale: number,
     loading: boolean,
 ) => {
-    userscale = Number(userscale.toFixed(1));
     const [zoom, setZoom] = useState({
         x: 0,
         y: 0,
-        scale: userscale,
         containerWidth: mapSize[0],
         containerHeight: mapSize[1],
     });
@@ -38,7 +35,6 @@ export const useZoom = (
             setZoom({
                 x: 0,
                 y: 0,
-                scale: userscale,
                 containerWidth: mapContainerMinSize * mapRatio,
                 containerHeight: mapContainerMinSize,
             });
@@ -66,26 +62,17 @@ export const useZoom = (
             const scale = mapContainerMinSize / longestDist;
 
             const currentZoom = {
-                x: leftOffset * scale * userscale,
-                y: topOffset * scale * userscale,
-                scale: scale * userscale,
-                containerWidth:
-                    mapContainerMinSize * mapRatio * scale * userscale,
-                containerHeight: mapContainerMinSize * scale * userscale,
+                x: leftOffset * scale,
+                y: topOffset * scale,
+                scale: scale,
+                containerWidth: mapContainerMinSize * mapRatio * scale,
+                containerHeight: mapContainerMinSize * scale,
             };
 
             setZoom(currentZoom);
             zoomMemo.current = currentZoom;
         }
-    }, [
-        journeys,
-        vrouteposition,
-        value,
-        mapContainer,
-        mapSize,
-        userscale,
-        loading,
-    ]);
+    }, [journeys, vrouteposition, value, mapContainer, mapSize, loading]);
 
     return zoom;
 };
