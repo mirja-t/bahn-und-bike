@@ -1,8 +1,9 @@
 import styles from "./map.module.scss";
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
+import { usePinch } from "../../hooks/usePinch";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectCurrentTrainroutes,
@@ -13,6 +14,7 @@ import { Germany } from "./germany/Germany";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
+import { setUserScale, selectUserScale, useAppDispatch } from "../../AppSlice";
 
 interface MapProps {
     value: number;
@@ -21,15 +23,25 @@ interface MapProps {
 }
 export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
+    const zoomcontainerRef = useRef<HTMLDivElement | null>(null);
     const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
-    const [userScale, setUserScale] = useState(1);
+    const userScale = useSelector(selectUserScale);
+    const dispatch = useAppDispatch();
 
     const handleMapZoom = (dir: "+" | "-") => {
         const factor = dir === "+" ? 1 : -1;
-        setUserScale(Math.max(0.1, userScale + factor * 0.2));
+        dispatch(setUserScale(0.2 * factor));
     };
+
+    const pinchScale = usePinch(zoomcontainerRef);
+    useEffect(() => {
+        if (!mapcontainerRef.current || !zoomcontainerRef.current) return;
+        if (pinchScale.deltaY) {
+            dispatch(setUserScale(pinchScale.deltaY / -100));
+        }
+    }, [pinchScale, dispatch]);
 
     const zoom = useZoom(
         journeys,
@@ -37,9 +49,10 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
         Number(value),
         mapContainer,
         mapSize,
-        userScale,
         isLoading,
     );
+    const scaleOriginX = zoom.x / zoom.containerWidth;
+    const scaleOriginY = zoom.y / zoom.containerHeight;
 
     const drag = useDrag(value);
 
@@ -59,35 +72,57 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
                 style={{
                     width: zoom.containerWidth,
                     height: zoom.containerHeight,
-                    transform: `translate(-50%, -50%)`,
                 }}
             >
-                <motion.div
-                    drag
-                    dragMomentum={false}
+                <div
+                    ref={zoomcontainerRef}
                     style={{
-                        left: zoom.x,
-                        top: zoom.y,
-                        x: drag.x,
-                        y: drag.y,
-                        touchAction: "none",
+                        width: 100 * userScale + "%",
+                        height: 100 * userScale + "%",
+                        position: "relative",
+                        marginLeft:
+                            -(((userScale - 1) * zoom.containerWidth) / 2) *
+                                (1 - scaleOriginX) +
+                            "px",
+                        marginTop:
+                            -(
+                                ((((userScale - 1) * zoom.containerHeight) /
+                                    2) *
+                                    zoom.containerHeight) /
+                                zoom.containerWidth
+                            ) *
+                                (1 - scaleOriginY) +
+                            "px",
                     }}
-                    className={styles.mapInner}
                 >
-                    {!isLoading && (
-                        <>
-                            {value === 0 &&
-                                journeys.length === 0 &&
-                                !isLoading && (
-                                    <div className="instructions">
-                                        <p>{t("instruction")}</p>
-                                    </div>
-                                )}
-                            <Trainroutes zoom={zoom} />
-                        </>
-                    )}
-                    <Germany />
-                </motion.div>
+                    <motion.div
+                        drag
+                        dragMomentum={false}
+                        style={{
+                            left: zoom.x,
+                            top: zoom.y,
+                            x: drag.x,
+                            y: drag.y,
+                            height: "100%",
+                            width: "100%",
+                        }}
+                        className={styles.mapInner}
+                    >
+                        {!isLoading && (
+                            <>
+                                {value === 0 &&
+                                    journeys.length === 0 &&
+                                    !isLoading && (
+                                        <div className="instructions">
+                                            <p>{t("instruction")}</p>
+                                        </div>
+                                    )}
+                                <Trainroutes />
+                            </>
+                        )}
+                        <Germany />
+                    </motion.div>
+                </div>
             </div>
         </>
     );

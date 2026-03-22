@@ -26,6 +26,7 @@ import { Map } from "../map/Map";
 import {
     selectActiveTab,
     setActiveTab,
+    setUserScale,
     useAppDispatch,
     type TabIds,
 } from "../../AppSlice";
@@ -93,6 +94,7 @@ export const Container = () => {
         dispatch(setVelorouteList([]));
         dispatch(setActiveTab("trainlines"));
         dispatch(loadTrainroutes({ start, value, direct }));
+        dispatch(setUserScale("reset"));
         setSubmitVal(value);
     };
 
