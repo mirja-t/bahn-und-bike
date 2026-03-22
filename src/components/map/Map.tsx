@@ -41,7 +41,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
         if (pinchScale.deltaY) {
             dispatch(setUserScale(pinchScale.deltaY / -100));
         }
-    }, [pinchScale]);
+    }, [pinchScale, dispatch]);
 
     const zoom = useZoom(
         journeys,
