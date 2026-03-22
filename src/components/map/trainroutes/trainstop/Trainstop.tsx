@@ -1,19 +1,20 @@
 import "./trainstop.scss";
-import { useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { setActiveSpot, type CurrentTrainroute } from "../TrainroutesSlice";
+import { selectUserScale, useAppDispatch } from "../../../../AppSlice";
+import { useSelector } from "react-redux";
 
 interface TrainstopProps {
     item: CurrentTrainroute["lastStation"];
-    strokeScale: number;
     styles: {
         scale: number;
         transformOrigin: string;
     };
 }
 
-export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
-    const dispatch = useDispatch();
+export const Trainstop = ({ item, styles }: TrainstopProps) => {
+    const dispatch = useAppDispatch();
+    const userScale = useSelector(selectUserScale);
     const hoverSpot = (
         e: React.MouseEvent,
         spot?: CurrentTrainroute["lastStation"],
@@ -33,16 +34,16 @@ export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
             >
                 <circle
                     className="spot-bg"
-                    r={6 / strokeScale}
+                    r={6 / userScale}
                     cx={item.x}
                     cy={item.y}
                 />
                 <motion.rect
                     className="spot spot-large"
-                    x={item.x - 1.5 / strokeScale}
-                    y={item.y - 1.5 / strokeScale}
-                    width={3 / strokeScale}
-                    height={3 / strokeScale}
+                    x={item.x - 1.5 / userScale}
+                    y={item.y - 1.5 / userScale}
+                    width={3 / userScale}
+                    height={3 / userScale}
                     style={{
                         scale: styles.scale,
                         transformOrigin: `${item.x}px ${item.y}px`,
@@ -53,10 +54,10 @@ export const Trainstop = ({ item, strokeScale, styles }: TrainstopProps) => {
                         <motion.rect
                             key={`trainstop-${item.stop_id || item.x}-${item.y}`}
                             className="spot spot-small"
-                            x={item.x - 1.5 / strokeScale}
-                            y={item.y - 1.5 / strokeScale}
-                            width={3 / strokeScale}
-                            height={3 / strokeScale}
+                            x={item.x - 1.5 / userScale}
+                            y={item.y - 1.5 / userScale}
+                            width={3 / userScale}
+                            height={3 / userScale}
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0 }}

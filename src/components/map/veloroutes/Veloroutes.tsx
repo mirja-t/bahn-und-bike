@@ -13,11 +13,7 @@ import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 
-interface VeloroutesProps {
-    strokeScale: number;
-}
-
-export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
+export const Veloroutes = () => {
     const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const previewVeloroute = useSelector(selectPreviewVeloroute);
@@ -51,7 +47,6 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
                     id={route.id}
                     idx={0}
                     path={route.path.join(" ")}
-                    strokeScale={strokeScale}
                     className={
                         previewVeloroute?.id === route.id
                             ? styles.hover
@@ -67,7 +62,6 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
                         id={activeVeloroute.id}
                         idx={idx}
                         path={path}
-                        strokeScale={strokeScale}
                         active={idx === activeVelorouteSectionIdx}
                         onClick={handleSectionClick}
                         className={styles.current}
@@ -81,11 +75,10 @@ export const Veloroutes = ({ strokeScale }: VeloroutesProps) => {
                             <VelorouteStop
                                 key={`${activeVeloroute.id}-stop-${idx}`}
                                 item={item}
-                                strokeScale={strokeScale}
                                 type={
                                     item === activeVRouteStops.start ||
                                     item === activeVRouteStops.end
-                                        ? "active" 
+                                        ? "active"
                                         : ""
                                 }
                             />

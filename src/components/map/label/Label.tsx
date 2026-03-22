@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { selectUserScale } from "../../../AppSlice";
 import styles from "./label.module.scss";
 
 interface LabelProps<T> {
@@ -7,18 +9,18 @@ interface LabelProps<T> {
         stop_name: string;
     } & { [key in keyof T]?: T[key] };
     className: "train" | "veloroute";
-    strokeScale: number;
 }
 
-export const Label = <T,>({ item, className, strokeScale }: LabelProps<T>) => {
+export const Label = <T,>({ item, className }: LabelProps<T>) => {
+    const userScale = useSelector(selectUserScale);
     return (
         <text
             className={`${styles.destinationLabel}${
                 className === "veloroute" ? ` ${styles.veloroute}` : ""
             }`}
-            x={item.x + 5 / strokeScale}
+            x={item.x + 5 / userScale}
             y={item.y}
-            style={{ fontSize: `${7 / strokeScale}px` }}
+            style={{ fontSize: `${7 / userScale}px` }}
         >
             <tspan>{item.stop_name}</tspan>
         </text>

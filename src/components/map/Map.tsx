@@ -117,7 +117,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
                                             <p>{t("instruction")}</p>
                                         </div>
                                     )}
-                                <Trainroutes zoom={zoom} />
+                                <Trainroutes />
                             </>
                         )}
                         <Germany />
