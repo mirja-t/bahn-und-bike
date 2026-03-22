@@ -20,7 +20,6 @@ interface TrainroutesProps {
         containerWidth: number;
         x: number;
         y: number;
-        scale: number;
     };
 }
 
