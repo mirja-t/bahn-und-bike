@@ -1,9 +1,7 @@
 import "./App.scss";
 import {
     selectTheme,
-    setTheme,
     LangCode,
-    Theme,
     useAppDispatch,
     setLangCode,
     selectLangCode,
@@ -29,7 +27,6 @@ import { Privacy } from "./components/privacy/Privacy";
 import { Imprint } from "./components/imprint/Imprint";
 import { Container } from "./components/container/Container";
 import { Panel } from "./components/stateless/panel/Panel";
-import { Select } from "./components/stateless/select/Select";
 import ErrorBoundary from "./components/stateless/errorBoundary/ErrorBoundary";
 export function App() {
     const theme = useSelector(selectTheme);
@@ -37,10 +34,6 @@ export function App() {
     const location = useLocation();
     const dispatch = useAppDispatch();
     const langCode = useSelector(selectLangCode);
-
-    const setPageTheme = (value: Theme) => {
-        dispatch(setTheme(value));
-    };
 
     useEffect(() => {
         const lastSlugSegment = location.pathname.match(/[^\/]*$/);
@@ -93,7 +86,7 @@ export function App() {
                                     },
                                 ]}
                             />
-                            <Select
+                            {/* <Select
                                 options={[
                                     { label: "light", value: "light" },
                                     { label: "dark", value: "dark" },
@@ -102,7 +95,7 @@ export function App() {
                                 preselectedValue={theme}
                                 onChange={setPageTheme}
                                 label="theme"
-                            />
+                            /> */}
                         </Panel>
                     </Header>
                     <Routes>

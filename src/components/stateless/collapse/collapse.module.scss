@@ -14,7 +14,7 @@
             content: "";
             position: absolute;
             margin-left: spacing.$padding-xs;
-            @include caret.caret();
+            @include caret.caret(inherit, 0.3em);
             top: 50%;
         }
         &.on {

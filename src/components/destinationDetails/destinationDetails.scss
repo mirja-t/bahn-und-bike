@@ -3,6 +3,9 @@
 @use "../../scss/variables/colors.scss" as colors;
 
 .details {
+    header {
+        margin-top: 0.75em;
+    }
     color: var(--train-headline);
     .veloroute-details {
         color: var(--bike);

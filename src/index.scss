@@ -7,9 +7,9 @@
 @use "./webfonts.css";
 
 html {
-    font-size: 16px;
+    font-size: 14px;
     @media (min-width: breakpoints.$breakpoint-xl) {
-        font-size: 18px;
+        font-size: 16px;
     }
 }
 
@@ -52,7 +52,7 @@ h3,
 .h1,
 .h2,
 .h3 {
-    line-height: 1.3;
+    line-height: 1.2;
 }
 
 h2,
@@ -73,12 +73,12 @@ h3,
 
 h5,
 .h5 {
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: fonts.$letterspacing;
+    font-weight: 600;
+    // text-transform: uppercase;
+    // letter-spacing: fonts.$letterspacing;
     font-size: fonts.$h5-font-size;
-    margin-bottom: 0.75em;
-    margin-top: 1em;
+    margin-bottom: 0.5em;
+    margin-top: 0.75em;
 }
 
 h6,
@@ -89,15 +89,15 @@ h6,
 
 label {
     font-family: fonts.$base-heading-font-family;
-    font-size: 75%;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: fonts.$letterspacing;
+    font-size: 85%;
+    font-weight: 600;
+    // text-transform: uppercase;
+    // letter-spacing: fonts.$letterspacing;
     color: var(--label);
 }
 
 .section {
-    margin-bottom: spacing.$mainpadding;
+    margin-bottom: spacing.$padding-xs;
     p {
         margin-top: -0.3rem;
         font-size: 1rem;
@@ -167,4 +167,9 @@ pre {
 }
 fieldset {
     border: none;
+}
+
+.small,
+small {
+    font-size: 0.75rem;
 }

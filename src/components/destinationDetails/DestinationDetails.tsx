@@ -25,9 +25,10 @@ import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
 import type { Destination } from "./DestinationDetailsSlice";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
+import { Tooltip } from "../stateless/tooltip/Tooltip";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -67,7 +68,7 @@ const Section = ({ section }: SectionProps) => {
                         <TrainIcon />
                     </PinIcon>
                     <div>
-                        <h2>{section.name}</h2>
+                        <h2 className="h3">{section.name}</h2>
                         {loadingTrainlinesWithAgencyNames ? (
                             <Loading />
                         ) : errorTrainlinesWithAgencyNames ? (
@@ -76,16 +77,17 @@ const Section = ({ section }: SectionProps) => {
                             trainlinesWithAgencyNames.map(
                                 // to do: find out why there are duplicates
                                 (trainline, idx) => (
-                                    <div
-                                        key={`${trainline.id}-${idx}`}
-                                        className="trainline-info"
-                                    >
-                                        <span>
+                                    <span key={`${trainline.id}-${idx}`}>
+                                        <Tooltip
+                                            className="small"
+                                            text={trainline.agency_name}
+                                        >
                                             {trainline.name}
-                                            :&nbsp;
-                                            {trainline.agency_name}
-                                        </span>
-                                    </div>
+                                            {idx <
+                                                trainlinesWithAgencyNames.length -
+                                                    1 && ", "}
+                                        </Tooltip>
+                                    </span>
                                 ),
                             )
                         )}
@@ -152,7 +154,10 @@ export const DestinationDetails = () => {
                     {activeSection && <Section section={activeSection} />}
                     {trainLinesAlongVeloroute.length > 0 &&
                         trainLinesAlongVeloroute.map((trainline) => (
-                            <Section key={trainline.id} section={trainline} />
+                            <Fragment key={trainline.id}>
+                                <Section section={trainline} />
+                                <hr />
+                            </Fragment>
                         ))}
                     {/* if not direct connection */}
                     {activeSection && activeSection.connection && (
