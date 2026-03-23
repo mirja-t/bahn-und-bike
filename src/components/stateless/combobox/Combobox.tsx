@@ -1,6 +1,7 @@
 import styles from "./combobox.module.scss";
 import ScrollContainer from "../scrollcontainer/ScrollContainer";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useClickOutside } from "../../../hooks/useClickOutside";
 
 const DEFAULT_MAX_LENGTH = 100;
 
@@ -48,19 +49,11 @@ export const Combobox = ({
         }
     }, [value, inputValue]);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (
-                wrapperRef.current &&
-                !wrapperRef.current.contains(event.target as Node)
-            ) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () =>
-            document.removeEventListener("mousedown", handleClickOutside);
+    const handleClickOutside = useCallback(() => {
+        setIsOpen(false);
+        setIsFiltering(false);
     }, []);
+    useClickOutside(wrapperRef, handleClickOutside);
 
     const displayedOptions = isFiltering
         ? options

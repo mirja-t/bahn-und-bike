@@ -12,6 +12,7 @@
     appearance: none;
     -webkit-appearance: none;
     border: none;
+    background-color: transparent;
     cursor: pointer;
 
     .tooltipText {
@@ -21,9 +22,8 @@
         left: 50%;
         bottom: calc(100% + 0.5em);
         transform: translateX(-50%);
-        background: var(--bg);
+        background: var(--bg-dark);
         color: var(--text);
-        font-size: 80%;
         text-transform: none;
         font-family: fonts.$global-font-family;
         font-weight: 400;
@@ -39,12 +39,10 @@
             left: 50%;
             top: 100%;
             transform: translateX(-50%);
-            @include caret.caret(var(--bg));
+            @include caret.caret(var(--bg-dark));
         }
     }
-    &:hover .tooltipText,
-    &:focus-visible .tooltipText,
-    &:focus-within .tooltipText {
+    .show.tooltipText {
         visibility: visible;
         opacity: 1;
     }
