@@ -94,11 +94,10 @@ export const loadTrainroutes = createAsyncThunk<
         value * 30,
         direct,
     );
-    const trainlineList = direct
-        ? currentTrainroutes
-              .map((route) => route.trainlines.map((t) => t.trainline_id))
-              .flat()
-        : null;
+    // used to create veloroute sections
+    const trainlineList = currentTrainroutes
+        .map((route) => route.trainlines.map((t) => t.trainline_id))
+        .flat();
     thunkAPI.dispatch(setTrainlineList(trainlineList));
     // check costs of fetching all related veloroutes when no trainline is selected
     const stopIds = [

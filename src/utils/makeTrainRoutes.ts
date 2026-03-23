@@ -79,7 +79,7 @@ export const makeTrainRoutes = (
                             trainline_id: stop.trainline_id,
                             trainline_name: stop.name,
                         });
-                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
+                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.stop_name} – ${currentRoute.route.lastStation.stop_name}`;
                     }
                     // Add trainline to existing route - only if it is not the connecting trainline
                     else if (
@@ -92,7 +92,7 @@ export const makeTrainRoutes = (
                             trainline_id: stop.trainline_id,
                             trainline_name: stop.name,
                         });
-                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.lastStation.stop_name}`;
+                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.stop_name} – ${currentRoute.route.lastStation.stop_name}`;
                     }
                 } else {
                     // create new route
@@ -106,10 +106,10 @@ export const makeTrainRoutes = (
                         ...currentRoute.route.stopIds,
                         stop.station_id,
                     ];
-                    let name = `${stop.name}: ${stop.station_name}`;
+                    let name = `${stop.name}: ${currentRoute.route.firstStation.stop_name} – ${stop.station_name}`;
                     let trainlines: Train[] = [];
                     if (connection) {
-                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${stop.station_name}`;
+                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.stop_name} – ${stop.station_name}`;
                         trainlines = connection.initial_trains;
                     } else {
                         trainlines.push({

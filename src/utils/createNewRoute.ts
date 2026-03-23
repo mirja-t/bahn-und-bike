@@ -50,7 +50,7 @@ export function createNewRoute(
     const stopIds = [startDest.station_id];
     let svgPathPoints = getPoints([startDest]);
     let lastDest = startDest;
-    let name = `${startDest.name}: ${startDest.station_name}`;
+    let name = `${startDest.name}: ${startDest.station_name} – ${startDest.station_name}`;
     if (route && route.length > 1) {
         const filteredRoute = route.filter((stop, idx, arr) =>
             // quick fix until we have proper route data without duplicates, filter out stops that have the same destination_id as a previous stop in the route (except for the first stop, which is the startDest)
@@ -58,7 +58,7 @@ export function createNewRoute(
         );
         lastDest = filteredRoute[filteredRoute.length - 1];
         svgPathPoints = getPoints(filteredRoute);
-        name = `${startDest.name}: ${lastDest.station_name}`;
+        name = `${startDest.name}: ${startDest.station_name} – ${lastDest.station_name}`;
         filteredRoute.slice(1).forEach((stop) => {
             if (
                 // avoid duplicates in case of connections with same trainline_id at the beginning and end of the route
