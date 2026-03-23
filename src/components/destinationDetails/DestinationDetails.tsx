@@ -80,7 +80,11 @@ const Section = ({ section }: SectionProps) => {
                                     <span key={`${trainline.id}-${idx}`}>
                                         <Tooltip
                                             className="small"
-                                            text={trainline.agency_name}
+                                            content={
+                                                <div className="tooltip">
+                                                    {trainline.agency_name}
+                                                </div>
+                                            }
                                         >
                                             {trainline.name}
                                             {idx <
@@ -116,6 +120,7 @@ const Section = ({ section }: SectionProps) => {
                     </ol>
                 </Collapse>
             )}
+            <hr style={{ marginTop: ".75em" }} />
         </>
     );
 };
@@ -156,7 +161,6 @@ export const DestinationDetails = () => {
                         trainLinesAlongVeloroute.map((trainline) => (
                             <Fragment key={trainline.id}>
                                 <Section section={trainline} />
-                                <hr />
                             </Fragment>
                         ))}
                     {/* if not direct connection */}
