@@ -1,8 +1,12 @@
 @use "../../scss/variables/breakpoints.scss" as breakpoints;
 @use "../../scss/variables/spacing.scss" as spacing;
 @use "../../scss/variables/colors.scss" as colors;
+@use "../../scss/variables/borders.scss" as borders;
 
 .details {
+    header {
+        margin-top: 0.75em;
+    }
     color: var(--train-headline);
     .veloroute-details {
         color: var(--bike);
@@ -36,4 +40,9 @@
             vertical-align: top;
         }
     }
+}
+.tooltip {
+    background: colors.$background-dark;
+    padding: spacing.$padding-xs;
+    border-radius: borders.$borderradius-xs;
 }

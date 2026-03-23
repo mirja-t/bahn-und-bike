@@ -7,8 +7,8 @@ export const VelorouteIcon = () => {
         <div className={`${styles.velorouteIcon} ${iconstyles.icon}`}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="26"
+                height="26"
                 x="0px"
                 y="0px"
                 viewBox="0 0 30 30"
