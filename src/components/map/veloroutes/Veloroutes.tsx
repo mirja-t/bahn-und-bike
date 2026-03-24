@@ -1,17 +1,19 @@
 import styles from "./veloroutes.module.scss";
 import { useSelector } from "react-redux";
 import {
+    loadVeloroute,
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectPreviewVeloroute,
     selectVelorouteList,
-    setActiveVeloroute,
     setVelorouteSectionActiveThunk,
+    type Veloroute,
     type VelorouteStop as VelorouteStopType,
 } from "./VeloroutesSlice";
-import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
+import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
+import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
@@ -35,18 +37,40 @@ export const Veloroutes = () => {
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
     const handleRouteClick = (id: string) => {
+        console.log("Load veloroute with id:", id);
         dispatch(setActiveTab("veloroutes"));
-        dispatch(setActiveVeloroute(id));
+        dispatch(loadVeloroute({ id }));
+    };
+
+    const getPath = (gcs: string) => {
+        const path = gcs
+            .split(" ")
+            .map((coord) => {
+                const [lat, lon] = coord.split(",").map(Number);
+                if (isNaN(lat) || isNaN(lon)) {
+                    console.warn(
+                        `Invalid coordinate pair: ${coord} (lat: ${lat}, lon: ${lon})`,
+                    );
+                    return "";
+                }
+                return SvgMapBuilder.getMapPosition(
+                    lon,
+                    lat,
+                    germanyBounds,
+                ).join(",");
+            })
+            .join(" ");
+        return path;
     };
 
     return (
         <g className={styles.veloroute}>
-            {velorouteList.map((route) => (
+            {velorouteList.slice(2, 6).map((route) => (
                 <VeloroutePath
                     key={`preview-${route.id}`}
                     id={route.id}
                     idx={0}
-                    path={route.path.join(" ")}
+                    path={getPath(route.gcs)}
                     className={
                         previewVeloroute?.id === route.id
                             ? styles.hover
@@ -70,7 +94,10 @@ export const Veloroutes = () => {
 
             {activeVeloroute &&
                 activeVeloroute.route.map(
-                    (s: { dist: number; leg: VelorouteStopType[] }) =>
+                    (s: {
+                        dist: number;
+                        leg: Veloroute["route"][number]["leg"];
+                    }) =>
                         s.leg.map((item: VelorouteStopType, idx: number) => (
                             <VelorouteStop
                                 key={`${activeVeloroute.id}-stop-${idx}`}

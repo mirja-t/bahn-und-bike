@@ -7,9 +7,9 @@ import {
     selectVelorouteList,
     selectActiveVeloroute,
     setActiveVelorouteSection,
-    type Veloroute,
-    setActiveVeloroute,
     setPreviewVeloroute,
+    loadVeloroute,
+    type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -129,24 +129,23 @@ export const DestinationDetails = () => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
-    // to do: fix route for trainlines along veloroute, name and stopIds currently not working
     const trainLinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
 
     const dispatch = useAppDispatch();
 
-    const setVelorouteActive = (vroute: Veloroute) => {
+    const setVelorouteActive = (vroute: VelorouteListItem) => {
         if (vroute.len !== undefined) {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
-            dispatch(setActiveVeloroute(vroute.id));
+            dispatch(loadVeloroute({ id: vroute.id }));
         }
     };
 
-    const handleVelorouteHover = (vroute: Veloroute | null) => {
+    const handleVelorouteHover = (vroute: VelorouteListItem | null) => {
         if (vroute) {
-            dispatch(setPreviewVeloroute(vroute.id));
+            dispatch(loadVeloroute({ id: vroute.id, preview: true }));
         } else {
             dispatch(setPreviewVeloroute(null));
         }
