@@ -140,6 +140,7 @@ export const DestinationDetails = () => {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
             dispatch(loadVeloroute({ id: vroute.id }));
+            dispatch(setPreviewVeloroute(null));
         }
     };
 

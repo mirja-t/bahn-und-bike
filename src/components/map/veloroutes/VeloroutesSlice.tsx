@@ -48,14 +48,14 @@ export type VelorouteListItem = {
 export interface VeloroutesState {
     velorouteList: VelorouteListItem[];
     velorouteListIsLoading: boolean;
-    isLoading: boolean;
-    hasError: boolean;
     veloroute: { active: Veloroute | null; preview: Veloroute | null };
     activeVelorouteSection: number | null;
     hoveredVelorouteSection: number | null;
     activeVelorouteStop: VelorouteStop | null;
     velorouteIsLoading: boolean;
     velorouteHasError: boolean;
+    veloroutesHasError: boolean;
+    veloroutesIsLoading: boolean;
 }
 
 export const loadVeloroutes = createAsyncThunk<
@@ -115,6 +115,8 @@ export const setVelorouteSectionActiveThunk = (idx: number) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));
+        dispatch(setPreviewVeloroute(null));
+        dispatch(setActiveVelorouteSection(idx));
     };
 };
 
@@ -132,8 +134,8 @@ export const veloroutesSlice = createSlice({
         velorouteList: [],
         velorouteListIsLoading: false,
         crossingVelorouteList: [],
-        isLoading: false,
-        hasError: false,
+        veloroutesIsLoading: false,
+        veloroutesHasError: false,
         crossingRoutesLoading: false,
         crossingRoutesError: false,
         veloroute: { active: null, preview: null },
@@ -176,16 +178,16 @@ export const veloroutesSlice = createSlice({
         builder
             .addCase(loadVeloroutes.pending, (state) => {
                 state.velorouteListIsLoading = true;
-                state.hasError = false;
+                state.veloroutesHasError = false;
             })
             .addCase(loadVeloroutes.fulfilled, (state, action) => {
                 state.velorouteList = action.payload;
                 state.velorouteListIsLoading = false;
-                state.hasError = false;
+                state.veloroutesHasError = false;
             })
             .addCase(loadVeloroutes.rejected, (state) => {
                 state.velorouteListIsLoading = false;
-                state.hasError = true;
+                state.veloroutesHasError = true;
             })
             .addCase(loadVeloroute.pending, (state) => {
                 state.velorouteIsLoading = true;
@@ -214,8 +216,7 @@ export const selectActiveVelorouteSection = (state: RootState) =>
 export const selectActiveVelorouteStop = (state: RootState) =>
     state.veloroutes.activeVelorouteStop;
 export const selectVeloroutesLoading = (state: RootState) =>
-    state.veloroutes.isLoading;
-export const selectVelorouteListIsLoading = (state: RootState) =>
+    state.veloroutes.velorouteIsLoading ||
     state.veloroutes.velorouteListIsLoading;
 export const selectHoveredVelorouteSection = (state: RootState) =>
     state.veloroutes.hoveredVelorouteSection;

@@ -4,6 +4,7 @@ import {
     setActiveVelorouteStop,
     selectActiveVelorouteStop,
     type VelorouteStop as VelorouteStopType,
+    setActiveVelorouteSection,
 } from "../VeloroutesSlice";
 import { motion } from "framer-motion";
 import { selectUserScale } from "../../../../AppSlice";
@@ -11,9 +12,10 @@ import { selectUserScale } from "../../../../AppSlice";
 interface VelorouteStopProps {
     item: VelorouteStopType;
     type: string;
+    idx: number;
 }
 
-export const VelorouteStop = ({ item, type }: VelorouteStopProps) => {
+export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
     const dispatch = useDispatch();
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const userScale = useSelector(selectUserScale);
@@ -26,6 +28,9 @@ export const VelorouteStop = ({ item, type }: VelorouteStopProps) => {
             return dispatch(setActiveVelorouteStop(spot));
         }
         dispatch(setActiveVelorouteStop(null));
+    };
+    const handleClick = () => {
+        dispatch(setActiveVelorouteSection(idx));
     };
 
     return (
@@ -70,6 +75,7 @@ export const VelorouteStop = ({ item, type }: VelorouteStopProps) => {
                 cx={item.x}
                 cy={item.y}
                 r={3 / userScale}
+                onClick={handleClick}
                 onMouseEnter={(e) => hoverVeloStop(e, item)}
                 onMouseLeave={hoverVeloStop}
                 style={{
