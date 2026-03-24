@@ -42,46 +42,53 @@ export const Veloroutes = () => {
 
     return (
         <g className={styles.veloroute}>
-            {veloroutes &&
-                veloroutes.map((veloroute) =>
-                    veloroute.path.map((path: string, idx: number) => (
-                        <VeloroutePath
-                            key={`current-${veloroute.id}-${idx}`}
-                            id={veloroute.id}
-                            idx={idx}
-                            path={path}
-                            active={idx === activeVelorouteSectionIdx}
-                            onClick={handleSectionClick}
-                            className={styles.current}
-                        />
-                    )),
-                )}
-            {veloroutes &&
-                veloroutes.map((veloroute) =>
-                    veloroute.route.map(
-                        (
-                            s: {
-                                dist: number;
-                                leg: Veloroute["route"][number]["leg"];
-                            },
-                            legIndex,
-                        ) =>
-                            s.leg.map(
-                                (item: VelorouteStopType, idx: number) => (
-                                    <VelorouteStop
-                                        key={`${veloroute.id}-stop-${idx}`}
-                                        item={item}
-                                        idx={legIndex}
-                                        type={
-                                            item === activeVRouteStops.start ||
-                                            item === activeVRouteStops.end
-                                                ? "active"
-                                                : ""
-                                        }
-                                    />
-                                ),
-                            ),
-                    ),
+            {activeVeloroute &&
+                activeVeloroute.path.map((path: string, idx: number) => (
+                    <VeloroutePath
+                        key={`current-${activeVeloroute.id}-${idx}`}
+                        id={activeVeloroute.id}
+                        idx={idx}
+                        path={path}
+                        active={idx === activeVelorouteSectionIdx}
+                        onClick={handleSectionClick}
+                        className={styles.current}
+                    />
+                ))}
+            {previewVeloroute &&
+                previewVeloroute.path.map((path: string, idx: number) => (
+                    <VeloroutePath
+                        key={`preview-${previewVeloroute.id}-${idx}`}
+                        id={previewVeloroute.id}
+                        idx={idx}
+                        path={path}
+                        active={false}
+                        onClick={handleSectionClick}
+                        className={styles.preview}
+                    />
+                ))}
+            {activeVeloroute &&
+                activeVeloroute.route.map(
+                    (
+                        s: {
+                            dist: number;
+                            leg: Veloroute["route"][number]["leg"];
+                        },
+                        legIndex,
+                    ) =>
+                        s.leg.map((item: VelorouteStopType, idx: number) => (
+                            <VelorouteStop
+                                key={`${activeVeloroute.id}-stop-${idx}`}
+                                item={item}
+                                idx={legIndex}
+                                type={
+                                    item === activeVRouteStops.start
+                                        ? "active start"
+                                        : item === activeVRouteStops.end
+                                          ? "active end"
+                                          : ""
+                                }
+                            />
+                        )),
                 )}
         </g>
     );

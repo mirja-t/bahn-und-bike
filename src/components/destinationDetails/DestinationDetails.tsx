@@ -1,7 +1,7 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { selectLangCode, useAppDispatch } from "../../AppSlice";
+import { selectLangCode, setActiveTab, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectVelorouteList,
@@ -141,14 +141,7 @@ export const DestinationDetails = () => {
             dispatch(setActiveVelorouteSection(null));
             dispatch(loadVeloroute({ id: vroute.id }));
             dispatch(setPreviewVeloroute(null));
-        }
-    };
-
-    const handleVelorouteHover = (vroute: VelorouteListItem | null) => {
-        if (vroute) {
-            dispatch(loadVeloroute({ id: vroute.id, preview: true }));
-        } else {
-            dispatch(setPreviewVeloroute(null));
+            dispatch(setActiveTab("leg"));
         }
     };
 
@@ -180,7 +173,6 @@ export const DestinationDetails = () => {
                             items={veloroutes}
                             activeId={activeVeloroute?.id}
                             fn={setVelorouteActive}
-                            onHover={handleVelorouteHover}
                             icon={<VelorouteIcon />}
                         />
                     </section>

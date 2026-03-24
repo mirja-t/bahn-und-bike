@@ -32,7 +32,7 @@ export const CombinedVelorouteDetails = () => {
     const sectionHeadline = (stop: VelorouteStop, idx: number) => (
         <h3 className="veloroute-trainstops">
             <div className="veloroutesection-icon">
-                <span>{idx}</span>
+                <span>{idx})&nbsp;</span>
             </div>
             <span>
                 {idx === 1 ? t("from") : t("to")} {stop.stop_name}

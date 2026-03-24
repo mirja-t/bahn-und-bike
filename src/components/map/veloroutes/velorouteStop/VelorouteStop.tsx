@@ -2,12 +2,11 @@ import styles from "./veloroutestop.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import {
     setActiveVelorouteStop,
-    selectActiveVelorouteStop,
     type VelorouteStop as VelorouteStopType,
     setActiveVelorouteSection,
 } from "../VeloroutesSlice";
-import { motion } from "framer-motion";
 import { selectUserScale } from "../../../../AppSlice";
+import { MapPinIcon } from "../../../stateless/icons/MapPinIcon";
 
 interface VelorouteStopProps {
     item: VelorouteStopType;
@@ -17,8 +16,9 @@ interface VelorouteStopProps {
 
 export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
     const dispatch = useDispatch();
-    const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const userScale = useSelector(selectUserScale);
+    const active = type.includes("active");
+    const start = type.includes("start");
 
     const hoverVeloStop = (
         { type }: React.MouseEvent<SVGCircleElement>,
@@ -35,38 +35,21 @@ export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
 
     return (
         <g>
-            <motion.circle
-                className={styles.velorouteStopOutline}
-                strokeWidth={0.8 / userScale}
-                cx={item.x}
-                cy={item.y}
-                r={4 / userScale}
-                style={{
-                    transformOrigin: `${item.x}px ${item.y}px`,
-                }}
-                initial={{
-                    opacity: 0,
-                    scale: 0,
-                }}
-                animate={{
-                    opacity: type === "active" ? 1 : 0,
-                    scale: type === "active" ? 1 : 0,
-                }}
+            <MapPinIcon
+                idx={start ? 1 : 2}
+                active={active}
+                position={{ x: item.x, y: item.y }}
+                userScale={userScale}
             />
             <circle
                 className={
-                    type === "active"
+                    active
                         ? `${styles.velorouteStop} ${styles.active}`
                         : styles.velorouteStop
                 }
                 cx={item.x}
                 cy={item.y}
-                r={
-                    type === "active" ||
-                    activeVelorouteStop?.stop_id === item.stop_id
-                        ? 1 / userScale
-                        : 1.2 / userScale
-                }
+                r={1 / userScale}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
                 }}

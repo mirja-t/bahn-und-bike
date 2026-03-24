@@ -15,6 +15,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
 import { setUserScale, selectUserScale, useAppDispatch } from "../../AppSlice";
+import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 
 interface MapProps {
     value: number;
@@ -27,6 +28,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
+    const veloroutesLoading = useSelector(selectVeloroutesLoading);
     const userScale = useSelector(selectUserScale);
     const dispatch = useAppDispatch();
 
@@ -59,7 +61,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     return (
         <>
             <AnimatePresence>
-                {isLoading && (
+                {(isLoading || veloroutesLoading) && (
                     <motion.div className={styles.loading}>
                         <Loading />
                     </motion.div>

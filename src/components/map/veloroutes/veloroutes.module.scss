@@ -18,9 +18,9 @@
     }
     path.velorouteSection,
     polyline.velorouteSection {
-        stroke-dasharray: 2;
+        stroke-dasharray: 1;
         fill: none;
-        stroke: var(--bike-inactive);
+        stroke: var(--bike);
         &.current,
         &.hover,
         &.active {
@@ -30,12 +30,11 @@
             stroke-dasharray: 0;
         }
         &.preview {
-            opacity: 0.5;
+            stroke: var(--bike-inactive);
         }
     }
-    path.velorouteSectionLarge,
-    polyline.velorouteSectionLarge {
-        stroke: transparent;
-        fill: none;
-    }
+}
+.velorouteSectionLarge {
+    stroke: transparent;
+    fill: none;
 }
