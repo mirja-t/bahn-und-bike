@@ -3,39 +3,64 @@ $scalefactor: 0.5vw;
 $iconsize: calc(#{$scalefactor} + 1.5em);
 
 .itemlist {
-    overflow: hidden;
     li {
         position: relative;
-        background: var(--linklist-bg);
-        border-radius: var(--linklist-border-radius);
-        border-bottom: 1px solid var(--linklist-bg-active);
-        box-shadow: var(--linklist-boxshadow);
-        padding: 0.2em;
-        transition: all 0.35s ease;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: spacing.$padding-s;
-        h4 {
-            font-family: "Source Sans Pro", sans-serif;
-            font-weight: 300;
-            color: var(--linklist);
-            line-height: 1.2;
+        p {
+            color: inherit;
         }
-        &.active,
-        &:hover {
+        &.interactive {
+            cursor: pointer;
+        }
+    }
+    &.default {
+        li {
+            padding: 0.2em;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background: var(--linklist-bg);
+            border-radius: var(--linklist-border-radius);
+            border-bottom: 1px solid var(--linklist-bg-active);
+            box-shadow: var(--linklist-boxshadow);
             transition: all 0.35s ease;
-            background: var(--linklist-bg-active);
-            box-shadow: var(--linklist-boxshadow-active);
-            h4 {
-                color: var(--linklist-active);
+            gap: spacing.$padding-s;
+            .label {
+                font-family: "Source Sans Pro", sans-serif;
+                font-weight: 300;
+                color: var(--linklist);
+                line-height: 1.2;
+                margin: 0;
+            }
+            &.active,
+            &.interactive:hover,
+            &.interactive:focus-visible {
+                transition: all 0.35s ease;
+                background: var(--linklist-bg-active);
+                box-shadow: var(--linklist-boxshadow-active);
+                .label {
+                    color: var(--linklist-active);
+                }
+            }
+            &.nomatch {
+                padding: 0;
+                background: transparent;
+                box-shadow: none;
             }
         }
-        &.nomatch {
-            padding: 0;
-            background: transparent;
-            box-shadow: none;
-            cursor: default;
+    }
+    &.orderedList {
+        li {
+            margin-left: 5ch;
+            p.label {
+                font-size: 0.9em;
+            }
+            &.active,
+            &.interactive:hover,
+            &.interactive:focus-visible {
+                p.label {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }

@@ -24,7 +24,10 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
-import type { Destination } from "./DestinationDetailsSlice";
+import {
+    setActiveDestination,
+    type Destination,
+} from "./DestinationDetailsSlice";
 import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
@@ -35,6 +38,7 @@ interface SectionProps {
 const Section = ({ section }: SectionProps) => {
     const { t } = useTranslation();
     const langCode = useSelector(selectLangCode);
+    const dispatch = useAppDispatch();
 
     const trainlineIds = useMemo(() => {
         const ids = section.trainlines
@@ -59,6 +63,10 @@ const Section = ({ section }: SectionProps) => {
         loading: loadingTrainlinesWithAgencyNames,
         error: errorTrainlinesWithAgencyNames,
     } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
+
+    const handleTrainstationHover = (trainstation: Destination | null) => {
+        dispatch(setActiveDestination(trainstation));
+    };
 
     return (
         <>
@@ -113,11 +121,11 @@ const Section = ({ section }: SectionProps) => {
                 <Error />
             ) : (
                 <Collapse title={`${t("journey")}`}>
-                    <ol>
-                        {stops.map((stop) => (
-                            <li key={stop.id}>{stop.name}</li>
-                        ))}
-                    </ol>
+                    <ItemList
+                        onHover={handleTrainstationHover}
+                        items={stops}
+                        variant="orderedList"
+                    />
                 </Collapse>
             )}
             <hr style={{ marginTop: ".75em" }} />
@@ -166,13 +174,13 @@ export const DestinationDetails = () => {
                         </section>
                     )}
 
-                    <section className="section">
+                    <section className="section veloroute-details">
                         <h5>{t("veloroutes")}</h5>
                         {veloroutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
                         <ItemList
                             items={veloroutes}
                             activeId={activeVeloroute?.id}
-                            fn={setVelorouteActive}
+                            onClick={setVelorouteActive}
                             icon={<VelorouteIcon />}
                         />
                     </section>

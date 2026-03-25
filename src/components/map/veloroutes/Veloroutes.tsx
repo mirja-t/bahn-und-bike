@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
+    selectHoveredVelorouteSection,
     selectPreviewVeloroute,
     setVelorouteSectionActiveThunk,
     type Veloroute,
@@ -16,6 +17,7 @@ export const Veloroutes = () => {
     const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const previewVeloroute = useSelector(selectPreviewVeloroute);
+    const hoveredVelorouteSection = useSelector(selectHoveredVelorouteSection);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
         activeVelorouteSectionIdx !== null && activeVeloroute
@@ -42,7 +44,10 @@ export const Veloroutes = () => {
                         id={activeVeloroute.id}
                         idx={idx}
                         path={path}
-                        active={idx === activeVelorouteSectionIdx}
+                        active={
+                            idx === activeVelorouteSectionIdx ||
+                            idx === hoveredVelorouteSection
+                        }
                         onClick={handleSectionClick}
                         className={styles.current}
                     />
@@ -59,6 +64,8 @@ export const Veloroutes = () => {
                         className={styles.preview}
                     />
                 ))}
+
+            {/* stops */}
             {activeVeloroute &&
                 activeVeloroute.route.map(
                     (

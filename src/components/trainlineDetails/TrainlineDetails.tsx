@@ -72,7 +72,7 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
                         loading={trainlineListIsLoading}
                         items={trainRoutes}
                         activeId={activeSection?.id}
-                        fn={handleTrainrouteClick}
+                        onClick={handleTrainrouteClick}
                         onHover={handleTrainrouteHover}
                         icon={<TrainIcon />}
                     />

@@ -7,6 +7,7 @@ import {
     setActiveVelorouteStop,
     type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
+import { ItemList } from "../stateless/itemlist/ItemList";
 
 export const CombinedVelorouteDetails = () => {
     const dispatch = useDispatch();
@@ -19,14 +20,19 @@ export const CombinedVelorouteDetails = () => {
             : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
 
-    const hoverVeloStop = (
-        { type }: React.MouseEvent,
-        velorouteStop: VelorouteStop | null = null,
-    ) => {
-        if (type === "mouseenter") {
-            return dispatch(setActiveVelorouteStop(velorouteStop));
+    const itemList = activeVelorouteSection
+        ? activeVelorouteSection.leg.slice(1, -1).map((stop) => ({
+              ...stop,
+              id: stop.stop_id,
+              name: stop.stop_name,
+          }))
+        : [];
+    const hoverVeloStop = (item: VelorouteStop | null) => {
+        if (item) {
+            dispatch(setActiveVelorouteStop(item));
+        } else {
+            dispatch(setActiveVelorouteStop(null));
         }
-        dispatch(setActiveVelorouteStop(null));
     };
 
     const sectionHeadline = (stop: VelorouteStop, idx: number) => (
@@ -61,39 +67,16 @@ export const CombinedVelorouteDetails = () => {
                         {activeVelorouteSection.leg.length > 2 && (
                             <>
                                 <h6>{t("via")}</h6>
-                                <ul className="veloroute-stops">
-                                    {activeVelorouteSection.leg
-                                        .slice(1, -1)
-                                        .map(
-                                            (
-                                                s: VelorouteStop,
-                                                idx: number,
-                                                arr: VelorouteStop[],
-                                            ) => (
-                                                <li key={idx}>
-                                                    <span
-                                                        className={
-                                                            activeVelorouteStop &&
-                                                            activeVelorouteStop.stop_id ===
-                                                                s.stop_id
-                                                                ? "hover"
-                                                                : ""
-                                                        }
-                                                        onMouseEnter={(e) =>
-                                                            hoverVeloStop(e, s)
-                                                        }
-                                                        onMouseLeave={
-                                                            hoverVeloStop
-                                                        }
-                                                    >
-                                                        {s.stop_name}
-                                                    </span>
-                                                    {idx !== arr.length - 1 &&
-                                                        `, `}
-                                                </li>
-                                            ),
-                                        )}
-                                </ul>
+                                <ItemList
+                                    variant="orderedList"
+                                    items={itemList}
+                                    onHover={hoverVeloStop}
+                                    activeId={
+                                        activeVelorouteStop
+                                            ? activeVelorouteStop.stop_id
+                                            : ""
+                                    }
+                                />
                             </>
                         )}
                         <h6>{t("distance")}</h6>

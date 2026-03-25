@@ -31,13 +31,13 @@ const meta = {
     argTypes: {
         items: { control: "object" },
         activeId: { control: "text" },
-        fn: { action: "clicked" },
+        onClick: { action: "clicked" },
         icon: { control: "text" },
     },
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         items: mockItems,
-        fn: fn(),
+        onClick: fn(),
         icon: <VelorouteIcon />,
     },
 } satisfies Meta<typeof ItemList>;

@@ -11,6 +11,7 @@ import {
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
+import { ItemList } from "../stateless/itemlist/ItemList";
 
 export const VelorouteDetails = () => {
     const dispatch = useAppDispatch();
@@ -23,18 +24,29 @@ export const VelorouteDetails = () => {
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
 
-    const setVelorouteSectionActive = (idx: number) => {
-        dispatch(setVelorouteSectionActiveThunk(idx));
-    };
+    const orderedListItems = activeVeloroute
+        ? activeVeloroute.route.map((section, idx) => ({
+              id: `${idx}-${section.leg[0].stop_name}-${section.leg[section.leg.length - 1].stop_name}`,
+              name: `${section.leg[0].stop_name} to ${section.leg[section.leg.length - 1].stop_name}`,
+              idx,
+          }))
+        : [];
 
-    const hoverVelorouteSection = (
-        { type }: React.MouseEvent | React.FocusEvent,
-        idx?: number,
+    const setVelorouteSectionActive = (
+        item: (typeof orderedListItems)[number] | null,
     ) => {
-        if ((type === "mouseenter" || type === "focus") && idx !== undefined) {
-            return dispatch(setHoveredVelorouteSection(idx));
+        if (item) {
+            dispatch(setVelorouteSectionActiveThunk(item.idx));
         }
-        dispatch(setHoveredVelorouteSection(null));
+    };
+    const hoverVelorouteSection = (
+        item: (typeof orderedListItems)[number] | null,
+    ) => {
+        if (item) {
+            dispatch(setHoveredVelorouteSection(item.idx));
+        } else {
+            dispatch(setHoveredVelorouteSection(null));
+        }
     };
 
     return (
@@ -54,53 +66,12 @@ export const VelorouteDetails = () => {
                             <h5>{`${t("totaldistance")}`}</h5>
                             <p>{activeVeloroute.len}km</p>
                             <Collapse title={`${t("cyclingroutelegs")}`}>
-                                <ol className="veloroute-stops">
-                                    {activeVeloroute.route.map(
-                                        (
-                                            obj: {
-                                                leg: { stop_name: string }[];
-                                            },
-                                            idx: number,
-                                        ) => (
-                                            <li key={`${idx}-${obj.leg[0].stop_name}-${obj.leg[obj.leg.length - 1].stop_name}`}>
-                                                <button
-                                                    type="button"
-                                                    className={
-                                                        activeVelorouteSectionIdx ===
-                                                        idx
-                                                            ? "veloroute-stop-button active"
-                                                            : "veloroute-stop-button"
-                                                    }
-                                                    onClick={() =>
-                                                        setVelorouteSectionActive(
-                                                            idx,
-                                                        )
-                                                    }
-                                                    onMouseEnter={(e) =>
-                                                        hoverVelorouteSection(
-                                                            e,
-                                                            idx,
-                                                        )
-                                                    }
-                                                    onMouseLeave={(e) =>
-                                                        hoverVelorouteSection(e)
-                                                    }
-                                                    onFocus={(e) =>
-                                                        hoverVelorouteSection(
-                                                            e,
-                                                            idx,
-                                                        )
-                                                    }
-                                                    onBlur={(e) =>
-                                                        hoverVelorouteSection(e)
-                                                    }
-                                                >
-                                                    {`${obj.leg[0].stop_name} to ${obj.leg[obj.leg.length - 1].stop_name}`}
-                                                </button>
-                                            </li>
-                                        ),
-                                    )}
-                                </ol>
+                                <ItemList
+                                    items={orderedListItems}
+                                    onClick={setVelorouteSectionActive}
+                                    onHover={hoverVelorouteSection}
+                                    variant="orderedList"
+                                />
                             </Collapse>
                         </section>
                         {!activeVelorouteSection && t("nolegchosen")}

@@ -10,6 +10,7 @@ export type Destination = {
     trainstop: boolean;
 };
 export interface DestinationsState {
+    activeDestination: Destination | null;
     activeDestinations: Destination[] | null;
     destinationsLoading: boolean;
     destinationsError: boolean;
@@ -40,11 +41,19 @@ export const loadDestinations = createAsyncThunk<
 export const destinationDetailsSlice = createSlice({
     name: "destinations",
     initialState: {
+        activeDestination: null,
         activeDestinations: null,
         destinationsLoading: false,
         destinationsError: false,
     } as DestinationsState,
-    reducers: {},
+    reducers: {
+        setActiveDestination: (
+            state,
+            action: { payload: Destination | null },
+        ) => {
+            state.activeDestination = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(loadDestinations.pending, (state) => {
@@ -65,5 +74,8 @@ export const destinationDetailsSlice = createSlice({
 
 export const selectActiveDestinations = (state: RootState) =>
     state.destinations.activeDestinations;
+export const selectActiveDestination = (state: RootState) =>
+    state.destinations.activeDestination;
 
+export const { setActiveDestination } = destinationDetailsSlice.actions;
 export default destinationDetailsSlice.reducer;
