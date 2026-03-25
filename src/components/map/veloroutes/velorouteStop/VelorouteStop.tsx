@@ -1,11 +1,15 @@
 import styles from "./veloroutestop.module.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
     setActiveVelorouteStop,
     type VelorouteStop as VelorouteStopType,
-    setActiveVelorouteSection,
+    setVelorouteSectionActiveThunk,
 } from "../VeloroutesSlice";
-import { selectUserScale } from "../../../../AppSlice";
+import {
+    selectUserScale,
+    setActiveTab,
+    useAppDispatch,
+} from "../../../../AppSlice";
 import { MapPinIcon } from "../../../stateless/icons/MapPinIcon";
 
 interface VelorouteStopProps {
@@ -14,8 +18,12 @@ interface VelorouteStopProps {
     idx: number;
 }
 
-export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
-    const dispatch = useDispatch();
+export const VelorouteStop = ({
+    item,
+    type,
+    idx: sectionIdx,
+}: VelorouteStopProps) => {
+    const dispatch = useAppDispatch();
     const userScale = useSelector(selectUserScale);
     const active = type.includes("active");
     const start = type.includes("start");
@@ -30,7 +38,8 @@ export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
         dispatch(setActiveVelorouteStop(null));
     };
     const handleClick = () => {
-        dispatch(setActiveVelorouteSection(idx));
+        dispatch(setActiveTab("veloroutes"));
+        dispatch(setVelorouteSectionActiveThunk(sectionIdx));
     };
 
     return (
