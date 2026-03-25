@@ -1,15 +1,18 @@
 .velorouteStop {
+    position: relative;
     fill: var(--bike);
     transform: scale(1);
     &.hover {
         transform: scale(1.8);
     }
     &.active {
-        fill: red; //var(--bike-hover);
+        fill: var(--bike-hover);
     }
 }
 
-circle.velorouteStopOutline {
-    stroke: var(--bike-hover);
-    fill: var(--bg);
+.velorouteStopActive {
+    fill: var(--bike-active);
+}
+.velorouteStopPin {
+    fill: var(--bike-active);
 }

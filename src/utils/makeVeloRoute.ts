@@ -65,25 +65,28 @@ export const makeVeloRoute = (
         },
         [],
     );
-    const polyline = legs.map(({ leg }) =>
-        leg
-            .map(({ gcs }) => {
-                const positions = gcs
-                    .split(" ")
-                    .map((gcs) => {
-                        const [lat, lon] = gcs.split(",").map(parseFloat);
-                        const [x, y] = SvgMapBuilder.getMapPosition(
-                            lon,
-                            lat,
-                            germanyBounds,
-                        );
-                        return [x, y];
-                    })
-                    .filter(([x, y]) => !isNaN(x) && !isNaN(y))
-                    .map(([x, y]) => `${x},${y}`);
-                return positions.join(" ");
-            })
-            .join(" "),
+    const polyline = legs.map(
+        ({ leg }) =>
+            leg
+                .map(({ gcs }) => {
+                    const positions = gcs
+                        .split(" ")
+                        .map((gcs) => {
+                            const [lat, lon] = gcs.split(",").map(parseFloat);
+                            const [x, y] = SvgMapBuilder.getMapPosition(
+                                lon,
+                                lat,
+                                germanyBounds,
+                            );
+                            return [x, y];
+                        })
+                        .filter(([x, y]) => !isNaN(x) && !isNaN(y))
+                        .map(([x, y]) => `${x},${y}`);
+                    return positions.join(" ");
+                })
+                .join(" "),
+        // .map(({ x, y }) => `${x},${y}`)
+        // .join(" "),
     );
     return {
         id: stops[0].veloroute_id,

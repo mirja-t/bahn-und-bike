@@ -15,8 +15,10 @@ export const Loading = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
         >
-            <Spinner />
-            <p>{t("loading") || "loading..."}</p>
+            <div>
+                <Spinner />
+                <p>{t("loading") || "loading..."}</p>
+            </div>
         </motion.div>
     );
 };

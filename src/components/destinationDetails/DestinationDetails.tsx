@@ -1,15 +1,15 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { selectLangCode, useAppDispatch } from "../../AppSlice";
+import { selectLangCode, setActiveTab, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectVelorouteList,
     selectActiveVeloroute,
     setActiveVelorouteSection,
-    type Veloroute,
-    setActiveVeloroute,
     setPreviewVeloroute,
+    loadVeloroute,
+    type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -129,26 +129,19 @@ export const DestinationDetails = () => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
     const veloroutes = useSelector(selectVelorouteList);
-    // to do: fix route for trainlines along veloroute, name and stopIds currently not working
     const trainLinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
 
     const dispatch = useAppDispatch();
 
-    const setVelorouteActive = (vroute: Veloroute) => {
+    const setVelorouteActive = (vroute: VelorouteListItem) => {
         if (vroute.len !== undefined) {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
-            dispatch(setActiveVeloroute(vroute.id));
-        }
-    };
-
-    const handleVelorouteHover = (vroute: Veloroute | null) => {
-        if (vroute) {
-            dispatch(setPreviewVeloroute(vroute.id));
-        } else {
+            dispatch(loadVeloroute({ id: vroute.id }));
             dispatch(setPreviewVeloroute(null));
+            dispatch(setActiveTab("leg"));
         }
     };
 
@@ -180,7 +173,6 @@ export const DestinationDetails = () => {
                             items={veloroutes}
                             activeId={activeVeloroute?.id}
                             fn={setVelorouteActive}
-                            onHover={handleVelorouteHover}
                             icon={<VelorouteIcon />}
                         />
                     </section>

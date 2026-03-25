@@ -18,6 +18,7 @@ import {
     selectVelorouteList,
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setPreviewVeloroute,
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
@@ -72,6 +73,7 @@ export const Container = () => {
             dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
+            dispatch(setPreviewVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(loadVeloroutes(stopIds));
@@ -89,6 +91,7 @@ export const Container = () => {
         dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
+        dispatch(setPreviewVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));

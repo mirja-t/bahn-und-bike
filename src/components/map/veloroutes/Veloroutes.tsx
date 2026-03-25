@@ -4,20 +4,18 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectPreviewVeloroute,
-    selectVelorouteList,
-    setActiveVeloroute,
     setVelorouteSectionActiveThunk,
+    type Veloroute,
     type VelorouteStop as VelorouteStopType,
 } from "./VeloroutesSlice";
-import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
+import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const previewVeloroute = useSelector(selectPreviewVeloroute);
-    const velorouteList = useSelector(selectVelorouteList);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
         activeVelorouteSectionIdx !== null && activeVeloroute
@@ -34,27 +32,9 @@ export const Veloroutes = () => {
         dispatch(setActiveTab("veloroutes"));
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
-    const handleRouteClick = (id: string) => {
-        dispatch(setActiveTab("veloroutes"));
-        dispatch(setActiveVeloroute(id));
-    };
 
     return (
         <g className={styles.veloroute}>
-            {velorouteList.map((route) => (
-                <VeloroutePath
-                    key={`preview-${route.id}`}
-                    id={route.id}
-                    idx={0}
-                    path={route.path.join(" ")}
-                    className={
-                        previewVeloroute?.id === route.id
-                            ? styles.hover
-                            : styles.preview
-                    }
-                    onClick={handleRouteClick}
-                />
-            ))}
             {activeVeloroute &&
                 activeVeloroute.path.map((path: string, idx: number) => (
                     <VeloroutePath
@@ -67,19 +47,38 @@ export const Veloroutes = () => {
                         className={styles.current}
                     />
                 ))}
-
+            {previewVeloroute &&
+                previewVeloroute.path.map((path: string, idx: number) => (
+                    <VeloroutePath
+                        key={`preview-${previewVeloroute.id}-${idx}`}
+                        id={previewVeloroute.id}
+                        idx={idx}
+                        path={path}
+                        active={false}
+                        onClick={handleSectionClick}
+                        className={styles.preview}
+                    />
+                ))}
             {activeVeloroute &&
                 activeVeloroute.route.map(
-                    (s: { dist: number; leg: VelorouteStopType[] }) =>
+                    (
+                        s: {
+                            dist: number;
+                            leg: Veloroute["route"][number]["leg"];
+                        },
+                        legIndex,
+                    ) =>
                         s.leg.map((item: VelorouteStopType, idx: number) => (
                             <VelorouteStop
-                                key={`${activeVeloroute.id}-stop-${idx}`}
+                                key={`${activeVeloroute.id}-stop-${legIndex}-${idx}`}
                                 item={item}
+                                idx={legIndex}
                                 type={
-                                    item === activeVRouteStops.start ||
-                                    item === activeVRouteStops.end
-                                        ? "active"
-                                        : ""
+                                    item === activeVRouteStops.start
+                                        ? "active start"
+                                        : item === activeVRouteStops.end
+                                          ? "active end"
+                                          : ""
                                 }
                             />
                         )),
