@@ -27,13 +27,6 @@ export const Veloroutes = () => {
             ? activeVelorouteSection.leg[activeVelorouteSection.leg.length - 1]
             : null,
     };
-    const veloroutes = [];
-    if (activeVeloroute) {
-        veloroutes.push(activeVeloroute);
-    }
-    if (previewVeloroute) {
-        veloroutes.push(previewVeloroute);
-    }
 
     const handleSectionClick = (_: string, idx: number) => {
         dispatch(setActiveTab("veloroutes"));
