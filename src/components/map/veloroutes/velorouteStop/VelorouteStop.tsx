@@ -44,7 +44,7 @@ export const VelorouteStop = ({ item, type, idx }: VelorouteStopProps) => {
             <circle
                 className={
                     active
-                        ? `${styles.velorouteStop} ${styles.active}`
+                        ? `${styles.velorouteStop} active`
                         : styles.velorouteStop
                 }
                 cx={item.x}
