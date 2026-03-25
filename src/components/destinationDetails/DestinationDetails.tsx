@@ -113,11 +113,7 @@ const Section = ({ section }: SectionProps) => {
                 <Error />
             ) : (
                 <Collapse title={`${t("journey")}`}>
-                    <ol>
-                        {stops.map((stop) => (
-                            <li key={stop.id}>{stop.name}</li>
-                        ))}
-                    </ol>
+                    <ItemList items={stops} variant="orderedList" />
                 </Collapse>
             )}
             <hr style={{ marginTop: ".75em" }} />
@@ -166,13 +162,13 @@ export const DestinationDetails = () => {
                         </section>
                     )}
 
-                    <section className="section">
+                    <section className="section veloroute-details">
                         <h5>{t("veloroutes")}</h5>
                         {veloroutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
                         <ItemList
                             items={veloroutes}
                             activeId={activeVeloroute?.id}
-                            fn={setVelorouteActive}
+                            onClick={setVelorouteActive}
                             icon={<VelorouteIcon />}
                         />
                     </section>
