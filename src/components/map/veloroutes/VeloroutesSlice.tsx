@@ -132,10 +132,7 @@ export const veloroutesSlice = createSlice({
     initialState: {
         velorouteList: [],
         velorouteListIsLoading: false,
-        crossingVelorouteList: [],
         veloroutesHasError: false,
-        crossingRoutesLoading: false,
-        crossingRoutesError: false,
         veloroute: { active: null, preview: null },
         velorouteIsLoading: false,
         velorouteHasError: false,
