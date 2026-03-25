@@ -24,7 +24,10 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
-import type { Destination } from "./DestinationDetailsSlice";
+import {
+    setActiveDestination,
+    type Destination,
+} from "./DestinationDetailsSlice";
 import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
@@ -59,6 +62,10 @@ const Section = ({ section }: SectionProps) => {
         loading: loadingTrainlinesWithAgencyNames,
         error: errorTrainlinesWithAgencyNames,
     } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
+
+    const handleTrainstationHover = (trainstation: Destination | null) => {
+        setActiveDestination(trainstation);
+    };
 
     return (
         <>
@@ -113,7 +120,11 @@ const Section = ({ section }: SectionProps) => {
                 <Error />
             ) : (
                 <Collapse title={`${t("journey")}`}>
-                    <ItemList items={stops} variant="orderedList" />
+                    <ItemList
+                        onHover={handleTrainstationHover}
+                        items={stops}
+                        variant="orderedList"
+                    />
                 </Collapse>
             )}
             <hr style={{ marginTop: ".75em" }} />

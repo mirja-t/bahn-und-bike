@@ -49,7 +49,7 @@ export const ItemList = <T,>({
             className={activeId && item.id === activeId ? styles.active : ""}
         >
             {icon && icon}
-            <p className="label">{`${item.name}`}</p>
+            <p className={styles.label}>{`${item.name}`}</p>
         </motion.li>
     );
     return (
