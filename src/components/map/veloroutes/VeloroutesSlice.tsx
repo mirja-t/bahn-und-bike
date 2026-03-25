@@ -115,7 +115,6 @@ export const setVelorouteSectionActiveThunk = (idx: number) => {
         dispatch(setActiveSection(null));
         dispatch(loadTrainroutesAlongVeloroute(idx));
         dispatch(setPreviewVeloroute(null));
-        dispatch(setActiveVelorouteSection(idx));
     };
 };
 
