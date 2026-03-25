@@ -73,6 +73,10 @@ export const loadVeloroutes = createAsyncThunk<
         ),
     );
 
+    if (normalizedIds.length === 0) {
+        return [];
+    }
+
     const veloroutes: VelorouteListItem[] = await fetch(
         `${VITE_API_URL}veloroutes`,
         {
