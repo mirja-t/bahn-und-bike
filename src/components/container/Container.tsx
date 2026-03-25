@@ -1,4 +1,4 @@
-import "./container.scss";
+import styles from "./container.module.scss";
 import { useRef, useEffect, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
@@ -22,7 +22,6 @@ import {
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { mapRatio } from "../../utils/svgMap";
-import { TravelDuration } from "../form/TravelDuration";
 import { Map } from "../map/Map";
 import {
     selectActiveTab,
@@ -36,6 +35,9 @@ import Tabs from "../stateless/tabs/Tabs";
 import { TrainlineDetails } from "../trainlineDetails/TrainlineDetails";
 import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 import { useTranslation } from "../../utils/i18n";
+import { TravelDuration } from "../form/TravelDuration";
+import { Instructions } from "../instructions/Instructions";
+import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -47,12 +49,11 @@ export const Container = () => {
     const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
     const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
 
-    const sidebarRef = useRef<HTMLElement>(null);
+    const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
     const { t } = useTranslation();
 
-    const container = useRef<HTMLDivElement | null>(null);
     const prevValue = useRef(0);
 
     const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
@@ -122,67 +123,55 @@ export const Container = () => {
     };
 
     return (
-        <>
-            <div id="container" ref={container}>
-                <div
-                    style={{
-                        position: "relative",
-                        zIndex: 2,
-                        height: "100%",
-                    }}
-                >
-                    <Panel>
-                        <aside
-                            ref={sidebarRef}
-                            className="destination-details-container"
+        <LayoutWithSidebar>
+            <LayoutWithSidebar.Aside>
+                <Panel>
+                    <div ref={sidebarRef}>
+                        <Tabs
+                            height={sidebarHeight.toString() + "px"}
+                            activeTabId={activeTabId}
+                            handleTabClick={handleTabClick}
                         >
-                            <Tabs
-                                height={sidebarHeight.toString() + "px"}
-                                activeTabId={activeTabId}
-                                handleTabClick={handleTabClick}
+                            <Tabs.Tab
+                                id="trainlines"
+                                name={t("trainconnections")}
                             >
-                                <Tabs.Tab
-                                    id="trainlines"
-                                    name={t("trainconnections")}
-                                >
-                                    <TrainlineDetails
-                                        fn={handleTrainrouteSelect}
-                                    />
-                                </Tabs.Tab>
-                                <Tabs.Tab
-                                    id="veloroutes"
-                                    name={t("bikeroutes")}
-                                    disabled={veloroutes.length === 0}
-                                >
-                                    <DestinationDetails />
-                                </Tabs.Tab>
-                                <Tabs.Tab
-                                    id="leg"
-                                    name={t("routelegs")}
-                                    disabled={!activeVeloroute}
-                                >
-                                    <VelorouteDetails />
-                                    <CombinedVelorouteDetails />
-                                </Tabs.Tab>
-                            </Tabs>
-                        </aside>
-                    </Panel>
-                </div>
-                <main>
-                    <div id="map-wrapper" ref={setWrapper}>
-                        <Map
-                            value={submitVal}
-                            mapSize={memoizedMapSize}
-                            mapContainer={wrapper}
-                        />
+                                <TrainlineDetails fn={handleTrainrouteSelect} />
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                                id="veloroutes"
+                                name={t("bikeroutes")}
+                                disabled={veloroutes.length === 0}
+                            >
+                                <DestinationDetails />
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                                id="leg"
+                                name={t("routelegs")}
+                                disabled={!activeVeloroute}
+                            >
+                                <VelorouteDetails />
+                                <CombinedVelorouteDetails />
+                            </Tabs.Tab>
+                        </Tabs>
                     </div>
-                </main>
-            </div>
-            <div>
+                </Panel>
+            </LayoutWithSidebar.Aside>
+            <LayoutWithSidebar.Main>
+                <div className={styles.mapWrapper} ref={setWrapper}>
+                    <Instructions />
+                    <Map
+                        value={submitVal}
+                        mapSize={memoizedMapSize}
+                        mapContainer={wrapper}
+                    />
+                </div>
+            </LayoutWithSidebar.Main>
+            <LayoutWithSidebar.Bottom>
                 <Panel>
                     <TravelDuration handleSubmit={handleSubmit} />
                 </Panel>
-            </div>
-        </>
+            </LayoutWithSidebar.Bottom>
+        </LayoutWithSidebar>
     );
 };

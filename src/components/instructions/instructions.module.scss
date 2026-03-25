@@ -1,0 +1,39 @@
+.instructionsWrapper {
+    height: fit-content;
+    max-width: calc(35em + 0.5vw);
+    align-self: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+
+    ol {
+        list-style: none;
+        counter-reset: item;
+        text-align: left;
+        padding: 1em 5em;
+    }
+    li {
+        counter-increment: item;
+        margin-bottom: 0.5em;
+        position: relative;
+    }
+    li:before {
+        width: 1.5em;
+        height: 1.5em;
+        content: counter(item);
+        background: var(--primary);
+        color: white;
+        text-align: center;
+        display: inline-block;
+        left: -2em;
+        top: 0.25em;
+        position: absolute;
+    }
+
+    p {
+        padding: 0 1em;
+    }
+}
+.instructions {
+    padding: 2em;
+}

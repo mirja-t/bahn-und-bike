@@ -1,0 +1,13 @@
+@use "../../scss/variables/breakpoints.scss" as breakpoints;
+@use "../../scss/mixins/caret.scss" as caret;
+@use "../../scss/variables/spacing.scss" as spacing;
+
+$sidebarwidth: 20em;
+$transition: width 0.5s ease;
+
+.mapWrapper {
+    flex-grow: 1;
+    position: relative;
+    justify-content: center;
+    display: flex;
+}
