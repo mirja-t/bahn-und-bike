@@ -55,7 +55,6 @@ export interface VeloroutesState {
     velorouteIsLoading: boolean;
     velorouteHasError: boolean;
     veloroutesHasError: boolean;
-    veloroutesIsLoading: boolean;
 }
 
 export const loadVeloroutes = createAsyncThunk<
@@ -134,7 +133,6 @@ export const veloroutesSlice = createSlice({
         velorouteList: [],
         velorouteListIsLoading: false,
         crossingVelorouteList: [],
-        veloroutesIsLoading: false,
         veloroutesHasError: false,
         crossingRoutesLoading: false,
         crossingRoutesError: false,
