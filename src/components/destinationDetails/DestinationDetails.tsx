@@ -38,6 +38,7 @@ interface SectionProps {
 const Section = ({ section }: SectionProps) => {
     const { t } = useTranslation();
     const langCode = useSelector(selectLangCode);
+    const dispatch = useAppDispatch();
 
     const trainlineIds = useMemo(() => {
         const ids = section.trainlines
@@ -64,7 +65,7 @@ const Section = ({ section }: SectionProps) => {
     } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
 
     const handleTrainstationHover = (trainstation: Destination | null) => {
-        setActiveDestination(trainstation);
+        dispatch(setActiveDestination(trainstation));
     };
 
     return (
