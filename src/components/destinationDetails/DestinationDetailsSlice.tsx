@@ -47,7 +47,10 @@ export const destinationDetailsSlice = createSlice({
         destinationsError: false,
     } as DestinationsState,
     reducers: {
-        setActiveDestination: (state, action) => {
+        setActiveDestination: (
+            state,
+            action: { payload: Destination | null },
+        ) => {
             state.activeDestination = action.payload;
         },
     },
