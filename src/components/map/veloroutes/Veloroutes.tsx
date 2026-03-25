@@ -77,7 +77,7 @@ export const Veloroutes = () => {
                     ) =>
                         s.leg.map((item: VelorouteStopType, idx: number) => (
                             <VelorouteStop
-                                key={`${activeVeloroute.id}-stop-${idx}`}
+                                key={`${activeVeloroute.id}-stop-${legIndex}-${idx}`}
                                 item={item}
                                 idx={legIndex}
                                 type={
