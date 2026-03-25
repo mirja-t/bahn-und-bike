@@ -46,7 +46,12 @@ export const ItemList = <T,>({
             onMouseLeave={() => onHover && onHover(null)}
             onFocus={() => onHover && onHover(item)}
             onBlur={() => onHover && onHover(null)}
-            className={activeId && item.id === activeId ? styles.active : ""}
+            className={[
+                activeId && item.id === activeId ? styles.active : "",
+                onClick ? styles.interactive : "",
+            ]
+                .filter(Boolean)
+                .join(" ")}
         >
             {icon && icon}
             <p className={styles.label}>{`${item.name}`}</p>
