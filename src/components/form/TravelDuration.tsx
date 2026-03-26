@@ -48,7 +48,12 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 step={1}
                 handleInputChange={handleInputChange}
             />
-            <Button variant="primary" type="submit" label={t("search")} />
+            <Button
+                disabled={value === 0}
+                variant="primary"
+                type="submit"
+                label={t("search")}
+            />
         </form>
     );
 };

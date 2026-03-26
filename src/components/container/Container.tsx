@@ -159,7 +159,7 @@ export const Container = () => {
             </LayoutWithSidebar.Aside>
             <LayoutWithSidebar.Main>
                 <div className={styles.mapWrapper} ref={setWrapper}>
-                    <Instructions />
+                    {submitVal === 0 && <Instructions />}
                     <Map
                         value={submitVal}
                         mapSize={memoizedMapSize}
