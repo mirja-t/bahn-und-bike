@@ -54,6 +54,11 @@ svg#routes {
                 stroke-dashoffset: 0 !important;
                 transition: all 0.5s ease;
             }
+            .route-bg {
+                stroke: var(--train-active);
+                opacity: 0.2;
+                fill: none;
+            }
         }
         &.inactive {
             .route-bg {
