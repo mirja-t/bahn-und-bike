@@ -202,7 +202,7 @@ export const Combobox = ({
                     }
                     tabIndex={-1}
                 />
-                {showDropdown && (
+                {true && (
                     <ScrollContainer
                         height="fit-content"
                         className={`${styles.listboxWrapper} ${listboxPositionClass}`}
