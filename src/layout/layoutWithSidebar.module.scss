@@ -31,3 +31,19 @@
     z-index: 10;
     position: relative;
 }
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: spacing.$mainpadding;
+    margin: 0 spacing.$padding-xl 0 spacing.$padding-s;
+    a {
+        color: var(--secondary);
+        font-size: 0.9em;
+        font-weight: bold;
+        &:hover,
+        &.active {
+            text-decoration: none;
+            color: var(--primary);
+        }
+    }
+}

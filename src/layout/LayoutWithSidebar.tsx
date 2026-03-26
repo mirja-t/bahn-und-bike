@@ -1,5 +1,5 @@
 import styles from "./layoutWithSidebar.module.scss";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { Panel } from "../components/stateless/panel/Panel";
 import { Logo } from "../components/stateless/header/logo/Logo";
 import {
@@ -58,6 +58,16 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
                     <Logo />
                 </Link>
                 <Panel>
+                    <nav className={styles.navigation}>
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                isActive ? styles.active : ""
+                            }
+                        >
+                            Routefinder
+                        </NavLink>
+                    </nav>
                     <Switcher
                         setValue={(langCode: LangCode) =>
                             dispatch(setLangCode(langCode))
