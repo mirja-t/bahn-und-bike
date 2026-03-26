@@ -16,7 +16,7 @@ interface TravelDurationProps {
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
-    const [direct, setDirect] = useState(true);
+    const [direct, setDirect] = useState(false);
 
     const handleCheckboxChange = () => {
         setDirect((prev) => !prev);
