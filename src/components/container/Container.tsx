@@ -124,39 +124,43 @@ export const Container = () => {
 
     return (
         <LayoutWithSidebar>
-            <LayoutWithSidebar.Aside>
-                <Panel>
-                    <div ref={sidebarRef}>
-                        <Tabs
-                            height={sidebarHeight.toString() + "px"}
-                            activeTabId={activeTabId}
-                            handleTabClick={handleTabClick}
-                        >
-                            <Tabs.Tab
-                                id="trainlines"
-                                name={t("trainconnections")}
+            {submitVal > 0 && (
+                <LayoutWithSidebar.Aside>
+                    <Panel>
+                        <div ref={sidebarRef}>
+                            <Tabs
+                                height={sidebarHeight.toString() + "px"}
+                                activeTabId={activeTabId}
+                                handleTabClick={handleTabClick}
                             >
-                                <TrainlineDetails fn={handleTrainrouteSelect} />
-                            </Tabs.Tab>
-                            <Tabs.Tab
-                                id="veloroutes"
-                                name={t("bikeroutes")}
-                                disabled={veloroutes.length === 0}
-                            >
-                                <DestinationDetails />
-                            </Tabs.Tab>
-                            <Tabs.Tab
-                                id="leg"
-                                name={t("routelegs")}
-                                disabled={!activeVeloroute}
-                            >
-                                <VelorouteDetails />
-                                <CombinedVelorouteDetails />
-                            </Tabs.Tab>
-                        </Tabs>
-                    </div>
-                </Panel>
-            </LayoutWithSidebar.Aside>
+                                <Tabs.Tab
+                                    id="trainlines"
+                                    name={t("trainconnections")}
+                                >
+                                    <TrainlineDetails
+                                        fn={handleTrainrouteSelect}
+                                    />
+                                </Tabs.Tab>
+                                <Tabs.Tab
+                                    id="veloroutes"
+                                    name={t("bikeroutes")}
+                                    disabled={veloroutes.length === 0}
+                                >
+                                    <DestinationDetails />
+                                </Tabs.Tab>
+                                <Tabs.Tab
+                                    id="leg"
+                                    name={t("routelegs")}
+                                    disabled={!activeVeloroute}
+                                >
+                                    <VelorouteDetails />
+                                    <CombinedVelorouteDetails />
+                                </Tabs.Tab>
+                            </Tabs>
+                        </div>
+                    </Panel>
+                </LayoutWithSidebar.Aside>
+            )}
             <LayoutWithSidebar.Main>
                 <div className={styles.mapWrapper} ref={setWrapper}>
                     {submitVal === 0 && <Instructions />}
