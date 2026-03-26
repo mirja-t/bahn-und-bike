@@ -6,6 +6,7 @@ import {
     waitFor,
     within,
 } from "@testing-library/react";
+import { MemoryRouter } from "react-router";
 import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Container } from "./Container";
 import { createMockStore } from "../../stories/MockSlice";
@@ -66,9 +67,11 @@ describe("Container search reset", () => {
     const renderContainer = () => {
         const mockStore = createMockStore();
         render(
-            <Provider store={mockStore}>
-                <Container />
-            </Provider>,
+            <MemoryRouter>
+                <Provider store={mockStore}>
+                    <Container />
+                </Provider>
+            </MemoryRouter>,
         );
 
         const travelDurationForm = screen.getByRole("form");
@@ -76,7 +79,7 @@ describe("Container search reset", () => {
             name: /traveltime/i,
         });
         const searchButton = screen.getByRole("button", { name: "search" });
-        const tabs = screen.getByRole("navigation");
+        const tabs = screen.getByRole("navigation", { name: "Tabs" });
         const btnTab1 = within(tabs).getByRole("button", {
             name: "trainconnections",
         });
@@ -108,9 +111,7 @@ describe("Container search reset", () => {
         fireEvent.change(durationSlider, { target: { value: "1" } });
         fireEvent.click(searchButton);
 
-        const firstEntryTitle = await screen.findByRole("heading", {
-            name: "RE1: Potsdam",
-        });
+        const firstEntryTitle = await screen.findByText("RE1: Berlin – Potsdam");
         fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
 
         await waitFor(() => {
@@ -131,9 +132,7 @@ describe("Container search reset", () => {
 
         fireEvent.change(durationSlider, { target: { value: "1" } });
         fireEvent.click(searchButton);
-        const firstEntryTitle = await screen.findByRole("heading", {
-            name: "RE1: Potsdam",
-        });
+        const firstEntryTitle = await screen.findByText("RE1: Berlin – Potsdam");
         fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
         fireEvent.click(searchButton);
         await waitFor(() => {
