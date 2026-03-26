@@ -1,24 +1,16 @@
 import styles from "./layoutWithSidebar.module.scss";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router-dom";
 import { Panel } from "../components/stateless/panel/Panel";
 import { Logo } from "../components/stateless/header/logo/Logo";
 import {
     LangCode,
+    resetAppStateThunk,
     selectLangCode,
     setLangCode,
     useAppDispatch,
 } from "../AppSlice";
 import { Switcher } from "../components/form/switcher/Switcher";
 import { useSelector } from "react-redux";
-import {
-    setActiveSection,
-    setCurrentTrainroutes,
-    setTrainroutesAlongVeloroute,
-} from "../components/map/trainroutes/TrainroutesSlice";
-import {
-    setActiveVeloroute,
-    setActiveVelorouteSection,
-} from "../components/map/veloroutes/VeloroutesSlice";
 import { Header } from "../components/stateless/header/Header";
 import { Footer } from "../components/stateless/footer/Footer";
 
@@ -35,14 +27,6 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
     const langCode = useSelector(selectLangCode);
 
-    const resetState = () => {
-        dispatch(setCurrentTrainroutes([]));
-        dispatch(setActiveSection(null));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(setTrainroutesAlongVeloroute([]));
-    };
-
     return (
         <div className={styles.wrapper}>
             <Header>
@@ -53,7 +37,7 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
                             ? "Zur Startseite"
                             : "Back to Homepage"
                     }
-                    onClick={resetState}
+                    onClick={resetAppStateThunk}
                 >
                     <Logo />
                 </Link>

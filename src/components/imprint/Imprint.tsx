@@ -3,11 +3,9 @@ import { useTranslation } from "../../utils/i18n";
 import { Link } from "react-router-dom";
 import ScrollContainer from "../stateless/scrollcontainer/ScrollContainer";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
+import { resetAppStateThunk } from "../../AppSlice";
 
-interface ImprintProps {
-    resetState: () => void;
-}
-export const Imprint = ({ resetState }: ImprintProps) => {
+export const Imprint = () => {
     const { t } = useTranslation();
 
     return (
@@ -32,7 +30,7 @@ export const Imprint = ({ resetState }: ImprintProps) => {
                                         className="button button-primary"
                                         to="/"
                                         title={t("backtostart")}
-                                        onClick={resetState}
+                                        onClick={resetAppStateThunk}
                                     >
                                         <span>{t("backtostart")}</span>
                                     </Link>

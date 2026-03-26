@@ -3,12 +3,9 @@ import { useTranslation } from "../../utils/i18n";
 import { Link } from "react-router-dom";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import ScrollContainer from "../stateless/scrollcontainer/ScrollContainer";
+import { resetAppStateThunk } from "../../AppSlice";
 
-interface PrivacyProps {
-    resetState: () => void;
-}
-
-export const Privacy = ({ resetState }: PrivacyProps) => {
+export const Privacy = () => {
     const { t } = useTranslation();
 
     return (
@@ -93,7 +90,7 @@ export const Privacy = ({ resetState }: PrivacyProps) => {
                                         className="button button-primary"
                                         to="/"
                                         title={t("backtostart")}
-                                        onClick={resetState}
+                                        onClick={resetAppStateThunk}
                                     >
                                         <span>{t("backtostart")}</span>
                                     </Link>
