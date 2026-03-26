@@ -23,6 +23,7 @@ export default defineConfig({
         projects: [
             {
                 resolve: {
+                    dedupe: ["react-router", "react-router-dom"],
                     alias: [
                         {
                             find: /^(\.{1,2}\/)*config\/config$/,
