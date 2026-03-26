@@ -13,7 +13,7 @@ export const Instructions = () => {
     const isLoading = useSelector(selectTrainrouteListLoading);
     return !journeys.length && !isLoading ? (
         <div className={styles.instructionsWrapper}>
-            <Panel direction="column">
+            <Panel direction="column" variant="frostedGlass">
                 <div className={styles.instructions}>
                     <h1>{t("home_headline")}</h1>
                     <h3>{t("home_subheadline")}</h3>
