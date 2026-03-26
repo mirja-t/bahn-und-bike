@@ -1,0 +1,49 @@
+@use "../scss/variables/spacing.scss" as spacing;
+
+.wrapper {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    position: relative;
+    height: 100%;
+    gap: spacing.$padding-s;
+    padding: spacing.$padding-s;
+}
+.container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 20em 1fr;
+    grid-template-rows: 1fr auto;
+    gap: spacing.$mainpadding;
+}
+.bottom {
+    grid-column: span 2;
+}
+.main {
+    grid-column: span 2;
+    display: flex;
+    min-height: 0;
+}
+.aside + .main {
+    grid-column: 2;
+    display: flex;
+}
+.aside {
+    z-index: 10;
+    position: relative;
+}
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: spacing.$mainpadding;
+    margin: 0 spacing.$padding-xl 0 spacing.$padding-s;
+    a {
+        color: var(--secondary);
+        font-size: 0.9em;
+        font-weight: bold;
+        &:hover,
+        &.active {
+            text-decoration: none;
+            color: var(--primary);
+        }
+    }
+}

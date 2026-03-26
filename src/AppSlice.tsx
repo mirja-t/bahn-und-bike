@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "./store";
 import { useDispatch } from "react-redux";
+import {
+    setActiveSection,
+    setCurrentTrainroutes,
+    setTrainroutesAlongVeloroute,
+} from "./components/map/trainroutes/TrainroutesSlice";
+import {
+    setActiveVeloroute,
+    setActiveVelorouteSection,
+} from "./components/map/veloroutes/VeloroutesSlice";
 
 export const Theme = {
     Light: "light",
@@ -57,6 +66,16 @@ export const appSlice = createSlice({
         },
     },
 });
+
+export const resetAppStateThunk = () => {
+    return (dispatch: AppDispatch) => {
+        dispatch(setCurrentTrainroutes([]));
+        dispatch(setActiveSection(null));
+        dispatch(setActiveVeloroute(null));
+        dispatch(setActiveVelorouteSection(null));
+        dispatch(setTrainroutesAlongVeloroute([]));
+    };
+};
 
 export const selectTheme = (state: RootState) => state.app.theme;
 export const selectLangCode = (state: RootState) => state.app.langCode;

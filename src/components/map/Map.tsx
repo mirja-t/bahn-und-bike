@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
 import { usePinch } from "../../hooks/usePinch";
-import { useTranslation } from "../../utils/i18n";
 import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
@@ -25,7 +24,6 @@ interface MapProps {
 export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
     const zoomcontainerRef = useRef<HTMLDivElement | null>(null);
-    const { t } = useTranslation();
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroutesLoading = useSelector(selectVeloroutesLoading);
@@ -110,18 +108,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
                         }}
                         className={styles.mapInner}
                     >
-                        {!isLoading && (
-                            <>
-                                {value === 0 &&
-                                    journeys.length === 0 &&
-                                    !isLoading && (
-                                        <div className="instructions">
-                                            <p>{t("instruction")}</p>
-                                        </div>
-                                    )}
-                                <Trainroutes />
-                            </>
-                        )}
+                        {!isLoading && <Trainroutes />}
                         <Germany />
                     </motion.div>
                 </div>

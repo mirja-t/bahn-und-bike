@@ -1,0 +1,9 @@
+@use "../../../scss/variables/spacing.scss" as spacing;
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+    position: relative;
+}

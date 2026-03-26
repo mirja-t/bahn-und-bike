@@ -16,7 +16,7 @@ interface TravelDurationProps {
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
-    const [direct, setDirect] = useState(true);
+    const [direct, setDirect] = useState(false);
 
     const handleCheckboxChange = () => {
         setDirect((prev) => !prev);
@@ -48,7 +48,12 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 step={1}
                 handleInputChange={handleInputChange}
             />
-            <Button variant="primary" type="submit" label={t("search")} />
+            <Button
+                disabled={value === 0}
+                variant="primary"
+                type="submit"
+                label={t("search")}
+            />
         </form>
     );
 };

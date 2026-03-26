@@ -22,6 +22,18 @@ export default defineConfig({
     test: {
         projects: [
             {
+                resolve: {
+                    dedupe: ["react-router", "react-router-dom"],
+                    alias: [
+                        {
+                            find: /^(\.{1,2}\/)*config\/config$/,
+                            replacement: path.resolve(
+                                dirname,
+                                "src/__mocks__/config.ts",
+                            ),
+                        },
+                    ],
+                },
                 test: {
                     name: "unit",
                     environment: "jsdom",

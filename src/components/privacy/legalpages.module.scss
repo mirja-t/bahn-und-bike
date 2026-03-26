@@ -1,0 +1,19 @@
+@use "../../scss/variables/spacing.scss" as spacing;
+
+.wrapper {
+    width: 100%;
+    > div {
+        max-width: 80%;
+        margin: auto;
+        padding: spacing.$mainpadding;
+        text-align: left;
+        margin-bottom: spacing.$mainpadding;
+    }
+    .seal {
+        width: 100px;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}

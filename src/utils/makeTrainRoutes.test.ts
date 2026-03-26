@@ -118,7 +118,7 @@ describe("makeTrainRoutes", () => {
         );
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.name).toBe(
-            "SNCF, Deutsche Bahn + Polish Railways: Vilnius",
+            "SNCF, Deutsche Bahn + Polish Railways: S+U Berlin – Vilnius",
         );
     });
 });

@@ -56,7 +56,7 @@ const Tabs = <T extends React.Key | null | undefined>({
     }, [activeTabId]);
 
     return (
-        <div style={{ overflow: "hidden" }}>
+        <div data-testid="tabs-container" style={{ overflow: "hidden" }}>
             <ScrollContainer className="tabs" height={height}>
                 <ScrollContainer.FitContent className="tabs-fit-content">
                     <nav
