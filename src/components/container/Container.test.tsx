@@ -44,7 +44,7 @@ vi.mock("../map/Map", () => ({
 describe("Container search reset", () => {
     const responseStops: ResponseStop[] = [
         {
-            station_id: "berlin",
+            station_id: "2975",
             station_name: "Berlin Hbf",
             dur: 0,
             lat: "52.525084",
@@ -54,7 +54,7 @@ describe("Container search reset", () => {
             trainline_id: "re1",
         },
         {
-            station_id: "potsdam",
+            station_id: "1234",
             station_name: "Potsdam",
             dur: 10,
             lat: "52.390569",
@@ -67,7 +67,7 @@ describe("Container search reset", () => {
     beforeEach(() => {
         vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
             const url = String(input);
-            if (url.includes("trainstops/")) {
+            if (url.includes("trainstops/") || url.includes("connections/")) {
                 return {
                     status: 200,
                     json: async () => responseStops,
@@ -134,10 +134,10 @@ describe("Container search reset", () => {
             name: "Tabs",
         });
         expect(tabs).not.toBeNull();
-        return;
         const firstEntryTitle = await screen.findByText(
             "RE1: Berlin – Potsdam",
         );
+        expect(firstEntryTitle).not.toBeNull();
         fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
 
         await waitFor(async () => {
@@ -160,7 +160,6 @@ describe("Container search reset", () => {
 
         fireEvent.change(durationSlider, { target: { value: "1" } });
         fireEvent.click(searchButton);
-        return;
         const firstEntryTitle = await screen.findByText(
             "RE1: Berlin – Potsdam",
         );
