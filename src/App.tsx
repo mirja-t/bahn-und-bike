@@ -1,5 +1,5 @@
 import "./App.scss";
-import { selectTheme, useAppDispatch } from "./AppSlice";
+import { selectTheme } from "./AppSlice";
 import { useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { Privacy } from "./components/privacy/Privacy";
