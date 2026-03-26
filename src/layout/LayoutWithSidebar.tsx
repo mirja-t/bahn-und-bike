@@ -77,11 +77,11 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
             </Header>
             <div className={styles.container}>{children}</div>
             <Footer>
-                <Link to="datenschutz">
+                <Link to="/datenschutz">
                     {langCode === LangCode.DE ? "Datenschutz" : "Privacy"}
                 </Link>
                 &nbsp;&nbsp;
-                <Link to="impressum">
+                <Link to="/impressum">
                     {langCode === LangCode.DE ? "Impressum" : "Legal Notes"}
                 </Link>
             </Footer>

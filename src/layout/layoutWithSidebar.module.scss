@@ -1,27 +1,29 @@
 @use "../scss/variables/spacing.scss" as spacing;
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     position: relative;
     height: 100%;
-    overflow: hidden;
     gap: spacing.$padding-s;
     padding: spacing.$padding-s;
 }
 .container {
     position: relative;
-    flex-grow: 1;
     display: grid;
     grid-template-columns: 20em 1fr;
     grid-template-rows: 1fr auto;
     gap: spacing.$mainpadding;
 }
 .bottom {
-    grid-column: 1 / 3;
+    grid-column: span 2;
 }
 .main {
+    grid-column: span 2;
+    display: flex;
+    min-height: 0;
+}
+.aside + .main {
     grid-column: 2;
     display: flex;
 }
