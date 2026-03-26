@@ -68,7 +68,7 @@ svg#routes {
             }
             .route {
                 transition: all 0.5s ease;
-                opacity: 1;
+                opacity: 0.5;
                 stroke: var(--train-muted);
                 fill: none;
             }
