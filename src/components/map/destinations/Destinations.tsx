@@ -24,7 +24,7 @@ export const Destinations = () => {
                 <text x={x + 6} y={y} fontSize="9" fill="black">
                     {destination.name}
                 </text>
-                <circle cx={x} cy={y} r="5" fill="blue" />
+                <circle cx={x} cy={y} r="1" fill="black" />
             </g>
         );
     };
