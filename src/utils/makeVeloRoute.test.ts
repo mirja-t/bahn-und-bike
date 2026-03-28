@@ -3,11 +3,11 @@ import { makeVeloRoute } from "./makeVeloRoute";
 import type { VeloroutesResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 describe("makeVeloRoute", () => {
-    const trainlines = ["line_1", "line_2", "line_3", "line_4"];
+    const trainstops = ["trainstop_a", "trainstop_c", "trainstop_d"];
     const stops: VeloroutesResponseStop[] = [
         {
             name: "Route 1",
-            dest_name: "Stop 0",
+            dest_name: "",
             dist: 0,
             gcs: "0,0",
             lat: "0",
@@ -16,9 +16,10 @@ describe("makeVeloRoute", () => {
             trainlines: "",
             trainstop: "",
             veloroute_id: "route_1",
+            station_name: "Stop 0",
         },
         {
-            dest_name: "Stop A",
+            dest_name: "",
             dist: 5,
             lat: "1",
             lon: "1",
@@ -28,6 +29,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "1,1",
+            station_name: "Stop A",
         },
         {
             dest_name: "Stop B",
@@ -40,6 +42,7 @@ describe("makeVeloRoute", () => {
             gcs: "2,2",
             trainlines: "",
             trainstop: "",
+            station_name: "",
         },
         {
             dest_name: "Stop C",
@@ -52,6 +55,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "3,3",
+            station_name: "Stop C",
         },
         {
             dest_name: "Stop D",
@@ -64,6 +68,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "4,4",
+            station_name: "Stop D",
         },
     ];
     it("should return an array of routes with 2 legs when start and end have trainlines", () => {
@@ -121,12 +126,12 @@ describe("makeVeloRoute", () => {
             ],
         };*/
 
-        const result = makeVeloRoute(stops.slice(1), trainlines);
+        const result = makeVeloRoute(stops.slice(1), trainstops);
         expect(result.route.length).toBe(2);
         // expect(result).toEqual(expectedRoute);
     });
     it("should return an array of routes with 3 legs when start does not have trainlines", () => {
-        const result = makeVeloRoute(stops, trainlines);
+        const result = makeVeloRoute(stops, trainstops);
         expect(result.route.length).toBe(3);
     });
 });

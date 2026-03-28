@@ -4,16 +4,6 @@ import type {
     VelorouteStop,
 } from "../components/map/veloroutes/VeloroutesSlice";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
-import { removeWords } from "./utils";
-
-const wordsToRemove = [
-    "Bahnhof",
-    "Hbf",
-    "Hauptbahnhof",
-    "Bhf",
-    "S-Bahn",
-    "Busbahnhof",
-];
 
 const addXY = (stop: VeloroutesResponseStop) => {
     const [x, y] = SvgMapBuilder.getMapPosition(
@@ -30,7 +20,7 @@ const addXY = (stop: VeloroutesResponseStop) => {
 
 export const makeVeloRoute = (
     stops: VeloroutesResponseStop[],
-    trainlines: string[] | null,
+    trainstops: string[],
 ): Veloroute => {
     stops.sort((a, b) => a.stop_number - b.stop_number);
     const velorouteStops = convertVelorouteStops(stops);
@@ -47,9 +37,8 @@ export const makeVeloRoute = (
                 acc.push({ dist: 0, leg: [stop] });
             } else if (
                 // build leg
-                stop.trainlines?.some((trainline) =>
-                    !trainlines ? true : trainlines.includes(trainline),
-                ) &&
+                stop.trainstop &&
+                trainstops.includes(stop.trainstop) &&
                 idx !== arr.length - 1
             ) {
                 acc.push({ dist: 0, leg: [stop] });
@@ -100,10 +89,10 @@ export const makeVeloRoute = (
 export const convertVelorouteStops = (
     stops: VeloroutesResponseStop[],
 ): (VelorouteStop & { dist: number; gcs: string })[] => {
-    return stops.map((stop) => {
+    const convertedStops = stops.map((stop) => {
         const copiedStop: VelorouteStop & { dist: number; gcs: string } = {
             stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
-            stop_name: removeWords(stop.dest_name, wordsToRemove),
+            stop_name: stop.station_name || stop.dest_name || "",
             x: addXY(stop).x,
             y: addXY(stop).y,
             dist: stop.dist,
@@ -117,4 +106,5 @@ export const convertVelorouteStops = (
         }
         return copiedStop;
     });
+    return convertedStops;
 };

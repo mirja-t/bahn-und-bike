@@ -9,11 +9,12 @@ import type { AppDispatch, RootState } from "../../../store";
 
 export type VeloroutesResponseStop = {
     name: string;
-    dest_name: string;
+    dest_name: string | null;
     dist: number;
     gcs: string;
     lat: string;
     lon: string;
+    station_name: string;
     stop_number: number;
     trainlines: string; // comma separated string of trainline_ids from API
     trainstop: string;
@@ -107,8 +108,11 @@ export const loadVeloroute = createAsyncThunk<
         },
     ).then((response) => response.json());
 
-    const trainlines = thunkAPI.getState().trainroutes.trainlineList;
-    const activeVeloroute = makeVeloRoute(responseStops, trainlines);
+    const trainstops = thunkAPI
+        .getState()
+        .trainroutes.currentTrainroutes.map((route) => route.stopIds)
+        .flat();
+    const activeVeloroute = makeVeloRoute(responseStops, trainstops);
     const key = preview ? "preview" : "active";
     return { [key]: activeVeloroute };
 });
