@@ -3,7 +3,7 @@ import { makeVeloRoute } from "./makeVeloRoute";
 import type { VeloroutesResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 describe("makeVeloRoute", () => {
-    const trainlines = ["line_1", "line_2", "line_3", "line_4"];
+    const trainstops = ["trainstop_a", "trainstop_c", "trainstop_d"];
     const stops: VeloroutesResponseStop[] = [
         {
             name: "Route 1",
@@ -126,12 +126,12 @@ describe("makeVeloRoute", () => {
             ],
         };*/
 
-        const result = makeVeloRoute(stops.slice(1), trainlines);
+        const result = makeVeloRoute(stops.slice(1), trainstops);
         expect(result.route.length).toBe(2);
         // expect(result).toEqual(expectedRoute);
     });
     it("should return an array of routes with 3 legs when start does not have trainlines", () => {
-        const result = makeVeloRoute(stops, trainlines);
+        const result = makeVeloRoute(stops, trainstops);
         expect(result.route.length).toBe(3);
     });
 });
