@@ -10,23 +10,23 @@ export type Destination = {
     trainstop: boolean;
 };
 export interface DestinationsState {
-    activeDestination: Destination | null;
-    activeDestinations: Destination[] | null;
-    destinationsLoading: boolean;
+    destinations: Destination[] | null;
     destinationsError: boolean;
+    destinationsLoading: boolean;
+    activeDestination: Destination | null;
+    activeDestinationLoading: boolean;
+    activeDestinationError: boolean;
 }
-
 export const loadDestinations = createAsyncThunk<
     Destination[],
-    { ids: string[] },
+    { population: number },
     { state: RootState }
->("destinations/setDestination", async ({ ids }) => {
+>("destinations/setDestinations", async ({ population }) => {
     const destinations: Destination[] = await fetch(
-        `${VITE_API_URL}destinations`,
+        `${VITE_API_URL}destinations?population=${population}`,
         {
-            method: "POST",
+            method: "GET",
             headers: headers,
-            body: JSON.stringify({ ids }),
         },
     ).then((response) => {
         if (response.status !== 200) {
@@ -41,10 +41,12 @@ export const loadDestinations = createAsyncThunk<
 export const destinationDetailsSlice = createSlice({
     name: "destinations",
     initialState: {
-        activeDestination: null,
-        activeDestinations: null,
-        destinationsLoading: false,
+        destinations: null,
         destinationsError: false,
+        destinationsLoading: false,
+        activeDestination: null,
+        activeDestinationLoading: false,
+        activeDestinationError: false,
     } as DestinationsState,
     reducers: {
         setActiveDestination: (
@@ -61,7 +63,7 @@ export const destinationDetailsSlice = createSlice({
                 state.destinationsError = false;
             })
             .addCase(loadDestinations.fulfilled, (state, action) => {
-                state.activeDestinations = action.payload;
+                state.destinations = action.payload;
                 state.destinationsLoading = false;
                 state.destinationsError = false;
             })
@@ -72,8 +74,8 @@ export const destinationDetailsSlice = createSlice({
     },
 });
 
-export const selectActiveDestinations = (state: RootState) =>
-    state.destinations.activeDestinations;
+export const selectDestinations = (state: RootState) =>
+    state.destinations.destinations;
 export const selectActiveDestination = (state: RootState) =>
     state.destinations.activeDestination;
 

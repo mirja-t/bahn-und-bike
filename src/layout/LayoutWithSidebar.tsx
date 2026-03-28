@@ -13,6 +13,9 @@ import { Switcher } from "../components/form/switcher/Switcher";
 import { useSelector } from "react-redux";
 import { Header } from "../components/stateless/header/Header";
 import { Footer } from "../components/stateless/footer/Footer";
+import { Select } from "../components/stateless/select/Select";
+import { loadDestinations } from "../components/destinationDetails/DestinationDetailsSlice";
+import { useEffect } from "react";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
     return <main className={styles.main}>{children}</main>;
@@ -26,6 +29,18 @@ const Bottom = ({ children }: { children: React.ReactNode }) => {
 const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useAppDispatch();
     const langCode = useSelector(selectLangCode);
+    const handlePopulationChange = (value: string) => {
+        const numericValue = parseInt(value.replace(/[^\d]/g, ""), 10);
+        dispatch(loadDestinations({ population: numericValue }));
+    };
+    const options = [
+        { value: "> 1000000", label: "> 1,000,000" },
+        { value: "> 500000", label: "> 500,000" },
+        { value: "> 100000", label: "> 100,000" },
+    ];
+    useEffect(() => {
+        dispatch(loadDestinations({ population: 1000000 }));
+    }, [dispatch]);
 
     return (
         <div className={styles.wrapper}>
@@ -52,6 +67,13 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
                             Routefinder
                         </NavLink>
                     </nav>
+                    <Select
+                        label="Cities"
+                        name="cities"
+                        options={options}
+                        preselectedValue={options[0].value}
+                        onChange={handlePopulationChange}
+                    />
                     <Switcher
                         setValue={(langCode: LangCode) =>
                             dispatch(setLangCode(langCode))
