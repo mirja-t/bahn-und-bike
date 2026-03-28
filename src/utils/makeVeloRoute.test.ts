@@ -7,7 +7,7 @@ describe("makeVeloRoute", () => {
     const stops: VeloroutesResponseStop[] = [
         {
             name: "Route 1",
-            dest_name: "Stop 0",
+            dest_name: "",
             dist: 0,
             gcs: "0,0",
             lat: "0",
@@ -16,9 +16,10 @@ describe("makeVeloRoute", () => {
             trainlines: "",
             trainstop: "",
             veloroute_id: "route_1",
+            station_name: "Stop 0",
         },
         {
-            dest_name: "Stop A",
+            dest_name: "",
             dist: 5,
             lat: "1",
             lon: "1",
@@ -28,6 +29,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "1,1",
+            station_name: "Stop A",
         },
         {
             dest_name: "Stop B",
@@ -40,6 +42,7 @@ describe("makeVeloRoute", () => {
             gcs: "2,2",
             trainlines: "",
             trainstop: "",
+            station_name: "",
         },
         {
             dest_name: "Stop C",
@@ -52,6 +55,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "3,3",
+            station_name: "Stop C",
         },
         {
             dest_name: "Stop D",
@@ -64,6 +68,7 @@ describe("makeVeloRoute", () => {
             veloroute_id: "route_1",
             name: "Route 1",
             gcs: "4,4",
+            station_name: "Stop D",
         },
     ];
     it("should return an array of routes with 2 legs when start and end have trainlines", () => {
