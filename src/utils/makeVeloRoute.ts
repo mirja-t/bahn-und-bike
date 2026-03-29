@@ -37,7 +37,7 @@ export const makeVeloRoute = (
                 acc.push({ dist: 0, leg: [stop] });
             } else if (
                 // build leg
-                !!stop.trainstop &&
+                stop.trainstop !== null &&
                 trainstops.includes(stop.trainstop) &&
                 idx !== arr.length - 1
             ) {
