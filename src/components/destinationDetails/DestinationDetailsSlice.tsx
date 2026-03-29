@@ -14,8 +14,6 @@ export interface DestinationsState {
     destinationsError: boolean;
     destinationsLoading: boolean;
     activeDestination: Destination | null;
-    activeDestinationLoading: boolean;
-    activeDestinationError: boolean;
 }
 export const loadDestinations = createAsyncThunk<
     Destination[],
