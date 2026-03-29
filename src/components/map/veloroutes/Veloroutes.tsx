@@ -37,6 +37,7 @@ const TrainstationVelorouteConnection = ({
     } | null>(null);
 
     useEffect(() => {
+        setTrainstop(null);
         if (!id) return;
         const fetchTrainstop = async () => {
             const response = await fetch(`${VITE_API_URL}trainstations/${id}`, {
