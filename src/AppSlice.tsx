@@ -35,6 +35,7 @@ export interface AppState {
     langLoading: boolean;
     langError: boolean;
     userScale: number;
+    resetKey: number;
 }
 
 export const appSlice = createSlice({
@@ -46,6 +47,7 @@ export const appSlice = createSlice({
         langLoading: false,
         langError: false,
         userScale: 1,
+        resetKey: 0,
     } as AppState,
     reducers: {
         setTheme: (state, action: { payload: Theme }) => {
@@ -60,9 +62,13 @@ export const appSlice = createSlice({
         setUserScale: (state, action: { payload: number | "reset" }) => {
             if (action.payload === "reset") {
                 state.userScale = 1;
+                state.resetKey += 1;
             } else if (typeof state.userScale === "number") {
                 state.userScale = state.userScale + action.payload;
             }
+        },
+        setResetKey: (state) => {
+            state.resetKey += 1;
         },
     },
 });
@@ -81,9 +87,15 @@ export const selectTheme = (state: RootState) => state.app.theme;
 export const selectLangCode = (state: RootState) => state.app.langCode;
 export const selectActiveTab = (state: RootState) => state.app.activeTab;
 export const selectUserScale = (state: RootState) => state.app.userScale;
+export const selectResetKey = (state: RootState) => state.app.resetKey;
 
-export const { setTheme, setLangCode, setActiveTab, setUserScale } =
-    appSlice.actions;
+export const {
+    setTheme,
+    setLangCode,
+    setActiveTab,
+    setUserScale,
+    setResetKey,
+} = appSlice.actions;
 
 export default appSlice.reducer;
 export const useAppDispatch: () => AppDispatch = useDispatch;
