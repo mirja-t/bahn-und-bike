@@ -9,7 +9,7 @@ export interface UseFetchBatchReturn<T> {
 
 export const useFetchBatch = <T extends { id: string | number }>(
     ids: (string | number)[],
-    assetsEndpoint: string | number,
+    assetsEndpoint: string,
     method: "POST" | "GET" = "GET",
 ): UseFetchBatchReturn<T> => {
     const [assetsMap, setAssetsMap] = useState<Map<string, T>>(new Map());
