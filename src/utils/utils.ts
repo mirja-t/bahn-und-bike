@@ -66,7 +66,7 @@ export const removeWords = (str: string, words: string[]): string => {
     return sanitizedString;
 };
 
-export const debounce = <T extends (...args: K[]) => void, K extends string>(
+export const debounce = <T extends (...args: K[]) => void, K>(
     func: T,
     wait: number,
 ): ((...args: Parameters<T>) => void) => {

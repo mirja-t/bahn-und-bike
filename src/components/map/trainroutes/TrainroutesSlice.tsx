@@ -6,7 +6,7 @@ import { createNewRoute } from "../../../utils/createNewRoute";
 import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type ResponseStop = {
-    station_id: string;
+    station_id: number;
     station_name: string;
     dur: number;
     lat: string;
@@ -17,7 +17,7 @@ export type ResponseStop = {
 };
 type Trainstop = {
     stop_name: string;
-    stop_id: string;
+    stop_id: number;
     trainline_id?: string;
     lat: number;
     lon: number;
@@ -46,16 +46,16 @@ export type CurrentTrainroute = {
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
-    stopIds: string[];
+    stopIds: number[];
     points: string;
     connection: Connection | null;
 };
 export type CurrentTrainroutes = CurrentTrainroute[];
 
 export interface TrainroutesState {
-    startPos: string;
+    startPos: number;
     travelInterval: number;
-    trainlineList: string[] | null;
+    trainstops: number[];
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
@@ -70,7 +70,7 @@ export interface TrainroutesState {
 
 export const loadTrainroutes = createAsyncThunk<
     CurrentTrainroutes,
-    { start: string; value: number; direct: boolean },
+    { start: number; value: number; direct: boolean },
     { state: RootState }
 >("trainroutes/setTrainroutes", async ({ start, value, direct }, thunkAPI) => {
     const connectionsQuery = direct
@@ -88,17 +88,15 @@ export const loadTrainroutes = createAsyncThunk<
         return response.json();
     });
 
+    // used to create veloroute sections
+    const trainstops = connections.map((stop) => stop.station_id);
+    thunkAPI.dispatch(setTrainstops(trainstops));
     const currentTrainroutes = makeTrainRoutes(
         connections,
         start,
         value * 30,
         direct,
     );
-    // used to create veloroute sections
-    const trainlineList = currentTrainroutes
-        .map((route) => route.trainlines.map((t) => t.trainline_id))
-        .flat();
-    thunkAPI.dispatch(setTrainlineList(trainlineList));
     // check costs of fetching all related veloroutes when no trainline is selected
     const stopIds = [
         ...new Set(
@@ -131,7 +129,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         : undefined;
 
     const connections: CurrentTrainroutes = [];
-    const fetchConnection = async (id: string): Promise<CurrentTrainroute> => {
+    const fetchConnection = async (id: number): Promise<CurrentTrainroute> => {
         const connectionQuery = "connection/" + startdestination + "&" + id;
         const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
             headers: headers,
@@ -145,7 +143,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
         const route = createNewRoute(reversedConnection[0], reversedConnection);
         return route;
     };
-    const seenIds = new Set<string>();
+    const seenIds = new Set<number>();
     for (const id of [startId, endId]) {
         if (!id || seenIds.has(id)) {
             continue;
@@ -160,9 +158,9 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
-        startPos: "2975",
+        startPos: 2975,
         travelInterval: 30,
-        trainlineList: null,
+        trainstops: [],
         currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
@@ -182,8 +180,8 @@ export const trainroutesSlice = createSlice({
             // Reset previewSection to avoid holding a stale reference
             state.previewSection = null;
         },
-        setTrainlineList: (state, action: { payload: string[] | null }) => {
-            state.trainlineList = action.payload;
+        setTrainstops: (state, action: { payload: number[] }) => {
+            state.trainstops = action.payload;
         },
         setActiveSpot: (state, action: { payload: Trainstop | null }) => {
             state.activeSpot = action.payload;
@@ -210,7 +208,7 @@ export const trainroutesSlice = createSlice({
         ) => {
             state.trainroutesAlongVeloroute = action.payload;
         },
-        setStartPos: (state, action: { payload: string }) => {
+        setStartPos: (state, action: { payload: number }) => {
             state.startPos = action.payload;
         },
     },
@@ -263,8 +261,6 @@ export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state: RootState) =>
     state.trainroutes.currentTrainroutes;
-export const selectTrainlineList = (state: RootState) =>
-    state.trainroutes.trainlineList;
 
 export const {
     setActiveSpot,
@@ -273,7 +269,7 @@ export const {
     setTrainroutesAlongVeloroute,
     setStartPos,
     setCurrentTrainroutes,
-    setTrainlineList,
+    setTrainstops,
 } = trainroutesSlice.actions;
 
 export default trainroutesSlice.reducer;

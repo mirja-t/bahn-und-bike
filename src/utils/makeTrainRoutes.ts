@@ -23,7 +23,7 @@ const fallbackRouteNode: RouteNode = {
         name: "",
         lat: "0",
         lon: "0",
-        station_id: "",
+        station_id: Infinity,
         station_name: "",
         dur: 0,
         stop_number: 0,
@@ -34,7 +34,7 @@ const fallbackRouteNode: RouteNode = {
 
 export const makeTrainRoutes = (
     stops: ResponseStop[],
-    start: string,
+    start: number,
     durationLimit: number,
     direct: boolean = true,
 ): CurrentTrainroute[] => {
@@ -175,7 +175,7 @@ export const makeTrainRoutes = (
     }
     function createTrainlineStopsArr(
         stops: ResponseStop[],
-        start: string,
+        start: number,
     ): Trainline[] {
         const trainlineObj = stops.reduce(
             (acc, stop) => {

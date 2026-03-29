@@ -17,7 +17,7 @@ export type VeloroutesResponseStop = {
     station_name: string;
     stop_number: number;
     trainlines: string; // comma separated string of trainline_ids from API
-    trainstop: string;
+    trainstop: number | null;
     veloroute_id: string;
 };
 
@@ -25,7 +25,7 @@ export type VelorouteStop = {
     stop_id: string;
     stop_name: string;
     trainlines?: string[];
-    trainstop?: string;
+    trainstop: number | null;
     x: number;
     y: number;
 };
@@ -60,18 +60,14 @@ export interface VeloroutesState {
 
 export const loadVeloroutes = createAsyncThunk<
     VelorouteListItem[],
-    string[],
+    number[],
     { state: RootState }
->("veloroutes/setVelorouteList", async (trainstations: string[], thunkAPI) => {
+>("veloroutes/setVelorouteList", async (trainstations: number[], thunkAPI) => {
     const state = thunkAPI.getState();
     const startPosId = state.trainroutes.startPos;
 
     const normalizedIds = Array.from(
-        new Set(
-            trainstations
-                .map((id) => id.trim())
-                .filter((id) => id.length > 0 && id !== startPosId),
-        ),
+        new Set(trainstations.filter((id) => !!id && id !== startPosId)),
     );
 
     if (normalizedIds.length === 0) {
@@ -107,11 +103,7 @@ export const loadVeloroute = createAsyncThunk<
             headers: headers,
         },
     ).then((response) => response.json());
-
-    const trainstops = thunkAPI
-        .getState()
-        .trainroutes.currentTrainroutes.map((route) => route.stopIds)
-        .flat();
+    const trainstops = thunkAPI.getState().trainroutes.trainstops;
     const activeVeloroute = makeVeloRoute(responseStops, trainstops);
     const key = preview ? "preview" : "active";
     return { [key]: activeVeloroute };

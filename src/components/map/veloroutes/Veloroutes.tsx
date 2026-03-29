@@ -21,7 +21,7 @@ import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
 import { headers, VITE_API_URL } from "../../../config/config";
 
 interface TrainstationVelorouteConnectionProps {
-    id: string | undefined;
+    id: number | null | undefined;
     velorouteCoordinate:
         | { x: number | undefined; y: number | undefined }
         | undefined;
@@ -103,7 +103,7 @@ export const Veloroutes = () => {
     };
 
     const handleSectionClick = (_: string, idx: number) => {
-        dispatch(setActiveTab("veloroutes"));
+        dispatch(setActiveTab("leg"));
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
 

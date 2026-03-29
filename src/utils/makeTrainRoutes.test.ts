@@ -39,7 +39,7 @@ const mockedAPIResponseWithConnections: ResponseStop[] = [
 describe("makeTrainRoutes", () => {
     it("should generate train routes with direct connections only", () => {
         // Arrange
-        const start = "berlin";
+        const start = 3;
         const durationLimit = 600;
 
         // Act
@@ -54,19 +54,15 @@ describe("makeTrainRoutes", () => {
         // (order is not guaranteed as it depends on implementation details)
         expect(result).toHaveLength(2);
 
-        const warsawRoute = result.find(
-            (r) => r.lastStation.stop_id === "warsaw",
-        );
+        const warsawRoute = result.find((r) => r.lastStation.stop_id === 4);
         expect(warsawRoute).toBeDefined();
 
-        const parisRoute = result.find(
-            (r) => r.lastStation.stop_id === "paris",
-        );
+        const parisRoute = result.find((r) => r.lastStation.stop_id === 1);
         expect(parisRoute).toBeDefined();
     });
     it("should generate train routes with connecting routes", () => {
         // Arrange
-        const start = "berlin";
+        const start = 3;
         const durationLimit = 6000;
 
         // Act
@@ -80,9 +76,7 @@ describe("makeTrainRoutes", () => {
         // Assert - Check that routes contain expected destinations
         // (order is not guaranteed as it depends on implementation details)
         expect(result).toHaveLength(4);
-        const vilniusRoute = result.find(
-            (r) => r.lastStation.stop_id === "vilnius",
-        );
+        const vilniusRoute = result.find((r) => r.lastStation.stop_id === 6);
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.trainlines).toEqual([
             { trainline_id: "TGV", trainline_name: "SNCF" },
@@ -101,7 +95,7 @@ describe("makeTrainRoutes", () => {
     });
     it("should return route with correct name for route with connection", () => {
         // Arrange
-        const start = "berlin";
+        const start = 3;
         const durationLimit = 6000;
 
         // Act
@@ -113,9 +107,7 @@ describe("makeTrainRoutes", () => {
         );
 
         // Assert - Check that route name is correct
-        const vilniusRoute = result.find(
-            (r) => r.lastStation.stop_id === "vilnius",
-        );
+        const vilniusRoute = result.find((r) => r.lastStation.stop_id === 6);
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.name).toBe(
             "SNCF, Deutsche Bahn + Polish Railways: S+U Berlin – Vilnius",

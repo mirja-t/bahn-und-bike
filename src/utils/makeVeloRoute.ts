@@ -20,7 +20,7 @@ const addXY = (stop: VeloroutesResponseStop) => {
 
 export const makeVeloRoute = (
     stops: VeloroutesResponseStop[],
-    trainstops: string[],
+    trainstops: number[],
 ): Veloroute => {
     stops.sort((a, b) => a.stop_number - b.stop_number);
     const velorouteStops = convertVelorouteStops(stops);
@@ -37,7 +37,7 @@ export const makeVeloRoute = (
                 acc.push({ dist: 0, leg: [stop] });
             } else if (
                 // build leg
-                stop.trainstop &&
+                !!stop.trainstop &&
                 trainstops.includes(stop.trainstop) &&
                 idx !== arr.length - 1
             ) {
@@ -97,6 +97,7 @@ export const convertVelorouteStops = (
             y: addXY(stop).y,
             dist: stop.dist,
             gcs: stop.gcs,
+            trainstop: stop.trainstop,
         };
         if (stop.trainlines) {
             copiedStop.trainlines = stop.trainlines.split(",");
