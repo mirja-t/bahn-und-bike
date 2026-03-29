@@ -81,7 +81,7 @@ export function createNewRoute(
         });
     }
     return {
-        id: `new_route-${Date.now()}`,
+        id: `new_route-${stopIds.join('-')}`,
         name,
         connection: null,
         dur: getDuration(route),
