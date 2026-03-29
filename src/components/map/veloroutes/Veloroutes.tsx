@@ -45,7 +45,6 @@ const TrainstationVelorouteConnection = ({
             if (response.status === 200) {
                 const data = await response.json();
                 const { lat, lon } = data;
-                console.log("fetched trainstop data", lat, lon);
                 setTrainstop({ lat, lon });
             } else {
                 console.error("Failed to fetch trainstop data");
