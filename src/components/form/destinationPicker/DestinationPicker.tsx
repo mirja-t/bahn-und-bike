@@ -111,7 +111,6 @@ export const DestinationPicker = () => {
     }
 
     const handleInputChange = (value: string) => {
-        console.log("Input changed:", value);
         if (!value) {
             return;
         }
