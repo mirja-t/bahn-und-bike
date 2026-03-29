@@ -13,7 +13,6 @@ import { Switcher } from "../components/form/switcher/Switcher";
 import { useSelector } from "react-redux";
 import { Header } from "../components/stateless/header/Header";
 import { Footer } from "../components/stateless/footer/Footer";
-import { DestinationLayerSelect } from "../components/form/destinationLayerSelect/DestinationLayerSelect";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
     return <main className={styles.main}>{children}</main>;
@@ -53,7 +52,6 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
                             Routefinder
                         </NavLink>
                     </nav>
-                    <DestinationLayerSelect />
                     <Switcher
                         setValue={(langCode: LangCode) =>
                             dispatch(setLangCode(langCode))

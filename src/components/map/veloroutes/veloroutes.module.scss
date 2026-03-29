@@ -38,3 +38,11 @@
     stroke: transparent;
     fill: none;
 }
+.connectionLine {
+    stroke: var(--train-active);
+    stroke-dasharray: 1;
+    fill: none;
+}
+.connectionDot {
+    fill: var(--train-active);
+}

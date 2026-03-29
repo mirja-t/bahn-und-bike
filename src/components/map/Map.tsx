@@ -15,7 +15,6 @@ import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
 import { setUserScale, selectUserScale, useAppDispatch } from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
-import { Destinations } from "./destinations/Destinations";
 
 interface MapProps {
     value: number;
@@ -110,7 +109,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
                         className={styles.mapInner}
                     >
                         {!isLoading && <Trainroutes />}
-                        <Destinations />
+                        {/* <Destinations /> */}
                         <Germany />
                     </motion.div>
                 </div>
