@@ -64,7 +64,7 @@ export const VelorouteDetails = () => {
                         </header>
                         <section className="veloroute-details">
                             <h5>{`${t("totaldistance")}`}</h5>
-                            <p>{activeVeloroute.len}km</p>
+                            <p>ca. {activeVeloroute.len.toFixed(0)}km</p>
                             <Collapse title={`${t("cyclingroutelegs")}`}>
                                 <ItemList
                                     items={orderedListItems}

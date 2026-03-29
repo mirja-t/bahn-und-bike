@@ -8,7 +8,7 @@
     "crossingveloroutes": "Anschlussradwege",
     "cyclingroutelegs": "Streckenabschnitte",
     "direct_trains_only": "Nur Direktverbindungen",
-    "distance": "Etappenlänge",
+    "distance": "Länge",
     "email": "Email-Adresse:",
     "from": "Von",
     "home_headline": "Plane deine Tour",
@@ -66,5 +66,7 @@
     "bikeroutes": "Radwege",
     "trainconnections": "Bahnverbindungen",
     "routelegs": "Abschnitte",
-    "journey": "Fahrtverlauf"
+    "journey": "Fahrtverlauf",
+    "nearesttrainstation": "Nächste Bahnstation",
+    "distanceToNextTrainstation": "Entfernung zur nächsten Bahnstation"
 }

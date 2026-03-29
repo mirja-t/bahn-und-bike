@@ -124,14 +124,14 @@ export const Veloroutes = () => {
                 activeVelorouteSection.leg[0].trainstop && (
                     <>
                         <TrainstationVelorouteConnection
-                            trainstopCoordinates={firstStop.firstStation}
+                            trainstopCoordinates={firstStop?.firstStation}
                             velorouteCoordinate={{
                                 x: activeVelorouteSection.leg[0].x,
                                 y: activeVelorouteSection.leg[0].y,
                             }}
                         />
                         <TrainstationVelorouteConnection
-                            trainstopCoordinates={lastStop.firstStation}
+                            trainstopCoordinates={lastStop?.firstStation}
                             velorouteCoordinate={{
                                 x: activeVelorouteSection.leg.at(-1)?.x,
                                 y: activeVelorouteSection.leg.at(-1)?.y,

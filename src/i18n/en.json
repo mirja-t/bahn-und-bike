@@ -8,7 +8,7 @@
     "crossingveloroutes": "Crossing veloroutes",
     "cyclingroutelegs": "Cycling Route Legs",
     "direct_trains_only": "Direct connections only",
-    "distance": "Leg distance",
+    "distance": "Distance",
     "email": "email:",
     "from": "From",
     "home_headline": "Plan your tour",
@@ -66,5 +66,7 @@
     "bikeroutes": "Cycling routes",
     "trainconnections": "Train connections",
     "routelegs": "Route legs",
-    "journey": "Journey"
+    "journey": "Journey",
+    "nearesttrainstation": "Nearest train station",
+    "distanceToNextTrainstation": "Distance to next train station"
 }
