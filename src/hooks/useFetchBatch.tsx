@@ -7,8 +7,8 @@ export interface UseFetchBatchReturn<T> {
     error: boolean;
 }
 
-export const useFetchBatch = <T extends { id: string }>(
-    ids: string[],
+export const useFetchBatch = <T extends { id: string | number }>(
+    ids: (string | number)[],
     assetsEndpoint: string,
     method: "POST" | "GET" = "GET",
 ): UseFetchBatchReturn<T> => {
@@ -26,7 +26,12 @@ export const useFetchBatch = <T extends { id: string }>(
 
         const fetchAssets = async () => {
             try {
-                const validIds = ids.filter((id) => id && id.trim() !== "");
+                const validIds = ids.filter((id) => {
+                    if (typeof id === "number") {
+                        return !isNaN(id);
+                    }
+                    return id && id.trim() !== "";
+                });
                 if (validIds.length === 0) {
                     setLoading(false);
                     return;
@@ -62,7 +67,7 @@ export const useFetchBatch = <T extends { id: string }>(
                     // Create hashmap of id -> asset for O(1) lookup
                     const newMap = new Map<string, T>();
                     fetchedAssets.forEach((asset) => {
-                        newMap.set(asset.id, asset);
+                        newMap.set(asset.id.toString(), asset);
                     });
 
                     setAssetsMap(newMap);
@@ -86,7 +91,7 @@ export const useFetchBatch = <T extends { id: string }>(
 
     // Map IDs to assets in original order, filter out missing assets
     const assets = ids
-        .map((id) => assetsMap.get(id))
+        .map((id) => assetsMap.get(id.toString()))
         .filter((asset): asset is T => asset !== undefined);
 
     return {

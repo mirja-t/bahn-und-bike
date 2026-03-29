@@ -44,7 +44,7 @@ vi.mock("../map/Map", () => ({
 describe("Container search reset", () => {
     const responseStops: ResponseStop[] = [
         {
-            station_id: "2975",
+            station_id: 2975,
             station_name: "Berlin Hbf",
             dur: 0,
             lat: "52.525084",
@@ -54,7 +54,7 @@ describe("Container search reset", () => {
             trainline_id: "re1",
         },
         {
-            station_id: "1234",
+            station_id: 1234,
             station_name: "Potsdam",
             dur: 10,
             lat: "52.390569",

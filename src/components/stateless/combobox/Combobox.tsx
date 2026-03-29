@@ -5,24 +5,24 @@ import { useClickOutside } from "../../../hooks/useClickOutside";
 
 const DEFAULT_MAX_LENGTH = 100;
 
-export interface ComboboxOption {
-    value: string;
+export interface ComboboxOption<T> {
+    value: T;
     label: string;
 }
 
-interface ComboboxProps {
-    options: ComboboxOption[];
+interface ComboboxProps<T> {
+    options: ComboboxOption<T>[];
     name: string;
     label?: string;
-    value?: ComboboxOption | null;
-    onChange: (value: ComboboxOption | null) => void;
-    onInputChange?: (value: string) => void;
+    value?: ComboboxOption<T> | null;
+    onChange: (value: ComboboxOption<T> | null) => void;
+    onInputChange?: (inputVal: string) => void;
     placeholder?: string;
     maxLength?: number;
     dropdownPosition?: "bottom" | "top";
 }
 
-export const Combobox = ({
+export const Combobox = <T,>({
     options,
     name,
     label,
@@ -32,8 +32,10 @@ export const Combobox = ({
     placeholder,
     maxLength = DEFAULT_MAX_LENGTH,
     dropdownPosition = "bottom",
-}: ComboboxProps) => {
-    const [inputValue, setInputValue] = useState<ComboboxOption | null>(null);
+}: ComboboxProps<T>) => {
+    const [inputValue, setInputValue] = useState<ComboboxOption<T> | null>(
+        null,
+    );
     const [visibleValue, setVisibleValue] = useState<string>(
         value?.label || "",
     );
@@ -102,7 +104,7 @@ export const Combobox = ({
         }
     };
 
-    const handleOptionSelect = (option: ComboboxOption) => {
+    const handleOptionSelect = (option: ComboboxOption<T>) => {
         setInputValue(option);
         setVisibleValue(option.label);
         onChange(option);
@@ -131,7 +133,7 @@ export const Combobox = ({
 
     const handleOptionKeyDown = (
         event: React.KeyboardEvent<HTMLLIElement>,
-        option: ComboboxOption,
+        option: ComboboxOption<T>,
         index: number,
     ) => {
         if (event.key === "Enter" || event.key === " ") {
@@ -216,7 +218,7 @@ export const Combobox = ({
                             >
                                 {displayedOptions.map((option, index) => (
                                     <li
-                                        key={option.value}
+                                        key={`option-${option.value}`}
                                         role="option"
                                         aria-selected={
                                             option.value === inputValue?.value

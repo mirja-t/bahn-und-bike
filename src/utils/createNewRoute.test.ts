@@ -12,7 +12,7 @@ describe("createNewRoute", () => {
         const actualValue = createNewRoute(parisStopSNCF, stops);
 
         //assert
-        expect(actualValue.stopIds).toEqual(["paris", "bruxelles", "berlin"]);
+        expect(actualValue.stopIds).toEqual([1, 2, 3]);
         // expect(actualValue).toEqual(parisBerlinRoute); // to do: handle trimming names in test data
     });
 });

@@ -81,7 +81,7 @@ export function createNewRoute(
         });
     }
     return {
-        id: startDest.station_id,
+        id: `new_route-${stopIds.join('-')}`,
         name,
         connection: null,
         dur: getDuration(route),

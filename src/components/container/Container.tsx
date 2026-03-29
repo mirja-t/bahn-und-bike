@@ -65,10 +65,7 @@ export const Container = () => {
                     trainRoutes
                         .map((route) => route.stopIds)
                         .flat()
-                        .filter(
-                            (id) =>
-                                id !== null && id !== undefined && id !== "",
-                        ),
+                        .filter((id) => id !== null && id !== undefined),
                 ),
             );
             dispatch(setVelorouteList([]));

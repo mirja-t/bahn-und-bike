@@ -9,9 +9,82 @@ import {
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
 } from "./VeloroutesSlice";
-import { setActiveTab, useAppDispatch } from "../../../AppSlice";
+import {
+    selectUserScale,
+    setActiveTab,
+    useAppDispatch,
+} from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
+import { useEffect, useState } from "react";
+import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
+import { headers, VITE_API_URL } from "../../../config/config";
+
+interface TrainstationVelorouteConnectionProps {
+    id: number | null | undefined;
+    velorouteCoordinate:
+        | { x: number | undefined; y: number | undefined }
+        | undefined;
+}
+const TrainstationVelorouteConnection = ({
+    id,
+    velorouteCoordinate,
+}: TrainstationVelorouteConnectionProps) => {
+    const userScale = useSelector(selectUserScale);
+    const [trainstop, setTrainstop] = useState<{
+        lat: number;
+        lon: number;
+    } | null>(null);
+
+    useEffect(() => {
+        setTrainstop(null);
+        if (!id) return;
+        const fetchTrainstop = async () => {
+            const response = await fetch(`${VITE_API_URL}trainstations/${id}`, {
+                headers,
+            });
+            if (response.status === 200) {
+                const data = await response.json();
+                const { lat, lon } = data;
+                setTrainstop({ lat, lon });
+            } else {
+                console.error("Failed to fetch trainstop data");
+            }
+        };
+        fetchTrainstop();
+    }, [id]);
+    if (
+        !trainstop ||
+        !velorouteCoordinate ||
+        velorouteCoordinate.x === undefined ||
+        velorouteCoordinate.y === undefined
+    )
+        return null;
+    const [x, y] = SvgMapBuilder.getMapPosition(
+        trainstop.lon,
+        trainstop.lat,
+        germanyBounds,
+    );
+
+    return (
+        <g>
+            <line
+                x1={x}
+                y1={y}
+                x2={velorouteCoordinate.x}
+                y2={velorouteCoordinate.y}
+                className={styles.connectionLine}
+                strokeWidth={1 / userScale}
+            />
+            <circle
+                cx={x}
+                cy={y}
+                r={3 / userScale}
+                className={styles.connectionDot}
+            />
+        </g>
+    );
+};
 
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
@@ -31,7 +104,7 @@ export const Veloroutes = () => {
     };
 
     const handleSectionClick = (_: string, idx: number) => {
-        dispatch(setActiveTab("veloroutes"));
+        dispatch(setActiveTab("leg"));
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
 
@@ -64,6 +137,25 @@ export const Veloroutes = () => {
                         className={styles.preview}
                     />
                 ))}
+            {activeVelorouteSection &&
+                activeVelorouteSection.leg[0].trainstop && (
+                    <>
+                        <TrainstationVelorouteConnection
+                            id={activeVelorouteSection.leg[0].trainstop}
+                            velorouteCoordinate={{
+                                x: activeVelorouteSection.leg[0].x,
+                                y: activeVelorouteSection.leg[0].y,
+                            }}
+                        />
+                        <TrainstationVelorouteConnection
+                            id={activeVelorouteSection.leg.at(-1)?.trainstop}
+                            velorouteCoordinate={{
+                                x: activeVelorouteSection.leg.at(-1)?.x,
+                                y: activeVelorouteSection.leg.at(-1)?.y,
+                            }}
+                        />
+                    </>
+                )}
 
             {/* stops */}
             {activeVeloroute &&

@@ -11,7 +11,7 @@ const warsawCoordinates = [52.2296756, 21.0122287];
 const moscowCoordinates = [55.755826, 37.6173];
 
 const parisStopSNCF: ResponseStop = {
-    station_id: "paris",
+    station_id: 1,
     trainline_id: "TGV",
     dur: 0,
     stop_number: 0,
@@ -21,7 +21,7 @@ const parisStopSNCF: ResponseStop = {
     lon: parisCoordinates[1].toString(),
 };
 const bruxellesStopSNCF: ResponseStop = {
-    station_id: "bruxelles",
+    station_id: 2,
     trainline_id: "TGV",
     dur: 30,
     stop_number: 1,
@@ -31,7 +31,7 @@ const bruxellesStopSNCF: ResponseStop = {
     lon: bruxellesCoordinates[1].toString(),
 };
 const berlinStopSNCF: ResponseStop = {
-    station_id: "berlin",
+    station_id: 3,
     trainline_id: "TGV",
     dur: 300,
     stop_number: 2,
@@ -41,7 +41,7 @@ const berlinStopSNCF: ResponseStop = {
     lon: berlinCoordinates[1].toString(),
 };
 const berlinStopDB: ResponseStop = {
-    station_id: "berlin",
+    station_id: 3,
     trainline_id: "DB",
     dur: 0,
     stop_number: 0,
@@ -51,7 +51,7 @@ const berlinStopDB: ResponseStop = {
     lon: berlinCoordinates[1].toString(),
 };
 const warsawStopSNCF: ResponseStop = {
-    station_id: "warsaw",
+    station_id: 4,
     trainline_id: "TGV",
     dur: 300,
     stop_number: 3,
@@ -61,7 +61,7 @@ const warsawStopSNCF: ResponseStop = {
     lon: warsawCoordinates[1].toString(),
 };
 const moscowStopSNCF: ResponseStop = {
-    station_id: "moscow",
+    station_id: 5,
     trainline_id: "TGV",
     dur: 600,
     stop_number: 4,
@@ -71,7 +71,7 @@ const moscowStopSNCF: ResponseStop = {
     lon: moscowCoordinates[1].toString(),
 };
 const vilniusStopPR: ResponseStop = {
-    station_id: "vilnius",
+    station_id: 6,
     trainline_id: "PR",
     dur: 0,
     stop_number: 0,
@@ -81,7 +81,7 @@ const vilniusStopPR: ResponseStop = {
     lon: "25.279652",
 };
 const warsawStopPR: ResponseStop = {
-    station_id: "warsaw",
+    station_id: 4,
     trainline_id: "PR",
     dur: 500,
     stop_number: 1,
@@ -91,7 +91,7 @@ const warsawStopPR: ResponseStop = {
     lon: warsawCoordinates[1].toString(),
 };
 const warsawStopDB: ResponseStop = {
-    station_id: "warsaw",
+    station_id: 4,
     trainline_id: "DB",
     dur: 500,
     stop_number: 1,
@@ -101,7 +101,7 @@ const warsawStopDB: ResponseStop = {
     lon: warsawCoordinates[1].toString(),
 };
 const bratislavaStopPR: ResponseStop = {
-    station_id: "bratislava",
+    station_id: 7,
     trainline_id: "PR",
     dur: 200,
     stop_number: 2,
@@ -111,7 +111,7 @@ const bratislavaStopPR: ResponseStop = {
     lon: "17.107748",
 };
 const viennaStopPR: ResponseStop = {
-    station_id: "vienna",
+    station_id: 8,
     trainline_id: "PR",
     dur: 300,
     stop_number: 3,
@@ -184,7 +184,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         pathLength: 224,
         firstStation: {
             stop_name: "S+U Berlin",
-            stop_id: "8011160",
+            stop_id: 3,
             x: 700,
             y: 400,
             lat: 52.52437,
@@ -192,23 +192,13 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         },
         lastStation: {
             stop_name: "Nauen",
-            stop_id: "8010239",
+            stop_id: 9,
             x: 690,
             y: 410,
             lat: 52.52437,
             lon: 13.41053,
         },
-        stopIds: [
-            "8011160",
-            "8011167",
-            "8010404",
-            "8080040",
-            "8081586",
-            "8013479",
-            "8011541",
-            "8013472",
-            "8010239",
-        ],
+        stopIds: [3, 9],
         points: "750.2131,424.97898507247646 743.3190999999999,424.18572225147807 733.0532999999999,423.46783138232865 726.2212999999999,421.0772513683098 724.8883,420.5148016541665 722.2612,419.3698672605193 718.3875,417.71653844672517 713.4342,415.6053202207047 701.8212,410.7096230541889 ",
         connection: null,
     },
@@ -220,7 +210,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         pathLength: 422,
         firstStation: {
             stop_name: "S+U Berlin",
-            stop_id: "8011160",
+            stop_id: 3,
             x: 740,
             y: 420,
             lat: 52.52437,
@@ -228,24 +218,13 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         },
         lastStation: {
             stop_name: "Rathenow",
-            stop_id: "9210771",
+            stop_id: 9,
             x: 640,
             y: 410,
             lat: 52.52437,
             lon: 13.41053,
         },
-        stopIds: [
-            "8011160",
-            "8011167",
-            "8010404",
-            "8013021",
-            "8080260",
-            "8080370",
-            "8010389",
-            "90210050",
-            "9210318",
-            "9210771",
-        ],
+        stopIds: [3, 9, 4, 5, 6, 7, 8, 9],
         points: "750.2131,424.97898507247646 743.3190999999999,424.18572225147807 733.0532999999999,423.46783138232865 727.4364999999999,422.9908966962512 719.1381,422.0137480084005 713.3829999999999,421.37868663881363 707.1288,420.7213672270145 676.2554999999999,414.0314600956526 663.5818,412.75378355589714 648.7971,412.78687660360276 ",
         connection: null,
     },
@@ -257,7 +236,7 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         pathLength: 1089,
         firstStation: {
             stop_name: "S+U Berlin",
-            stop_id: "8011160",
+            stop_id: 3,
             x: 720,
             y: 400,
             lat: 52.52437,
@@ -265,30 +244,13 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         },
         lastStation: {
             stop_name: "Lutherstadt Wittenberg",
-            stop_id: "8010222",
+            stop_id: 9,
             x: 670,
             y: 530,
             lat: 52.52437,
             lon: 13.41053,
         },
-        stopIds: [
-            "8011160",
-            "8011118",
-            "8011113",
-            "8011041",
-            "8010215",
-            "8013123",
-            "8013137",
-            "8013345",
-            "8012260",
-            "8010182",
-            "8012487",
-            "8011210",
-            "8013371",
-            "8011290",
-            "8013418",
-            "8010222",
-        ],
+        stopIds: [3, 9, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
         points: "750.2131,424.97898507247646 750.9603000000001,427.6489084666671 749.8635,433.2149896016475 746.0805,440.7916955579485 740.0657000000001,462.094469278015 739.3017,470.6021071583682 736.2944000000001,475.54197909888114 732.6989,491.84765225895285 729.3163999999999,496.16244939749834 718.7927,511.2534273816875 711.1554,516.0732107089651 702.8862,518.0799030310013 691.2406000000001,524.0199729279311 688.5609000000001,527.9133739428735 686.4583,529.8490877842811 679.5052999999999,532.3417340447681 ",
         connection: null,
     },

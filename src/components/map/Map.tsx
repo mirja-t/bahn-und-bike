@@ -13,7 +13,12 @@ import { Germany } from "./germany/Germany";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
-import { setUserScale, selectUserScale, useAppDispatch } from "../../AppSlice";
+import {
+    setUserScale,
+    selectUserScale,
+    useAppDispatch,
+    selectResetKey,
+} from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 
 interface MapProps {
@@ -22,6 +27,7 @@ interface MapProps {
     mapSize: [number, number];
 }
 export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
+    const resetKey = useSelector(selectResetKey);
     const mapcontainerRef = useRef<HTMLDivElement | null>(null);
     const zoomcontainerRef = useRef<HTMLDivElement | null>(null);
     const journeys = useSelector(selectCurrentTrainroutes);
@@ -54,7 +60,7 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
     const scaleOriginX = zoom.x / zoom.containerWidth;
     const scaleOriginY = zoom.y / zoom.containerHeight;
 
-    const drag = useDrag(value);
+    const drag = useDrag(resetKey);
 
     return (
         <>

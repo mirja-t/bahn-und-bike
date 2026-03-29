@@ -3,7 +3,7 @@ import { makeVeloRoute } from "./makeVeloRoute";
 import type { VeloroutesResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 describe("makeVeloRoute", () => {
-    const trainstops = ["trainstop_a", "trainstop_c", "trainstop_d"];
+    const trainstops = [1, 3, 4];
     const stops: VeloroutesResponseStop[] = [
         {
             name: "Route 1",
@@ -14,7 +14,7 @@ describe("makeVeloRoute", () => {
             lon: "0",
             stop_number: 1,
             trainlines: "",
-            trainstop: "",
+            trainstop: null,
             veloroute_id: "route_1",
             station_name: "Stop 0",
         },
@@ -24,7 +24,7 @@ describe("makeVeloRoute", () => {
             lat: "1",
             lon: "1",
             stop_number: 2,
-            trainstop: "trainstop_a",
+            trainstop: 1,
             trainlines: "line_1, line_2",
             veloroute_id: "route_1",
             name: "Route 1",
@@ -41,7 +41,7 @@ describe("makeVeloRoute", () => {
             name: "Route 1",
             gcs: "2,2",
             trainlines: "",
-            trainstop: "",
+            trainstop: null,
             station_name: "",
         },
         {
@@ -50,7 +50,7 @@ describe("makeVeloRoute", () => {
             lat: "3",
             lon: "3",
             stop_number: 4,
-            trainstop: "trainstop_c",
+            trainstop: 3,
             trainlines: "line_3",
             veloroute_id: "route_1",
             name: "Route 1",
@@ -63,7 +63,7 @@ describe("makeVeloRoute", () => {
             lat: "4",
             lon: "4",
             stop_number: 5,
-            trainstop: "trainstop_d",
+            trainstop: 4,
             trainlines: "line_4",
             veloroute_id: "route_1",
             name: "Route 1",
