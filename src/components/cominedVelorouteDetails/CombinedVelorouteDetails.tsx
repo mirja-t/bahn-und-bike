@@ -48,7 +48,7 @@ export const CombinedVelorouteDetails = () => {
 
     type DestinationInfo = {
         destName: string;
-        trainlines: string;
+        // trainlines: string; --> to do: add trainline infos
     };
     const [destinationNames, setDestinationNames] = useState<{
         start: DestinationInfo;
@@ -56,11 +56,9 @@ export const CombinedVelorouteDetails = () => {
     }>({
         start: {
             destName: "",
-            trainlines: "",
         },
         end: {
             destName: "",
-            trainlines: "",
         },
     });
 
