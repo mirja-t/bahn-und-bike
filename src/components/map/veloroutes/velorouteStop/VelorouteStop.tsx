@@ -53,7 +53,7 @@ export const VelorouteStop = ({
                 }
                 cx={item.x}
                 cy={item.y}
-                r={2 / appZoom}
+                r={1.5 / appZoom}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
                 }}

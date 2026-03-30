@@ -35,7 +35,7 @@ export const VeloroutePath = ({
             />
             <polyline
                 className={styles.velorouteSectionLarge}
-                strokeWidth={10 / appZoom}
+                strokeWidth={6 / appZoom}
                 points={path}
             />
         </g>

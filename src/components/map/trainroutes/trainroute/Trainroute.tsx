@@ -42,12 +42,12 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
         >
             <polyline
                 className="route-bg"
-                strokeWidth={10 / appZoom}
+                strokeWidth={6 / appZoom}
                 points={item.points}
             />
             <polyline
                 className={"route"}
-                strokeWidth={2 / appZoom}
+                strokeWidth={1 / appZoom}
                 points={item.points}
                 style={{
                     strokeDashoffset: item.pathLength,

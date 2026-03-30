@@ -53,7 +53,7 @@ const TrainstationVelorouteConnection = ({
             <circle
                 cx={x}
                 cy={y}
-                r={3 / appZoom}
+                r={2 / appZoom}
                 className={styles.connectionDot}
             />
         </g>
