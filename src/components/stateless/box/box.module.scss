@@ -1,0 +1,4 @@
+@use "../../../scss/variables/spacing.scss" as spacing;
+.box {
+    margin-bottom: spacing.$mainpadding;
+}

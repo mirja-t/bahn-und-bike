@@ -11,6 +11,8 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesSlice";
 import { useEffect, useState } from "react";
 import { haversineDistance } from "../../utils/haversineDistance";
+import { Collapse } from "../stateless/collapse/Collapse";
+import { Box } from "../stateless/box/Box";
 
 export const CombinedVelorouteDetails = () => {
     const dispatch = useDispatch();
@@ -188,38 +190,45 @@ export const CombinedVelorouteDetails = () => {
         </>
     );
     return (
-        <div id="veloroute-details">
-            <div id="veloroute" className="details">
-                {activeVelorouteSection !== null && (
-                    <section className="veloroute-details veloroute-section-details">
-                        <h5>{`${t("leg")}`}</h5>
-                        {sectionHeadline(activeVelorouteSection.leg[0], 1)}
-                        {sectionHeadline(
-                            activeVelorouteSection.leg[
-                                activeVelorouteSection.leg.length - 1
-                            ],
-                            2,
-                        )}
-                        {activeVelorouteSection.leg.length > 2 && (
-                            <>
-                                <h6>{t("via")}</h6>
-                                <ItemList
-                                    variant="orderedList"
-                                    items={itemList}
-                                    onHover={hoverVeloStop}
-                                    activeId={
-                                        activeVelorouteStop
-                                            ? activeVelorouteStop?.stop_id
-                                            : ""
-                                    }
-                                />
-                            </>
-                        )}
-                        <h6>{t("distance")}</h6>
-                        <p>{activeVelorouteSection.dist} km</p>
-                    </section>
-                )}
+        <>
+            <hr />
+            <div id="veloroute-details">
+                <div id="veloroute" className="details">
+                    {activeVelorouteSection !== null && (
+                        <section className="veloroute-details veloroute-section-details">
+                            <h5>{`${t("leg")}`}</h5>
+                            <Box>
+                                {sectionHeadline(
+                                    activeVelorouteSection.leg[0],
+                                    1,
+                                )}
+                                {sectionHeadline(
+                                    activeVelorouteSection.leg[
+                                        activeVelorouteSection.leg.length - 1
+                                    ],
+                                    2,
+                                )}
+                            </Box>
+                            {activeVelorouteSection.leg.length > 2 && (
+                                <Collapse title={`${t("via")}`}>
+                                    <ItemList
+                                        variant="orderedList"
+                                        items={itemList}
+                                        onHover={hoverVeloStop}
+                                        activeId={
+                                            activeVelorouteStop
+                                                ? activeVelorouteStop?.stop_id
+                                                : ""
+                                        }
+                                    />
+                                </Collapse>
+                            )}
+                            <h6>{t("distance")}</h6>
+                            <p>{activeVelorouteSection.dist} km</p>
+                        </section>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };

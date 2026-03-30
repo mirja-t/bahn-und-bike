@@ -63,12 +63,12 @@ svg#routes {
         &.inactive {
             .route-bg {
                 stroke: transparent;
-                opacity: 0.5;
+                opacity: 0.3;
                 fill: none;
             }
             .route {
                 transition: all 0.5s ease;
-                opacity: 0.5;
+                opacity: 0.3;
                 stroke: var(--train-muted);
                 fill: none;
             }
@@ -76,6 +76,7 @@ svg#routes {
         &:hover {
             .route {
                 stroke: var(--train-hover);
+                opacity: 1;
             }
         }
     }

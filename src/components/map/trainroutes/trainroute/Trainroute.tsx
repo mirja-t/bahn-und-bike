@@ -10,7 +10,7 @@ import {
 } from "../../veloroutes/VeloroutesSlice";
 import { Trainstop } from "../trainstop/Trainstop";
 import {
-    selectUserScale,
+    selectAppZoom,
     setActiveTab,
     useAppDispatch,
 } from "../../../../AppSlice";
@@ -23,7 +23,7 @@ interface TrainrouteProps {
 
 export const Trainroute = ({ item, className }: TrainrouteProps) => {
     const dispatch = useAppDispatch();
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
 
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
         const stopIds = line.stopIds;
@@ -42,12 +42,12 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
         >
             <polyline
                 className="route-bg"
-                strokeWidth={5 / userScale}
+                strokeWidth={6 / appZoom}
                 points={item.points}
             />
             <polyline
                 className={"route"}
-                strokeWidth={1 / userScale}
+                strokeWidth={1 / appZoom}
                 points={item.points}
                 style={{
                     strokeDashoffset: item.pathLength,

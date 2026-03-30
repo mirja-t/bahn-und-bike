@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectUserScale } from "../../../../AppSlice";
+import { selectAppZoom } from "../../../../AppSlice";
 import styles from "../veloroutes.module.scss";
 
 interface VeloroutePathProps {
@@ -19,7 +19,7 @@ export const VeloroutePath = ({
     onClick,
     className,
 }: VeloroutePathProps) => {
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     return (
         <g
             onClick={() => {
@@ -30,12 +30,12 @@ export const VeloroutePath = ({
         >
             <polyline
                 className={`${styles.velorouteSection} ${active ? styles.active : ""} ${className || ""}`}
-                strokeWidth={active ? 1.5 / userScale : 1 / userScale}
+                strokeWidth={active ? 2 / appZoom : 1 / appZoom}
                 points={path}
             />
             <polyline
                 className={styles.velorouteSectionLarge}
-                strokeWidth={6 / userScale}
+                strokeWidth={6 / appZoom}
                 points={path}
             />
         </g>

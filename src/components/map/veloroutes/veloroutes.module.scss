@@ -35,12 +35,12 @@
     }
 }
 .velorouteSectionLarge {
-    stroke: transparent;
     fill: none;
+    stroke: var(--bike);
+    opacity: 0.1;
 }
 .connectionLine {
     stroke: var(--train-active);
-    stroke-dasharray: 1;
     fill: none;
 }
 .connectionDot {

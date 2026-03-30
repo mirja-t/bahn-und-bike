@@ -9,11 +9,7 @@ import {
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
 } from "./VeloroutesSlice";
-import {
-    selectUserScale,
-    setActiveTab,
-    useAppDispatch,
-} from "../../../AppSlice";
+import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
@@ -29,7 +25,7 @@ const TrainstationVelorouteConnection = ({
     trainstopCoordinates,
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
 
     if (
         !trainstopCoordinates ||
@@ -52,12 +48,12 @@ const TrainstationVelorouteConnection = ({
                 x2={velorouteCoordinate.x}
                 y2={velorouteCoordinate.y}
                 className={styles.connectionLine}
-                strokeWidth={1 / userScale}
+                strokeWidth={1 / appZoom}
             />
             <circle
                 cx={x}
                 cy={y}
-                r={3 / userScale}
+                r={2 / appZoom}
                 className={styles.connectionDot}
             />
         </g>

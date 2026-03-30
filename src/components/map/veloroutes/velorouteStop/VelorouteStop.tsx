@@ -5,7 +5,7 @@ import {
     type VelorouteStop as VelorouteStopType,
     setVelorouteSectionActiveThunk,
 } from "../VeloroutesSlice";
-import { selectUserScale, useAppDispatch } from "../../../../AppSlice";
+import { selectAppZoom, useAppDispatch } from "../../../../AppSlice";
 import { MapPinIcon } from "../../../stateless/icons/MapPinIcon";
 
 interface VelorouteStopProps {
@@ -20,7 +20,7 @@ export const VelorouteStop = ({
     idx: sectionIdx,
 }: VelorouteStopProps) => {
     const dispatch = useAppDispatch();
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     const active = type.includes("active");
     const start = type.includes("start");
 
@@ -43,7 +43,7 @@ export const VelorouteStop = ({
                 idx={start ? 1 : 2}
                 active={active}
                 position={{ x: item.x, y: item.y }}
-                userScale={userScale}
+                scale={appZoom}
             />
             <circle
                 className={
@@ -53,7 +53,7 @@ export const VelorouteStop = ({
                 }
                 cx={item.x}
                 cy={item.y}
-                r={1 / userScale}
+                r={1.5 / appZoom}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
                 }}
@@ -61,7 +61,7 @@ export const VelorouteStop = ({
             <circle
                 cx={item.x}
                 cy={item.y}
-                r={3 / userScale}
+                r={6 / appZoom}
                 onClick={handleClick}
                 onMouseEnter={(e) => hoverVeloStop(e, item)}
                 onMouseLeave={hoverVeloStop}
