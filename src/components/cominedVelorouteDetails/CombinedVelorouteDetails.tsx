@@ -79,36 +79,73 @@ export const CombinedVelorouteDetails = () => {
 
     useEffect(() => {
         if (!activeVelorouteSection) return;
+
+        const abortController = new AbortController();
+        let isCancelled = false;
+
         const fetchDestinationInfo = async (
             lat: number,
             lon: number,
             key: keyof typeof destinationNames = "start",
         ) => {
-            const response = await fetch(
-                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
-            ).then((res) => res.json());
-            const address = response.address;
-            const destname =
-                address.suburb ||
-                address.village ||
-                address.town ||
-                address.city ||
-                address.hamlet ||
-                address.county ||
-                address.state_district ||
-                "";
-            setDestinationNames((prev) => ({
-                ...prev,
-                [key]: { ...prev[key], destName: destname },
-            }));
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`,
+                    { signal: abortController.signal },
+                );
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json();
+                if (isCancelled) {
+                    return;
+                }
+
+                const address = data.address ?? {};
+                const destname =
+                    address.suburb ||
+                    address.village ||
+                    address.town ||
+                    address.city ||
+                    address.hamlet ||
+                    address.county ||
+                    address.state_district ||
+                    "";
+
+                if (!destname) {
+                    return;
+                }
+
+                setDestinationNames((prev) => ({
+                    ...prev,
+                    [key]: { ...prev[key], destName: destname },
+                }));
+            } catch (error) {
+                if (error instanceof DOMException && error.name === "AbortError") {
+                    return;
+                }
+                // Swallow other errors to avoid breaking the UI; optionally log.
+            }
         };
+
         const { lat: startLat, lon: startLon } =
             activeVelorouteSection.leg.at(0) || {};
         const { lat: endLat, lon: endLon } =
             activeVelorouteSection.leg.at(-1) || {};
-        if (startLat && startLon)
+
+        if (startLat && startLon) {
             fetchDestinationInfo(startLat, startLon, "start");
-        if (endLat && endLon) fetchDestinationInfo(endLat, endLon, "end");
+        }
+        if (endLat && endLon) {
+            fetchDestinationInfo(endLat, endLon, "end");
+        }
+
+        return () => {
+            isCancelled = true;
+            abortController.abort();
+        };
     }, [activeVelorouteSection]);
 
     const sectionHeadline = (stop: VelorouteStop, idx: number) => (
