@@ -123,7 +123,10 @@ export const CombinedVelorouteDetails = () => {
                     [key]: { ...prev[key], destName: destname },
                 }));
             } catch (error) {
-                if (error instanceof DOMException && error.name === "AbortError") {
+                if (
+                    error instanceof DOMException &&
+                    error.name === "AbortError"
+                ) {
                     return;
                 }
                 // Swallow other errors to avoid breaking the UI; optionally log.
@@ -135,10 +138,10 @@ export const CombinedVelorouteDetails = () => {
         const { lat: endLat, lon: endLon } =
             activeVelorouteSection.leg.at(-1) || {};
 
-        if (startLat && startLon) {
+        if (startLat !== undefined && startLon !== undefined) {
             fetchDestinationInfo(startLat, startLon, "start");
         }
-        if (endLat && endLon) {
+        if (endLat !== undefined && endLon !== undefined) {
             fetchDestinationInfo(endLat, endLon, "end");
         }
 
