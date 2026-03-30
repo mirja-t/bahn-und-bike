@@ -28,6 +28,8 @@ export type VelorouteStop = {
     trainstop: number | null;
     x: number;
     y: number;
+    lat: number;
+    lon: number;
 };
 
 export type Veloroute = {

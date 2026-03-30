@@ -5,11 +5,7 @@ import {
     type VelorouteStop as VelorouteStopType,
     setVelorouteSectionActiveThunk,
 } from "../VeloroutesSlice";
-import {
-    selectAppZoom,
-    setActiveTab,
-    useAppDispatch,
-} from "../../../../AppSlice";
+import { selectAppZoom, useAppDispatch } from "../../../../AppSlice";
 import { MapPinIcon } from "../../../stateless/icons/MapPinIcon";
 
 interface VelorouteStopProps {
@@ -38,7 +34,6 @@ export const VelorouteStop = ({
         dispatch(setActiveVelorouteStop(null));
     };
     const handleClick = () => {
-        dispatch(setActiveTab("veloroutes"));
         dispatch(setVelorouteSectionActiveThunk(sectionIdx));
     };
 

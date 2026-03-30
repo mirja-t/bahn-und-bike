@@ -12,53 +12,31 @@ import {
 import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
-import { useEffect, useState } from "react";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
-import { headers, VITE_API_URL } from "../../../config/config";
+import { selectTrainroutesAlongVeloroute } from "../trainroutes/TrainroutesSlice";
 
 interface TrainstationVelorouteConnectionProps {
-    id: number | null | undefined;
+    trainstopCoordinates: { lat: number; lon: number } | null;
     velorouteCoordinate:
         | { x: number | undefined; y: number | undefined }
         | undefined;
 }
 const TrainstationVelorouteConnection = ({
-    id,
+    trainstopCoordinates,
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
-    const [trainstop, setTrainstop] = useState<{
-        lat: number;
-        lon: number;
-    } | null>(null);
 
-    useEffect(() => {
-        setTrainstop(null);
-        if (!id) return;
-        const fetchTrainstop = async () => {
-            const response = await fetch(`${VITE_API_URL}trainstations/${id}`, {
-                headers,
-            });
-            if (response.status === 200) {
-                const data = await response.json();
-                const { lat, lon } = data;
-                setTrainstop({ lat, lon });
-            } else {
-                console.error("Failed to fetch trainstop data");
-            }
-        };
-        fetchTrainstop();
-    }, [id]);
     if (
-        !trainstop ||
+        !trainstopCoordinates ||
         !velorouteCoordinate ||
         velorouteCoordinate.x === undefined ||
         velorouteCoordinate.y === undefined
     )
         return null;
     const [x, y] = SvgMapBuilder.getMapPosition(
-        trainstop.lon,
-        trainstop.lat,
+        trainstopCoordinates.lon,
+        trainstopCoordinates.lat,
         germanyBounds,
     );
 
@@ -104,6 +82,11 @@ export const Veloroutes = () => {
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
 
+    const trainlinesAlongVeloroute = useSelector(
+        selectTrainroutesAlongVeloroute,
+    );
+    const [firstStop, lastStop] = trainlinesAlongVeloroute;
+
     return (
         <g className={styles.veloroute}>
             {activeVeloroute &&
@@ -137,14 +120,14 @@ export const Veloroutes = () => {
                 activeVelorouteSection.leg[0].trainstop && (
                     <>
                         <TrainstationVelorouteConnection
-                            id={activeVelorouteSection.leg[0].trainstop}
+                            trainstopCoordinates={firstStop?.firstStation}
                             velorouteCoordinate={{
                                 x: activeVelorouteSection.leg[0].x,
                                 y: activeVelorouteSection.leg[0].y,
                             }}
                         />
                         <TrainstationVelorouteConnection
-                            id={activeVelorouteSection.leg.at(-1)?.trainstop}
+                            trainstopCoordinates={lastStop?.firstStation}
                             velorouteCoordinate={{
                                 x: activeVelorouteSection.leg.at(-1)?.x,
                                 y: activeVelorouteSection.leg.at(-1)?.y,

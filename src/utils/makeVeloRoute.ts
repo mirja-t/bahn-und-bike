@@ -95,6 +95,8 @@ export const convertVelorouteStops = (
             stop_name: stop.station_name || stop.dest_name || "",
             x: addXY(stop).x,
             y: addXY(stop).y,
+            lat: parseFloat(stop.lat),
+            lon: parseFloat(stop.lon),
             dist: stop.dist,
             gcs: stop.gcs,
             trainstop: stop.trainstop,
