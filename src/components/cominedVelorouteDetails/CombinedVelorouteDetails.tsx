@@ -136,9 +136,16 @@ export const CombinedVelorouteDetails = () => {
                 {destinationNames[idx === 1 ? "start" : "end"].destName ||
                     stop.stop_name}
                 <br />
-                {t("distanceToNextTrainstation")}:&nbsp;
-                <br />
-                {idx === 1 ? distanceToStartStation : distanceToEndStation} km
+                {startVeloStop && endVeloStop ? (
+                    <>
+                        {t("distanceToNextTrainstation")}:&nbsp;
+                        <br />
+                        {idx === 1
+                            ? distanceToStartStation
+                            : distanceToEndStation}{" "}
+                        km
+                    </>
+                ) : null}
             </p>
         </>
     );
