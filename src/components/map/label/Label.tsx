@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectUserScale } from "../../../AppSlice";
+import { selectAppZoom } from "../../../AppSlice";
 import styles from "./label.module.scss";
 
 interface LabelProps<T> {
@@ -12,15 +12,15 @@ interface LabelProps<T> {
 }
 
 export const Label = <T,>({ item, className }: LabelProps<T>) => {
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     return (
         <text
             className={`${styles.destinationLabel}${
                 className === "veloroute" ? ` ${styles.veloroute}` : ""
             }`}
-            x={item.x + 5 / userScale}
+            x={item.x + 8 / appZoom}
             y={item.y}
-            style={{ fontSize: `${7 / userScale}px` }}
+            style={{ fontSize: `${16 / appZoom}px` }}
         >
             <tspan>{item.stop_name}</tspan>
         </text>

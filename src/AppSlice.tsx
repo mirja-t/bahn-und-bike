@@ -35,6 +35,7 @@ export interface AppState {
     langLoading: boolean;
     langError: boolean;
     userScale: number;
+    appScale: number;
     resetKey: number;
 }
 
@@ -47,6 +48,7 @@ export const appSlice = createSlice({
         langLoading: false,
         langError: false,
         userScale: 1,
+        appScale: 1,
         resetKey: 0,
     } as AppState,
     reducers: {
@@ -66,6 +68,9 @@ export const appSlice = createSlice({
             } else if (typeof state.userScale === "number") {
                 state.userScale = state.userScale + action.payload;
             }
+        },
+        setAppScale: (state, action: { payload: number }) => {
+            state.appScale = action.payload;
         },
         setResetKey: (state) => {
             state.resetKey += 1;
@@ -88,12 +93,15 @@ export const selectLangCode = (state: RootState) => state.app.langCode;
 export const selectActiveTab = (state: RootState) => state.app.activeTab;
 export const selectUserScale = (state: RootState) => state.app.userScale;
 export const selectResetKey = (state: RootState) => state.app.resetKey;
+export const selectAppZoom = (state: RootState) =>
+    state.app.appScale + state.app.userScale;
 
 export const {
     setTheme,
     setLangCode,
     setActiveTab,
     setUserScale,
+    setAppScale,
     setResetKey,
 } = appSlice.actions;
 

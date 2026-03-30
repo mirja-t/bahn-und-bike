@@ -1,7 +1,7 @@
 import "./trainstop.scss";
 import { motion, AnimatePresence } from "framer-motion";
 import { setActiveSpot, type CurrentTrainroute } from "../TrainroutesSlice";
-import { selectUserScale, useAppDispatch } from "../../../../AppSlice";
+import { selectAppZoom, useAppDispatch } from "../../../../AppSlice";
 import { useSelector } from "react-redux";
 
 interface TrainstopProps {
@@ -14,7 +14,7 @@ interface TrainstopProps {
 
 export const Trainstop = ({ item, styles }: TrainstopProps) => {
     const dispatch = useAppDispatch();
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     const hoverSpot = (
         e: React.MouseEvent,
         spot?: CurrentTrainroute["lastStation"],
@@ -34,16 +34,16 @@ export const Trainstop = ({ item, styles }: TrainstopProps) => {
             >
                 <circle
                     className="spot-bg"
-                    r={6 / userScale}
+                    r={6 / appZoom}
                     cx={item.x}
                     cy={item.y}
                 />
                 <motion.rect
                     className="spot spot-large"
-                    x={item.x - 1.5 / userScale}
-                    y={item.y - 1.5 / userScale}
-                    width={3 / userScale}
-                    height={3 / userScale}
+                    x={item.x - 1.5 / appZoom}
+                    y={item.y - 1.5 / appZoom}
+                    width={3 / appZoom}
+                    height={3 / appZoom}
                     style={{
                         scale: styles.scale,
                         transformOrigin: `${item.x}px ${item.y}px`,
@@ -54,10 +54,10 @@ export const Trainstop = ({ item, styles }: TrainstopProps) => {
                         <motion.rect
                             key={`trainstop-${item.stop_id || item.x}-${item.y}`}
                             className="spot spot-small"
-                            x={item.x - 1.5 / userScale}
-                            y={item.y - 1.5 / userScale}
-                            width={3 / userScale}
-                            height={3 / userScale}
+                            x={item.x - 1.5 / appZoom}
+                            y={item.y - 1.5 / appZoom}
+                            width={3 / appZoom}
+                            height={3 / appZoom}
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0 }}

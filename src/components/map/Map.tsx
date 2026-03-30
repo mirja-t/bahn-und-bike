@@ -1,9 +1,8 @@
 import styles from "./map.module.scss";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
-import { usePinch } from "../../hooks/usePinch";
 import {
     selectCurrentTrainroutes,
     selectTrainrouteListLoading,
@@ -38,16 +37,8 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
 
     const handleMapZoom = (dir: "+" | "-") => {
         const factor = dir === "+" ? 1 : -1;
-        dispatch(setUserScale(0.2 * factor));
+        dispatch(setUserScale(0.5 * factor));
     };
-
-    const pinchScale = usePinch(zoomcontainerRef);
-    useEffect(() => {
-        if (!mapcontainerRef.current || !zoomcontainerRef.current) return;
-        if (pinchScale.deltaY) {
-            dispatch(setUserScale(pinchScale.deltaY / -100));
-        }
-    }, [pinchScale, dispatch]);
 
     const zoom = useZoom(
         journeys,
