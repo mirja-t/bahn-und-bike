@@ -43,7 +43,7 @@ export const VelorouteStop = ({
                 idx={start ? 1 : 2}
                 active={active}
                 position={{ x: item.x, y: item.y }}
-                userScale={appZoom}
+                scale={appZoom}
             />
             <circle
                 className={
