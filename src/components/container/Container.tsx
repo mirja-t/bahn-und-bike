@@ -11,6 +11,7 @@ import {
     loadTrainroutes,
     selectCurrentTrainroutes,
     setCurrentTrainroutes,
+    selectTrainrouteListLoading,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
@@ -37,6 +38,7 @@ import { useTranslation } from "../../utils/i18n";
 import { TravelDuration } from "../form/TravelDuration";
 import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -46,10 +48,11 @@ export const Container = () => {
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
-
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
+    const journeys = useSelector(selectCurrentTrainroutes);
+    const isLoading = useSelector(selectTrainrouteListLoading);
     const { t } = useTranslation();
 
     const prevValue = useRef(0);
@@ -140,7 +143,26 @@ export const Container = () => {
             )}
             <LayoutWithSidebar.Main>
                 <div className={styles.mapWrapper} ref={wrapperRef}>
-                    {submitVal === 0 && <Instructions />}
+                    <AnimatePresence>
+                        {submitVal === 0 && !journeys.length && !isLoading && (
+                            <motion.div
+                                style={{
+                                    position: "absolute",
+                                    zIndex: 999,
+                                    alignSelf: "center",
+                                    justifyContent: "center",
+                                }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{
+                                    opacity: 0,
+                                    transition: { duration: 2 },
+                                }}
+                            >
+                                <Instructions />
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                     <Map value={submitVal} />
                 </div>
             </LayoutWithSidebar.Main>
