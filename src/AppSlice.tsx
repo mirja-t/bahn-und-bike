@@ -70,10 +70,7 @@ export const appSlice = createSlice({
                 state.userScale = 1;
                 state.resetKey += 1;
             } else if (typeof state.userScale === "number") {
-                state.userScale = Math.max(
-                    0.1,
-                    state.userScale + action.payload,
-                );
+                state.userScale = state.userScale * action.payload;
             }
         },
         setAppScale: (state, action: { payload: number }) => {
@@ -113,7 +110,7 @@ export const selectActiveTab = (state: RootState) => state.app.activeTab;
 export const selectUserScale = (state: RootState) => state.app.userScale;
 export const selectResetKey = (state: RootState) => state.app.resetKey;
 export const selectAppZoom = (state: RootState) =>
-    state.app.appScale + (state.app.userScale - 1);
+    state.app.appScale * state.app.userScale;
 export const selectSubmitValue = (state: RootState) => state.app.submitValue;
 
 export const {
