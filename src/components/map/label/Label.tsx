@@ -18,9 +18,9 @@ export const Label = <T,>({ item, className }: LabelProps<T>) => {
             className={`${styles.destinationLabel}${
                 className === "veloroute" ? ` ${styles.veloroute}` : ""
             }`}
-            x={item.x + 5 / appZoom}
+            x={item.x + 10 / appZoom}
             y={item.y}
-            style={{ fontSize: `${10 / appZoom}px` }}
+            style={{ fontSize: `${20 / appZoom}px` }}
         >
             <tspan>{item.stop_name}</tspan>
         </text>

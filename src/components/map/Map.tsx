@@ -13,10 +13,10 @@ import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
 import {
     setUserScale,
-    selectUserScale,
     useAppDispatch,
     selectResetKey,
     setAppScale,
+    selectAppZoom,
 } from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 import { useEffect, useRef } from "react";
@@ -30,7 +30,7 @@ export const Map = ({ value }: MapProps) => {
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroutesLoading = useSelector(selectVeloroutesLoading);
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     const dispatch = useAppDispatch();
 
     const handleMapZoom = (dir: "+" | "-") => {
@@ -46,7 +46,7 @@ export const Map = ({ value }: MapProps) => {
 
     const drag = useDrag(resetKey);
     useEffect(() => {
-        dispatch(setAppScale(zoom.scale * 0.5)); // to do: remove tha factor and adjust the svg sizes instead
+        dispatch(setAppScale(zoom.scale));
     }, [dispatch, zoom]);
 
     return (
@@ -78,7 +78,7 @@ export const Map = ({ value }: MapProps) => {
                         <div
                             className={styles.map}
                             style={{
-                                transform: `scale(${zoom.scale * userScale}) translate(${zoom.x * 100}%, ${zoom.y * 100}%)`,
+                                transform: `scale(${appZoom}) translate(${zoom.x * 100}%, ${zoom.y * 100}%)`,
                             }}
                         >
                             {!isLoading && <Trainroutes />}

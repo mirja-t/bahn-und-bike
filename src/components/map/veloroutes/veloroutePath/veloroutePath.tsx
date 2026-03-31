@@ -30,12 +30,12 @@ export const VeloroutePath = ({
         >
             <polyline
                 className={`${styles.velorouteSection} ${active ? styles.active : ""} ${className || ""}`}
-                strokeWidth={active ? 2 / appZoom : 1 / appZoom}
+                strokeWidth={active ? 4 / appZoom : 2 / appZoom}
                 points={path}
             />
             <polyline
                 className={styles.velorouteSectionLarge}
-                strokeWidth={6 / appZoom}
+                strokeWidth={12 / appZoom}
                 points={path}
             />
         </g>

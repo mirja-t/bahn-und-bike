@@ -24,15 +24,15 @@ export const MapPinIcon = ({
                 }}
                 animate={{
                     opacity: active ? 1 : 0,
-                    scale: active ? 1.2 / scale : 0.5 / scale,
+                    scale: active ? 2.4 / scale : 1 / scale,
                 }}
-                d={`M${x + 4.8},${y - 13 / scale}c0,-2.7,-2.2,-4.9,-4.9,-4.9s-4.9,2.2,-4.9,4.9s.6,2.6,1.4,3.5c.9.9,3.5,3.4,3.5,3.4,0,0,2.6-2.6,3.5-3.4.9-.9,1.4-2.1,1.4-3.5Z`}
+                d={`M${x + 4.8},${y - 26 / scale}c0,-2.7,-2.2,-4.9,-4.9,-4.9s-4.9,2.2,-4.9,4.9s.6,2.6,1.4,3.5c.9.9,3.5,3.4,3.5,3.4,0,0,2.6-2.6,3.5-3.4.9-.9,1.4-2.1,1.4-3.5Z`}
             />
             <motion.text
                 x={x}
-                y={y - 9 / scale}
+                y={y - 20 / scale}
                 textAnchor="middle"
-                fontSize={7 / scale}
+                fontSize={14 / scale}
                 fill={`var(--bg)`}
                 style={{ pointerEvents: "none" }}
                 fontFamily="Oswald, sans-serif"
