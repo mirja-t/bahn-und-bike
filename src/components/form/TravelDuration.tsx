@@ -1,10 +1,12 @@
 import styles from "./travelduration.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "../../utils/i18n";
 import { Button } from "../stateless/button/Button";
 import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
+import { useSelector } from "react-redux";
+import { selectSubmitValue } from "../../AppSlice";
 
 interface TravelDurationProps {
     handleSubmit: (
@@ -14,6 +16,7 @@ interface TravelDurationProps {
     ) => void;
 }
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
+    const submitValue = useSelector(selectSubmitValue);
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
@@ -28,6 +31,12 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         const val = Number(target.value);
         setValue(val);
     };
+
+    useEffect(() => {
+        if (submitValue === 0) {
+            setValue(0);
+        }
+    }, [submitValue]);
 
     return (
         <form

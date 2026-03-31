@@ -1,5 +1,5 @@
 import styles from "./container.module.scss";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -25,7 +25,9 @@ import {
 import { Map } from "../map/Map";
 import {
     selectActiveTab,
+    selectSubmitValue,
     setActiveTab,
+    setSubmitValue,
     setUserScale,
     useAppDispatch,
     type TabIds,
@@ -46,7 +48,7 @@ export const Container = () => {
     const veloroutes = useSelector(selectVelorouteList);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
-    const [submitVal, setSubmitVal] = useState(0);
+    const submitValue = useSelector(selectSubmitValue);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
@@ -95,7 +97,7 @@ export const Container = () => {
         dispatch(setActiveTab("trainlines"));
         dispatch(loadTrainroutes({ start, value, direct }));
         dispatch(setUserScale("reset"));
-        setSubmitVal(value);
+        dispatch(setSubmitValue(value));
     };
 
     const handleTrainrouteSelect = () => {
@@ -104,7 +106,7 @@ export const Container = () => {
 
     return (
         <LayoutWithSidebar>
-            {submitVal > 0 && (
+            {submitValue > 0 && (
                 <LayoutWithSidebar.Aside>
                     <Panel>
                         <div ref={sidebarRef}>
@@ -144,26 +146,28 @@ export const Container = () => {
             <LayoutWithSidebar.Main>
                 <div className={styles.mapWrapper} ref={wrapperRef}>
                     <AnimatePresence>
-                        {submitVal === 0 && !journeys.length && !isLoading && (
-                            <motion.div
-                                style={{
-                                    position: "absolute",
-                                    zIndex: 999,
-                                    alignSelf: "center",
-                                    justifyContent: "center",
-                                }}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{
-                                    opacity: 0,
-                                    transition: { duration: 2 },
-                                }}
-                            >
-                                <Instructions />
-                            </motion.div>
-                        )}
+                        {submitValue === 0 &&
+                            !journeys.length &&
+                            !isLoading && (
+                                <motion.div
+                                    style={{
+                                        position: "absolute",
+                                        zIndex: 999,
+                                        alignSelf: "center",
+                                        justifyContent: "center",
+                                    }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{
+                                        opacity: 0,
+                                        transition: { duration: 2 },
+                                    }}
+                                >
+                                    <Instructions />
+                                </motion.div>
+                            )}
                     </AnimatePresence>
-                    <Map value={submitVal} />
+                    <Map value={submitValue} />
                 </div>
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>

@@ -5,6 +5,7 @@ import {
     setActiveSection,
     setCurrentTrainroutes,
     setTrainroutesAlongVeloroute,
+    setTrainstops,
 } from "./components/map/trainroutes/TrainroutesSlice";
 import {
     setActiveVeloroute,
@@ -38,6 +39,7 @@ export interface AppState {
     userScale: number;
     appScale: number;
     resetKey: number;
+    submitValue: number;
 }
 
 export const appSlice = createSlice({
@@ -51,6 +53,7 @@ export const appSlice = createSlice({
         userScale: 1,
         appScale: 1,
         resetKey: 0,
+        submitValue: 0,
     } as AppState,
     reducers: {
         setTheme: (state, action: { payload: Theme }) => {
@@ -79,6 +82,9 @@ export const appSlice = createSlice({
         setResetKey: (state) => {
             state.resetKey += 1;
         },
+        setSubmitValue: (state, action: { payload: number }) => {
+            state.submitValue = action.payload;
+        },
     },
 });
 
@@ -90,12 +96,14 @@ export const resetAppStateThunk = () => {
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setAppScale(1));
-        dispatch(setUserScale(1));
+        dispatch(setUserScale("reset"));
         dispatch(setResetKey());
         dispatch(setActiveTab("trainlines"));
         dispatch(setVelorouteList([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        dispatch(setSubmitValue(0));
+        dispatch(setTrainstops([]));
     };
 };
 
@@ -106,6 +114,7 @@ export const selectUserScale = (state: RootState) => state.app.userScale;
 export const selectResetKey = (state: RootState) => state.app.resetKey;
 export const selectAppZoom = (state: RootState) =>
     state.app.appScale + (state.app.userScale - 1);
+export const selectSubmitValue = (state: RootState) => state.app.submitValue;
 
 export const {
     setTheme,
@@ -114,6 +123,7 @@ export const {
     setUserScale,
     setAppScale,
     setResetKey,
+    setSubmitValue,
 } = appSlice.actions;
 
 export default appSlice.reducer;
