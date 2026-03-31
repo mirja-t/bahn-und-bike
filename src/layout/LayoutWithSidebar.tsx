@@ -37,7 +37,9 @@ const LayoutWithSidebar = ({ children }: { children: React.ReactNode }) => {
                             ? "Zur Startseite"
                             : "Back to Homepage"
                     }
-                    onClick={resetAppStateThunk}
+                    onClick={() => {
+                        dispatch(resetAppStateThunk());
+                    }}
                 >
                     <Logo />
                 </Link>

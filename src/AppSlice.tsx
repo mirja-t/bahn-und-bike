@@ -9,6 +9,7 @@ import {
 import {
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setVelorouteList,
 } from "./components/map/veloroutes/VeloroutesSlice";
 
 export const Theme = {
@@ -88,6 +89,13 @@ export const resetAppStateThunk = () => {
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
+        dispatch(setAppScale(1));
+        dispatch(setUserScale(1));
+        dispatch(setResetKey());
+        dispatch(setActiveTab("trainlines"));
+        dispatch(setVelorouteList([]));
+        dispatch(setActiveVeloroute(null));
+        dispatch(setActiveVelorouteSection(null));
     };
 };
 
