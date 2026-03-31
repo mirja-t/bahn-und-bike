@@ -1,5 +1,5 @@
 import styles from "./container.module.scss";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -21,7 +21,6 @@ import {
     setPreviewVeloroute,
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
-import { mapRatio } from "../../utils/svgMap";
 import { Map } from "../map/Map";
 import {
     selectActiveTab,
@@ -46,8 +45,7 @@ export const Container = () => {
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const [submitVal, setSubmitVal] = useState(0);
-    const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
-    const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
 
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
@@ -55,8 +53,6 @@ export const Container = () => {
     const { t } = useTranslation();
 
     const prevValue = useRef(0);
-
-    const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
@@ -98,22 +94,6 @@ export const Container = () => {
         dispatch(setUserScale("reset"));
         setSubmitVal(value);
     };
-
-    useEffect(() => {
-        if (!wrapper) return;
-
-        const setSize = () => {
-            const width = wrapper.getBoundingClientRect().width;
-            const height = width / mapRatio;
-            setMapSize([width, height]);
-        };
-
-        setSize();
-        window.addEventListener("resize", setSize);
-        return () => {
-            window.removeEventListener("resize", setSize);
-        };
-    }, [wrapper]);
 
     const handleTrainrouteSelect = () => {
         dispatch(setActiveTab("veloroutes"));
@@ -159,13 +139,9 @@ export const Container = () => {
                 </LayoutWithSidebar.Aside>
             )}
             <LayoutWithSidebar.Main>
-                <div className={styles.mapWrapper} ref={setWrapper}>
+                <div className={styles.mapWrapper} ref={wrapperRef}>
                     {submitVal === 0 && <Instructions />}
-                    <Map
-                        value={submitVal}
-                        mapSize={memoizedMapSize}
-                        mapContainer={wrapper}
-                    />
+                    <Map value={submitVal} />
                 </div>
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>

@@ -1,78 +1,51 @@
-import { useEffect, useState, useRef } from "react";
-import { mapRatio, svgWidth, svgHeight } from "../utils/svgMap";
-import { getLongestDistance } from "../utils/getLongestDistance";
-import { getCenterPosition } from "../utils/getCenterPosition";
+import { useEffect, useState } from "react";
+import { svgWidth, svgHeight } from "../utils/svgMap";
 import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
-import type { Veloroute } from "../components/map/veloroutes/VeloroutesSlice";
 
 export const useZoom = (
     journeys: CurrentTrainroute[],
-    vrouteposition: Pick<Veloroute, "route"> | null,
     value: number,
-    mapContainer: HTMLDivElement | null,
-    mapSize: [number, number],
     loading: boolean,
 ) => {
     const [zoom, setZoom] = useState({
         x: 0,
         y: 0,
-        containerWidth: mapSize[0],
-        containerHeight: mapSize[1],
+        scale: 1,
+        ratio: 1,
     });
-
-    const zoomMemo = useRef(zoom);
 
     useEffect(() => {
         if (loading) return;
-
-        // get shorter side of mapContainer
-        if (!mapContainer) return;
-        const mapContainerMinSize =
-            Math.min(mapContainer?.offsetWidth, mapContainer?.offsetHeight) ||
-            1;
-
         if (value === 0) {
             setZoom({
                 x: 0,
                 y: 0,
-                containerWidth: mapContainerMinSize * mapRatio,
-                containerHeight: mapContainerMinSize,
+                scale: 1,
+                ratio: 1,
             });
         } else {
-            const xStart = getCenterPosition(journeys, "x");
-            const yStart = getCenterPosition(journeys, "y");
-            const leftOffset = (svgWidth / 2 - xStart) / 2;
-            const topOffset = (svgHeight / 2 - yStart) / 2;
-
-            const distX: number = getLongestDistance(
-                journeys,
-                "x",
-                xStart,
-                vrouteposition || undefined,
-            );
-            const distY: number = getLongestDistance(
-                journeys,
-                "y",
-                yStart,
-                vrouteposition || undefined,
-            );
+            // const containerSize = mapContainer.current.getBoundingClientRect();
+            const xValues = journeys.map((el) => el.lastStation.x);
+            const yValues = journeys.map((el) => el.lastStation.y);
+            const trainrouteDistanceXMin: number = Math.min(...xValues);
+            const trainrouteDistanceXMax: number = Math.max(...xValues);
+            const trainrouteDistanceYMin: number = Math.min(...yValues);
+            const trainrouteDistanceYMax: number = Math.max(...yValues);
+            const distX = trainrouteDistanceXMax - trainrouteDistanceXMin;
+            const distY = trainrouteDistanceYMax - trainrouteDistanceYMin;
+            const offsetX =
+                0.5 - (trainrouteDistanceXMin + distX / 2) / svgWidth;
+            const offsetY =
+                0.5 - (trainrouteDistanceYMin + distY / 2) / svgHeight;
+            setZoom((prev) => ({ ...prev, x: offsetX, y: offsetY }));
 
             // get viewport ratio
-            const longestDist = Math.max(distX, distY);
-            const scale = mapContainerMinSize / longestDist;
-
-            const currentZoom = {
-                x: leftOffset * scale,
-                y: topOffset * scale,
-                scale: scale,
-                containerWidth: mapContainerMinSize * mapRatio * scale,
-                containerHeight: mapContainerMinSize * scale,
-            };
-
-            setZoom(currentZoom);
-            zoomMemo.current = currentZoom;
+            const scaleX = svgWidth / distX;
+            const scaleY = svgHeight / distY;
+            setZoom((prev) => ({ ...prev, scale: Math.min(scaleX, scaleY) }));
+            setZoom((prev) => ({ ...prev, ratio: distX / distY }));
         }
-    }, [journeys, vrouteposition, value, mapContainer, mapSize, loading]);
+    }, [journeys, value, loading]);
 
     return zoom;
 };
