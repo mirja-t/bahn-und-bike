@@ -34,8 +34,8 @@ export const Map = ({ value }: MapProps) => {
     const dispatch = useAppDispatch();
 
     const handleMapZoom = (dir: "+" | "-") => {
-        const factor = dir === "+" ? 1 : -1;
-        dispatch(setUserScale(0.5 * factor));
+        const factor = dir === "+" ? 2 : 0.5;
+        dispatch(setUserScale(factor));
     };
 
     const zoom = useZoom(journeys, Number(value), isLoading);
