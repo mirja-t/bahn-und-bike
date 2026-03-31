@@ -16,9 +16,10 @@ import {
     selectUserScale,
     useAppDispatch,
     selectResetKey,
+    setAppScale,
 } from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface MapProps {
     value: number;
@@ -44,6 +45,9 @@ export const Map = ({ value }: MapProps) => {
             (mapWrapperRef.current?.offsetHeight || 1));
 
     const drag = useDrag(resetKey);
+    useEffect(() => {
+        dispatch(setAppScale(zoom.scale * 0.5)); // to do: remove tha factor and adjust the svg sizes instead
+    }, [dispatch, zoom]);
 
     return (
         <div ref={mapWrapperRef} className={styles.mapWrapper}>
