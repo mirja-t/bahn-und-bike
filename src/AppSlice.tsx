@@ -66,7 +66,10 @@ export const appSlice = createSlice({
                 state.userScale = 1;
                 state.resetKey += 1;
             } else if (typeof state.userScale === "number") {
-                state.userScale = state.userScale + action.payload;
+                state.userScale = Math.max(
+                    0.1,
+                    state.userScale + action.payload,
+                );
             }
         },
         setAppScale: (state, action: { payload: number }) => {
