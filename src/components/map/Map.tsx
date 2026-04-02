@@ -72,7 +72,6 @@ export const Map = ({ value }: MapProps) => {
     };
 
     useEffect(() => {
-        console.log("Zoom changed, resetting offset");
         setOffset({
             x: zoom.x,
             y: zoom.y,
