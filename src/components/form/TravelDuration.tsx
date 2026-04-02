@@ -6,13 +6,15 @@ import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
-import { selectSubmitValue } from "../../AppSlice";
+import { selectLangCode, selectSubmitValue } from "../../AppSlice";
+import { getTime } from "../../utils/getTime";
 
 interface TravelDurationProps {
     handleSubmit: (
         e: React.SubmitEvent<HTMLFormElement>,
         value: number,
         direct: boolean,
+        maxDistanceToStation: number,
     ) => void;
 }
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
@@ -20,6 +22,15 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
+    const [maxDistanceToStation, setMaxDistanceToStation] = useState(0);
+    const langCode = useSelector(selectLangCode);
+
+    const handleMaxDistanceToStationChange = ({
+        target,
+    }: React.ChangeEvent<HTMLInputElement>) => {
+        const val = Number(target.value);
+        setMaxDistanceToStation(val);
+    };
 
     const handleCheckboxChange = () => {
         setDirect((prev) => !prev);
@@ -38,11 +49,20 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         }
     }, [submitValue]);
 
+    const scale = (_: number, i: number) => {
+        const hour = Math.floor(i / 2);
+        const minute = i % 2 === 1 ? "30" : "00";
+        const time = `${hour}:${minute}`;
+        return time;
+    };
+
     return (
         <form
             className={styles.travelduration}
             name="travel duration form"
-            onSubmit={(e) => handleSubmit(e, value, direct)}
+            onSubmit={(e) =>
+                handleSubmit(e, value, direct, maxDistanceToStation)
+            }
         >
             <DestinationPicker />
             <CheckBox
@@ -51,11 +71,23 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 id={"directconnection"}
             />
             <RangeInput
+                min={1}
+                max={5}
+                value={maxDistanceToStation}
+                step={1}
+                handleInputChange={handleMaxDistanceToStationChange}
+                name={t("maxDistanceToNextTrainstation")}
+                getCurrentValue={(val) => `${val} km`}
+            />
+            <RangeInput
                 min={0}
                 max={7}
                 value={value}
                 step={1}
                 handleInputChange={handleInputChange}
+                name={t("traveltime")}
+                makeScale={scale}
+                getCurrentValue={(val) => getTime(val * 30, langCode)}
             />
             <Button
                 disabled={value === 0}
