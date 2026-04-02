@@ -20,13 +20,15 @@ import {
 } from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 import { useEffect, useRef, useState } from "react";
+import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 
 interface MapProps {
     value: number;
 }
 export const Map = ({ value }: MapProps) => {
-    const mapWrapperRef = useRef<HTMLDivElement | null>(null);
+    const [mapWrapperEl, setMapWrapperEl] = useState<HTMLDivElement | null>(null);
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
+    const wrapperSize = useResponsiveSize(mapWrapperEl);
     const resetKey = useSelector(selectResetKey);
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
@@ -50,9 +52,9 @@ export const Map = ({ value }: MapProps) => {
 
     const zoom = useZoom(journeys, Number(value), isLoading);
     const containerRatio =
-        zoom.ratio /
-        ((mapWrapperRef.current?.offsetWidth || 1) /
-            (mapWrapperRef.current?.offsetHeight || 1));
+        wrapperSize.width > 0 && wrapperSize.height > 0
+            ? zoom.ratio / (wrapperSize.width / wrapperSize.height)
+            : 1;
 
     const drag = useDrag(resetKey);
     useEffect(() => {
@@ -80,7 +82,10 @@ export const Map = ({ value }: MapProps) => {
     }, [zoom]);
 
     return (
-        <div ref={mapWrapperRef} className={styles.mapWrapper}>
+        <div
+            ref={setMapWrapperEl}
+            className={styles.mapWrapper}
+        >
             <AnimatePresence>
                 {(isLoading || veloroutesLoading) && (
                     <motion.div className={styles.loading}>
