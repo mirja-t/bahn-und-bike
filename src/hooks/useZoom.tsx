@@ -43,13 +43,16 @@ export const useZoom = (
                 0.5 - (trainrouteDistanceXMin + distX / 2) / svgWidth;
             const offsetY =
                 0.5 - (trainrouteDistanceYMin + distY / 2) / svgHeight;
-            setZoom((prev) => ({ ...prev, x: offsetX, y: offsetY }));
 
             // get viewport ratio
             const scaleX = svgWidth / distX;
             const scaleY = svgHeight / distY;
-            setZoom((prev) => ({ ...prev, scale: Math.min(scaleX, scaleY) }));
-            setZoom((prev) => ({ ...prev, ratio: distX / distY }));
+            setZoom({
+                x: offsetX,
+                y: offsetY,
+                scale: Math.min(scaleX, scaleY),
+                ratio: distX / distY,
+            });
         }
     }, [journeys, value, loading]);
 
