@@ -3,10 +3,6 @@
 .instructionsWrapper {
     height: fit-content;
     max-width: calc(35em + 0.5vw);
-    align-self: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
 
     ol {
         list-style: none;

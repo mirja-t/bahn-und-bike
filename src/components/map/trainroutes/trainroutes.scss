@@ -26,7 +26,7 @@ $transitionSpeed: 0.35s;
 }
 
 svg#routes {
-    position: relative;
+    position: absolute;
     z-index: 3;
 
     polyline,

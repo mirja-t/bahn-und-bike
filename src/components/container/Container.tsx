@@ -1,5 +1,5 @@
 import styles from "./container.module.scss";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -11,6 +11,7 @@ import {
     loadTrainroutes,
     selectCurrentTrainroutes,
     setCurrentTrainroutes,
+    selectTrainrouteListLoading,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
@@ -21,11 +22,12 @@ import {
     setPreviewVeloroute,
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
-import { mapRatio } from "../../utils/svgMap";
 import { Map } from "../map/Map";
 import {
     selectActiveTab,
+    selectSubmitValue,
     setActiveTab,
+    setSubmitValue,
     setUserScale,
     useAppDispatch,
     type TabIds,
@@ -38,6 +40,7 @@ import { useTranslation } from "../../utils/i18n";
 import { TravelDuration } from "../form/TravelDuration";
 import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -45,18 +48,16 @@ export const Container = () => {
     const veloroutes = useSelector(selectVelorouteList);
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
-    const [submitVal, setSubmitVal] = useState(0);
-    const [mapSize, setMapSize] = useState<[number, number]>([0, 0]);
-    const [wrapper, setWrapper] = useState<HTMLDivElement | null>(null);
-
+    const submitValue = useSelector(selectSubmitValue);
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
+    const journeys = useSelector(selectCurrentTrainroutes);
+    const isLoading = useSelector(selectTrainrouteListLoading);
     const { t } = useTranslation();
 
     const prevValue = useRef(0);
-
-    const memoizedMapSize = useMemo(() => mapSize, [mapSize]);
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
@@ -96,24 +97,8 @@ export const Container = () => {
         dispatch(setActiveTab("trainlines"));
         dispatch(loadTrainroutes({ start, value, direct }));
         dispatch(setUserScale("reset"));
-        setSubmitVal(value);
+        dispatch(setSubmitValue(value));
     };
-
-    useEffect(() => {
-        if (!wrapper) return;
-
-        const setSize = () => {
-            const width = wrapper.getBoundingClientRect().width;
-            const height = width / mapRatio;
-            setMapSize([width, height]);
-        };
-
-        setSize();
-        window.addEventListener("resize", setSize);
-        return () => {
-            window.removeEventListener("resize", setSize);
-        };
-    }, [wrapper]);
 
     const handleTrainrouteSelect = () => {
         dispatch(setActiveTab("veloroutes"));
@@ -121,7 +106,7 @@ export const Container = () => {
 
     return (
         <LayoutWithSidebar>
-            {submitVal > 0 && (
+            {submitValue > 0 && (
                 <LayoutWithSidebar.Aside>
                     <Panel>
                         <div ref={sidebarRef}>
@@ -159,13 +144,30 @@ export const Container = () => {
                 </LayoutWithSidebar.Aside>
             )}
             <LayoutWithSidebar.Main>
-                <div className={styles.mapWrapper} ref={setWrapper}>
-                    {submitVal === 0 && <Instructions />}
-                    <Map
-                        value={submitVal}
-                        mapSize={memoizedMapSize}
-                        mapContainer={wrapper}
-                    />
+                <div className={styles.mapWrapper} ref={wrapperRef}>
+                    <AnimatePresence>
+                        {submitValue === 0 &&
+                            !journeys.length &&
+                            !isLoading && (
+                                <motion.div
+                                    style={{
+                                        position: "absolute",
+                                        zIndex: 999,
+                                        alignSelf: "center",
+                                        justifyContent: "center",
+                                    }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{
+                                        opacity: 0,
+                                        transition: { duration: 0.5 },
+                                    }}
+                                >
+                                    <Instructions />
+                                </motion.div>
+                            )}
+                    </AnimatePresence>
+                    <Map value={submitValue} />
                 </div>
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>

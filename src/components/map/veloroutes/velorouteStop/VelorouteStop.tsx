@@ -53,7 +53,7 @@ export const VelorouteStop = ({
                 }
                 cx={item.x}
                 cy={item.y}
-                r={1.5 / appZoom}
+                r={3 / appZoom}
                 style={{
                     transformOrigin: `${item.x}px ${item.y}px`,
                 }}
@@ -61,7 +61,7 @@ export const VelorouteStop = ({
             <circle
                 cx={item.x}
                 cy={item.y}
-                r={6 / appZoom}
+                r={12 / appZoom}
                 onClick={handleClick}
                 onMouseEnter={(e) => hoverVeloStop(e, item)}
                 onMouseLeave={hoverVeloStop}

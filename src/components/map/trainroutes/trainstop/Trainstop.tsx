@@ -34,16 +34,16 @@ export const Trainstop = ({ item, styles }: TrainstopProps) => {
             >
                 <circle
                     className="spot-bg"
-                    r={6 / appZoom}
+                    r={12 / appZoom}
                     cx={item.x}
                     cy={item.y}
                 />
                 <motion.rect
                     className="spot spot-large"
-                    x={item.x - 1.5 / appZoom}
-                    y={item.y - 1.5 / appZoom}
-                    width={3 / appZoom}
-                    height={3 / appZoom}
+                    x={item.x - 3 / appZoom}
+                    y={item.y - 3 / appZoom}
+                    width={6 / appZoom}
+                    height={6 / appZoom}
                     style={{
                         scale: styles.scale,
                         transformOrigin: `${item.x}px ${item.y}px`,
@@ -54,10 +54,10 @@ export const Trainstop = ({ item, styles }: TrainstopProps) => {
                         <motion.rect
                             key={`trainstop-${item.stop_id || item.x}-${item.y}`}
                             className="spot spot-small"
-                            x={item.x - 1.5 / appZoom}
-                            y={item.y - 1.5 / appZoom}
-                            width={3 / appZoom}
-                            height={3 / appZoom}
+                            x={item.x - 3 / appZoom}
+                            y={item.y - 3 / appZoom}
+                            width={6 / appZoom}
+                            height={6 / appZoom}
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             exit={{ scale: 0 }}

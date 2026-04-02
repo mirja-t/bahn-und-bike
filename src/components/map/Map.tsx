@@ -1,5 +1,4 @@
 import styles from "./map.module.scss";
-import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
@@ -14,47 +13,79 @@ import { Loading } from "../stateless/loading/Loading";
 import { ZoomPanel } from "../stateless/zoomPanel/ZoomPanel";
 import {
     setUserScale,
-    selectUserScale,
     useAppDispatch,
     selectResetKey,
+    setAppScale,
+    selectAppZoom,
 } from "../../AppSlice";
 import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
+import { useEffect, useRef, useState } from "react";
+import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 
 interface MapProps {
     value: number;
-    mapContainer: HTMLDivElement | null;
-    mapSize: [number, number];
 }
-export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
+export const Map = ({ value }: MapProps) => {
+    const [mapWrapperEl, setMapWrapperEl] = useState<HTMLDivElement | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement | null>(null);
+    const wrapperSize = useResponsiveSize(mapWrapperEl);
     const resetKey = useSelector(selectResetKey);
-    const mapcontainerRef = useRef<HTMLDivElement | null>(null);
-    const zoomcontainerRef = useRef<HTMLDivElement | null>(null);
     const journeys = useSelector(selectCurrentTrainroutes);
     const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroutesLoading = useSelector(selectVeloroutesLoading);
-    const userScale = useSelector(selectUserScale);
+    const appZoom = useSelector(selectAppZoom);
     const dispatch = useAppDispatch();
+    const [offset, setOffset] = useState({ x: 0, y: 0 });
+    const [cachedOffset, setCachedOffset] = useState({ x: 0, y: 0 });
 
     const handleMapZoom = (dir: "+" | "-") => {
-        const factor = dir === "+" ? 1 : -1;
-        dispatch(setUserScale(0.5 * factor));
+        const factor = dir === "+" ? 2 : 0.5;
+        dispatch(setUserScale(factor));
+        setOffset((prev) => ({
+            x: prev.x + cachedOffset.x,
+            y: prev.y + cachedOffset.y,
+        }));
+        drag.x.set(0);
+        drag.y.set(0);
+        setCachedOffset({ x: 0, y: 0 });
     };
 
-    const zoom = useZoom(
-        journeys,
-        null,
-        Number(value),
-        mapContainer,
-        mapSize,
-        isLoading,
-    );
-    const scaleOriginX = zoom.x / zoom.containerWidth;
-    const scaleOriginY = zoom.y / zoom.containerHeight;
+    const zoom = useZoom(journeys, Number(value), isLoading);
+    const containerRatio =
+        wrapperSize.width > 0 && wrapperSize.height > 0
+            ? zoom.ratio / (wrapperSize.width / wrapperSize.height)
+            : 1;
 
     const drag = useDrag(resetKey);
+    useEffect(() => {
+        dispatch(setAppScale(zoom.scale));
+    }, [dispatch, zoom]);
+
+    const handleDragEnd = () => {
+        const offsetX =
+            drag.x.get() /
+            (mapContainerRef.current?.offsetWidth || 0) /
+            appZoom;
+        const offsetY =
+            drag.y.get() /
+            (mapContainerRef.current?.offsetHeight || 0) /
+            appZoom;
+        setCachedOffset({ x: offsetX, y: offsetY });
+    };
+
+    useEffect(() => {
+        setOffset({
+            x: zoom.x,
+            y: zoom.y,
+        });
+        setCachedOffset({ x: 0, y: 0 });
+    }, [zoom]);
 
     return (
-        <>
+        <div
+            ref={setMapWrapperEl}
+            className={styles.mapWrapper}
+        >
             <AnimatePresence>
                 {(isLoading || veloroutesLoading) && (
                     <motion.div className={styles.loading}>
@@ -64,52 +95,40 @@ export const Map = ({ value, mapContainer, mapSize }: MapProps) => {
             </AnimatePresence>
             <ZoomPanel fn={handleMapZoom} />
             <div
-                className={styles.mapContainer}
-                ref={mapcontainerRef}
+                className={styles.mapInnerWrapper}
                 style={{
-                    width: zoom.containerWidth,
-                    height: zoom.containerHeight,
+                    width: 100 * Math.min(containerRatio, 1) + "%",
                 }}
             >
-                <div
-                    ref={zoomcontainerRef}
-                    style={{
-                        width: 100 * userScale + "%",
-                        height: 100 * userScale + "%",
-                        position: "relative",
-                        marginLeft:
-                            -(((userScale - 1) * zoom.containerWidth) / 2) *
-                                (1 - scaleOriginX) +
-                            "px",
-                        marginTop:
-                            -(
-                                ((((userScale - 1) * zoom.containerHeight) /
-                                    2) *
-                                    zoom.containerHeight) /
-                                zoom.containerWidth
-                            ) *
-                                (1 - scaleOriginY) +
-                            "px",
-                    }}
-                >
+                <div className={styles.mapContainer} ref={mapContainerRef}>
                     <motion.div
+                        className={styles.mapInnerContainer}
                         drag
                         dragMomentum={false}
+                        onDragEnd={handleDragEnd}
                         style={{
-                            left: zoom.x,
-                            top: zoom.y,
                             x: drag.x,
                             y: drag.y,
-                            height: "100%",
-                            width: "100%",
                         }}
-                        className={styles.mapInner}
                     >
-                        {!isLoading && <Trainroutes />}
-                        <Germany />
+                        <div
+                            className={styles.map}
+                            style={{
+                                transform: `scale(${appZoom})`,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    transform: `translate(${offset.x * 100}%, ${offset.y * 100}%)`,
+                                }}
+                            >
+                                {!isLoading && <Trainroutes />}
+                                <Germany />
+                            </div>
+                        </div>
                     </motion.div>
                 </div>
             </div>
-        </>
+        </div>
     );
 };

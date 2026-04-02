@@ -1,17 +1,11 @@
 import styles from "./instructions.module.scss";
 import { useTranslation } from "../../utils/i18n";
 import { Panel } from "../stateless/panel/Panel";
-import {
-    selectCurrentTrainroutes,
-    selectTrainrouteListLoading,
-} from "../map/trainroutes/TrainroutesSlice";
-import { useSelector } from "react-redux";
 
 export const Instructions = () => {
     const { t } = useTranslation();
-    const journeys = useSelector(selectCurrentTrainroutes);
-    const isLoading = useSelector(selectTrainrouteListLoading);
-    return !journeys.length && !isLoading ? (
+
+    return (
         <div className={styles.instructionsWrapper}>
             <Panel direction="column" variant="frostedGlass">
                 <div className={styles.instructions}>
@@ -27,5 +21,5 @@ export const Instructions = () => {
                 </div>
             </Panel>
         </div>
-    ) : null;
+    );
 };

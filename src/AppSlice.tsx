@@ -5,10 +5,12 @@ import {
     setActiveSection,
     setCurrentTrainroutes,
     setTrainroutesAlongVeloroute,
+    setTrainstops,
 } from "./components/map/trainroutes/TrainroutesSlice";
 import {
     setActiveVeloroute,
     setActiveVelorouteSection,
+    setVelorouteList,
 } from "./components/map/veloroutes/VeloroutesSlice";
 
 export const Theme = {
@@ -37,6 +39,7 @@ export interface AppState {
     userScale: number;
     appScale: number;
     resetKey: number;
+    submitValue: number;
 }
 
 export const appSlice = createSlice({
@@ -50,6 +53,7 @@ export const appSlice = createSlice({
         userScale: 1,
         appScale: 1,
         resetKey: 0,
+        submitValue: 0,
     } as AppState,
     reducers: {
         setTheme: (state, action: { payload: Theme }) => {
@@ -66,7 +70,7 @@ export const appSlice = createSlice({
                 state.userScale = 1;
                 state.resetKey += 1;
             } else if (typeof state.userScale === "number") {
-                state.userScale = state.userScale + action.payload;
+                state.userScale = state.userScale * action.payload;
             }
         },
         setAppScale: (state, action: { payload: number }) => {
@@ -75,6 +79,9 @@ export const appSlice = createSlice({
         setResetKey: (state) => {
             state.resetKey += 1;
         },
+        setSubmitValue: (state, action: { payload: number }) => {
+            state.submitValue = action.payload;
+        },
     },
 });
 
@@ -82,9 +89,15 @@ export const resetAppStateThunk = () => {
     return (dispatch: AppDispatch) => {
         dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
-        dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVeloroute(null));
+        dispatch(setVelorouteList([]));
         dispatch(setTrainroutesAlongVeloroute([]));
+        dispatch(setAppScale(1));
+        dispatch(setUserScale("reset"));
+        dispatch(setActiveTab("trainlines"));
+        dispatch(setSubmitValue(0));
+        dispatch(setTrainstops([]));
     };
 };
 
@@ -94,7 +107,8 @@ export const selectActiveTab = (state: RootState) => state.app.activeTab;
 export const selectUserScale = (state: RootState) => state.app.userScale;
 export const selectResetKey = (state: RootState) => state.app.resetKey;
 export const selectAppZoom = (state: RootState) =>
-    state.app.appScale + (state.app.userScale - 1);
+    state.app.appScale * state.app.userScale;
+export const selectSubmitValue = (state: RootState) => state.app.submitValue;
 
 export const {
     setTheme,
@@ -103,6 +117,7 @@ export const {
     setUserScale,
     setAppScale,
     setResetKey,
+    setSubmitValue,
 } = appSlice.actions;
 
 export default appSlice.reducer;
