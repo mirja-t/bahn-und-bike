@@ -72,10 +72,12 @@ export const Map = ({ value }: MapProps) => {
     };
 
     useEffect(() => {
+        console.log("Zoom changed, resetting offset");
         setOffset({
             x: zoom.x,
             y: zoom.y,
         });
+        setCachedOffset({ x: 0, y: 0 });
     }, [zoom]);
 
     return (
@@ -108,11 +110,17 @@ export const Map = ({ value }: MapProps) => {
                         <div
                             className={styles.map}
                             style={{
-                                transform: `scale(${appZoom}) translate(${offset.x * 100}%, ${offset.y * 100}%)`,
+                                transform: `scale(${appZoom})`,
                             }}
                         >
-                            {!isLoading && <Trainroutes />}
-                            <Germany />
+                            <div
+                                style={{
+                                    transform: `translate(${offset.x * 100}%, ${offset.y * 100}%)`,
+                                }}
+                            >
+                                {!isLoading && <Trainroutes />}
+                                <Germany />
+                            </div>
                         </div>
                     </motion.div>
                 </div>
