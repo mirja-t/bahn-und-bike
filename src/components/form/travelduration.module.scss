@@ -6,7 +6,12 @@
     display: flex;
     flex-grow: 1;
     gap: spacing.$padding-xl;
-    // input {
-    //     align-self: center;
-    // }
+    line-height: 1;
+    .travelTimeWrapper {
+        flex-grow: 2;
+        flex-basis: 60em;
+    }
+    .distanceWrapper {
+        flex-grow: 1;
+    }
 }

@@ -22,7 +22,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
-    const [maxDistanceToStation, setMaxDistanceToStation] = useState(0);
+    const [maxDistanceToStation, setMaxDistanceToStation] = useState(1);
     const langCode = useSelector(selectLangCode);
 
     const handleMaxDistanceToStationChange = ({
@@ -70,25 +70,29 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 handleCheckboxChange={handleCheckboxChange}
                 id={"directconnection"}
             />
-            <RangeInput
-                min={1}
-                max={5}
-                value={maxDistanceToStation}
-                step={1}
-                handleInputChange={handleMaxDistanceToStationChange}
-                name={t("maxDistanceToNextTrainstation")}
-                getCurrentValue={(val) => `${val} km`}
-            />
-            <RangeInput
-                min={0}
-                max={7}
-                value={value}
-                step={1}
-                handleInputChange={handleInputChange}
-                name={t("traveltime")}
-                makeScale={scale}
-                getCurrentValue={(val) => getTime(val * 30, langCode)}
-            />
+            <div className={styles.distanceWrapper}>
+                <RangeInput
+                    min={1}
+                    max={5}
+                    value={maxDistanceToStation}
+                    step={1}
+                    handleInputChange={handleMaxDistanceToStationChange}
+                    name={t("maxDistanceToNextTrainstation")}
+                    getCurrentValue={(val) => `${val} km`}
+                />
+            </div>
+            <div className={styles.travelTimeWrapper}>
+                <RangeInput
+                    min={0}
+                    max={7}
+                    value={value}
+                    step={1}
+                    handleInputChange={handleInputChange}
+                    name={t("traveltime")}
+                    makeScale={scale}
+                    getCurrentValue={(val) => getTime(val * 30, langCode)}
+                />
+            </div>
             <Button
                 disabled={value === 0}
                 variant="primary"
