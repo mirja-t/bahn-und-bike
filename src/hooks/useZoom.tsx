@@ -31,8 +31,14 @@ export const useZoom = (
             const trainrouteDistanceXMax: number = Math.max(...xValues);
             const trainrouteDistanceYMin: number = Math.min(...yValues);
             const trainrouteDistanceYMax: number = Math.max(...yValues);
-            const distX = trainrouteDistanceXMax - trainrouteDistanceXMin;
-            const distY = trainrouteDistanceYMax - trainrouteDistanceYMin;
+            const distX = Math.max(
+                0.001,
+                trainrouteDistanceXMax - trainrouteDistanceXMin,
+            );
+            const distY = Math.max(
+                0.001,
+                trainrouteDistanceYMax - trainrouteDistanceYMin,
+            );
             const offsetX =
                 0.5 - (trainrouteDistanceXMin + distX / 2) / svgWidth;
             const offsetY =
