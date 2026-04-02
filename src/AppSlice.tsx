@@ -89,16 +89,13 @@ export const resetAppStateThunk = () => {
     return (dispatch: AppDispatch) => {
         dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
-        dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVeloroute(null));
+        dispatch(setVelorouteList([]));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setAppScale(1));
         dispatch(setUserScale("reset"));
-        dispatch(setResetKey());
         dispatch(setActiveTab("trainlines"));
-        dispatch(setVelorouteList([]));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
         dispatch(setSubmitValue(0));
         dispatch(setTrainstops([]));
     };
