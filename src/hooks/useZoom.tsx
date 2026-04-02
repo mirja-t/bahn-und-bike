@@ -16,7 +16,7 @@ export const useZoom = (
 
     useEffect(() => {
         if (loading) return;
-        if (value === 0) {
+        if (value === 0 || journeys.length === 0) {
             setZoom({
                 x: 0,
                 y: 0,
