@@ -171,7 +171,7 @@ export const trainroutesSlice = createSlice({
         trainroutesAlongVeloroute: [],
         trainroutesAlongVelorouteLoading: false,
         trainroutesAlongVelorouteError: false,
-        maxDistToNextStation: 5,
+        maxDistToNextStation: 2, // in km, default value, can be changed by user in VelorouteDetails
     } as TrainroutesState,
     reducers: {
         setCurrentTrainroutes: (

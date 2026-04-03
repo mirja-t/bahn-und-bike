@@ -14,6 +14,8 @@ export type VeloroutesResponseStop = {
     gcs: string;
     lat: string;
     lon: string;
+    station_lat: string | null;
+    station_lon: string | null;
     station_name: string;
     stop_number: number;
     trainlines: string; // comma separated string of trainline_ids from API
@@ -30,6 +32,7 @@ export type VelorouteStop = {
     y: number;
     lat: number;
     lon: number;
+    distToTrainstation?: number;
 };
 
 export type Veloroute = {
@@ -106,7 +109,13 @@ export const loadVeloroute = createAsyncThunk<
         },
     ).then((response) => response.json());
     const trainstops = thunkAPI.getState().trainroutes.trainstops;
-    const activeVeloroute = makeVeloRoute(responseStops, trainstops);
+    const maxDistToNextStation =
+        thunkAPI.getState().trainroutes.maxDistToNextStation;
+    const activeVeloroute = makeVeloRoute(
+        responseStops,
+        trainstops,
+        maxDistToNextStation,
+    );
     const key = preview ? "preview" : "active";
     return { [key]: activeVeloroute };
 });

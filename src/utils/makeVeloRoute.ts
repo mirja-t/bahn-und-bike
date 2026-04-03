@@ -3,6 +3,7 @@ import type {
     Veloroute,
     VelorouteStop,
 } from "../components/map/veloroutes/VeloroutesSlice";
+import { haversineDistance } from "./haversineDistance";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
 const addXY = (stop: VeloroutesResponseStop) => {
@@ -21,6 +22,7 @@ const addXY = (stop: VeloroutesResponseStop) => {
 export const makeVeloRoute = (
     stops: VeloroutesResponseStop[],
     trainstops: number[],
+    maxDistToNextStation: number,
 ): Veloroute => {
     stops.sort((a, b) => a.stop_number - b.stop_number);
     const velorouteStops = convertVelorouteStops(stops);
@@ -36,10 +38,12 @@ export const makeVeloRoute = (
                 // add first leg
                 acc.push({ dist: 0, leg: [stop] });
             } else if (
-                // build leg
+                // build leg on new trainstation
                 stop.trainstop !== null &&
                 trainstops.includes(stop.trainstop) &&
-                idx !== arr.length - 1
+                idx !== arr.length - 1 &&
+                stop.distToTrainstation !== undefined &&
+                stop.distToTrainstation <= maxDistToNextStation
             ) {
                 acc.push({ dist: 0, leg: [stop] });
                 lastLeg.leg.push(stop);
@@ -101,11 +105,14 @@ export const convertVelorouteStops = (
             gcs: stop.gcs,
             trainstop: stop.trainstop,
         };
-        if (stop.trainlines) {
-            copiedStop.trainlines = stop.trainlines.split(",");
-        }
+        // add distance to trainstation if trainstop exists
         if (stop.trainstop) {
-            copiedStop.trainstop = stop.trainstop;
+            copiedStop.distToTrainstation = haversineDistance(
+                parseFloat(stop.lat),
+                parseFloat(stop.lon),
+                parseFloat(stop.station_lat || "0"),
+                parseFloat(stop.station_lon || "0"),
+            );
         }
         return copiedStop;
     });
