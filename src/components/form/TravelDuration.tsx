@@ -6,8 +6,16 @@ import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
-import { selectLangCode, selectSubmitValue } from "../../AppSlice";
+import {
+    selectLangCode,
+    selectSubmitValue,
+    useAppDispatch,
+} from "../../AppSlice";
 import { getTime } from "../../utils/getTime";
+import {
+    selectMaxDistToNextStations,
+    setMaxDistToNextStation,
+} from "../map/trainroutes/TrainroutesSlice";
 
 interface TravelDurationProps {
     handleSubmit: (
@@ -22,14 +30,15 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
-    const [maxDistanceToStation, setMaxDistanceToStation] = useState(1);
     const langCode = useSelector(selectLangCode);
+    const maxDistanceToStation = useSelector(selectMaxDistToNextStations);
+    const dispatch = useAppDispatch();
 
     const handleMaxDistanceToStationChange = ({
         target,
     }: React.ChangeEvent<HTMLInputElement>) => {
         const val = Number(target.value);
-        setMaxDistanceToStation(val);
+        dispatch(setMaxDistToNextStation(val));
     };
 
     const handleCheckboxChange = () => {
