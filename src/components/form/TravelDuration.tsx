@@ -6,23 +6,14 @@ import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
-import {
-    selectLangCode,
-    selectSubmitValue,
-    useAppDispatch,
-} from "../../AppSlice";
+import { selectLangCode, selectSubmitValue } from "../../AppSlice";
 import { getTime } from "../../utils/getTime";
-import {
-    selectMaxDistToNextStations,
-    setMaxDistToNextStation,
-} from "../map/trainroutes/TrainroutesSlice";
 
 interface TravelDurationProps {
     handleSubmit: (
         e: React.SubmitEvent<HTMLFormElement>,
         value: number,
         direct: boolean,
-        maxDistanceToStation: number,
     ) => void;
 }
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
@@ -31,15 +22,6 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
     const langCode = useSelector(selectLangCode);
-    const maxDistanceToStation = useSelector(selectMaxDistToNextStations);
-    const dispatch = useAppDispatch();
-
-    const handleMaxDistanceToStationChange = ({
-        target,
-    }: React.ChangeEvent<HTMLInputElement>) => {
-        const val = Number(target.value);
-        dispatch(setMaxDistToNextStation(val));
-    };
 
     const handleCheckboxChange = () => {
         setDirect((prev) => !prev);
@@ -69,9 +51,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         <form
             className={styles.travelduration}
             name="travel duration form"
-            onSubmit={(e) =>
-                handleSubmit(e, value, direct, maxDistanceToStation)
-            }
+            onSubmit={(e) => handleSubmit(e, value, direct)}
         >
             <DestinationPicker />
             <CheckBox
@@ -79,17 +59,6 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 handleCheckboxChange={handleCheckboxChange}
                 id={"directconnection"}
             />
-            <div className={styles.distanceWrapper}>
-                <RangeInput
-                    min={1}
-                    max={5}
-                    value={maxDistanceToStation}
-                    step={1}
-                    handleInputChange={handleMaxDistanceToStationChange}
-                    name={t("maxDistanceToNextTrainstation")}
-                    getCurrentValue={(val) => `${val} km`}
-                />
-            </div>
             <div className={styles.travelTimeWrapper}>
                 <RangeInput
                     min={0}

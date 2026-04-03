@@ -12,6 +12,12 @@ import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { RangeInput } from "../form/rangeinput/RangeInput";
+import {
+    selectMaxDistToNextStations,
+    setMaxDistToNextStation,
+} from "../map/trainroutes/TrainroutesSlice";
+import { Box } from "../stateless/box/Box";
 
 export const VelorouteDetails = () => {
     const dispatch = useAppDispatch();
@@ -49,6 +55,14 @@ export const VelorouteDetails = () => {
         }
     };
 
+    const maxDistanceToStation = useSelector(selectMaxDistToNextStations);
+    const handleMaxDistanceToStationChange = ({
+        target,
+    }: React.ChangeEvent<HTMLInputElement>) => {
+        const val = Number(target.value);
+        dispatch(setMaxDistToNextStation(val));
+    };
+
     return (
         <div id="veloroute-details">
             <div id="veloroute" className="details">
@@ -64,7 +78,10 @@ export const VelorouteDetails = () => {
                         </header>
                         <section className="veloroute-details">
                             <h5>{`${t("totaldistance")}`}</h5>
-                            <p>{t("approx")} {activeVeloroute.len.toFixed(0)} km</p>
+                            <p>
+                                {t("approx")} {activeVeloroute.len.toFixed(0)}{" "}
+                                km
+                            </p>
                             <Collapse title={`${t("cyclingroutelegs")}`}>
                                 <ItemList
                                     items={orderedListItems}
@@ -74,6 +91,19 @@ export const VelorouteDetails = () => {
                                 />
                             </Collapse>
                         </section>
+                        <Box>
+                            <RangeInput
+                                min={1}
+                                max={5}
+                                value={maxDistanceToStation}
+                                step={1}
+                                handleInputChange={
+                                    handleMaxDistanceToStationChange
+                                }
+                                name={t("maxDistanceToNextTrainstation")}
+                                getCurrentValue={(val) => `${val} km`}
+                            />
+                        </Box>
                         {!activeVelorouteSection && t("nolegchosen")}
                     </div>
                 )}
