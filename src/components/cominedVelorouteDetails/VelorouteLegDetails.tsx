@@ -10,7 +10,6 @@ import {
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesSlice";
 import { useEffect, useState } from "react";
-import { haversineDistance } from "../../utils/haversineDistance";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
 
@@ -63,19 +62,6 @@ export const VelorouteLegDetails = () => {
             destName: "",
         },
     });
-
-    const distanceToStartStation = haversineDistance(
-        startVeloStop?.lat || 0,
-        startVeloStop?.lon || 0,
-        startStation?.firstStation?.lat || 0,
-        startStation?.firstStation?.lon || 0,
-    ).toFixed(2);
-    const distanceToEndStation = haversineDistance(
-        endVeloStop?.lat || 0,
-        endVeloStop?.lon || 0,
-        endStation?.firstStation?.lat || 0,
-        endStation?.firstStation?.lon || 0,
-    ).toFixed(2);
 
     useEffect(() => {
         if (!activeVelorouteSection) return;
@@ -181,8 +167,8 @@ export const VelorouteLegDetails = () => {
                         {t("distanceToNextTrainstation")}:&nbsp;
                         <br />
                         {idx === 1
-                            ? distanceToStartStation
-                            : distanceToEndStation}{" "}
+                            ? startVeloStop.distToTrainstation?.toFixed(2)
+                            : endVeloStop.distToTrainstation?.toFixed(2)}{" "}
                         km
                     </>
                 ) : null}
