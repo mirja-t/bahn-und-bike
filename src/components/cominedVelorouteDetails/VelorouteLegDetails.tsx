@@ -14,7 +14,7 @@ import { haversineDistance } from "../../utils/haversineDistance";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
 
-export const CombinedVelorouteDetails = () => {
+export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);

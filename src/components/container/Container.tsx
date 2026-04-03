@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
-import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
+import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
     setActiveSection,
     setTrainroutesAlongVeloroute,
@@ -136,7 +136,7 @@ export const Container = () => {
                                     disabled={!activeVeloroute}
                                 >
                                     <VelorouteDetails />
-                                    <CombinedVelorouteDetails />
+                                    <VelorouteLegDetails />
                                 </Tabs.Tab>
                             </Tabs>
                         </div>
