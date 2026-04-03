@@ -4,7 +4,10 @@ import {
     setActiveSection,
     loadTrainroutesAlongVeloroute,
 } from "../trainroutes/TrainroutesSlice";
-import { makeVeloRoute } from "../../../utils/makeVeloRoute";
+import {
+    convertVelorouteStops,
+    makeVeloRoute,
+} from "../../../utils/makeVeloRoute";
 import type { AppDispatch, RootState } from "../../../store";
 
 export type VeloroutesResponseStop = {
@@ -111,10 +114,13 @@ export const loadVeloroute = createAsyncThunk<
     const trainstops = thunkAPI.getState().trainroutes.trainstops;
     const maxDistToNextStation =
         thunkAPI.getState().trainroutes.maxDistToNextStation;
+    const velorouteStops = convertVelorouteStops(responseStops);
     const activeVeloroute = makeVeloRoute(
-        responseStops,
+        velorouteStops,
         trainstops,
         maxDistToNextStation,
+        id,
+        responseStops[0].name,
     );
     const key = preview ? "preview" : "active";
     return { [key]: activeVeloroute };

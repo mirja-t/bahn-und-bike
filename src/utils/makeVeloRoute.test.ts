@@ -1,97 +1,102 @@
 import { describe, it, expect } from "vitest";
 import { makeVeloRoute } from "./makeVeloRoute";
-import type { VeloroutesResponseStop } from "../components/map/veloroutes/VeloroutesSlice";
+import type { VelorouteStop } from "../components/map/veloroutes/VeloroutesSlice";
 
 describe("makeVeloRoute", () => {
-    const trainstops = [1, 3, 4];
-    const stops: VeloroutesResponseStop[] = [
+    const stops: (VelorouteStop & { dist: number; gcs: string })[] = [
         {
-            name: "Route 1",
-            dest_name: "",
+            stop_id: "stop_1",
+            stop_name: "Stop 1",
+            trainstop: null,
+            x: 0,
+            y: 0,
             dist: 0,
             gcs: "0,0",
-            lat: "0",
-            lon: "0",
-            stop_number: 1,
-            trainlines: "",
-            trainstop: null,
-            station_lat: null,
-            station_lon: null,
-            veloroute_id: "route_1",
-            station_name: "Stop 0",
+            lat: 0,
+            lon: 0,
+            trainlines: [],
         },
         {
-            dest_name: "",
-            dist: 5,
-            lat: "1",
-            lon: "1",
-            stop_number: 2,
+            stop_id: "stop_2",
+            stop_name: "Stop 2",
             trainstop: 1,
-            station_lat: "1.02", // ~2.2km from stop 2
-            station_lon: "1",
-            trainlines: "line_1, line_2",
-            veloroute_id: "route_1",
-            name: "Route 1",
+            distToTrainstation: 0.5,
+            x: 1,
+            y: 1,
+            dist: 5,
+            lat: 1,
+            lon: 1,
+            trainlines: ["line_1", "line_2"],
             gcs: "1,1",
-            station_name: "Stop A",
         },
         {
-            dest_name: "Stop B",
-            dist: 5,
-            lat: "2",
-            lon: "2",
-            stop_number: 3,
-            veloroute_id: "route_1",
-            name: "Route 1",
-            gcs: "2,2",
-            trainlines: "",
+            stop_id: "stop_3",
+            stop_name: "Stop B",
             trainstop: null,
-            station_lat: null,
-            station_lon: null,
-            station_name: "",
+            x: 2,
+            y: 2,
+            dist: 5,
+            lat: 2,
+            lon: 2,
+            gcs: "2,2",
+            trainlines: [],
         },
         {
-            dest_name: "Stop C",
-            dist: 5,
-            lat: "3",
-            lon: "3",
-            stop_number: 4,
+            stop_id: "stop_3",
+            stop_name: "Stop C",
             trainstop: 3,
-            station_lat: "3",
-            station_lon: "3.1", // ~7.8km from stop 4
-            trainlines: "line_3",
-            veloroute_id: "route_1",
-            name: "Route 1",
+            distToTrainstation: 4.5,
+            dist: 5,
+            lat: 3,
+            lon: 3,
+            trainlines: ["line_3"],
             gcs: "3,3",
-            station_name: "Stop C",
+            x: 3,
+            y: 3,
         },
         {
-            dest_name: "Stop D",
-            dist: 5,
-            lat: "4",
-            lon: "4",
-            stop_number: 5,
+            stop_id: "stop_4",
+            stop_name: "Stop D",
             trainstop: 4,
-            trainlines: "line_4",
-            veloroute_id: "route_1",
-            name: "Route 1",
+            x: 4,
+            y: 4,
+            dist: 5,
+            lat: 4,
+            lon: 4,
+            distToTrainstation: 2,
+            trainlines: ["line_4"],
             gcs: "4,4",
-            station_name: "Stop D",
-            station_lat: "4",
-            station_lon: "4", // ~0km from stop D
         },
     ];
     it("should return an array of routes with 2 legs when start and end have trainlines", () => {
-        const result = makeVeloRoute(stops.slice(1), trainstops, 1);
+        const result = makeVeloRoute(
+            stops.slice(1),
+            [1, 2, 3, 4],
+            5,
+            "route_1",
+            "Route 1",
+        );
         expect(result.route.length).toBe(2);
         // expect(result).toEqual(expectedRoute);
     });
     it("should return an array of routes with 3 legs when start does not have trainlines", () => {
-        const result = makeVeloRoute(stops, trainstops, 5);
+        const result = makeVeloRoute(
+            stops,
+            [1, 2, 3, 4],
+            5,
+            "route_1",
+            "Route 1",
+        );
         expect(result.route.length).toBe(3);
     });
     it("should not create new leg if trainstop is further than maxDistToNextStation", () => {
-        const result = makeVeloRoute(stops, trainstops, 3);
-        expect(result.route.length).toBe(2);
+        const result = makeVeloRoute(
+            stops.slice(1),
+            [1, 2, 3, 4],
+            3,
+            "route_1",
+            "Route 1",
+        );
+        expect(result.route.length).toBe(1);
     });
 });

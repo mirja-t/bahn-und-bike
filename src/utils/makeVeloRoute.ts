@@ -20,13 +20,13 @@ const addXY = (stop: VeloroutesResponseStop) => {
 };
 
 export const makeVeloRoute = (
-    stops: VeloroutesResponseStop[],
+    stops: (VelorouteStop & { dist: number; gcs: string })[],
     trainstops: number[],
     maxDistToNextStation: number,
+    id: string,
+    name: string,
 ): Veloroute => {
-    stops.sort((a, b) => a.stop_number - b.stop_number);
-    const velorouteStops = convertVelorouteStops(stops);
-    const legs = velorouteStops.reduce(
+    const legs = stops.reduce(
         (
             acc: { dist: number; leg: (VelorouteStop & { gcs: string })[] }[],
             stop,
@@ -41,7 +41,7 @@ export const makeVeloRoute = (
                 // build leg on new trainstation
                 stop.trainstop !== null &&
                 trainstops.includes(stop.trainstop) &&
-                idx !== arr.length - 1 &&
+                idx !== arr.length - 1 && // the last stop can be a trainstop but should not create a new leg
                 stop.distToTrainstation !== undefined &&
                 stop.distToTrainstation <= maxDistToNextStation
             ) {
@@ -82,8 +82,8 @@ export const makeVeloRoute = (
         // .join(" "),
     );
     return {
-        id: stops[0].veloroute_id,
-        name: stops[0].name,
+        id,
+        name,
         len: stops.reduce((sum, stop) => sum + stop.dist, 0),
         path: polyline,
         route: legs,
@@ -93,28 +93,31 @@ export const makeVeloRoute = (
 export const convertVelorouteStops = (
     stops: VeloroutesResponseStop[],
 ): (VelorouteStop & { dist: number; gcs: string })[] => {
-    const convertedStops = stops.map((stop) => {
-        const copiedStop: VelorouteStop & { dist: number; gcs: string } = {
-            stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
-            stop_name: stop.station_name || stop.dest_name || "",
-            x: addXY(stop).x,
-            y: addXY(stop).y,
-            lat: parseFloat(stop.lat),
-            lon: parseFloat(stop.lon),
-            dist: stop.dist,
-            gcs: stop.gcs,
-            trainstop: stop.trainstop,
-        };
-        // add distance to trainstation if trainstop exists
-        if (stop.trainstop) {
-            copiedStop.distToTrainstation = haversineDistance(
-                parseFloat(stop.lat),
-                parseFloat(stop.lon),
-                parseFloat(stop.station_lat || "0"),
-                parseFloat(stop.station_lon || "0"),
-            );
-        }
-        return copiedStop;
-    });
+    const convertedStops = stops
+        .sort((a, b) => a.stop_number - b.stop_number)
+        .map((stop) => {
+            const copiedStop: VelorouteStop & { dist: number; gcs: string } = {
+                stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
+                stop_name: stop.station_name || stop.dest_name || "",
+                x: addXY(stop).x,
+                y: addXY(stop).y,
+                lat: parseFloat(stop.lat),
+                lon: parseFloat(stop.lon),
+                dist: stop.dist,
+                gcs: stop.gcs,
+                trainstop: stop.trainstop,
+            };
+            // add distance to trainstation if trainstop exists
+            if (stop.trainstop) {
+                copiedStop.distToTrainstation = haversineDistance(
+                    parseFloat(stop.lat),
+                    parseFloat(stop.lon),
+                    parseFloat(stop.station_lat || "0"),
+                    parseFloat(stop.station_lon || "0"),
+                );
+            }
+            return copiedStop;
+        });
+
     return convertedStops;
 };
