@@ -114,12 +114,17 @@ export const convertVelorouteStops = (
                     : [],
             };
             if (copiedStop.trainstop) {
-                copiedStop.distToTrainstation = haversineDistance(
-                    parseFloat(stop.lat),
-                    parseFloat(stop.lon),
-                    parseFloat(stop.station_lat || "0"),
-                    parseFloat(stop.station_lon || "0"),
-                );
+                const stationLat = parseFloat(stop.station_lat ?? "");
+                const stationLon = parseFloat(stop.station_lon ?? "");
+
+                if (!isNaN(stationLat) && !isNaN(stationLon)) {
+                    copiedStop.distToTrainstation = haversineDistance(
+                        parseFloat(stop.lat),
+                        parseFloat(stop.lon),
+                        stationLat,
+                        stationLon,
+                    );
+                }
             }
             return copiedStop;
         });
