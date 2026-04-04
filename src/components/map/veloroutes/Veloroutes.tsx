@@ -4,6 +4,7 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectHoveredVelorouteSection,
+    selectVeloroutesLoading,
     setVelorouteSectionActiveThunk,
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
@@ -12,7 +13,10 @@ import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
-import { selectTrainroutesAlongVeloroute } from "../trainroutes/TrainroutesSlice";
+import {
+    selectTrainroutesAlongVeloroute,
+    selectTrainroutesLoading,
+} from "../trainroutes/TrainroutesSlice";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -25,12 +29,16 @@ const TrainstationVelorouteConnection = ({
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
+    const trainroutesLoading = useSelector(selectTrainroutesLoading);
+    const veloroutesLoading = useSelector(selectVeloroutesLoading);
+    const loading = trainroutesLoading || veloroutesLoading;
 
     if (
         !trainstopCoordinates ||
         !velorouteCoordinate ||
         velorouteCoordinate.x === undefined ||
-        velorouteCoordinate.y === undefined
+        velorouteCoordinate.y === undefined ||
+        loading
     )
         return null;
     const [x, y] = SvgMapBuilder.getMapPosition(

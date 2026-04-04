@@ -263,6 +263,9 @@ export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state: RootState) =>
     state.trainroutes.currentTrainroutes;
+export const selectTrainroutesLoading = (state: RootState) =>
+    state.trainroutes.trainroutesLoading ||
+    state.trainroutes.trainroutesAlongVelorouteLoading;
 
 export const {
     setActiveSpot,
