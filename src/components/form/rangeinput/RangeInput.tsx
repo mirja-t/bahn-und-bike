@@ -1,12 +1,17 @@
 import styles from "./rangeinput.module.scss";
 import { useTranslation } from "../../../utils/i18n";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 interface RangeInputProps {
     min: number;
     max: number;
     value: number;
     step: number;
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onRelease?: (
+        e:
+            | React.MouseEvent<HTMLInputElement>
+            | React.TouchEvent<HTMLInputElement>,
+    ) => void;
     name: string;
     makeScale?: (step: number, index: number) => string;
     getCurrentValue?: (val: number) => string;
@@ -16,19 +21,36 @@ export const RangeInput = ({
     max,
     value,
     step,
-    handleInputChange,
+    handleInputChange: handleInputChangeProp,
+    onRelease,
     name,
     makeScale = (val) => val.toString(),
     getCurrentValue = (val: number) => val.toString(),
 }: RangeInputProps) => {
+    const [inputValue, setInputValue] = useState(0);
     const ref = useRef<HTMLInputElement>(null);
     const { t } = useTranslation();
 
     useEffect(() => {
         if (!ref.current) return;
-        const trackLength = ((value - min) * 100) / (max - min) + "% 100%";
+        const trackLength = ((inputValue - min) * 100) / (max - min) + "% 100%";
         ref.current.style.backgroundSize = trackLength;
-    }, [value, min, max]);
+    }, [inputValue, min, max]);
+
+    useEffect(() => {
+        if (value) {
+            setInputValue(value);
+        } else {
+            setInputValue(min);
+        }
+    }, [value, min]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(Number(e.target.value));
+        if (handleInputChangeProp) {
+            handleInputChangeProp(e);
+        }
+    };
 
     return (
         <fieldset className={styles.rangeSlider}>
@@ -45,9 +67,11 @@ export const RangeInput = ({
                     name={name}
                     min={min}
                     max={max}
-                    value={value}
+                    value={inputValue}
                     step={step}
                     onChange={handleInputChange}
+                    onMouseUp={onRelease}
+                    onTouchEnd={onRelease}
                 />
                 <div className={styles.rangeInputWrapper}>
                     <ul

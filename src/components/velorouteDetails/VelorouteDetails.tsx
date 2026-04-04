@@ -54,11 +54,13 @@ export const VelorouteDetails = () => {
     };
 
     const maxDistanceToStation = useSelector(selectMaxDistToNextStations);
-    const handleMaxDistanceToStationChange = ({
-        target,
-    }: React.ChangeEvent<HTMLInputElement>) => {
-        const val = Number(target.value);
-        dispatch(setActiveVeloroute({ maxDistToNextStation: val }));
+    const handleMaxDistanceToStationRelease = (
+        e:
+            | React.MouseEvent<HTMLInputElement>
+            | React.TouchEvent<HTMLInputElement>,
+    ) => {
+        const value = Number((e.target as HTMLInputElement).value);
+        dispatch(setActiveVeloroute({ maxDistToNextStation: value }));
     };
 
     return (
@@ -95,9 +97,7 @@ export const VelorouteDetails = () => {
                                 max={5}
                                 value={maxDistanceToStation}
                                 step={1}
-                                handleInputChange={
-                                    handleMaxDistanceToStationChange
-                                }
+                                onRelease={handleMaxDistanceToStationRelease}
                                 name={t("maxDistanceToNextTrainstation")}
                                 getCurrentValue={(val) => `${val} km`}
                             />
