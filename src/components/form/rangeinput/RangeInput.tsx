@@ -38,11 +38,7 @@ export const RangeInput = ({
     }, [inputValue, min, max]);
 
     useEffect(() => {
-        if (value) {
-            setInputValue(value);
-        } else {
-            setInputValue(min);
-        }
+        setInputValue(Number.isFinite(value) ? value : min);
     }, [value, min]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
