@@ -4,7 +4,7 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectHoveredVelorouteSection,
-    selectPreviewVeloroute,
+    selectVeloroutesLoading,
     setVelorouteSectionActiveThunk,
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
@@ -13,7 +13,10 @@ import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
-import { selectTrainroutesAlongVeloroute } from "../trainroutes/TrainroutesSlice";
+import {
+    selectTrainroutesAlongVeloroute,
+    selectTrainroutesLoading,
+} from "../trainroutes/TrainroutesSlice";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -26,12 +29,16 @@ const TrainstationVelorouteConnection = ({
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
+    const trainroutesLoading = useSelector(selectTrainroutesLoading);
+    const veloroutesLoading = useSelector(selectVeloroutesLoading);
+    const loading = trainroutesLoading || veloroutesLoading;
 
     if (
         !trainstopCoordinates ||
         !velorouteCoordinate ||
         velorouteCoordinate.x === undefined ||
-        velorouteCoordinate.y === undefined
+        velorouteCoordinate.y === undefined ||
+        loading
     )
         return null;
     const [x, y] = SvgMapBuilder.getMapPosition(
@@ -63,7 +70,6 @@ const TrainstationVelorouteConnection = ({
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const previewVeloroute = useSelector(selectPreviewVeloroute);
     const hoveredVelorouteSection = useSelector(selectHoveredVelorouteSection);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
@@ -90,7 +96,7 @@ export const Veloroutes = () => {
     return (
         <g className={styles.veloroute}>
             {activeVeloroute &&
-                activeVeloroute.path.map((path: string, idx: number) => (
+                activeVeloroute.route.map(({ path }, idx: number) => (
                     <VeloroutePath
                         key={`current-${activeVeloroute.id}-${idx}`}
                         id={activeVeloroute.id}
@@ -102,18 +108,6 @@ export const Veloroutes = () => {
                         }
                         onClick={handleSectionClick}
                         className={styles.current}
-                    />
-                ))}
-            {previewVeloroute &&
-                previewVeloroute.path.map((path: string, idx: number) => (
-                    <VeloroutePath
-                        key={`preview-${previewVeloroute.id}-${idx}`}
-                        id={previewVeloroute.id}
-                        idx={idx}
-                        path={path}
-                        active={false}
-                        onClick={handleSectionClick}
-                        className={styles.preview}
                     />
                 ))}
             {activeVelorouteSection &&

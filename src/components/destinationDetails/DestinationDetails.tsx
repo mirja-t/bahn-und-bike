@@ -7,7 +7,6 @@ import {
     selectVelorouteList,
     selectActiveVeloroute,
     setActiveVelorouteSection,
-    setPreviewVeloroute,
     loadVeloroute,
     type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
@@ -148,7 +147,6 @@ export const DestinationDetails = () => {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
             dispatch(loadVeloroute({ id: vroute.id }));
-            dispatch(setPreviewVeloroute(null));
             dispatch(setActiveTab("leg"));
         }
     };

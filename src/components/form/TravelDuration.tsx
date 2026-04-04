@@ -6,7 +6,8 @@ import { RangeInput } from "./rangeinput/RangeInput";
 import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
-import { selectSubmitValue } from "../../AppSlice";
+import { selectLangCode, selectSubmitValue } from "../../AppSlice";
+import { getTime } from "../../utils/getTime";
 
 interface TravelDurationProps {
     handleSubmit: (
@@ -20,6 +21,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
     const [direct, setDirect] = useState(false);
+    const langCode = useSelector(selectLangCode);
 
     const handleCheckboxChange = () => {
         setDirect((prev) => !prev);
@@ -38,6 +40,13 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         }
     }, [submitValue]);
 
+    const scale = (_: number, i: number) => {
+        const hour = Math.floor(i / 2);
+        const minute = i % 2 === 1 ? "30" : "00";
+        const time = `${hour}:${minute}`;
+        return time;
+    };
+
     return (
         <form
             className={styles.travelduration}
@@ -50,13 +59,18 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
                 handleCheckboxChange={handleCheckboxChange}
                 id={"directconnection"}
             />
-            <RangeInput
-                min={0}
-                max={7}
-                value={value}
-                step={1}
-                handleInputChange={handleInputChange}
-            />
+            <div className={styles.travelTimeWrapper}>
+                <RangeInput
+                    min={0}
+                    max={7}
+                    value={value}
+                    step={1}
+                    handleInputChange={handleInputChange}
+                    name={t("traveltime")}
+                    makeScale={scale}
+                    getCurrentValue={(val) => getTime(val * 30, langCode)}
+                />
+            </div>
             <Button
                 disabled={value === 0}
                 variant="primary"

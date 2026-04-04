@@ -10,11 +10,10 @@ import {
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesSlice";
 import { useEffect, useState } from "react";
-import { haversineDistance } from "../../utils/haversineDistance";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
 
-export const CombinedVelorouteDetails = () => {
+export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const activeVeloroute = useSelector(selectActiveVeloroute);
@@ -63,19 +62,6 @@ export const CombinedVelorouteDetails = () => {
             destName: "",
         },
     });
-
-    const distanceToStartStation = haversineDistance(
-        startVeloStop?.lat || 0,
-        startVeloStop?.lon || 0,
-        startStation?.firstStation?.lat || 0,
-        startStation?.firstStation?.lon || 0,
-    ).toFixed(2);
-    const distanceToEndStation = haversineDistance(
-        endVeloStop?.lat || 0,
-        endVeloStop?.lon || 0,
-        endStation?.firstStation?.lat || 0,
-        endStation?.firstStation?.lon || 0,
-    ).toFixed(2);
 
     useEffect(() => {
         if (!activeVelorouteSection) return;
@@ -159,9 +145,8 @@ export const CombinedVelorouteDetails = () => {
                 </div>
                 <span>
                     {idx === 1 ? t("from") : t("to")}&nbsp;
-                    {idx === 1
-                        ? startStation?.firstStation?.stop_name
-                        : endStation?.firstStation?.stop_name}
+                    {destinationNames[idx === 1 ? "start" : "end"].destName ||
+                        stop.stop_name}
                 </span>
             </h3>
             <p
@@ -173,16 +158,17 @@ export const CombinedVelorouteDetails = () => {
             >
                 {t("nearesttrainstation")}:&nbsp;
                 <br />
-                {destinationNames[idx === 1 ? "start" : "end"].destName ||
-                    stop.stop_name}
+                {idx === 1
+                    ? startStation?.firstStation?.stop_name
+                    : endStation?.firstStation?.stop_name}
                 <br />
                 {startVeloStop && endVeloStop ? (
                     <>
                         {t("distanceToNextTrainstation")}:&nbsp;
                         <br />
                         {idx === 1
-                            ? distanceToStartStation
-                            : distanceToEndStation}{" "}
+                            ? startVeloStop.distToTrainstation?.toFixed(2)
+                            : endVeloStop.distToTrainstation?.toFixed(2)}{" "}
                         km
                     </>
                 ) : null}
@@ -224,7 +210,7 @@ export const CombinedVelorouteDetails = () => {
                                 </Collapse>
                             )}
                             <h6>{t("distance")}</h6>
-                            <p>{activeVelorouteSection.dist} km</p>
+                            <p>{activeVelorouteSection.dist.toFixed(2)} km</p>
                         </section>
                     )}
                 </div>

@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
-import { CombinedVelorouteDetails } from "../cominedVelorouteDetails/CombinedVelorouteDetails";
+import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
     setActiveSection,
     setTrainroutesAlongVeloroute,
@@ -19,7 +19,6 @@ import {
     selectVelorouteList,
     setActiveVeloroute,
     setActiveVelorouteSection,
-    setPreviewVeloroute,
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { Map } from "../map/Map";
@@ -72,7 +71,6 @@ export const Container = () => {
             dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
-            dispatch(setPreviewVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(loadVeloroutes(stopIds));
@@ -90,7 +88,6 @@ export const Container = () => {
         dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
-        dispatch(setPreviewVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));
@@ -136,7 +133,7 @@ export const Container = () => {
                                     disabled={!activeVeloroute}
                                 >
                                     <VelorouteDetails />
-                                    <CombinedVelorouteDetails />
+                                    <VelorouteLegDetails />
                                 </Tabs.Tab>
                             </Tabs>
                         </div>

@@ -1,78 +1,100 @@
+import styles from "./rangeinput.module.scss";
 import { useTranslation } from "../../../utils/i18n";
-import { getTime } from "../../../utils/getTime";
-import "./rangeinput.scss";
-import { useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { selectLangCode } from "../../../AppSlice";
+import { useRef, useEffect, useState, useId } from "react";
 interface RangeInputProps {
     min: number;
     max: number;
     value: number;
     step: number;
-    handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onRelease?: (
+        e:
+            | React.MouseEvent<HTMLInputElement>
+            | React.TouchEvent<HTMLInputElement>,
+    ) => void;
+    name: string;
+    makeScale?: (step: number, index: number) => string;
+    getCurrentValue?: (val: number) => string;
 }
 export const RangeInput = ({
     min,
     max,
     value,
     step,
-    handleInputChange,
+    handleInputChange: handleInputChangeProp,
+    onRelease,
+    name,
+    makeScale = (val) => val.toString(),
+    getCurrentValue = (val: number) => val.toString(),
 }: RangeInputProps) => {
+    const [inputValue, setInputValue] = useState(0);
     const ref = useRef<HTMLInputElement>(null);
-    const langCode = useSelector(selectLangCode);
+    const generatedId = useId();
+    const id = generatedId;
     const { t } = useTranslation();
 
     useEffect(() => {
         if (!ref.current) return;
-        const trackLength = ((value - min) * 100) / (max - min) + "% 100%";
+        const trackLength = ((inputValue - min) * 100) / (max - min) + "% 100%";
         ref.current.style.backgroundSize = trackLength;
-    }, [value, min, max]);
+    }, [inputValue, min, max]);
 
-    const skala = () => {
-        const rangeSkala = [];
-        for (let i = 0; i < max; i++) {
-            const hour = Math.floor(i / 2);
-            const minute = i % 2 === 1 ? "30" : "00";
-            const time = `${hour}:${minute}`;
-            rangeSkala.push(
-                <li key={i}>
-                    <span>{time}</span>
-                    {i === max - 1 && (
-                        <span className="end">{`${Math.floor((i + 1) / 2)}:${(i + 1) % 2 === 1 ? "30" : "00"}`}</span>
-                    )}
-                </li>,
-            );
+    useEffect(() => {
+        setInputValue(Number.isFinite(value) ? value : min);
+    }, [value, min]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(Number(e.target.value));
+        if (handleInputChangeProp) {
+            handleInputChangeProp(e);
         }
-        return rangeSkala;
     };
 
     return (
-        <fieldset className="range-slider">
-            <label htmlFor="traveltime">{t("traveltime")}:</label>
+        <fieldset className={styles.rangeSlider}>
+            <label htmlFor={id}>{name}:</label>
             <span>
                 {" "}
-                {t("upto")} {getTime(value * 30, langCode)}
+                {t("upto")} {getCurrentValue(inputValue)}
             </span>
             <div>
                 <input
                     ref={ref}
                     type="range"
-                    id="traveltime"
-                    name="traveltime"
+                    id={id}
+                    name={id}
                     min={min}
                     max={max}
-                    value={value}
+                    value={inputValue}
                     step={step}
                     onChange={handleInputChange}
+                    onMouseUp={onRelease}
+                    onTouchEnd={onRelease}
                 />
-                <div className="rangeInputWrapper">
+                <div className={styles.rangeInputWrapper}>
                     <ul
-                        className="steps"
+                        className={styles.steps}
                         style={{
                             width: "100%",
                         }}
                     >
-                        {skala()}
+                        {new Array((max - min) / step + 1)
+                            .fill(step)
+                            .map((step, i) => step * i + min)
+                            .map(makeScale)
+                            .map((str, i, arr) => {
+                                if (i === arr.length - 1) return null;
+                                return (
+                                    <li key={i}>
+                                        <span>{str}</span>
+                                        {i === max - min - step && (
+                                            <span className={styles.end}>
+                                                {arr[i + 1]}
+                                            </span>
+                                        )}
+                                    </li>
+                                );
+                            })}
                     </ul>
                 </div>
             </div>

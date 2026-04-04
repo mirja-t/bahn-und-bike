@@ -20,19 +20,26 @@ export const MapPinIcon = ({
             <motion.path
                 initial={{
                     opacity: 0,
-                    scale: 1,
+                    scale: 0,
                 }}
                 animate={{
                     opacity: active ? 1 : 0,
-                    scale: active ? 2.4 / scale : 1 / scale,
+                    scale: active ? 1.35 : 0,
                 }}
-                d={`M${x + 4.8},${y - 26 / scale}c0,-2.7,-2.2,-4.9,-4.9,-4.9s-4.9,2.2,-4.9,4.9s.6,2.6,1.4,3.5c.9.9,3.5,3.4,3.5,3.4,0,0,2.6-2.6,3.5-3.4.9-.9,1.4-2.1,1.4-3.5Z`}
+                d={`
+                    M${x} ${y - 8 / scale}
+                    c${-5 / scale} ${-5 / scale}, ${-10 / scale} ${-7.5 / scale}, ${-10 / scale} ${-15 / scale} 
+                    c0 ${-5 / scale}, ${2.5 / scale} ${-10 / scale}, ${10 / scale} ${-10 / scale}
+                    c${7.5 / scale} 0, ${10 / scale} ${5 / scale}, ${10 / scale} ${10 / scale}
+                    c0 ${7.5 / scale}, ${-5 / scale} ${10 / scale}, ${-10 / scale} ${15 / scale}
+                    z
+                    `}
             />
             <motion.text
                 x={x}
-                y={y - 20 / scale}
+                y={y - 18 / scale}
                 textAnchor="middle"
-                fontSize={14 / scale}
+                fontSize={16 / scale}
                 fill={`var(--bg)`}
                 style={{ pointerEvents: "none" }}
                 fontFamily="Oswald, sans-serif"

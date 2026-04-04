@@ -3,6 +3,7 @@ import type {
     Veloroute,
     VelorouteStop,
 } from "../components/map/veloroutes/VeloroutesSlice";
+import { haversineDistance } from "./haversineDistance";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
 
 const addXY = (stop: VeloroutesResponseStop) => {
@@ -18,96 +19,115 @@ const addXY = (stop: VeloroutesResponseStop) => {
     };
 };
 
-export const makeVeloRoute = (
-    stops: VeloroutesResponseStop[],
-    trainstops: number[],
-): Veloroute => {
-    stops.sort((a, b) => a.stop_number - b.stop_number);
-    const velorouteStops = convertVelorouteStops(stops);
-    const legs = velorouteStops.reduce(
-        (
-            acc: { dist: number; leg: (VelorouteStop & { gcs: string })[] }[],
-            stop,
-            idx,
-            arr,
-        ) => {
+export const makeVelorouteLegs = (
+    stops: VelorouteStop[],
+    maxDistToNextStation: number,
+) => {
+    const routeLegs = stops.reduce(
+        (acc: { leg: VelorouteStop[] }[], stop, idx, arr) => {
             const lastLeg = acc[acc.length - 1];
             if (!lastLeg) {
                 // add first leg
-                acc.push({ dist: 0, leg: [stop] });
+                acc.push({ leg: [stop] });
             } else if (
-                // build leg
+                // build leg on new trainstation
                 stop.trainstop !== null &&
-                trainstops.includes(stop.trainstop) &&
-                idx !== arr.length - 1
+                idx !== arr.length - 1 && // the last stop can be a trainstop but should not create a new leg
+                stop.distToTrainstation !== undefined &&
+                stop.distToTrainstation <= maxDistToNextStation
             ) {
-                acc.push({ dist: 0, leg: [stop] });
+                acc.push({ leg: [stop] });
                 lastLeg.leg.push(stop);
-                lastLeg.dist =
-                    Math.round((lastLeg.dist + stop.dist) * 100) / 100;
             } else {
                 lastLeg.leg.push(stop);
-                lastLeg.dist =
-                    Math.round((lastLeg.dist + stop.dist) * 100) / 100;
             }
             return acc;
         },
         [],
     );
-    const polyline = legs.map(
-        ({ leg }) =>
-            leg
-                .map(({ gcs }) => {
-                    const positions = gcs
-                        .split(" ")
-                        .map((gcs) => {
-                            const [lat, lon] = gcs.split(",").map(parseFloat);
-                            const [x, y] = SvgMapBuilder.getMapPosition(
-                                lon,
-                                lat,
-                                germanyBounds,
-                            );
-                            return [x, y];
-                        })
-                        .filter(([x, y]) => !isNaN(x) && !isNaN(y))
-                        .map(([x, y]) => `${x},${y}`);
-                    return positions.join(" ");
-                })
-                .join(" "),
-        // .map(({ x, y }) => `${x},${y}`)
-        // .join(" "),
-    );
+    const routes = routeLegs.map((route, routeIdx, routeArr) => ({
+        ...route,
+        dist: route.leg
+            .slice(0, route.leg.length - 1)
+            .reduce((sum, stop) => sum + stop.dist, 0),
+        path: route.leg
+            .map((stop, idx, arr) => {
+                if (routeIdx < routeArr.length - 1 && idx === arr.length - 1)
+                    return ""; // last stop does not have a path
+                return stop.path;
+            })
+            .join(" "),
+    }));
+    return routes;
+};
+
+export const makeVeloRoute = (
+    stops: VelorouteStop[],
+    maxDistToNextStation: number,
+    id: string,
+    name: string,
+): Veloroute => {
+    const route = makeVelorouteLegs(stops, maxDistToNextStation);
     return {
-        id: stops[0].veloroute_id,
-        name: stops[0].name,
+        id,
+        name,
         len: stops.reduce((sum, stop) => sum + stop.dist, 0),
-        path: polyline,
-        route: legs,
+        route,
     };
 };
 
 export const convertVelorouteStops = (
     stops: VeloroutesResponseStop[],
-): (VelorouteStop & { dist: number; gcs: string })[] => {
-    const convertedStops = stops.map((stop) => {
-        const copiedStop: VelorouteStop & { dist: number; gcs: string } = {
-            stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
-            stop_name: stop.station_name || stop.dest_name || "",
-            x: addXY(stop).x,
-            y: addXY(stop).y,
-            lat: parseFloat(stop.lat),
-            lon: parseFloat(stop.lon),
-            dist: stop.dist,
-            gcs: stop.gcs,
-            trainstop: stop.trainstop,
-        };
-        if (stop.trainlines) {
-            copiedStop.trainlines = stop.trainlines.split(",");
-        }
-        if (stop.trainstop) {
-            copiedStop.trainstop = stop.trainstop;
-        }
-        return copiedStop;
-    });
+    trainstops: number[],
+): VelorouteStop[] => {
+    const convertedStops = stops
+        .sort((a, b) => a.stop_number - b.stop_number)
+        .map((stop) => {
+            const copiedStop: VelorouteStop = {
+                stop_id: `${stop.veloroute_id}-${stop.stop_number}-${stop.name}`,
+                stop_name: stop.station_name || stop.dest_name || "",
+                x: addXY(stop).x,
+                y: addXY(stop).y,
+                lat: parseFloat(stop.lat),
+                lon: parseFloat(stop.lon),
+                dist: stop.dist,
+                path: stop.gcs
+                    .split(" ")
+                    .map((gcs) => {
+                        const [lat, lon] = gcs.split(",").map(parseFloat);
+                        const [x, y] = SvgMapBuilder.getMapPosition(
+                            lon,
+                            lat,
+                            germanyBounds,
+                        );
+                        return [x, y];
+                    })
+                    .filter(([x, y]) => !isNaN(x) && !isNaN(y))
+                    .map(([x, y]) => `${x},${y}`)
+                    .join(" "),
+                trainstop:
+                    stop.trainstop && trainstops.includes(stop.trainstop)
+                        ? stop.trainstop
+                        : null,
+                trainlines: stop.trainlines
+                    ? stop.trainlines.split(",").map((line) => line.trim())
+                    : [],
+            };
+            if (copiedStop.trainstop) {
+                const stationLat = parseFloat(stop.station_lat ?? "");
+                const stationLon = parseFloat(stop.station_lon ?? "");
+
+                if (!isNaN(stationLat) && !isNaN(stationLon)) {
+                    copiedStop.distToTrainstation = haversineDistance(
+                        parseFloat(stop.lat),
+                        parseFloat(stop.lon),
+                        stationLat,
+                        stationLon,
+                    );
+                }
+            }
+            return copiedStop;
+        });
+
     return convertedStops;
 };

@@ -65,6 +65,7 @@ export interface TrainroutesState {
     trainroutesAlongVeloroute: CurrentTrainroute[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
+    maxDistToNextStation: number;
     trainlineNames?: string[];
 }
 
@@ -118,7 +119,7 @@ export const loadTrainroutesAlongVeloroute = createAsyncThunk<
     { state: RootState }
 >("trainroutes/setTrainroutesAlongVeloroute", async (idx: number, thunkAPI) => {
     const startdestination = thunkAPI.getState().trainroutes.startPos;
-    const activeVeloroute = thunkAPI.getState().veloroutes.veloroute.active;
+    const activeVeloroute = thunkAPI.getState().veloroutes.veloroute;
     const startId = activeVeloroute
         ? activeVeloroute.route[idx].leg[0].trainstop
         : undefined;
@@ -170,6 +171,7 @@ export const trainroutesSlice = createSlice({
         trainroutesAlongVeloroute: [],
         trainroutesAlongVelorouteLoading: false,
         trainroutesAlongVelorouteError: false,
+        maxDistToNextStation: 2, // in km, default value, can be changed by user in VelorouteDetails
     } as TrainroutesState,
     reducers: {
         setCurrentTrainroutes: (
@@ -261,6 +263,9 @@ export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectCurrentTrainroutes = (state: RootState) =>
     state.trainroutes.currentTrainroutes;
+export const selectTrainroutesLoading = (state: RootState) =>
+    state.trainroutes.trainroutesLoading ||
+    state.trainroutes.trainroutesAlongVelorouteLoading;
 
 export const {
     setActiveSpot,

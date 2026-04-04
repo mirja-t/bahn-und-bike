@@ -69,5 +69,6 @@
     "routelegs": "Route legs",
     "journey": "Journey",
     "nearesttrainstation": "Nearest train station",
-    "distanceToNextTrainstation": "Distance to next train station"
+    "distanceToNextTrainstation": "Distance to next train station",
+    "maxDistanceToNextTrainstation": "Maximum distance to next train station"
 }
