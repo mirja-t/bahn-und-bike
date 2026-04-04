@@ -76,7 +76,7 @@ export const RangeInput = ({
                             width: "100%",
                         }}
                     >
-                        {new Array(max - min + step)
+                        {new Array((max - min) / step + 1)
                             .fill(step)
                             .map((step, i) => step * i + min)
                             .map(makeScale)
