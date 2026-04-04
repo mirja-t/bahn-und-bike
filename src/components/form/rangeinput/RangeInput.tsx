@@ -12,7 +12,6 @@ interface RangeInputProps {
             | React.MouseEvent<HTMLInputElement>
             | React.TouchEvent<HTMLInputElement>,
     ) => void;
-    id?: string;
     name: string;
     makeScale?: (step: number, index: number) => string;
     getCurrentValue?: (val: number) => string;
@@ -24,7 +23,6 @@ export const RangeInput = ({
     step,
     handleInputChange: handleInputChangeProp,
     onRelease,
-    id: idProp,
     name,
     makeScale = (val) => val.toString(),
     getCurrentValue = (val: number) => val.toString(),
@@ -32,7 +30,7 @@ export const RangeInput = ({
     const [inputValue, setInputValue] = useState(0);
     const ref = useRef<HTMLInputElement>(null);
     const generatedId = useId();
-    const id = idProp ?? generatedId;
+    const id = generatedId;
     const { t } = useTranslation();
 
     useEffect(() => {
