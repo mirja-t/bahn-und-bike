@@ -5,6 +5,7 @@ import { useTranslation } from "../../utils/i18n";
 import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
+    setActiveVeloroute,
     setHoveredVelorouteSection,
     setVelorouteSectionActiveThunk,
 } from "../map/veloroutes/VeloroutesSlice";
@@ -13,10 +14,7 @@ import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { RangeInput } from "../form/rangeinput/RangeInput";
-import {
-    selectMaxDistToNextStations,
-    setMaxDistToNextStation,
-} from "../map/trainroutes/TrainroutesSlice";
+import { selectMaxDistToNextStations } from "../map/veloroutes/VeloroutesSlice";
 import { Box } from "../stateless/box/Box";
 
 export const VelorouteDetails = () => {
@@ -60,7 +58,7 @@ export const VelorouteDetails = () => {
         target,
     }: React.ChangeEvent<HTMLInputElement>) => {
         const val = Number(target.value);
-        dispatch(setMaxDistToNextStation(val));
+        dispatch(setActiveVeloroute({ maxDistToNextStation: val }));
     };
 
     return (

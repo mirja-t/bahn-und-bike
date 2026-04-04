@@ -4,7 +4,6 @@ import {
     selectActiveVeloroute,
     selectActiveVelorouteSection,
     selectHoveredVelorouteSection,
-    selectPreviewVeloroute,
     setVelorouteSectionActiveThunk,
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
@@ -63,7 +62,6 @@ const TrainstationVelorouteConnection = ({
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const previewVeloroute = useSelector(selectPreviewVeloroute);
     const hoveredVelorouteSection = useSelector(selectHoveredVelorouteSection);
     const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
     const activeVelorouteSection =
@@ -90,7 +88,7 @@ export const Veloroutes = () => {
     return (
         <g className={styles.veloroute}>
             {activeVeloroute &&
-                activeVeloroute.path.map((path: string, idx: number) => (
+                activeVeloroute.route.map(({ path }, idx: number) => (
                     <VeloroutePath
                         key={`current-${activeVeloroute.id}-${idx}`}
                         id={activeVeloroute.id}
@@ -102,18 +100,6 @@ export const Veloroutes = () => {
                         }
                         onClick={handleSectionClick}
                         className={styles.current}
-                    />
-                ))}
-            {previewVeloroute &&
-                previewVeloroute.path.map((path: string, idx: number) => (
-                    <VeloroutePath
-                        key={`preview-${previewVeloroute.id}-${idx}`}
-                        id={previewVeloroute.id}
-                        idx={idx}
-                        path={path}
-                        active={false}
-                        onClick={handleSectionClick}
-                        className={styles.preview}
                     />
                 ))}
             {activeVelorouteSection &&
