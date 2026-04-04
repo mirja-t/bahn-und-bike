@@ -1,6 +1,6 @@
 import styles from "./rangeinput.module.scss";
 import { useTranslation } from "../../../utils/i18n";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useId } from "react";
 interface RangeInputProps {
     min: number;
     max: number;
@@ -12,6 +12,7 @@ interface RangeInputProps {
             | React.MouseEvent<HTMLInputElement>
             | React.TouchEvent<HTMLInputElement>,
     ) => void;
+    id?: string;
     name: string;
     makeScale?: (step: number, index: number) => string;
     getCurrentValue?: (val: number) => string;
@@ -23,12 +24,15 @@ export const RangeInput = ({
     step,
     handleInputChange: handleInputChangeProp,
     onRelease,
+    id: idProp,
     name,
     makeScale = (val) => val.toString(),
     getCurrentValue = (val: number) => val.toString(),
 }: RangeInputProps) => {
     const [inputValue, setInputValue] = useState(0);
     const ref = useRef<HTMLInputElement>(null);
+    const generatedId = useId();
+    const id = idProp ?? generatedId;
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -50,17 +54,17 @@ export const RangeInput = ({
 
     return (
         <fieldset className={styles.rangeSlider}>
-            <label htmlFor={name}>{name}:</label>
+            <label htmlFor={id}>{name}:</label>
             <span>
                 {" "}
-                {t("upto")} {getCurrentValue(value)}
+                {t("upto")} {getCurrentValue(inputValue)}
             </span>
             <div>
                 <input
                     ref={ref}
                     type="range"
-                    id={name}
-                    name={name}
+                    id={id}
+                    name={id}
                     min={min}
                     max={max}
                     value={inputValue}
