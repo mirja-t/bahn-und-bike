@@ -172,13 +172,16 @@ export const veloroutesSlice = createSlice({
             const { maxDistToNextStation } = action.payload;
             state.maxDistToNextStation = maxDistToNextStation;
             // obtain original stops from legs by filtering out duplicates at leg joints
+            const seenStopIds = new Set<VelorouteStop["stop_id"]>();
             const veloroutestops: VelorouteStop[] = state.veloroute.route
-                .flatMap((s) => s.leg.map((stop) => stop))
-                .filter((stop, idx, arr) =>
-                    arr
-                        .slice(0, idx)
-                        .every((prevStop) => prevStop.stop_id !== stop.stop_id),
-                );
+                .flatMap((s) => s.leg)
+                .filter((stop) => {
+                    if (seenStopIds.has(stop.stop_id)) {
+                        return false;
+                    }
+                    seenStopIds.add(stop.stop_id);
+                    return true;
+                });
             const legs = makeVelorouteLegs(
                 veloroutestops,
                 maxDistToNextStation,
