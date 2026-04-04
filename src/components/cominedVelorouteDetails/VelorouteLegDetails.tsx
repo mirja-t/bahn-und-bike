@@ -145,9 +145,8 @@ export const VelorouteLegDetails = () => {
                 </div>
                 <span>
                     {idx === 1 ? t("from") : t("to")}&nbsp;
-                    {idx === 1
-                        ? startStation?.firstStation?.stop_name
-                        : endStation?.firstStation?.stop_name}
+                    {destinationNames[idx === 1 ? "start" : "end"].destName ||
+                        stop.stop_name}
                 </span>
             </h3>
             <p
@@ -159,8 +158,9 @@ export const VelorouteLegDetails = () => {
             >
                 {t("nearesttrainstation")}:&nbsp;
                 <br />
-                {destinationNames[idx === 1 ? "start" : "end"].destName ||
-                    stop.stop_name}
+                {idx === 1
+                    ? startStation?.firstStation?.stop_name
+                    : endStation?.firstStation?.stop_name}
                 <br />
                 {startVeloStop && endVeloStop ? (
                     <>
