@@ -28,9 +28,11 @@
 
 .rangeSlider {
     --slider-height: 5px;
-    --sliderborder-width: 8px;
-    --sliderthumb-height: 21px;
-    --sliderthumb-width: 21px;
+    --sliderborder-width: 4px;
+    --sliderthumb-height: 15px;
+    --sliderthumb-width: 15px;
+    overflow: hidden;
+    padding-right: 4px;
     input[type="range"] {
         box-shadow:
             1px 1px 0 white,
@@ -39,7 +41,7 @@
         background-color: #dbdbdb;
 
         &::-webkit-slider-thumb {
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
             border-radius: 50%;
         }
     }
