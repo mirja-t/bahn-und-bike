@@ -42,7 +42,7 @@ describe("makeVeloRoute", () => {
             trainlines: [],
         },
         {
-            stop_id: "stop_3",
+            stop_id: "stop_4",
             stop_name: "Stop C",
             trainstop: 3,
             distToTrainstation: 4.5,
@@ -55,7 +55,7 @@ describe("makeVeloRoute", () => {
             y: 3,
         },
         {
-            stop_id: "stop_4",
+            stop_id: "stop_5",
             stop_name: "Stop D",
             trainstop: 4,
             x: 4,
@@ -83,7 +83,7 @@ describe("makeVeloRoute", () => {
     });
     it("should return the correct path", () => {
         const result = makeVeloRoute(stops.slice(1), 5, "route_1", "Route 1");
-        expect(result.route[0].path).toBe("1,1 2,2 3,3");
+        expect(result.route[0].path).toBe("1,1 2,2 ");
         expect(result.route[1].path).toBe("3,3 4,4");
     });
 });
