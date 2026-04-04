@@ -45,12 +45,18 @@ export const makeVelorouteLegs = (
         },
         [],
     );
-    const routes = routeLegs.map((route) => ({
+    const routes = routeLegs.map((route, routeIdx, routeArr) => ({
         ...route,
         dist: route.leg
             .slice(0, route.leg.length - 1)
             .reduce((sum, stop) => sum + stop.dist, 0),
-        path: route.leg.map((stop) => stop.path).join(" "),
+        path: route.leg
+            .map((stop, idx, arr) => {
+                if (routeIdx < routeArr.length - 1 && idx === arr.length - 1)
+                    return ""; // last stop does not have a path
+                return stop.path;
+            })
+            .join(" "),
     }));
     return routes;
 };
