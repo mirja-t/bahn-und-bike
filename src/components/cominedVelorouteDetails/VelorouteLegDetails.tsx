@@ -210,7 +210,7 @@ export const VelorouteLegDetails = () => {
                                 </Collapse>
                             )}
                             <h6>{t("distance")}</h6>
-                            <p>{activeVelorouteSection.dist} km</p>
+                            <p>{activeVelorouteSection.dist.toFixed(2)} km</p>
                         </section>
                     )}
                 </div>
