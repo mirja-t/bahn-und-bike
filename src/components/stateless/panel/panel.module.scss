@@ -2,7 +2,7 @@
 .panelWrapper {
     display: flex;
     gap: spacing.$padding-s;
-    padding: spacing.$padding-s spacing.$padding-m;
+    padding: spacing.$padding-m;
     position: relative;
     height: 100%;
     &.row {

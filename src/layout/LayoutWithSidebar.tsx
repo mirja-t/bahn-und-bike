@@ -13,12 +13,26 @@ import { Switcher } from "../components/form/switcher/Switcher";
 import { useSelector } from "react-redux";
 import { Header } from "../components/stateless/header/Header";
 import { Footer } from "../components/stateless/footer/Footer";
+import { useState } from "react";
+import { CloseButton } from "../components/stateless/button/CloseButton";
 
 const Main = ({ children }: { children: React.ReactNode }) => {
     return <main className={styles.main}>{children}</main>;
 };
 const Aside = ({ children }: { children: React.ReactNode }) => {
-    return <aside className={styles.aside}>{children}</aside>;
+    const [showSidebar, setShowSidebar] = useState(false);
+    const handleClick = () => {
+        console.log("close sidebar");
+        setShowSidebar((prev) => !prev);
+    };
+    return (
+        <aside
+            className={`${styles.aside} ${showSidebar ? "" : styles.closed}`}
+        >
+            <CloseButton onClick={handleClick} open={showSidebar} />
+            {children}
+        </aside>
+    );
 };
 const Bottom = ({ children }: { children: React.ReactNode }) => {
     return <div className={styles.bottom}>{children}</div>;

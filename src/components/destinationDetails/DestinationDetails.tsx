@@ -1,7 +1,7 @@
 import "./destinationDetails.scss";
 import { useSelector } from "react-redux";
 import { getTime } from "../../utils/getTime";
-import { selectLangCode, setActiveTab, useAppDispatch } from "../../AppSlice";
+import { selectLangCode, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectVelorouteList,
@@ -147,7 +147,6 @@ export const DestinationDetails = () => {
             dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSection(null));
             dispatch(loadVeloroute({ id: vroute.id }));
-            dispatch(setActiveTab("leg"));
         }
     };
 
