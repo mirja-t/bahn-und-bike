@@ -22,14 +22,17 @@ const Main = ({ children }: { children: React.ReactNode }) => {
 const Aside = ({ children }: { children: React.ReactNode }) => {
     const [showSidebar, setShowSidebar] = useState(false);
     const handleClick = () => {
-        console.log("close sidebar");
         setShowSidebar((prev) => !prev);
     };
     return (
         <aside
             className={`${styles.aside} ${showSidebar ? "" : styles.closed}`}
         >
-            <CloseButton onClick={handleClick} open={showSidebar} />
+            <div
+                className={`${styles.closeButtonWrapper} ${showSidebar ? styles.open : ""}`}
+            >
+                <CloseButton onClick={handleClick} open={showSidebar} />
+            </div>
             {children}
         </aside>
     );

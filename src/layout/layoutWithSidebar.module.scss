@@ -45,6 +45,26 @@ $breakpoint-max: 991px;
     @media screen and (min-width: $breakpoint) {
         position: relative;
     }
+    .closeButtonWrapper {
+        position: absolute;
+        right: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        z-index: 20;
+        width: 1.5em;
+        height: 4em;
+        padding: 2px;
+        &.open {
+            height: 2em;
+        }
+        > * {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0;
+        }
+    }
     &.closed {
         left: calc(-100% + 1.5em);
         opacity: 1;
@@ -52,9 +72,6 @@ $breakpoint-max: 991px;
         opacity: 1;
         top: 50%;
         transform: translateY(-50%);
-        // > * * {
-        //     display: none;
-        // }
     }
 }
 .navigation {

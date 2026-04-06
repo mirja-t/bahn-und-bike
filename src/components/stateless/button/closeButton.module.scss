@@ -1,17 +1,6 @@
 .closeButton {
-    position: absolute;
-    right: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 20;
     width: 1.5em;
-    height: 4em;
+    height: 1.5em;
     padding: 2px;
-    top: 50%;
-    transform: translateY(-50%);
-    &.open {
-        top: 1em;
-        height: 2em;
-    }
+    margin-left: auto;
 }
