@@ -1,16 +1,23 @@
 import styles from "./collapse.module.scss";
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 interface CollapseProps {
     children: ReactNode;
     title: string;
     variant?: "primary" | "minify";
+    open?: boolean;
 }
 
-export const Collapse = ({ children, title, variant }: CollapseProps) => {
+export const Collapse = ({ children, title, variant, open }: CollapseProps) => {
     const [toggle, setToggle] = useState(false);
     const buttonId = useId();
     const contentId = useId();
+
+    useEffect(() => {
+        if (!!open) {
+            setToggle(true);
+        }
+    }, [open]);
 
     return (
         <div

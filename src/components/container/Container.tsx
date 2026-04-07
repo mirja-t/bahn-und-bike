@@ -170,7 +170,7 @@ export const Container = () => {
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>
                 <Panel>
-                    <Collapse title="" variant="minify">
+                    <Collapse title="" variant="minify" open={true}>
                         <TravelDuration handleSubmit={handleSubmit} />
                     </Collapse>
                 </Panel>
