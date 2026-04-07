@@ -34,44 +34,53 @@ $breakpoint-max: 991px;
 }
 .aside {
     z-index: 10;
+    max-width: 500px;
     @media screen and (max-width: $breakpoint-max) {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        opacity: 1;
+        transition: left 0.3s ease;
+        &.closed {
+            max-width: 100%;
+            left: -100%;
+        }
+        .closeButtonWrapper {
+            position: absolute;
+            right: -2em;
+            transition: right 0.3s ease;
+            background: var(--bg-light);
+            border: none;
+            cursor: pointer;
+            z-index: 20;
+            width: 2em;
+            height: 4em;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top-right-radius: var(--panel-border-radius);
+            border-bottom-right-radius: var(--panel-border-radius);
+            box-shadow: var(--box-shadow);
+            &.open {
+                box-shadow: none;
+                height: 2em;
+                right: 0;
+                top: 0;
+                transform: translateY(0);
+            }
+            > * {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+            }
+        }
     }
     @media screen and (min-width: $breakpoint) {
         position: relative;
-    }
-    .closeButtonWrapper {
-        position: absolute;
-        right: 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-        z-index: 20;
-        width: 1.5em;
-        height: 4em;
-        padding: 2px;
-        &.open {
-            height: 2em;
+        .closeButtonWrapper {
+            display: none;
         }
-        > * {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            right: 0;
-        }
-    }
-    &.closed {
-        left: calc(-100% + 1.5em);
-        opacity: 1;
-        height: 4em;
-        opacity: 1;
-        top: 50%;
-        transform: translateY(-50%);
     }
 }
 .navigation {

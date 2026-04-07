@@ -106,7 +106,7 @@ export const Container = () => {
             {submitValue > 0 && (
                 <LayoutWithSidebar.Aside>
                     <Panel>
-                        <div ref={sidebarRef}>
+                        <div className={styles.sidebarWrapper} ref={sidebarRef}>
                             <Tabs
                                 height={sidebarHeight.toString() + "px"}
                                 activeTabId={activeTabId}
