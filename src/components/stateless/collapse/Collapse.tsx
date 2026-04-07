@@ -4,15 +4,18 @@ import { useId, useState, type ReactNode } from "react";
 interface CollapseProps {
     children: ReactNode;
     title: string;
+    variant?: "primary" | "minify";
 }
 
-export const Collapse = ({ children, title }: CollapseProps) => {
+export const Collapse = ({ children, title, variant }: CollapseProps) => {
     const [toggle, setToggle] = useState(false);
     const buttonId = useId();
     const contentId = useId();
 
     return (
-        <div className={styles.collapse}>
+        <div
+            className={`${styles.collapse} ${variant === "minify" ? styles.minify : ""}`}
+        >
             <button
                 id={buttonId}
                 type="button"

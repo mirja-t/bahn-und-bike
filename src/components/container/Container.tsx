@@ -40,6 +40,7 @@ import { TravelDuration } from "../form/TravelDuration";
 import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import { motion, AnimatePresence } from "framer-motion";
+import { Collapse } from "../stateless/collapse/Collapse";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -169,7 +170,9 @@ export const Container = () => {
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>
                 <Panel>
-                    <TravelDuration handleSubmit={handleSubmit} />
+                    <Collapse title="" variant="minify">
+                        <TravelDuration handleSubmit={handleSubmit} />
+                    </Collapse>
                 </Panel>
             </LayoutWithSidebar.Bottom>
         </LayoutWithSidebar>

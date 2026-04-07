@@ -9,6 +9,7 @@
     }
     &.column {
         flex-direction: column;
+        row-gap: spacing.$padding-s;
     }
     background: var(--bg-light);
     transition: all 0.25s ease;

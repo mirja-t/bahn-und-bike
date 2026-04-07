@@ -33,7 +33,7 @@ const Aside = ({ children }: { children: React.ReactNode }) => {
             >
                 <CloseButton onClick={handleClick} open={showSidebar} />
             </div>
-            {children}
+            <div className={styles.sidebarContent}>{children}</div>
         </aside>
     );
 };
