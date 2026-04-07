@@ -17,7 +17,7 @@ $breakpoint-max: 991px;
     grid-template-rows: 1fr auto;
     gap: spacing.$mainpadding;
     @media screen and (min-width: $breakpoint) {
-        grid-template-columns: 20em 1fr;
+        grid-template-columns: calc(20em + 5vw) 1fr;
     }
 }
 .bottom {
