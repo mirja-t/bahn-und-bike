@@ -2,6 +2,7 @@
 @use "../../../scss/mixins/caret.scss" as caret;
 
 .collapse {
+    width: 100%;
     .toggle {
         cursor: pointer;
         position: relative;
@@ -31,8 +32,46 @@
     }
     .toggleContainer {
         overflow: hidden;
+        width: 100%;
+        transition:
+            opacity 0.3s ease,
+            height 0.3s ease;
         &.off {
+            > * * {
+                opacity: 0;
+            }
             height: 0;
+        }
+    }
+    &.minify {
+        position: relative;
+        .toggle {
+            width: 100%;
+            top: -12px;
+            height: 12px;
+            position: absolute;
+            &:after {
+                position: absolute;
+                display: block;
+                top: 0;
+                left: 50%;
+                width: 24px;
+                height: 24px;
+                content: "";
+                border: none;
+                transform: translateX(-50%) rotate(0deg);
+                z-index: 1;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 12' width='100%25' height='100%25'%3E%3Cline stroke-linecap='round' stroke='%23999' stroke-width='2' x1='2' y1='4' x2='22' y2='4'%3E%3C/line%3E%3Cline stroke-linecap='round' stroke='%23999' stroke-width='2' x1='2' y1='8' x2='22' y2='8'%3E%3C/line%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+            }
+        }
+        > button {
+            width: 100%;
+            text-align: center;
+        }
+        .toggleContainer {
+            padding-right: spacing.$padding-s;
+            overflow: visible;
         }
     }
 }

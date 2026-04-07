@@ -40,6 +40,7 @@ import { TravelDuration } from "../form/TravelDuration";
 import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import { motion, AnimatePresence } from "framer-motion";
+import { Collapse } from "../stateless/collapse/Collapse";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -106,7 +107,7 @@ export const Container = () => {
             {submitValue > 0 && (
                 <LayoutWithSidebar.Aside>
                     <Panel>
-                        <div ref={sidebarRef}>
+                        <div className={styles.sidebarWrapper} ref={sidebarRef}>
                             <Tabs
                                 height={sidebarHeight.toString() + "px"}
                                 activeTabId={activeTabId}
@@ -169,7 +170,9 @@ export const Container = () => {
             </LayoutWithSidebar.Main>
             <LayoutWithSidebar.Bottom>
                 <Panel>
-                    <TravelDuration handleSubmit={handleSubmit} />
+                    <Collapse title="" variant="minify" open={true}>
+                        <TravelDuration handleSubmit={handleSubmit} />
+                    </Collapse>
                 </Panel>
             </LayoutWithSidebar.Bottom>
         </LayoutWithSidebar>

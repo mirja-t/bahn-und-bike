@@ -1,19 +1,23 @@
 @use "../scss/variables/spacing.scss" as spacing;
 
+$breakpoint: 992px;
+$breakpoint-max: 991px;
 .wrapper {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
     position: relative;
     height: 100%;
-    gap: spacing.$padding-s;
     padding: spacing.$padding-s;
 }
 .container {
     position: relative;
     display: grid;
-    grid-template-columns: 20em 1fr;
+    grid-template-columns: 0 1fr;
     grid-template-rows: 1fr auto;
-    gap: spacing.$mainpadding;
+    gap: spacing.$padding-s;
+    @media screen and (min-width: $breakpoint) {
+        grid-template-columns: calc(20em + 5vw) 1fr;
+    }
 }
 .bottom {
     grid-column: span 2;
@@ -29,7 +33,65 @@
 }
 .aside {
     z-index: 10;
-    position: relative;
+    max-width: 500px;
+    overflow: hidden;
+    padding: spacing.$padding-s;
+    margin-left: calc(-0.5vw - 0.25em);
+    @media screen and (max-width: $breakpoint-max) {
+        margin-left: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: left 0.3s ease;
+        &.closed {
+            max-width: 100%;
+            left: calc(-100% + 2em);
+            .sidebarContent {
+                left: calc(-2em);
+            }
+            .closeButtonWrapper {
+                right: 0;
+            }
+        }
+        .closeButtonWrapper {
+            position: absolute;
+            top: 50%;
+            right: spacing.$padding-s;
+            transition: right 0.3s ease;
+            background: var(--bg-light);
+            z-index: 20;
+            width: 2em;
+            height: 4em;
+            transform: translateY(-50%);
+            border-top-right-radius: var(--panel-border-radius);
+            border-bottom-right-radius: var(--panel-border-radius);
+            box-shadow: var(--box-shadow);
+            &.open {
+                box-shadow: none;
+                height: 2em;
+                top: spacing.$padding-s;
+                transform: translateY(0);
+            }
+            > * {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+            }
+        }
+    }
+    .sidebarContent {
+        position: relative;
+        height: 100%;
+    }
+    @media screen and (min-width: $breakpoint) {
+        position: relative;
+        .closeButtonWrapper {
+            display: none;
+        }
+    }
 }
 .navigation {
     display: flex;

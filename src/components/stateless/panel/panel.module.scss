@@ -1,8 +1,7 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 .panelWrapper {
     display: flex;
-    gap: spacing.$padding-s;
-    padding: spacing.$padding-s spacing.$padding-m;
+    padding: spacing.$padding-m;
     position: relative;
     height: 100%;
     &.row {
@@ -10,6 +9,7 @@
     }
     &.column {
         flex-direction: column;
+        row-gap: spacing.$padding-s;
     }
     background: var(--bg-light);
     transition: all 0.25s ease;
