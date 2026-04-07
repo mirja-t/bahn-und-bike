@@ -11,14 +11,12 @@ interface CollapseProps {
 
 export const Collapse = ({ children, title, variant, open }: CollapseProps) => {
     const { t } = useTranslation();
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState(Boolean(open));
     const buttonId = useId();
     const contentId = useId();
 
     useEffect(() => {
-        if (!!open) {
-            setToggle(true);
-        }
+        setToggle(Boolean(open));
     }, [open]);
 
     return (
