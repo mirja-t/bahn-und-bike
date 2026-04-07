@@ -43,12 +43,16 @@ export const ItemList = <T,>({
             tabIndex={onClick ? 0 : undefined}
             role={onClick ? "button" : undefined}
             onClick={onClick ? () => onClick(item) : undefined}
-            onKeyDown={onClick ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    onClick(item);
-                }
-            } : undefined}
+            onKeyDown={
+                onClick
+                    ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              onClick(item);
+                          }
+                      }
+                    : undefined
+            }
             onMouseEnter={() => onHover && onHover(item)}
             onMouseLeave={() => onHover && onHover(null)}
             onFocus={() => onHover && onHover(item)}
