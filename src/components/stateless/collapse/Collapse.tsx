@@ -1,3 +1,4 @@
+import { useTranslation } from "../../../utils/i18n";
 import styles from "./collapse.module.scss";
 import { useEffect, useId, useState, type ReactNode } from "react";
 
@@ -9,6 +10,7 @@ interface CollapseProps {
 }
 
 export const Collapse = ({ children, title, variant, open }: CollapseProps) => {
+    const { t } = useTranslation();
     const [toggle, setToggle] = useState(false);
     const buttonId = useId();
     const contentId = useId();
@@ -24,6 +26,7 @@ export const Collapse = ({ children, title, variant, open }: CollapseProps) => {
             className={`${styles.collapse} ${variant === "minify" ? styles.minify : ""}`}
         >
             <button
+                aria-label={title || t("toggle")}
                 id={buttonId}
                 type="button"
                 onClick={() => setToggle((prev) => !prev)}

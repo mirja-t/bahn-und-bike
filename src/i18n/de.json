@@ -70,5 +70,6 @@
     "journey": "Fahrtverlauf",
     "nearesttrainstation": "Nächste Bahnstation",
     "distanceToNextTrainstation": "Entfernung zur nächsten Bahnstation",
-    "maxDistanceToNextTrainstation": "Maximale Entfernung zur nächsten Bahnstation"
+    "maxDistanceToNextTrainstation": "Maximale Entfernung zur nächsten Bahnstation",
+    "toggle": "Ein-/Ausklappen"
 }
