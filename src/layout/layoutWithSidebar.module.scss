@@ -61,8 +61,6 @@ $breakpoint-max: 991px;
             right: spacing.$padding-s;
             transition: right 0.3s ease;
             background: var(--bg-light);
-            border: none;
-            cursor: pointer;
             z-index: 20;
             width: 2em;
             height: 4em;
