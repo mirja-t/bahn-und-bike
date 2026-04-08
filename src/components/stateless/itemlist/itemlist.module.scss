@@ -59,6 +59,7 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
             p.label {
                 font-size: 0.9em;
             }
+            &:hover,
             &.active,
             &.interactive:hover,
             &.interactive:focus-visible {

@@ -13,6 +13,8 @@ import { Trainroute } from "./trainroute/Trainroute";
 import { Veloroutes } from "../veloroutes/Veloroutes";
 import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
+import { AnimatePresence, motion } from "framer-motion";
+import { selectAppZoom } from "../../../AppSlice";
 
 export const Trainroutes = memo(function Trainroutes() {
     const journeys = useSelector(selectCurrentTrainroutes);
@@ -24,6 +26,7 @@ export const Trainroutes = memo(function Trainroutes() {
     const trainlinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
+    const appZoom = useSelector(selectAppZoom);
 
     const getClassName = (item: typeof activeSection) => {
         if (!activeSection && !trainlinesAlongVeloroute.length) {
@@ -65,17 +68,48 @@ export const Trainroutes = memo(function Trainroutes() {
             <Veloroutes />
 
             {(!!activeSpot || !!activeVelorouteStop) && (
-                <Label
-                    item={
-                        activeSpot ||
-                        activeVelorouteStop || {
-                            x: 0,
-                            y: 0,
-                            stop_name: "",
+                <>
+                    {/* dot train */}
+                    <AnimatePresence>
+                        {activeSpot && (
+                            <motion.rect
+                                x={activeSpot.x - 5 / appZoom}
+                                y={activeSpot.y - 5 / appZoom}
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.35 }}
+                                width={10 / appZoom}
+                                height={10 / appZoom}
+                                fill="var(--train-active)"
+                            />
+                        )}
+                    </AnimatePresence>
+                    {/* dot bikestop */}
+                    <AnimatePresence>
+                        {activeVelorouteStop && (
+                            <motion.circle
+                                cx={activeVelorouteStop.x}
+                                cy={activeVelorouteStop.y}
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ duration: 0.35 }}
+                                r={6 / appZoom}
+                                fill="var(--bike)"
+                            />
+                        )}
+                    </AnimatePresence>
+                    <Label
+                        item={
+                            activeSpot ||
+                            activeVelorouteStop || {
+                                x: 0,
+                                y: 0,
+                                stop_name: "",
+                            }
                         }
-                    }
-                    className={activeSpot ? "train" : "veloroute"}
-                />
+                        className={activeSpot ? "train" : "veloroute"}
+                    />
+                </>
             )}
         </svg>
     );
