@@ -52,7 +52,7 @@ $sidebar-tab-width: 3em;
     overflow: hidden;
     padding: spacing.$padding-s;
     margin-left: calc(-0.5vw - 0.25em);
-    @media screen and (max-width: $breakpoint-max) {
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
         margin-left: 0;
         position: fixed;
         top: 0;
@@ -102,7 +102,7 @@ $sidebar-tab-width: 3em;
         position: relative;
         height: 100%;
     }
-    @media screen and (min-width: $breakpoint) {
+    @media screen and (min-width: breakpoints.$breakpoint-m) {
         position: relative;
         .closeButtonWrapper {
             display: none;
@@ -114,7 +114,7 @@ $sidebar-tab-width: 3em;
     align-items: center;
     gap: spacing.$mainpadding;
     margin: 0 spacing.$padding-xl 0 spacing.$padding-s;
-    @media screen and (max-width: $breakpoint-max) {
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
         margin: 0 spacing.$padding-s;
     }
     a {
