@@ -1,7 +1,6 @@
 @use "../scss/variables/spacing.scss" as spacing;
+@use "../scss/variables/breakpoints.scss" as breakpoints;
 
-$breakpoint: 992px;
-$breakpoint-max: 991px;
 $sidebar-tab-width: 3em;
 .wrapper {
     display: grid;
@@ -16,7 +15,7 @@ $sidebar-tab-width: 3em;
     grid-template-columns: 0 1fr;
     grid-template-rows: 1fr auto;
     gap: spacing.$padding-s;
-    @media screen and (min-width: $breakpoint) {
+    @media screen and (min-width: breakpoints.$breakpoint-m) {
         grid-template-columns: calc(20em + 5vw) 1fr;
     }
 }
@@ -34,7 +33,7 @@ $sidebar-tab-width: 3em;
 }
 .backdrop {
     display: none;
-    @media screen and (max-width: $breakpoint-max) {
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
         position: fixed;
         top: 0;
         left: 0;

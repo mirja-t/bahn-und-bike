@@ -1,6 +1,5 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
-
-$breakpoint-max: 991px;
+@use "../../../scss/variables/breakpoints.scss" as breakpoints;
 
 .header {
     width: 100%;
@@ -9,7 +8,7 @@ $breakpoint-max: 991px;
     align-items: center;
     z-index: 2;
     position: relative;
-    @media screen and (max-width: $breakpoint-max) {
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
         flex-wrap: wrap;
         gap: spacing.$padding-s;
     }
