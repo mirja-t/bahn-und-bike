@@ -148,16 +148,7 @@ export const Container = () => {
                             !journeys.length &&
                             !isLoading && (
                                 <motion.div
-                                    style={{
-                                        position: "absolute",
-                                        zIndex: 999,
-                                        left: "50%",
-                                        top: "50%",
-                                        transform: "translate(-50%, -50%)",
-                                        width: "100%",
-                                        display: "flex",
-                                        justifyContent: "center",
-                                    }}
+                                    className={styles.instructionsOverlay}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{

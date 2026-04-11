@@ -28,12 +28,12 @@ const Aside = ({ children }: { children: React.ReactNode }) => {
         <>
             <div
                 role="button"
-                tabIndex={-1}
+                tabIndex={0}
                 aria-label="Close sidebar"
                 className={`${styles.backdrop} ${showSidebar ? styles.backdropVisible : ""}`}
                 onClick={() => setShowSidebar(false)}
                 onKeyDown={(e) => {
-                    if (e.key === "Escape") setShowSidebar(false);
+                    if (e.key === "Escape" || e.key === "Enter" || e.key === " ") setShowSidebar(false);
                 }}
             />
             <aside
