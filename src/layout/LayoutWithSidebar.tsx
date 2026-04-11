@@ -25,16 +25,28 @@ const Aside = ({ children }: { children: React.ReactNode }) => {
         setShowSidebar((prev) => !prev);
     };
     return (
-        <aside
-            className={`${styles.aside} ${showSidebar ? "" : styles.closed}`}
-        >
+        <>
             <div
-                className={`${styles.closeButtonWrapper} ${showSidebar ? styles.open : ""}`}
+                role="button"
+                tabIndex={-1}
+                aria-label="Close sidebar"
+                className={`${styles.backdrop} ${showSidebar ? styles.backdropVisible : ""}`}
+                onClick={() => setShowSidebar(false)}
+                onKeyDown={(e) => {
+                    if (e.key === "Escape") setShowSidebar(false);
+                }}
+            />
+            <aside
+                className={`${styles.aside} ${showSidebar ? "" : styles.closed}`}
             >
-                <CloseButton onClick={handleClick} open={showSidebar} />
-            </div>
-            <div className={styles.sidebarContent}>{children}</div>
-        </aside>
+                <div
+                    className={`${styles.closeButtonWrapper} ${showSidebar ? styles.open : ""}`}
+                >
+                    <CloseButton onClick={handleClick} open={showSidebar} />
+                </div>
+                <div className={styles.sidebarContent}>{children}</div>
+            </aside>
+        </>
     );
 };
 const Bottom = ({ children }: { children: React.ReactNode }) => {

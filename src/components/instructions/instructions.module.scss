@@ -2,7 +2,8 @@
 
 .instructionsWrapper {
     height: fit-content;
-    max-width: calc(35em + 0.5vw);
+    max-width: min(calc(35em + 0.5vw), 90vw);
+    width: 100%;
 
     ol {
         list-style: none;

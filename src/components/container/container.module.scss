@@ -10,6 +10,7 @@ $transition: width 0.5s ease;
     position: relative;
     justify-content: center;
     display: flex;
+    overflow: hidden;
 }
 .sidebarWrapper {
     width: 100%;

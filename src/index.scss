@@ -29,6 +29,7 @@ body {
     font-size: fonts.$global-font-size;
     font-weight: 400;
     color: var(--text);
+    overflow-x: hidden;
 }
 
 h1,

@@ -1,9 +1,16 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
 
+$breakpoint-max: 991px;
+
 .header {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     z-index: 2;
     position: relative;
+    @media screen and (max-width: $breakpoint-max) {
+        flex-wrap: wrap;
+        gap: spacing.$padding-s;
+    }
 }

@@ -151,7 +151,11 @@ export const Container = () => {
                                     style={{
                                         position: "absolute",
                                         zIndex: 999,
-                                        alignSelf: "center",
+                                        left: "50%",
+                                        top: "50%",
+                                        transform: "translate(-50%, -50%)",
+                                        width: "100%",
+                                        display: "flex",
                                         justifyContent: "center",
                                     }}
                                     initial={{ opacity: 0 }}
