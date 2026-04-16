@@ -11,6 +11,16 @@ $transition: width 0.5s ease;
     justify-content: center;
     display: flex;
 }
+.instructionsOverlay {
+    position: absolute;
+    z-index: 999;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 .sidebarWrapper {
     width: 100%;
 }
