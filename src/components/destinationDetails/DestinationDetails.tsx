@@ -13,6 +13,7 @@ import {
 import {
     selectActiveSection,
     selectTrainroutesAlongVeloroute,
+    setActiveSpot,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
     type ResponseTrainLine,
@@ -23,14 +24,12 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useFetchBatch } from "../../hooks/useFetchBatch";
-import {
-    setActiveDestination,
-    type Destination,
-} from "./DestinationDetailsSlice";
+import { type Destination } from "./DestinationDetailsSlice";
 import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
+import { germanyBounds, SvgMapBuilder } from "../../utils/svgMap";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -63,8 +62,26 @@ const Section = ({ section }: SectionProps) => {
         error: errorTrainlinesWithAgencyNames,
     } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
 
-    const handleTrainstationHover = (trainstation: Destination | null) => {
-        dispatch(setActiveDestination(trainstation));
+    const handleTrainstationHover = (stop: Destination | null) => {
+        if (!stop) {
+            dispatch(setActiveSpot(null));
+            return;
+        }
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            stop.lon,
+            stop.lat,
+            germanyBounds,
+        );
+        dispatch(
+            setActiveSpot({
+                stop_id: Number(stop.id),
+                stop_name: stop.name,
+                lat: stop.lat,
+                lon: stop.lon,
+                x,
+                y,
+            }),
+        );
     };
 
     return (

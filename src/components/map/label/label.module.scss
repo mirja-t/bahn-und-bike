@@ -1,15 +1,11 @@
 .destinationLabel {
-    // letter-spacing: 0.025em;
-    // font-weight: 600;
-    // text-transform: uppercase;
-    // font-family: "Oswald", sans-serif;
     white-space: nowrap;
     line-height: 1;
     transition:
         opacity 0.5s ease,
         color 0.5s ease;
     tspan {
-        fill: var(--primary-hover);
+        fill: var(--train-active);
         text-shadow:
             1px 1px 0 var(--bg),
             -1px -1px 0 var(--bg);

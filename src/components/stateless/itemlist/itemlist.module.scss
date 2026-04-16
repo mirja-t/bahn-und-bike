@@ -1,12 +1,20 @@
 @use "../../../scss/variables/spacing.scss" as spacing;
+@use "../../../scss/variables/fonts.scss" as fonts;
 $scalefactor: 0.5vw;
 $iconsize: calc(#{$scalefactor} + 1.5em);
 
 .itemlist {
     li {
         position: relative;
+        button,
+        a {
+            color: inherit;
+            cursor: pointer;
+            font-family: fonts.$global-font-family;
+        }
         p {
             color: inherit;
+            font-family: fonts.$global-font-family;
         }
         &.interactive {
             cursor: pointer;
@@ -25,7 +33,7 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
             transition: all 0.35s ease;
             gap: spacing.$padding-s;
             .label {
-                font-family: "Source Sans Pro", sans-serif;
+                font-family: fonts.$global-font-family;
                 font-weight: 300;
                 color: var(--linklist);
                 line-height: 1.2;
@@ -54,6 +62,7 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
             p.label {
                 font-size: 0.9em;
             }
+            &:hover,
             &.active,
             &.interactive:hover,
             &.interactive:focus-visible {
