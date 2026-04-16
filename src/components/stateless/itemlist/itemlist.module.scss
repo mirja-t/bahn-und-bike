@@ -7,10 +7,13 @@ $iconsize: calc(#{$scalefactor} + 1.5em);
     li {
         position: relative;
         button,
-        a,
-        p {
+        a {
             color: inherit;
             cursor: pointer;
+            font-family: fonts.$global-font-family;
+        }
+        p {
+            color: inherit;
             font-family: fonts.$global-font-family;
         }
         &.interactive {
