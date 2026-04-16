@@ -81,6 +81,7 @@ export const Trainroutes = memo(function Trainroutes() {
                                 width={10 / appZoom}
                                 height={10 / appZoom}
                                 fill="var(--train-active)"
+                                pointerEvents="none"
                             />
                         )}
                     </AnimatePresence>
