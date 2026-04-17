@@ -103,10 +103,13 @@ export const makeTrainRoutes = (
                         germanyBounds,
                     );
                     const points = `${currentRoute.route.points}${x},${y} `;
-                    const stopIds = [
-                        ...currentRoute.route.stopIds,
-                        stop.station_id,
-                    ];
+                    const stopIds = [...currentRoute.route.stopIds];
+                    if (
+                        stop.stop_number !== null &&
+                        typeof stop.stop_number === "number"
+                    ) {
+                        stopIds.push(stop.station_id);
+                    }
                     let name = `${stop.name}: ${currentRoute.route.firstStation.stop_name} – ${stop.station_name}`;
                     let trainlines: Train[] = [];
                     if (connection) {
@@ -158,20 +161,30 @@ export const makeTrainRoutes = (
             );
             const forwardRoute = stops.slice(startStopIdx); // forward direction
             groupedDirectStops.push(
-                forwardRoute.map((stop, idx) => ({
+                forwardRoute.map((stop) => ({
                     ...stop,
-                    stop_number: idx,
+                    stop_number:
+                        typeof stop.stop_number === "number"
+                            ? stop.stop_number - startStopNumber
+                            : null,
                 })),
             ); // forward direction
-
-            // backward direction - to do: consider duration order for reverse direction
             const reversedStops = stops
                 .slice(0, startStopIdx + 1)
                 .reverse()
                 .map((stop, idx, arr) => ({
                     ...stop,
-                    dur: idx === 0 ? 0 : arr[idx - 1].dur, // take duration from prev stop
-                    stop_number: idx,
+                    dur:
+                        idx === 0
+                            ? 0
+                            : (arr
+                                  .slice(0, idx)
+                                  .filter((s) => s.dur !== 0)
+                                  .at(-1)?.dur ?? 0), // take duration from prev stop
+                    stop_number:
+                        typeof stop.stop_number === "number"
+                            ? arr.length - 1 - idx - startStopNumber
+                            : null,
                 }));
             groupedDirectStops.push(reversedStops); // backward direction
         }
@@ -201,8 +214,11 @@ export const makeTrainRoutes = (
 
         for (const trainlineId in trainlineObj) {
             const stops = trainlineObj[trainlineId].stops;
-            const sortedByStopNumber = stops
-                .filter((stop) => stop.stop_number !== null)
+            const sortedByStopNumber: ResponseStop[] = stops
+                .filter(
+                    (stop): stop is typeof stop & { stop_number: number } =>
+                        stop.stop_number !== null,
+                )
                 .sort((a, b) => a.stop_number - b.stop_number);
             const interpolationTrainlineStops = stops.filter(
                 (stop) => stop.stop_number === null,
