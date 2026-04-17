@@ -1,7 +1,7 @@
 @use "../scss/variables/spacing.scss" as spacing;
+@use "../scss/variables/breakpoints.scss" as breakpoints;
 
-$breakpoint: 992px;
-$breakpoint-max: 991px;
+$sidebar-tab-width: 3em;
 .wrapper {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
@@ -15,12 +15,14 @@ $breakpoint-max: 991px;
     grid-template-columns: 0 1fr;
     grid-template-rows: 1fr auto;
     gap: spacing.$padding-s;
-    @media screen and (min-width: $breakpoint) {
+    @media screen and (min-width: breakpoints.$breakpoint-m) {
         grid-template-columns: calc(20em + 5vw) 1fr;
     }
 }
 .bottom {
     grid-column: span 2;
+    position: relative;
+    z-index: 99;
 }
 .main {
     grid-column: span 2;
@@ -31,25 +33,41 @@ $breakpoint-max: 991px;
     grid-column: 2;
     display: flex;
 }
-.aside {
-    z-index: 10;
-    max-width: 500px;
-    overflow: hidden;
-    padding: spacing.$padding-s;
-    margin-left: calc(-0.5vw - 0.25em);
-    @media screen and (max-width: $breakpoint-max) {
-        margin-left: 0;
+.backdrop {
+    display: none;
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
+        z-index: 9;
+        background: rgba(0, 0, 0, 0.3);
+        &.backdropVisible {
+            display: block;
+        }
+    }
+}
+.aside {
+    z-index: 9;
+    max-width: 500px;
+    overflow: hidden;
+    padding: spacing.$padding-s;
+    margin-left: calc(-0.5vw - 0.25em);
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
+        margin-left: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 90%;
         transition: left 0.3s ease;
         &.closed {
+            z-index: 10;
             max-width: 100%;
-            left: calc(-100% + 2em);
+            left: calc(-100% + #{$sidebar-tab-width});
             .sidebarContent {
-                left: calc(-2em);
+                left: calc(-#{$sidebar-tab-width});
             }
             .closeButtonWrapper {
                 right: 0;
@@ -62,15 +80,16 @@ $breakpoint-max: 991px;
             transition: right 0.3s ease;
             background: var(--bg-light);
             z-index: 20;
-            width: 2em;
-            height: 4em;
+            width: $sidebar-tab-width;
+            height: 5em;
             transform: translateY(-50%);
             border-top-right-radius: var(--panel-border-radius);
             border-bottom-right-radius: var(--panel-border-radius);
             box-shadow: var(--box-shadow);
+            touch-action: manipulation;
             &.open {
                 box-shadow: none;
-                height: 2em;
+                height: $sidebar-tab-width;
                 top: spacing.$padding-s;
                 transform: translateY(0);
             }
@@ -86,7 +105,7 @@ $breakpoint-max: 991px;
         position: relative;
         height: 100%;
     }
-    @media screen and (min-width: $breakpoint) {
+    @media screen and (min-width: breakpoints.$breakpoint-m) {
         position: relative;
         .closeButtonWrapper {
             display: none;
@@ -98,6 +117,9 @@ $breakpoint-max: 991px;
     align-items: center;
     gap: spacing.$mainpadding;
     margin: 0 spacing.$padding-xl 0 spacing.$padding-s;
+    @media screen and (max-width: breakpoints.$breakpoint-m-max) {
+        margin: 0 spacing.$padding-s;
+    }
     a {
         color: var(--secondary);
         font-size: 0.9em;

@@ -76,7 +76,8 @@ const Section = ({ section }: SectionProps) => {
             setActiveSpot({
                 stop_id: Number(stop.id),
                 stop_name: stop.name,
-                ...stop,
+                lat: stop.lat,
+                lon: stop.lon,
                 x,
                 y,
             }),
