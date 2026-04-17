@@ -9,11 +9,12 @@ export type ResponseStop = {
     station_id: number;
     station_name: string;
     dur: number;
-    lat: string;
-    lon: string;
+    lat: number;
+    lon: number;
     name: string;
     stop_number: number;
     trainline_id: string;
+    next_station_id: number | null;
 };
 type Trainstop = {
     stop_name: string;
@@ -98,6 +99,7 @@ export const loadTrainroutes = createAsyncThunk<
         value * 30,
         direct,
     );
+
     // check costs of fetching all related veloroutes when no trainline is selected
     const stopIds = [
         ...new Set(

@@ -20,7 +20,7 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const submitValue = useSelector(selectSubmitValue);
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
-    const [direct, setDirect] = useState(false);
+    const [direct, setDirect] = useState(true);
     const langCode = useSelector(selectLangCode);
 
     const handleCheckboxChange = () => {

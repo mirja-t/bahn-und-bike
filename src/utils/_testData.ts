@@ -17,8 +17,9 @@ const parisStopSNCF: ResponseStop = {
     stop_number: 0,
     station_name: "Paris, Gare du Nord",
     name: "SNCF",
-    lat: parisCoordinates[0].toString(),
-    lon: parisCoordinates[1].toString(),
+    lat: parisCoordinates[0],
+    lon: parisCoordinates[1],
+    next_station_id: 2,
 };
 const bruxellesStopSNCF: ResponseStop = {
     station_id: 2,
@@ -27,8 +28,9 @@ const bruxellesStopSNCF: ResponseStop = {
     stop_number: 1,
     station_name: "Bruxelles, Midi",
     name: "SNCF",
-    lat: bruxellesCoordinates[0].toString(),
-    lon: bruxellesCoordinates[1].toString(),
+    lat: bruxellesCoordinates[0],
+    lon: bruxellesCoordinates[1],
+    next_station_id: 3,
 };
 const berlinStopSNCF: ResponseStop = {
     station_id: 3,
@@ -37,8 +39,9 @@ const berlinStopSNCF: ResponseStop = {
     stop_number: 2,
     station_name: "S+U Berlin Hauptbahnhof",
     name: "SNCF",
-    lat: berlinCoordinates[0].toString(),
-    lon: berlinCoordinates[1].toString(),
+    lat: berlinCoordinates[0],
+    lon: berlinCoordinates[1],
+    next_station_id: null,
 };
 const berlinStopDB: ResponseStop = {
     station_id: 3,
@@ -47,8 +50,9 @@ const berlinStopDB: ResponseStop = {
     stop_number: 0,
     station_name: "S+U Berlin Hauptbahnhof",
     name: "Deutsche Bahn",
-    lat: berlinCoordinates[0].toString(),
-    lon: berlinCoordinates[1].toString(),
+    lat: berlinCoordinates[0],
+    lon: berlinCoordinates[1],
+    next_station_id: null,
 };
 const warsawStopSNCF: ResponseStop = {
     station_id: 4,
@@ -57,8 +61,9 @@ const warsawStopSNCF: ResponseStop = {
     stop_number: 3,
     station_name: "Warszawa Centralna",
     name: "SNCF",
-    lat: warsawCoordinates[0].toString(),
-    lon: warsawCoordinates[1].toString(),
+    lat: warsawCoordinates[0],
+    lon: warsawCoordinates[1],
+    next_station_id: null,
 };
 const moscowStopSNCF: ResponseStop = {
     station_id: 5,
@@ -67,8 +72,9 @@ const moscowStopSNCF: ResponseStop = {
     stop_number: 4,
     station_name: "Moscow, Leningradsky",
     name: "SNCF",
-    lat: moscowCoordinates[0].toString(),
-    lon: moscowCoordinates[1].toString(),
+    lat: moscowCoordinates[0],
+    lon: moscowCoordinates[1],
+    next_station_id: null,
 };
 const vilniusStopPR: ResponseStop = {
     station_id: 6,
@@ -77,8 +83,9 @@ const vilniusStopPR: ResponseStop = {
     stop_number: 0,
     station_name: "Vilnius",
     name: "Polish Railways",
-    lat: "54.687157",
-    lon: "25.279652",
+    lat: 54.687157,
+    lon: 25.279652,
+    next_station_id: null,
 };
 const warsawStopPR: ResponseStop = {
     station_id: 4,
@@ -87,8 +94,9 @@ const warsawStopPR: ResponseStop = {
     stop_number: 1,
     station_name: "Warszawa Centralna",
     name: "Polish Railways",
-    lat: warsawCoordinates[0].toString(),
-    lon: warsawCoordinates[1].toString(),
+    lat: warsawCoordinates[0],
+    lon: warsawCoordinates[1],
+    next_station_id: 7,
 };
 const warsawStopDB: ResponseStop = {
     station_id: 4,
@@ -97,8 +105,9 @@ const warsawStopDB: ResponseStop = {
     stop_number: 1,
     station_name: "Warszawa Centralna",
     name: "Deutsche Bahn",
-    lat: warsawCoordinates[0].toString(),
-    lon: warsawCoordinates[1].toString(),
+    lat: warsawCoordinates[0],
+    lon: warsawCoordinates[1],
+    next_station_id: null,
 };
 const bratislavaStopPR: ResponseStop = {
     station_id: 7,
@@ -107,8 +116,9 @@ const bratislavaStopPR: ResponseStop = {
     stop_number: 2,
     station_name: "Bratislava, Hlavná stanica",
     name: "Polish Railways",
-    lat: "48.148598",
-    lon: "17.107748",
+    lat: 48.148598,
+    lon: 17.107748,
+    next_station_id: null,
 };
 const viennaStopPR: ResponseStop = {
     station_id: 8,
@@ -117,8 +127,9 @@ const viennaStopPR: ResponseStop = {
     stop_number: 3,
     station_name: "Vienna, Hauptbahnhof",
     name: "Polish Railways",
-    lat: "48.185867",
-    lon: "16.373064",
+    lat: 48.185867,
+    lon: 16.373064,
+    next_station_id: null,
 };
 export const mockStops = {
     parisStopSNCF,
@@ -156,16 +167,16 @@ export const parisBerlinRoute: CurrentTrainroute = {
         stop_id: parisStopSNCF.station_id,
         x: expect.any(Number),
         y: expect.any(Number),
-        lat: parseFloat(parisStopSNCF.lat),
-        lon: parseFloat(parisStopSNCF.lon),
+        lat: parisStopSNCF.lat,
+        lon: parisStopSNCF.lon,
     },
     lastStation: {
         stop_name: berlinStopSNCF.station_name,
         stop_id: berlinStopSNCF.station_id,
         x: expect.any(Number),
         y: expect.any(Number),
-        lat: parseFloat(berlinStopSNCF.lat),
-        lon: parseFloat(berlinStopSNCF.lon),
+        lat: berlinStopSNCF.lat,
+        lon: berlinStopSNCF.lon,
     },
     stopIds: [
         parisStopSNCF.station_id,

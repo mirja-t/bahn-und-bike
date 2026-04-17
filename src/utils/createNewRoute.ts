@@ -22,11 +22,7 @@ export function createNewRoute(
     const getPoints = (route: ResponseStop[]) =>
         route
             .map(({ lat, lon }) =>
-                SvgMapBuilder.getMapPosition(
-                    parseFloat(lon),
-                    parseFloat(lat),
-                    germanyBounds,
-                ),
+                SvgMapBuilder.getMapPosition(lon, lat, germanyBounds),
             )
             .map((el) => el.join(","))
             .join(" ") + " ";
@@ -36,11 +32,7 @@ export function createNewRoute(
         return dur;
     };
     const getMapPosition = (stop: ResponseStop) =>
-        SvgMapBuilder.getMapPosition(
-            parseFloat(stop.lon),
-            parseFloat(stop.lat),
-            germanyBounds,
-        );
+        SvgMapBuilder.getMapPosition(stop.lon, stop.lat, germanyBounds);
     const trainlines = [
         {
             trainline_id: startDest.trainline_id,
@@ -81,7 +73,7 @@ export function createNewRoute(
         });
     }
     return {
-        id: `new_route-${stopIds.join('-')}`,
+        id: `new_route-${stopIds.join("-")}`,
         name,
         connection: null,
         dur: getDuration(route),
@@ -89,16 +81,16 @@ export function createNewRoute(
         firstStation: {
             stop_name: removeWords(startDest.station_name, wordsToRemove),
             stop_id: startDest.station_id,
-            lat: parseFloat(startDest.lat),
-            lon: parseFloat(startDest.lon),
+            lat: startDest.lat,
+            lon: startDest.lon,
             x: getMapPosition(startDest)[0],
             y: getMapPosition(startDest)[1],
         },
         lastStation: {
             stop_name: removeWords(lastDest.station_name, wordsToRemove),
             stop_id: lastDest.station_id,
-            lat: parseFloat(lastDest.lat),
-            lon: parseFloat(lastDest.lon),
+            lat: lastDest.lat,
+            lon: lastDest.lon,
             x: getMapPosition(lastDest)[0],
             y: getMapPosition(lastDest)[1],
         },
