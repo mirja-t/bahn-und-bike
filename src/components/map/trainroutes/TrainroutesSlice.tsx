@@ -12,7 +12,7 @@ export type ResponseStop = {
     lat: number;
     lon: number;
     name: string;
-    stop_number: number;
+    stop_number: number | null;
     trainline_id: string;
     next_station_id: number | null;
 };
