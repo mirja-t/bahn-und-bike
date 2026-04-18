@@ -93,7 +93,7 @@ describe("makeTrainRoutes", () => {
             ],
         });
     });
-    it("should return route with correct name for route with connection", () => {
+    it("should return route with correct name for route WITHOUT connection", () => {
         // Arrange
         const start = 3;
         const durationLimit = 6000;
@@ -111,6 +111,26 @@ describe("makeTrainRoutes", () => {
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.name).toBe(
             "SNCF, Deutsche Bahn + Polish Railways: S+U Berlin – Vilnius",
+        );
+    });
+    it("should return route with correct name for route WITH connection", () => {
+        // Arrange
+        const start = 3; // Berlin
+        const durationLimit = 6000;
+
+        // Act
+        const result = makeTrainRoutes(
+            tgvRouteParisMoscow,
+            start,
+            durationLimit,
+            true,
+        );
+
+        // Assert - Check that route name is correct
+        const moscowRoute = result.find((r) => r.lastStation.stop_id === 5);
+        expect(moscowRoute).toBeDefined();
+        expect(moscowRoute?.name).toBe(
+            "SNCF: S+U Berlin – Moscow, Leningradsky",
         );
     });
 });
