@@ -16,12 +16,7 @@ export type ResponseStop = {
     trainline_id: string;
     next_station_id: number | null;
 };
-type Trainstop = {
-    stop_name: string;
-    stop_id: number;
-    trainline_id?: string;
-    lat: number;
-    lon: number;
+export type Trainstop = ResponseStop & {
     x: number;
     y: number;
 };
@@ -35,7 +30,7 @@ export type ResponseTrainLine = {
     agency_name: string;
 };
 type Connection = {
-    stop_name: string;
+    station_name: string;
     initial_trains: Train[];
     connecting_trains: Train[];
 };
@@ -47,7 +42,7 @@ export type CurrentTrainroute = {
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
-    stopIds: number[];
+    stops: Trainstop[];
     points: string;
     connection: Connection | null;
 };
@@ -104,7 +99,7 @@ export const loadTrainroutes = createAsyncThunk<
     const stopIds = [
         ...new Set(
             currentTrainroutes
-                .map((t) => t.stopIds)
+                .map((t) => t.stops.map((s) => s.station_id))
                 .flat()
                 .filter((id) => id !== start),
         ),

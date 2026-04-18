@@ -19,6 +19,33 @@ export function createNewRoute(
     startDest: ResponseStop,
     route?: ResponseStop[],
 ): CurrentTrainroute {
+    const routeWithCoordinates = route?.map((stop) => {
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            stop.lon,
+            stop.lat,
+            germanyBounds,
+        );
+        return {
+            ...stop,
+            station_name: removeWords(stop.station_name, wordsToRemove),
+            x,
+            y,
+        };
+    });
+    const firstStation = {
+        ...startDest,
+        station_name: removeWords(startDest.station_name, wordsToRemove),
+        x: SvgMapBuilder.getMapPosition(
+            startDest.lon,
+            startDest.lat,
+            germanyBounds,
+        )[0],
+        y: SvgMapBuilder.getMapPosition(
+            startDest.lon,
+            startDest.lat,
+            germanyBounds,
+        )[1],
+    };
     const getPoints = (route: ResponseStop[]) =>
         route
             .map(({ lat, lon }) =>
@@ -78,23 +105,14 @@ export function createNewRoute(
         connection: null,
         dur: getDuration(route),
         trainlines: trainlines,
-        firstStation: {
-            stop_name: removeWords(startDest.station_name, wordsToRemove),
-            stop_id: startDest.station_id,
-            lat: startDest.lat,
-            lon: startDest.lon,
-            x: getMapPosition(startDest)[0],
-            y: getMapPosition(startDest)[1],
-        },
+        firstStation,
+
         lastStation: {
-            stop_name: removeWords(lastDest.station_name, wordsToRemove),
-            stop_id: lastDest.station_id,
-            lat: lastDest.lat,
-            lon: lastDest.lon,
+            ...lastDest,
             x: getMapPosition(lastDest)[0],
             y: getMapPosition(lastDest)[1],
         },
-        stopIds: stopIds,
+        stops: routeWithCoordinates || [firstStation],
         points: svgPathPoints,
         pathLength: getPathLengthFromPoints(svgPathPoints),
     };

@@ -3,7 +3,7 @@ import { Loading } from "../loading/Loading";
 import { motion } from "framer-motion";
 
 type Item<T> = {
-    id: string;
+    id: string | number;
     name: string;
 } & {
     [K in keyof T]: T[K];

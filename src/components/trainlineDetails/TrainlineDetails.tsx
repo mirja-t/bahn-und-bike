@@ -51,13 +51,14 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     };
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
+        const stopIds = line.stops.map((stop) => stop.station_id);
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         // Clear any hover preview when a route is explicitly selected
         dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));
-        dispatch(loadVeloroutes(line.stopIds));
+        dispatch(loadVeloroutes(stopIds));
         fn();
     };
 

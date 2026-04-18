@@ -101,14 +101,23 @@ export const Trainroutes = memo(function Trainroutes() {
                         )}
                     </AnimatePresence>
                     <Label
-                        item={
-                            activeSpot ||
-                            activeVelorouteStop || {
-                                x: 0,
-                                y: 0,
-                                stop_name: "",
-                            }
-                        }
+                        item={{
+                            x: activeSpot
+                                ? activeSpot.x
+                                : activeVelorouteStop
+                                  ? activeVelorouteStop.x
+                                  : 0,
+                            y: activeSpot
+                                ? activeSpot.y
+                                : activeVelorouteStop
+                                  ? activeVelorouteStop.y
+                                  : 0,
+                            name: activeSpot
+                                ? activeSpot.station_name
+                                : activeVelorouteStop
+                                  ? activeVelorouteStop.stop_name
+                                  : "",
+                        }}
                         className={activeSpot ? "train" : "veloroute"}
                     />
                 </>

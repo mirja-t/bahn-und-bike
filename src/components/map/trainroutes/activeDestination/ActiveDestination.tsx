@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface ActiveDestinationProps {
     activeDestination: string | null;
     item: {
-        stop_id: string;
+        station_id: string;
         x: number;
         y: number;
     };
@@ -15,7 +15,7 @@ export const ActiveDestination = ({
     item,
     strokeScale,
 }: ActiveDestinationProps) => {
-    const isVisible = activeDestination === item.stop_id;
+    const isVisible = activeDestination === item.station_id;
 
     return (
         <AnimatePresence>

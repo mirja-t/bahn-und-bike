@@ -6,7 +6,7 @@ interface LabelProps<T> {
     item: {
         x: number;
         y: number;
-        stop_name: string;
+        name: string;
     } & { [key in keyof T]?: T[key] };
     className: "train" | "veloroute";
 }
@@ -22,7 +22,7 @@ export const Label = <T,>({ item, className }: LabelProps<T>) => {
             y={item.y}
             style={{ fontSize: `${24 / appZoom}px` }}
         >
-            <tspan>{item.stop_name}</tspan>
+            <tspan>{item.name}</tspan>
         </text>
     );
 };

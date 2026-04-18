@@ -1,26 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "../../config/config";
 import type { RootState } from "../../store";
+import type { Trainstop } from "../map/trainroutes/TrainroutesSlice";
 
-export type Destination = {
-    id: string;
+export type Destination<T> = {
+    id: string | number;
     name: string;
     lat: number;
     lon: number;
-    trainstop: boolean;
+} & {
+    [key in keyof T]: T[key];
 };
 export interface DestinationsState {
-    destinations: Destination[] | null;
+    destinations: Destination<Trainstop>[] | null;
     destinationsError: boolean;
     destinationsLoading: boolean;
-    activeDestination: Destination | null;
+    activeDestination: Destination<Trainstop> | null;
 }
 export const loadDestinations = createAsyncThunk<
-    Destination[],
+    Destination<Trainstop>[],
     { population: number },
     { state: RootState }
 >("destinations/setDestinations", async ({ population }) => {
-    const destinations: Destination[] = await fetch(
+    const destinations: Destination<Trainstop>[] = await fetch(
         `${VITE_API_URL}destinations?population=${population}`,
         {
             method: "GET",
@@ -49,7 +51,7 @@ export const destinationDetailsSlice = createSlice({
     reducers: {
         setActiveDestination: (
             state,
-            action: { payload: Destination | null },
+            action: { payload: Destination<Trainstop> | null },
         ) => {
             state.activeDestination = action.payload;
         },

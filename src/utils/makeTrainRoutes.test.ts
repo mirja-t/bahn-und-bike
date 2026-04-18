@@ -54,10 +54,10 @@ describe("makeTrainRoutes", () => {
         // (order is not guaranteed as it depends on implementation details)
         expect(result).toHaveLength(2);
 
-        const warsawRoute = result.find((r) => r.lastStation.stop_id === 4);
+        const warsawRoute = result.find((r) => r.lastStation.station_id === 4);
         expect(warsawRoute).toBeDefined();
 
-        const parisRoute = result.find((r) => r.lastStation.stop_id === 1);
+        const parisRoute = result.find((r) => r.lastStation.station_id === 1);
         expect(parisRoute).toBeDefined();
     });
     it("should generate train routes with connecting routes", () => {
@@ -76,14 +76,14 @@ describe("makeTrainRoutes", () => {
         // Assert - Check that routes contain expected destinations
         // (order is not guaranteed as it depends on implementation details)
         expect(result).toHaveLength(4);
-        const vilniusRoute = result.find((r) => r.lastStation.stop_id === 6);
+        const vilniusRoute = result.find((r) => r.lastStation.station_id === 6);
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.trainlines).toEqual([
             { trainline_id: "TGV", trainline_name: "SNCF" },
             { trainline_id: "DB", trainline_name: "Deutsche Bahn" },
         ]);
         expect(vilniusRoute?.connection).toEqual({
-            stop_name: "Warszawa Centralna",
+            station_name: "Warszawa Centralna",
             initial_trains: [
                 { trainline_id: "TGV", trainline_name: "SNCF" },
                 { trainline_id: "DB", trainline_name: "Deutsche Bahn" },
@@ -107,7 +107,7 @@ describe("makeTrainRoutes", () => {
         );
 
         // Assert - Check that route name is correct
-        const vilniusRoute = result.find((r) => r.lastStation.stop_id === 6);
+        const vilniusRoute = result.find((r) => r.lastStation.station_id === 6);
         expect(vilniusRoute).toBeDefined();
         expect(vilniusRoute?.name).toBe(
             "SNCF, Deutsche Bahn + Polish Railways: S+U Berlin – Vilnius",
@@ -127,7 +127,7 @@ describe("makeTrainRoutes", () => {
         );
 
         // Assert - Check that route name is correct
-        const moscowRoute = result.find((r) => r.lastStation.stop_id === 5);
+        const moscowRoute = result.find((r) => r.lastStation.station_id === 5);
         expect(moscowRoute).toBeDefined();
         expect(moscowRoute?.name).toBe(
             "SNCF: S+U Berlin – Moscow, Leningradsky",

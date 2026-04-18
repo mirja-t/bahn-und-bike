@@ -159,8 +159,8 @@ export const VelorouteLegDetails = () => {
                 {t("nearesttrainstation")}:&nbsp;
                 <br />
                 {idx === 1
-                    ? startStation?.firstStation?.stop_name
-                    : endStation?.firstStation?.stop_name}
+                    ? startStation?.firstStation?.station_name
+                    : endStation?.firstStation?.station_name}
                 <br />
                 {startVeloStop && endVeloStop ? (
                     <>

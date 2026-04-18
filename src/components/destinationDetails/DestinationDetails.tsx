@@ -17,6 +17,7 @@ import {
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
     type ResponseTrainLine,
+    type Trainstop,
 } from "../map/trainroutes/TrainroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
@@ -29,7 +30,6 @@ import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
-import { germanyBounds, SvgMapBuilder } from "../../utils/svgMap";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -51,38 +51,40 @@ const Section = ({ section }: SectionProps) => {
         }
         return ids;
     }, [section]);
+    const stopIds = useMemo(
+        () =>
+            section.stops
+                .filter((stop) => stop.stop_number !== null)
+                .map((stop) => stop.station_id),
+        [section],
+    );
     const {
         assets: stops,
         loading: loadingStopNames,
         error: errorStopNames,
-    } = useFetchBatch<Destination>(section.stopIds, "trainstations", "POST");
+    } = useFetchBatch<Destination<Trainstop>>(stopIds, "trainstations", "POST");
     const {
         assets: trainlinesWithAgencyNames,
         loading: loadingTrainlinesWithAgencyNames,
         error: errorTrainlinesWithAgencyNames,
     } = useFetchBatch<ResponseTrainLine>(trainlineIds, "trainlines");
 
-    const handleTrainstationHover = (stop: Destination | null) => {
+    const handleTrainstationHover = (stop: Trainstop | null) => {
         if (!stop) {
             dispatch(setActiveSpot(null));
             return;
         }
-        const [x, y] = SvgMapBuilder.getMapPosition(
-            stop.lon,
-            stop.lat,
-            germanyBounds,
-        );
-        dispatch(
-            setActiveSpot({
-                stop_id: Number(stop.id),
-                stop_name: stop.name,
-                lat: stop.lat,
-                lon: stop.lon,
-                x,
-                y,
-            }),
-        );
+        dispatch(setActiveSpot(stop));
     };
+    const items: Destination<Trainstop>[] = useMemo(
+        () =>
+            stops.map((stop) => ({
+                ...stop,
+                id: stop.station_id,
+                name: stop.station_name || "",
+            })),
+        [stops],
+    );
 
     return (
         <>
@@ -139,7 +141,7 @@ const Section = ({ section }: SectionProps) => {
                 <Collapse title={`${t("journey")}`}>
                     <ItemList
                         onHover={handleTrainstationHover}
-                        items={stops}
+                        items={items}
                         variant="orderedList"
                     />
                 </Collapse>
@@ -183,7 +185,7 @@ export const DestinationDetails = () => {
                         <section className="section">
                             <div>
                                 <h5>{t("trainconnection")}</h5>
-                                <p>{activeSection.connection.stop_name}</p>
+                                <p>{activeSection.connection.station_name}</p>
                             </div>
                         </section>
                     )}
