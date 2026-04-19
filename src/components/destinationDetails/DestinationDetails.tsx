@@ -51,18 +51,7 @@ const Section = ({ section }: SectionProps) => {
         }
         return ids;
     }, [section]);
-    const stopIds = useMemo(
-        () =>
-            section.stops
-                .filter((stop) => stop.stop_number !== null)
-                .map((stop) => stop.station_id),
-        [section],
-    );
-    const {
-        assets: stops,
-        loading: loadingStopNames,
-        error: errorStopNames,
-    } = useFetchBatch<Destination<Trainstop>>(stopIds, "trainstations", "POST");
+
     const {
         assets: trainlinesWithAgencyNames,
         loading: loadingTrainlinesWithAgencyNames,
@@ -78,12 +67,14 @@ const Section = ({ section }: SectionProps) => {
     };
     const items: Destination<Trainstop>[] = useMemo(
         () =>
-            stops.map((stop) => ({
-                ...stop,
-                id: stop.station_id,
-                name: stop.station_name || "",
-            })),
-        [stops],
+            section.stops
+                .filter((stop) => stop.stop_number !== null)
+                .map((stop) => ({
+                    ...stop,
+                    id: stop.station_id,
+                    name: stop.station_name || "",
+                })),
+        [section.stops],
     );
 
     return (
@@ -133,19 +124,13 @@ const Section = ({ section }: SectionProps) => {
                     </div>
                 </section>
             )}
-            {loadingStopNames ? (
-                <Loading />
-            ) : errorStopNames ? (
-                <Error />
-            ) : (
-                <Collapse title={`${t("journey")}`}>
-                    <ItemList
-                        onHover={handleTrainstationHover}
-                        items={items}
-                        variant="orderedList"
-                    />
-                </Collapse>
-            )}
+            <Collapse title={`${t("journey")}`}>
+                <ItemList
+                    onHover={handleTrainstationHover}
+                    items={items}
+                    variant="orderedList"
+                />
+            </Collapse>
             <hr style={{ marginTop: ".75em" }} />
         </>
     );
