@@ -39,7 +39,7 @@ export const ItemList = <T,>({
                 delay: 0.1 * idx,
                 duration: 1,
             }}
-            key={item.id}
+            key={`item-${item.id}`}
             tabIndex={onClick ? 0 : undefined}
             role={onClick ? "button" : undefined}
             onClick={onClick ? () => onClick(item) : undefined}
