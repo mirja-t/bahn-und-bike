@@ -93,7 +93,7 @@ describe("makeTrainRoutes", () => {
             ],
         });
     });
-    it("should return route with correct name for route WITHOUT connection", () => {
+    it("should return route with correct name for route WITH connection", () => {
         // Arrange
         const start = 3;
         const durationLimit = 6000;
@@ -113,7 +113,7 @@ describe("makeTrainRoutes", () => {
             "SNCF, Deutsche Bahn + Polish Railways: S+U Berlin – Vilnius",
         );
     });
-    it("should return route with correct name for route WITH connection", () => {
+    it("should return route with correct name for route WITHOUT connection", () => {
         // Arrange
         const start = 3; // Berlin
         const durationLimit = 6000;
