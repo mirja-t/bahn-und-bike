@@ -218,7 +218,9 @@ export const makeTrainRoutes = (
                 counter++;
                 if (counter > 100) {
                     console.warn(
-                        "Infinite loop detected while processing trainline stops.",
+                        `Infinite loop detected while processing trainline stops for trainline ${trainlineId}. Remaining station ids: ${interpolationTrainlineStops
+                            .map((stop) => stop.station_id)
+                            .join(", ")}.`,
                     );
                     break;
                 }
@@ -234,6 +236,14 @@ export const makeTrainRoutes = (
                 } else {
                     trainlineStopsArr.splice(indexToInsert + 1, 0, currentStop);
                 }
+            }
+            if (interpolationTrainlineStops.length > 0) {
+                console.warn(
+                    `Could not resolve insertion point for all interpolation stops on trainline ${trainlineId}. Appending remaining station ids: ${interpolationTrainlineStops
+                        .map((stop) => stop.station_id)
+                        .join(", ")}.`,
+                );
+                trainlineStopsArr.push(...interpolationTrainlineStops);
             }
             trainlineObj[trainlineId].stops = trainlineStopsArr;
         }

@@ -133,4 +133,37 @@ describe("makeTrainRoutes", () => {
             "SNCF: S+U Berlin – Moscow, Leningradsky",
         );
     });
+    it("should keep unresolved interpolation stops instead of dropping them", () => {
+        // Arrange
+        const start = 3;
+        const durationLimit = 6000;
+        const routeWithUnresolvedInterpolation: ResponseStop[] = [
+            { ...berlinStopDB, stop_number: 0, next_station_id: 4 },
+            { ...warsawStopDB, stop_number: 1, next_station_id: null },
+            {
+                ...vilniusStopPR,
+                station_id: 9,
+                station_name: "Test Stop",
+                trainline_id: "DB",
+                name: "Deutsche Bahn",
+                stop_number: null,
+                next_station_id: 999,
+            },
+        ];
+
+        // Act
+        const result = makeTrainRoutes(
+            routeWithUnresolvedInterpolation,
+            start,
+            durationLimit,
+            true,
+        );
+
+        // Assert
+        const unresolvedRoute = result.find((r) => r.lastStation.station_id === 9);
+        expect(unresolvedRoute).toBeDefined();
+        expect(unresolvedRoute?.stops.some((stop) => stop.station_id === 9)).toBe(
+            true,
+        );
+    });
 });
