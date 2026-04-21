@@ -65,7 +65,7 @@ export const Container = () => {
                 new Set(
                     trainRoutes
                         .map((route) =>
-                            route.stops.map((stop) => stop.station_id),
+                            route.routestops.map((stop) => stop.station_id),
                         )
                         .flat()
                         .filter((id) => id !== null && id !== undefined),

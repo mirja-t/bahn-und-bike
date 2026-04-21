@@ -67,14 +67,14 @@ const Section = ({ section }: SectionProps) => {
     };
     const items: Destination<Trainstop>[] = useMemo(
         () =>
-            section.stops
+            section.routestops
                 .filter((stop) => stop.stop_number !== null)
                 .map((stop) => ({
                     ...stop,
                     id: stop.station_id,
                     name: stop.station_name || "",
                 })),
-        [section.stops],
+        [section.routestops],
     );
 
     return (

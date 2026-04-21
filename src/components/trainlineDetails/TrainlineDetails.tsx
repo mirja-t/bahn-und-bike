@@ -28,10 +28,6 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const activeSection = useSelector(selectActiveSection);
     const trainRoutes = useSelector(selectCurrentTrainroutes);
     const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
-    // check costs of fetching all related veloroutes when no trainline is selected
-    // const filteredTrainroutes = trainRoutes.filter((trainroute) =>
-    //     velorouteList.some((vr) => vr.trainRouteIds.includes(trainroute.id)),
-    // );
 
     const dispatch = useAppDispatch();
 
@@ -51,7 +47,7 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     };
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
-        const stopIds = line.stops.map((stop) => stop.station_id);
+        const stopIds = line.routestops.map((stop) => stop.station_id);
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));

@@ -1,7 +1,6 @@
 import type {
     CurrentTrainroute,
     ResponseStop,
-    Train,
     Trainstop,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { createNewRoute } from "./createNewRoute";
@@ -52,76 +51,52 @@ export const makeTrainRoutes = (
                 // break if duration limit exceeded
                 if (currentRoute.route.dur + stop.dur > durationLimit) break;
 
-                // find current route
-                const nextRoute = currentRoute.nextRoutes.find(
-                    (r) => r.route.lastStation.station_id === stop.station_id,
-                );
-                if (nextRoute) {
-                    currentRoute = nextRoute;
-                }
-                // if stop is already in route, add trainline to existing route
-                if (
-                    stop.station_id ===
-                    currentRoute.route.lastStation.station_id
+                while (
+                    currentRoute.nextRoutes.some(
+                        (nextRoute) =>
+                            nextRoute.route.routestops.at(-1)?.station_id ===
+                            stop.station_id,
+                    )
                 ) {
-                    // Add trainline to connecting route
-                    if (
-                        connection &&
-                        currentRoute.route.connection &&
-                        !currentRoute.route.connection.connecting_trains
-                            .map((t) => t.trainline_id)
-                            .includes(stop.trainline_id)
-                    ) {
-                        if (!stop.trainline_id || !stop.name) {
-                            console.warn(
-                                "makeTrainRoutes – Missing trainline_id or name for stop:",
-                                stop,
-                            );
-                        }
-                        currentRoute.route.connection?.connecting_trains.push({
-                            trainline_id: stop.trainline_id,
-                            trainline_name: stop.name,
-                        });
-                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.station_name} – ${currentRoute.route.lastStation.station_name}`;
+                    const existingRoute = currentRoute.nextRoutes.find(
+                        (nextRoute) =>
+                            nextRoute.route.routestops.at(-1)?.station_id ===
+                            stop.station_id,
+                    );
+                    if (!existingRoute) {
+                        break;
                     }
-                    // Add trainline to existing route - only if it is not the connecting trainline
-                    else if (
-                        !currentRoute.route.trainlines
-                            .map((t) => t.trainline_id)
-                            .includes(stop.trainline_id) &&
-                        !connection
-                    ) {
-                        currentRoute.route.trainlines.push({
-                            trainline_id: stop.trainline_id,
-                            trainline_name: stop.name,
-                        });
-                        currentRoute.route.name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.station_name} – ${currentRoute.route.lastStation.station_name}`;
-                    }
-                } else {
+                    currentRoute = existingRoute;
+                    currentRoute.route.trainlines.push({
+                        trainline_id: stop.trainline_id,
+                        trainline_name: stop.name,
+                    });
+                }
+
+                // if stopId is already in route, add trainline to existing route
+                if (
+                    !currentRoute.route.routestops.some(
+                        (s) => s.station_id === stop.station_id,
+                    )
+                ) {
                     // create new route
                     const points = `${currentRoute.route.points}${stop.x},${stop.y} `;
-                    const stops = [...currentRoute.route.stops, stop];
-                    let name = `${stop.name}: ${currentRoute.route.firstStation.station_name} – ${stop.station_name}`;
-                    let trainlines: Train[] = [];
-                    if (connection) {
-                        name = `${currentRoute.route.trainlines.map((t) => t.trainline_name).join(", ")} + ${connection.connecting_trains.map((t) => t.trainline_name).join(", ")}: ${currentRoute.route.firstStation.station_name} – ${stop.station_name}`;
-                        trainlines = connection.initial_trains;
-                    } else {
-                        trainlines.push({
-                            trainline_id: stop.trainline_id,
-                            trainline_name: stop.name,
-                        });
-                    }
+                    const routestops = [...currentRoute.route.routestops, stop];
                     currentRoute.nextRoutes.push({
                         route: {
                             connection,
-                            id: stops.map((s) => s.station_id).join("-"),
-                            name,
+                            id: "",
+                            name: "",
                             dur: currentRoute.route.dur + stop.dur,
-                            trainlines,
+                            trainlines: [
+                                {
+                                    trainline_id: stop.trainline_id,
+                                    trainline_name: stop.name,
+                                },
+                            ],
                             firstStation: routeTree.route.firstStation,
                             lastStation: stop,
-                            stops,
+                            routestops,
                             points,
                             pathLength: getPathLengthFromPoints(points),
                         },
@@ -145,11 +120,12 @@ export const makeTrainRoutes = (
             );
             const forwardRoute = stops.slice(startStopIdx); // forward direction
             groupedDirectStops.push(
-                forwardRoute.map((stop) => ({
+                forwardRoute.map((stop, idx) => ({
                     ...stop,
                     stop_number:
-                        typeof stop.stop_number === "number"
-                            ? stop.stop_number - startStopNumber
+                        typeof stop.stop_number === "number" &&
+                        stop.stop_number !== null
+                            ? idx
                             : null,
                 })),
             ); // forward direction
@@ -166,8 +142,9 @@ export const makeTrainRoutes = (
                                   .filter((s) => s.dur !== 0)
                                   .at(-1)?.dur ?? 0), // take duration from prev stop
                     stop_number:
-                        typeof stop.stop_number === "number"
-                            ? arr.length - 1 - idx - startStopNumber
+                        typeof stop.stop_number === "number" &&
+                        stop.stop_number !== null
+                            ? idx
                             : null,
                 }));
             groupedDirectStops.push(reversedStops); // backward direction
@@ -177,7 +154,7 @@ export const makeTrainRoutes = (
     function createTrainlineStopsArr(
         stops: ResponseStop[],
         start: number,
-    ): Trainline[] {
+    ): { [key: string]: Trainline } {
         const trainlineObj = stops.reduce(
             (acc, stop) => {
                 if (!acc[stop.trainline_id]) {
@@ -247,8 +224,7 @@ export const makeTrainRoutes = (
             }
             trainlineObj[trainlineId].stops = trainlineStopsArr;
         }
-
-        return Object.values(trainlineObj);
+        return trainlineObj;
     }
     /**
      * Group stops by trainline and determine the index of the start station for each trainline.
@@ -261,7 +237,8 @@ export const makeTrainRoutes = (
      *  }
      * }
      */
-    const trainlinesArr = createTrainlineStopsArr(stops, start);
+    const trainlinesObj = createTrainlineStopsArr(stops, start);
+    const trainlinesArr = Object.values(trainlinesObj);
 
     const trainlinesWithStart = trainlinesArr.filter(
         (line) => line.startStopNumber >= 0,
@@ -335,14 +312,72 @@ export const makeTrainRoutes = (
             }
         }
     }
-
     const routes: CurrentTrainroute[] = [];
     // Breadth traverse route tree to extract routes
     const queue: RouteNode[] = [routeTree];
     while (queue.length) {
         const current = queue.shift() || fallbackRouteNode;
         if (current.nextRoutes.length === 0) {
-            routes.push(current.route);
+            const trainlineIds = current.route.trainlines.map(
+                (t) => t.trainline_id,
+            );
+            const stops = trainlineIds
+                .map((id) => {
+                    const idxOfFirstStation = trainlinesObj[id].stops.findIndex(
+                        (stop) =>
+                            stop.station_id ===
+                            current.route.firstStation.station_id,
+                    );
+                    const idxOfLastStation = trainlinesObj[id].stops.findIndex(
+                        (stop) =>
+                            stop.station_id ===
+                            current.route.lastStation.station_id,
+                    );
+                    if (idxOfFirstStation === -1 || idxOfLastStation === -1) {
+                        console.warn(
+                            `Could not find start or end station for trainline ${id} in stops array. Start station id: ${current.route.firstStation.station_id}, End station id: ${current.route.lastStation.station_id}. Skipping this trainline for route construction.`,
+                        );
+                        return [];
+                    }
+
+                    const sliced = (
+                        trainlinesObj[id].stops as Trainstop[]
+                    ).slice(
+                        Math.min(idxOfFirstStation, idxOfLastStation),
+                        Math.max(idxOfFirstStation, idxOfLastStation) + 1,
+                    );
+                    if (idxOfFirstStation > idxOfLastStation) {
+                        sliced.reverse();
+                    }
+                    return sliced;
+                })
+                .flat()
+                .filter(
+                    (stop, idx, self) =>
+                        stop.stop_number !== null &&
+                        self
+                            .slice(0, idx)
+                            .every((s) => s.station_id !== stop.station_id), // Filter out duplicate stops across trainlines, but keep duplicates within the same trainline (for transfers)
+                );
+
+            const route = {
+                id: `route-${stops.map((s) => s.station_id).join("-")}`,
+                name: `${current.route.trainlines
+                    .map((t) => t.trainline_name)
+                    .join(
+                        ", ",
+                    )}: ${current.route.firstStation.station_name} – ${current.route.lastStation.station_name}`,
+                routestops: stops,
+                dur: current.route.dur,
+                trainlines: current.route.trainlines,
+                firstStation: current.route.firstStation,
+                lastStation: current.route.lastStation,
+                points: current.route.points,
+                pathLength: current.route.pathLength,
+                connection: current.route.connection,
+            };
+
+            routes.push(route);
         } else {
             for (const nextRoute of current.nextRoutes) {
                 queue.push(nextRoute);

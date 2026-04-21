@@ -112,7 +112,7 @@ export function createNewRoute(
             x: getMapPosition(lastDest)[0],
             y: getMapPosition(lastDest)[1],
         },
-        stops: routeWithCoordinates || [firstStation],
+        routestops: routeWithCoordinates || [firstStation],
         points: svgPathPoints,
         pathLength: getPathLengthFromPoints(svgPathPoints),
     };

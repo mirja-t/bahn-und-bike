@@ -42,7 +42,7 @@ export type CurrentTrainroute = {
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
-    stops: Trainstop[];
+    routestops: Trainstop[];
     points: string;
     connection: Connection | null;
 };
@@ -99,7 +99,7 @@ export const loadTrainroutes = createAsyncThunk<
     const stopIds = [
         ...new Set(
             currentTrainroutes
-                .map((t) => t.stops.map((s) => s.station_id))
+                .map((t) => t.routestops.map((s) => s.station_id))
                 .flat()
                 .filter((id) => id !== start),
         ),

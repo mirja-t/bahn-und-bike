@@ -26,7 +26,7 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
     const appZoom = useSelector(selectAppZoom);
 
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
-        const stopIds = line.stops.map((stop) => stop.station_id);
+        const stopIds = line.routestops.map((stop) => stop.station_id);
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
