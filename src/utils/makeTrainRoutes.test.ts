@@ -160,10 +160,12 @@ describe("makeTrainRoutes", () => {
         );
 
         // Assert
-        const routeWithTestStop = result.find((r) => r.lastStation.station_id === 9);
-        expect(routeWithTestStop).toBeDefined();
-        expect(routeWithTestStop?.stops.some((stop) => stop.station_id === 9)).toBe(
-            true,
+        const routeWithTestStop = result.find(
+            (r) => r.lastStation.station_id === 9,
         );
+        expect(routeWithTestStop).toBeDefined();
+        expect(
+            routeWithTestStop?.routestops.some((stop) => stop.station_id === 9),
+        ).toBe(true);
     });
 });

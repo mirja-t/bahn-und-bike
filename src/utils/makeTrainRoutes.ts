@@ -216,11 +216,10 @@ export const makeTrainRoutes = (
             }
             if (interpolationTrainlineStops.length > 0) {
                 console.warn(
-                    `Could not resolve insertion point for all interpolation stops on trainline ${trainlineId}. Appending remaining station ids: ${interpolationTrainlineStops
+                    `Could not resolve insertion point for all interpolation stops on trainline ${trainlineId}. 
                         .map((stop) => stop.station_id)
                         .join(", ")}.`,
                 );
-                trainlineStopsArr.push(...interpolationTrainlineStops);
             }
             trainlineObj[trainlineId].stops = trainlineStopsArr;
         }
