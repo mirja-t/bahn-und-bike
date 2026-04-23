@@ -21,18 +21,15 @@ export function createNewRoute(
             y,
         };
     });
+    const [x, y] = SvgMapBuilder.getMapPosition(
+        startDest.lon,
+        startDest.lat,
+        germanyBounds,
+    );
     const firstStation = {
         ...startDest,
-        x: SvgMapBuilder.getMapPosition(
-            startDest.lon,
-            startDest.lat,
-            germanyBounds,
-        )[0],
-        y: SvgMapBuilder.getMapPosition(
-            startDest.lon,
-            startDest.lat,
-            germanyBounds,
-        )[1],
+        x,
+        y,
     };
     const getPoints = (route: ResponseStop[]) =>
         route
