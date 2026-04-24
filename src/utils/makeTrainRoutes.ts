@@ -73,7 +73,7 @@ export const makeTrainRoutes = (
                     });
                 }
 
-                // if stopId is already in route, add trainline to existing route
+                // if stopId is not yet in route, add trainline to existing route
                 if (
                     !currentRoute.route.routestops.some(
                         (s) => s.station_id === stop.station_id,
@@ -156,7 +156,9 @@ export const makeTrainRoutes = (
         stopsGroup: TrainstopsAPIResponse,
         start: number,
     ): { [key: string]: Trainline } {
-        /*
+        /* logic to create trainlineObj with stops sorted by stop_number 
+        has been moved to BE
+        keep for reference
         const trainlineObj = stops.reduce(
             (acc, stop) => {
                 if (!acc[stop.trainline_id]) {
