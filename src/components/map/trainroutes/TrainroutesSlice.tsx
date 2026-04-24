@@ -5,22 +5,19 @@ import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
 import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
-export type ResponseStop = {
+export type TrainstopAPIResponse = {
     station_id: number;
     station_name: string;
     dur: number;
-    lat: string;
-    lon: string;
-    name: string;
-    stop_number: number;
-    trainline_id: string;
-};
-type Trainstop = {
-    stop_name: string;
-    stop_id: number;
-    trainline_id?: string;
     lat: number;
     lon: number;
+    name: string;
+    stop_number: number | null;
+    trainline_id: string;
+    next_station_id: number | null;
+};
+export type TrainstopsAPIResponse = Record<string, TrainstopAPIResponse[]>;
+export type Trainstop = TrainstopAPIResponse & {
     x: number;
     y: number;
 };
@@ -34,7 +31,7 @@ export type ResponseTrainLine = {
     agency_name: string;
 };
 type Connection = {
-    stop_name: string;
+    station_name: string;
     initial_trains: Train[];
     connecting_trains: Train[];
 };
@@ -46,7 +43,7 @@ export type CurrentTrainroute = {
     pathLength: number;
     firstStation: Trainstop;
     lastStation: Trainstop;
-    stopIds: number[];
+    routestops: Trainstop[];
     points: string;
     connection: Connection | null;
 };
@@ -77,7 +74,7 @@ export const loadTrainroutes = createAsyncThunk<
     const connectionsQuery = direct
         ? "trainstops/" + start
         : "connections/" + start;
-    const connections: ResponseStop[] = await fetch(
+    const connections: TrainstopsAPIResponse = await fetch(
         `${VITE_API_URL}${connectionsQuery}`,
         {
             headers: headers,
@@ -90,19 +87,22 @@ export const loadTrainroutes = createAsyncThunk<
     });
 
     // used to create veloroute sections
-    const trainstops = connections.map((stop) => stop.station_id);
+    const trainstops = Object.values(connections)
+        .flat()
+        .map((stop) => stop.station_id);
     thunkAPI.dispatch(setTrainstops(trainstops));
     const currentTrainroutes = makeTrainRoutes(
         connections,
         start,
         value * 30,
-        direct,
+        // direct,
     );
+
     // check costs of fetching all related veloroutes when no trainline is selected
     const stopIds = [
         ...new Set(
             currentTrainroutes
-                .map((t) => t.stopIds)
+                .map((t) => t.routestops.map((s) => s.station_id))
                 .flat()
                 .filter((id) => id !== start),
         ),

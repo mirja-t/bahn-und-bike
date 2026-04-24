@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "../../utils/i18n";
 import { Button } from "../stateless/button/Button";
 import { RangeInput } from "./rangeinput/RangeInput";
-import { CheckBox } from "./checkBox/CheckBox";
 import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
 import { selectLangCode, selectSubmitValue } from "../../AppSlice";
@@ -20,12 +19,12 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     const submitValue = useSelector(selectSubmitValue);
     const { t } = useTranslation();
     const [value, setValue] = useState(0);
-    const [direct, setDirect] = useState(false);
+    const [direct] = useState(true);
     const langCode = useSelector(selectLangCode);
 
-    const handleCheckboxChange = () => {
-        setDirect((prev) => !prev);
-    };
+    // const handleCheckboxChange = () => {
+    //     setDirect((prev) => !prev);
+    // };
 
     const handleInputChange = ({
         target,
@@ -54,11 +53,11 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
             onSubmit={(e) => handleSubmit(e, value, direct)}
         >
             <DestinationPicker />
-            <CheckBox
+            {/* <CheckBox
                 checked={direct}
                 handleCheckboxChange={handleCheckboxChange}
                 id={"directconnection"}
-            />
+            /> */}
             <div className={styles.travelTimeWrapper}>
                 <RangeInput
                     min={0}

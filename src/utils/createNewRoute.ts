@@ -1,46 +1,50 @@
 import type {
     CurrentTrainroute,
-    ResponseStop,
+    TrainstopAPIResponse,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { getPathLengthFromPoints } from "./getPathLength";
 import { germanyBounds, SvgMapBuilder } from "./svgMap";
-import { removeWords } from "./utils";
-
-const wordsToRemove = [
-    "Bahnhof",
-    "Hbf",
-    "Hauptbahnhof",
-    "Bhf",
-    "S-Bahn",
-    "Busbahnhof",
-];
 
 export function createNewRoute(
-    startDest: ResponseStop,
-    route?: ResponseStop[],
+    startDest: TrainstopAPIResponse,
+    route?: TrainstopAPIResponse[],
 ): CurrentTrainroute {
-    const getPoints = (route: ResponseStop[]) =>
+    const routeWithCoordinates = route?.map((stop) => {
+        const [x, y] = SvgMapBuilder.getMapPosition(
+            stop.lon,
+            stop.lat,
+            germanyBounds,
+        );
+        return {
+            ...stop,
+            x,
+            y,
+        };
+    });
+    const [x, y] = SvgMapBuilder.getMapPosition(
+        startDest.lon,
+        startDest.lat,
+        germanyBounds,
+    );
+    const firstStation = {
+        ...startDest,
+        x,
+        y,
+    };
+    const getPoints = (route: TrainstopAPIResponse[]) =>
         route
             .map(({ lat, lon }) =>
-                SvgMapBuilder.getMapPosition(
-                    parseFloat(lon),
-                    parseFloat(lat),
-                    germanyBounds,
-                ),
+                SvgMapBuilder.getMapPosition(lon, lat, germanyBounds),
             )
             .map((el) => el.join(","))
             .join(" ") + " ";
-    const getDuration = (route: ResponseStop[] | undefined) => {
+    const getDuration = (route: TrainstopAPIResponse[] | undefined) => {
         if (!route || route.length === 0) return 0;
         const dur = route.reduce((acc, stop) => acc + stop.dur, 0);
         return dur;
     };
-    const getMapPosition = (stop: ResponseStop) =>
-        SvgMapBuilder.getMapPosition(
-            parseFloat(stop.lon),
-            parseFloat(stop.lat),
-            germanyBounds,
-        );
+    const getMapPosition = (stop: TrainstopAPIResponse) =>
+        SvgMapBuilder.getMapPosition(stop.lon, stop.lat, germanyBounds);
     const trainlines = [
         {
             trainline_id: startDest.trainline_id,
@@ -81,28 +85,19 @@ export function createNewRoute(
         });
     }
     return {
-        id: `new_route-${stopIds.join('-')}`,
+        id: `new_route-${stopIds.join("-")}`,
         name,
         connection: null,
         dur: getDuration(route),
         trainlines: trainlines,
-        firstStation: {
-            stop_name: removeWords(startDest.station_name, wordsToRemove),
-            stop_id: startDest.station_id,
-            lat: parseFloat(startDest.lat),
-            lon: parseFloat(startDest.lon),
-            x: getMapPosition(startDest)[0],
-            y: getMapPosition(startDest)[1],
-        },
+        firstStation,
+
         lastStation: {
-            stop_name: removeWords(lastDest.station_name, wordsToRemove),
-            stop_id: lastDest.station_id,
-            lat: parseFloat(lastDest.lat),
-            lon: parseFloat(lastDest.lon),
+            ...lastDest,
             x: getMapPosition(lastDest)[0],
             y: getMapPosition(lastDest)[1],
         },
-        stopIds: stopIds,
+        routestops: routeWithCoordinates || [firstStation],
         points: svgPathPoints,
         pathLength: getPathLengthFromPoints(svgPathPoints),
     };

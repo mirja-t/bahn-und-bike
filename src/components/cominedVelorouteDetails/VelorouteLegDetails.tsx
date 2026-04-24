@@ -137,44 +137,52 @@ export const VelorouteLegDetails = () => {
         };
     }, [activeVelorouteSection]);
 
-    const sectionHeadline = (stop: VelorouteStop, idx: number) => (
-        <>
-            <h3 className="veloroute-trainstops">
-                <div className="veloroutesection-icon">
-                    <span>{idx})&nbsp;</span>
-                </div>
-                <span>
-                    {idx === 1 ? t("from") : t("to")}&nbsp;
-                    {destinationNames[idx === 1 ? "start" : "end"].destName ||
-                        stop.stop_name}
-                </span>
-            </h3>
-            <p
-                style={{
-                    marginBottom: "0.5em",
-                    paddingLeft: "1em",
-                    lineHeight: 1.2,
-                }}
-            >
-                {t("nearesttrainstation")}:&nbsp;
-                <br />
-                {idx === 1
-                    ? startStation?.firstStation?.stop_name
-                    : endStation?.firstStation?.stop_name}
-                <br />
-                {startVeloStop && endVeloStop ? (
-                    <>
-                        {t("distanceToNextTrainstation")}:&nbsp;
+    const sectionHeadline = (stop: VelorouteStop, idx: number) => {
+        const veloStop = idx === 1 ? startVeloStop : endVeloStop;
+        const stationName =
+            idx === 1
+                ? startStation?.firstStation?.station_name
+                : endStation?.firstStation?.station_name;
+        const distToTrainstation =
+            idx === 1
+                ? startVeloStop?.distToTrainstation
+                : endVeloStop?.distToTrainstation;
+        return (
+            <>
+                <h3 className="veloroute-trainstops">
+                    <div className="veloroutesection-icon">
+                        <span>{idx})&nbsp;</span>
+                    </div>
+                    <span>
+                        {idx === 1 ? t("from") : t("to")}&nbsp;
+                        {destinationNames[idx === 1 ? "start" : "end"]
+                            .destName || stop.stop_name}
+                    </span>
+                </h3>
+                {veloStop && stationName ? (
+                    <p
+                        style={{
+                            marginBottom: "0.5em",
+                            paddingLeft: "1em",
+                            lineHeight: 1.2,
+                        }}
+                    >
+                        {t("nearesttrainstation")}:&nbsp;
                         <br />
-                        {idx === 1
-                            ? startVeloStop.distToTrainstation?.toFixed(2)
-                            : endVeloStop.distToTrainstation?.toFixed(2)}{" "}
-                        km
-                    </>
-                ) : null}
-            </p>
-        </>
-    );
+                        {stationName}
+                        <br />
+                        <>
+                            {t("distanceToNextTrainstation")}:&nbsp;
+                            <br />
+                            {distToTrainstation?.toFixed(2)} km
+                        </>
+                    </p>
+                ) : (
+                    <p>{t("noTrainstationNearby")}</p>
+                )}
+            </>
+        );
+    };
     return (
         <>
             <hr />

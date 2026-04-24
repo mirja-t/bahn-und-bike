@@ -13,7 +13,12 @@ import {
 
 export const Destinations = () => {
     const destinations = useSelector(selectDestinations);
-    const renderDestinations = (destination: Destination) => {
+    const renderDestinations = (
+        destination: Destination<{
+            lat: number;
+            lon: number;
+        }>,
+    ) => {
         const [x, y] = SvgMapBuilder.getMapPosition(
             destination.lon,
             destination.lat,

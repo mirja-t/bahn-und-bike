@@ -52,7 +52,7 @@ export const Trainstop = ({ item, styles }: TrainstopProps) => {
                 <AnimatePresence>
                     {item && (
                         <motion.rect
-                            key={`trainstop-${item.stop_id || item.x}-${item.y}`}
+                            key={`trainstop-${item.station_id || item.x}-${item.y}`}
                             className="spot spot-small"
                             x={item.x - 3 / appZoom}
                             y={item.y - 3 / appZoom}
