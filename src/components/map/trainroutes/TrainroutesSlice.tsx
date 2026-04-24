@@ -89,8 +89,10 @@ export const loadTrainroutes = createAsyncThunk<
     });
 
     // used to create veloroute sections
-    // const trainstops = connections.map((stop) => stop.station_id);
-    // thunkAPI.dispatch(setTrainstops(trainstops));
+    const trainstops = Object.values(connections)
+        .flat()
+        .map((stop) => stop.station_id);
+    thunkAPI.dispatch(setTrainstops(trainstops));
     const currentTrainroutes = makeTrainRoutes(
         connections,
         start,
