@@ -49,7 +49,7 @@ describe("makeTrainRoutes", () => {
             tgvRouteParisMoscow,
             start,
             durationLimit,
-            true,
+            // true,
         );
 
         // Assert - Check that routes contain expected destinations
@@ -125,7 +125,7 @@ describe("makeTrainRoutes", () => {
             tgvRouteParisMoscow,
             start,
             durationLimit,
-            true,
+            // true,
         );
 
         // Assert - Check that route name is correct

@@ -37,7 +37,7 @@ export const makeTrainRoutes = (
     stopGroup: TrainstopsAPIResponse,
     start: number,
     durationLimit: number,
-    direct: boolean = true,
+    // direct: boolean = true,
 ): CurrentTrainroute[] => {
     function buildTree(
         groupedStops: Trainstop[][],
@@ -287,7 +287,7 @@ export const makeTrainRoutes = (
     };
 
     buildTree(trainlinesWithStartStopsArr, routeTree);
-
+    /* to do: fix indirect trainroutes
     if (!direct) {
         const trainlinesWithoutStartDest = trainlinesArr.filter(
             (line) => line.startStopNumber < 0,
@@ -339,7 +339,7 @@ export const makeTrainRoutes = (
                 }
             }
         }
-    }
+    }*/
     const routes: CurrentTrainroute[] = [];
     // Breadth traverse route tree to extract routes
     const queue: RouteNode[] = [routeTree];

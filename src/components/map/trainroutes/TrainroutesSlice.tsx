@@ -97,7 +97,7 @@ export const loadTrainroutes = createAsyncThunk<
         connections,
         start,
         value * 30,
-        direct,
+        // direct,
     );
 
     // check costs of fetching all related veloroutes when no trainline is selected
