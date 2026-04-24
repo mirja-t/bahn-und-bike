@@ -9,7 +9,7 @@ import {
 import { describe, expect, it, beforeEach, vi } from "vitest";
 import { Container } from "./Container";
 import { createMockStore } from "../../stories/MockSlice";
-import type { ResponseStop } from "../map/trainroutes/TrainroutesSlice";
+import type { TrainstopsAPIResponse } from "../map/trainroutes/TrainroutesSlice";
 
 vi.mock("../../layout/LayoutWithSidebar", () => {
     const Main = ({ children }: { children: React.ReactNode }) => (
@@ -42,30 +42,32 @@ vi.mock("../map/Map", () => ({
 }));
 
 describe("Container search reset", () => {
-    const responseStops: ResponseStop[] = [
-        {
-            station_id: 2975,
-            station_name: "Berlin Hbf",
-            dur: 0,
-            lat: 52.525084,
-            lon: 13.369402,
-            name: "RE1",
-            stop_number: 0,
-            trainline_id: "re1",
-            next_station_id: null,
-        },
-        {
-            station_id: 1234,
-            station_name: "Potsdam",
-            dur: 10,
-            lat: 52.390569,
-            lon: 13.064473,
-            name: "RE1",
-            stop_number: 1,
-            trainline_id: "re1",
-            next_station_id: null,
-        },
-    ];
+    const responseStops: TrainstopsAPIResponse = {
+        100: [
+            {
+                station_id: 2975,
+                station_name: "Berlin Hbf",
+                dur: 0,
+                lat: 52.525084,
+                lon: 13.369402,
+                name: "RE1",
+                stop_number: 0,
+                trainline_id: "100",
+                next_station_id: null,
+            },
+            {
+                station_id: 1234,
+                station_name: "Potsdam",
+                dur: 10,
+                lat: 52.390569,
+                lon: 13.064473,
+                name: "RE1",
+                stop_number: 1,
+                trainline_id: "100",
+                next_station_id: null,
+            },
+        ],
+    };
     beforeEach(() => {
         vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
             const url = String(input);
@@ -136,9 +138,7 @@ describe("Container search reset", () => {
             name: "Tabs",
         });
         expect(tabs).not.toBeNull();
-        const firstEntryTitle = await screen.findByText(
-            "RE1: Berlin – Potsdam",
-        );
+        const firstEntryTitle = await screen.findByText("RE1: Potsdam");
         expect(firstEntryTitle).not.toBeNull();
         fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
 
@@ -162,9 +162,7 @@ describe("Container search reset", () => {
 
         fireEvent.change(durationSlider, { target: { value: "1" } });
         fireEvent.click(searchButton);
-        const firstEntryTitle = await screen.findByText(
-            "RE1: Berlin – Potsdam",
-        );
+        const firstEntryTitle = await screen.findByText("RE1: Potsdam");
         fireEvent.click(firstEntryTitle.closest("li") as HTMLLIElement);
         fireEvent.click(searchButton);
         await waitFor(async () => {

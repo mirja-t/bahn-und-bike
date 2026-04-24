@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Provider } from "react-redux";
+import { createMockStore } from "./MockSlice";
 
 import { Collapse } from "../components/stateless/collapse/Collapse";
 
@@ -10,6 +12,13 @@ const meta = {
     tags: ["autodocs"],
     // More on argTypes: https://storybook.js.org/docs/api/argtypes
     argTypes: {},
+    decorators: [
+        (Story) => (
+            <Provider store={createMockStore()}>
+                <Story />
+            </Provider>
+        ),
+    ],
     // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
     args: {
         children: (

@@ -1,6 +1,6 @@
 import type {
     CurrentTrainroute,
-    ResponseStop,
+    TrainstopsAPIResponse,
     Trainstop,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { createNewRoute } from "./createNewRoute";
@@ -34,7 +34,7 @@ const fallbackRouteNode: RouteNode = {
 };
 
 export const makeTrainRoutes = (
-    stops: ResponseStop[],
+    stopGroup: TrainstopsAPIResponse,
     start: number,
     durationLimit: number,
     direct: boolean = true,
@@ -151,10 +151,12 @@ export const makeTrainRoutes = (
         }
         return groupedDirectStops.filter((group) => group.length > 1); // Filter out groups that don't have any stops beyond the start station
     }
+
     function createTrainlineStopsArr(
-        stops: ResponseStop[],
+        stopsGroup: TrainstopsAPIResponse,
         start: number,
     ): { [key: string]: Trainline } {
+        /*
         const trainlineObj = stops.reduce(
             (acc, stop) => {
                 if (!acc[stop.trainline_id]) {
@@ -222,9 +224,34 @@ export const makeTrainRoutes = (
                 );
             }
             trainlineObj[trainlineId].stops = trainlineStopsArr;
+        }*/
+        const trainlineObj: { [key: string]: Trainline } = {};
+        for (const trainlineId in stopsGroup) {
+            const stops = stopsGroup[trainlineId];
+            const trainlineStopsArr: Trainstop[] = stops.map((stop) => {
+                const [x, y] = SvgMapBuilder.getMapPosition(
+                    stop.lon,
+                    stop.lat,
+                    germanyBounds,
+                );
+                return { ...stop, x, y };
+            });
+            const startStop = stops.find(
+                (stop) =>
+                    stop.station_id === start && stop.stop_number !== null,
+            );
+            trainlineObj[trainlineId] = {
+                trainline_id: trainlineId,
+                startStopNumber:
+                    startStop && typeof startStop.stop_number === "number"
+                        ? startStop.stop_number
+                        : -1,
+                stops: trainlineStopsArr,
+            };
         }
         return trainlineObj;
     }
+
     /**
      * Group stops by trainline and determine the index of the start station for each trainline.
      * This allows us to create routes in both directions (forward and backward) from the start station.
@@ -236,7 +263,7 @@ export const makeTrainRoutes = (
      *  }
      * }
      */
-    const trainlinesObj = createTrainlineStopsArr(stops, start);
+    const trainlinesObj = createTrainlineStopsArr(stopGroup, start);
     const trainlinesArr = Object.values(trainlinesObj);
 
     const trainlinesWithStart = trainlinesArr.filter(

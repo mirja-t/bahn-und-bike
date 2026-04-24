@@ -5,7 +5,7 @@ import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
 import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
-export type ResponseStop = {
+export type TrainstopAPIResponse = {
     station_id: number;
     station_name: string;
     dur: number;
@@ -16,7 +16,10 @@ export type ResponseStop = {
     trainline_id: string;
     next_station_id: number | null;
 };
-export type Trainstop = ResponseStop & {
+export type TrainstopsAPIResponse = {
+    [index: number]: TrainstopAPIResponse[];
+};
+export type Trainstop = TrainstopAPIResponse & {
     x: number;
     y: number;
 };
@@ -73,7 +76,7 @@ export const loadTrainroutes = createAsyncThunk<
     const connectionsQuery = direct
         ? "trainstops/" + start
         : "connections/" + start;
-    const connections: ResponseStop[] = await fetch(
+    const connections: TrainstopsAPIResponse = await fetch(
         `${VITE_API_URL}${connectionsQuery}`,
         {
             headers: headers,
@@ -86,8 +89,8 @@ export const loadTrainroutes = createAsyncThunk<
     });
 
     // used to create veloroute sections
-    const trainstops = connections.map((stop) => stop.station_id);
-    thunkAPI.dispatch(setTrainstops(trainstops));
+    // const trainstops = connections.map((stop) => stop.station_id);
+    // thunkAPI.dispatch(setTrainstops(trainstops));
     const currentTrainroutes = makeTrainRoutes(
         connections,
         start,

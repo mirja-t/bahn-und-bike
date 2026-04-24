@@ -1,6 +1,6 @@
 import type {
     CurrentTrainroute,
-    ResponseStop,
+    TrainstopAPIResponse,
 } from "../components/map/trainroutes/TrainroutesSlice";
 import { expect } from "vitest";
 
@@ -10,9 +10,9 @@ const bruxellesCoordinates = [50.836389, 4.336389];
 const warsawCoordinates = [52.2296756, 21.0122287];
 const moscowCoordinates = [55.755826, 37.6173];
 
-const parisStopSNCF: ResponseStop = {
+const parisStopSNCF: TrainstopAPIResponse = {
     station_id: 1,
-    trainline_id: "TGV",
+    trainline_id: "100",
     dur: 0,
     stop_number: 0,
     station_name: "Paris, Gare du Nord",
@@ -21,9 +21,9 @@ const parisStopSNCF: ResponseStop = {
     lon: parisCoordinates[1],
     next_station_id: 2,
 };
-const bruxellesStopSNCF: ResponseStop = {
+const bruxellesStopSNCF: TrainstopAPIResponse = {
     station_id: 2,
-    trainline_id: "TGV",
+    trainline_id: "100",
     dur: 30,
     stop_number: 1,
     station_name: "Bruxelles, Midi",
@@ -32,9 +32,9 @@ const bruxellesStopSNCF: ResponseStop = {
     lon: bruxellesCoordinates[1],
     next_station_id: 3,
 };
-const berlinStopSNCF: ResponseStop = {
+const berlinStopSNCF: TrainstopAPIResponse = {
     station_id: 3,
-    trainline_id: "TGV",
+    trainline_id: "100",
     dur: 300,
     stop_number: 2,
     station_name: "S+U Berlin Hauptbahnhof",
@@ -43,9 +43,9 @@ const berlinStopSNCF: ResponseStop = {
     lon: berlinCoordinates[1],
     next_station_id: null,
 };
-const berlinStopDB: ResponseStop = {
+const berlinStopDB: TrainstopAPIResponse = {
     station_id: 3,
-    trainline_id: "DB",
+    trainline_id: "100",
     dur: 0,
     stop_number: 0,
     station_name: "S+U Berlin Hauptbahnhof",
@@ -54,9 +54,9 @@ const berlinStopDB: ResponseStop = {
     lon: berlinCoordinates[1],
     next_station_id: null,
 };
-const warsawStopSNCF: ResponseStop = {
+const warsawStopSNCF: TrainstopAPIResponse = {
     station_id: 4,
-    trainline_id: "TGV",
+    trainline_id: "100",
     dur: 300,
     stop_number: 3,
     station_name: "Warszawa Centralna",
@@ -65,9 +65,9 @@ const warsawStopSNCF: ResponseStop = {
     lon: warsawCoordinates[1],
     next_station_id: null,
 };
-const moscowStopSNCF: ResponseStop = {
+const moscowStopSNCF: TrainstopAPIResponse = {
     station_id: 5,
-    trainline_id: "TGV",
+    trainline_id: "100",
     dur: 600,
     stop_number: 4,
     station_name: "Moscow, Leningradsky",
@@ -76,9 +76,9 @@ const moscowStopSNCF: ResponseStop = {
     lon: moscowCoordinates[1],
     next_station_id: null,
 };
-const vilniusStopPR: ResponseStop = {
+const vilniusStopPR: TrainstopAPIResponse = {
     station_id: 6,
-    trainline_id: "PR",
+    trainline_id: "200",
     dur: 0,
     stop_number: 0,
     station_name: "Vilnius",
@@ -87,9 +87,9 @@ const vilniusStopPR: ResponseStop = {
     lon: 25.279652,
     next_station_id: null,
 };
-const warsawStopPR: ResponseStop = {
+const warsawStopPR: TrainstopAPIResponse = {
     station_id: 4,
-    trainline_id: "PR",
+    trainline_id: "200",
     dur: 500,
     stop_number: 1,
     station_name: "Warszawa Centralna",
@@ -98,9 +98,9 @@ const warsawStopPR: ResponseStop = {
     lon: warsawCoordinates[1],
     next_station_id: 7,
 };
-const warsawStopDB: ResponseStop = {
+const warsawStopDB: TrainstopAPIResponse = {
     station_id: 4,
-    trainline_id: "DB",
+    trainline_id: "300",
     dur: 500,
     stop_number: 1,
     station_name: "Warszawa Centralna",
@@ -109,9 +109,9 @@ const warsawStopDB: ResponseStop = {
     lon: warsawCoordinates[1],
     next_station_id: null,
 };
-const bratislavaStopPR: ResponseStop = {
+const bratislavaStopPR: TrainstopAPIResponse = {
     station_id: 7,
-    trainline_id: "PR",
+    trainline_id: "200",
     dur: 200,
     stop_number: 2,
     station_name: "Bratislava, Hlavná stanica",
@@ -120,9 +120,9 @@ const bratislavaStopPR: ResponseStop = {
     lon: 17.107748,
     next_station_id: null,
 };
-const viennaStopPR: ResponseStop = {
+const viennaStopPR: TrainstopAPIResponse = {
     station_id: 8,
-    trainline_id: "PR",
+    trainline_id: "200",
     dur: 300,
     stop_number: 3,
     station_name: "Vienna, Hauptbahnhof",
