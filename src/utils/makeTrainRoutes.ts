@@ -363,9 +363,7 @@ export const makeTrainRoutes = (
                 id: `route-${stops.map((s) => s.station_id).join("-")}`,
                 name: `${current.route.trainlines
                     .map((t) => t.trainline_name)
-                    .join(
-                        ", ",
-                    )}: ${current.route.firstStation.station_name} – ${current.route.lastStation.station_name}`,
+                    .join(", ")}: ${current.route.lastStation.station_name}`,
                 routestops: stops,
                 dur: current.route.dur,
                 trainlines: current.route.trainlines,

@@ -71,5 +71,6 @@
     "nearesttrainstation": "Nächste Bahnstation",
     "distanceToNextTrainstation": "Entfernung zur nächsten Bahnstation",
     "maxDistanceToNextTrainstation": "Maximale Entfernung zur nächsten Bahnstation",
-    "toggle": "Ein-/Ausklappen"
+    "toggle": "Ein-/Ausklappen",
+    "noTrainstationNearby": "Keine Bahnstation in der Nähe"
 }
