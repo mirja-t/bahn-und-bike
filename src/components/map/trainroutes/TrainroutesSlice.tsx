@@ -16,9 +16,7 @@ export type TrainstopAPIResponse = {
     trainline_id: string;
     next_station_id: number | null;
 };
-export type TrainstopsAPIResponse = {
-    [index: number]: TrainstopAPIResponse[];
-};
+export type TrainstopsAPIResponse = Record<string, TrainstopAPIResponse[]>;
 export type Trainstop = TrainstopAPIResponse & {
     x: number;
     y: number;
