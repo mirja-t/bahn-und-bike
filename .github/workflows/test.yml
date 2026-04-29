@@ -14,5 +14,8 @@ jobs:
               uses: actions/checkout@v4
             - name: Install dependencies
               run: npm ci
+            - name: Install Playwright browsers
+              run: npx playwright install --with-deps chromium
+
             - name: Run tests
               run: npm run test
