@@ -26,6 +26,10 @@ export default defineConfig({
                     dedupe: ["react-router", "react-router-dom"],
                     alias: [
                         {
+                            find: "@",
+                            replacement: path.resolve(dirname, "src"),
+                        },
+                        {
                             find: /^(\.{1,2}\/)*config\/config$/,
                             replacement: path.resolve(
                                 dirname,

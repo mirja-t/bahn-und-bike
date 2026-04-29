@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { headers, VITE_API_URL } from "../config/config";
+import { headers, VITE_API_URL } from "@/config/config";
 
 export interface UseFetchBatchReturn<T> {
     assets: T[];
