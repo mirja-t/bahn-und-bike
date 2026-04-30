@@ -19,6 +19,14 @@ export default defineConfig({
         port: 5173,
     },
     plugins: [react()],
+    resolve: {
+        alias: [
+            {
+                find: "@",
+                replacement: path.resolve(dirname, "src"),
+            },
+        ],
+    },
     test: {
         projects: [
             {
