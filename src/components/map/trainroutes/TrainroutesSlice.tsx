@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { headers, VITE_API_URL } from "../../../config/config";
+import { headers, VITE_API_URL } from "@/config/config";
 import type { RootState } from "../../../store";
 import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";

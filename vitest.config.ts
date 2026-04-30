@@ -26,11 +26,15 @@ export default defineConfig({
                     dedupe: ["react-router", "react-router-dom"],
                     alias: [
                         {
-                            find: /^(\.{1,2}\/)*config\/config$/,
+                            find: "@/config/config",
                             replacement: path.resolve(
                                 dirname,
                                 "src/__mocks__/config.ts",
                             ),
+                        },
+                        {
+                            find: "@",
+                            replacement: path.resolve(dirname, "src"),
                         },
                     ],
                 },

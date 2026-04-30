@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Loading } from "../components/stateless/loading/Loading";
+import { Loading } from "@/components/stateless/loading/Loading";
 import { Provider } from "react-redux";
 import { createMockStore } from "./MockSlice";
 
