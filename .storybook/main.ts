@@ -15,11 +15,22 @@ const config: StorybookConfig = {
     framework: "@storybook/react-vite",
     async viteFinal(config) {
         config.resolve = config.resolve ?? {};
-        config.resolve.alias = {
-            ...(config.resolve.alias ?? {}),
-            "@": path.resolve(__dirname, "../src"),
-        };
 
+        const existingAliases = config.resolve.alias;
+        const normalizedAliases = Array.isArray(existingAliases)
+            ? existingAliases
+            : Object.entries(existingAliases ?? {}).map(([find, replacement]) => ({
+                  find,
+                  replacement,
+              }));
+
+        config.resolve.alias = [
+            ...normalizedAliases,
+            {
+                find: "@",
+                replacement: path.resolve(__dirname, "../src"),
+            },
+        ];
         return config;
     },
 };
