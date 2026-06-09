@@ -30,7 +30,7 @@ jobs:
                   key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
             - name: Install Playwright browsers
-              run: npx playwright install --with-deps chromium
+              run: npx playwright install --with-deps
 
             - name: Clear Vite/Vitest cache
               run: rm -rf node_modules/.vite node_modules/.vitest
