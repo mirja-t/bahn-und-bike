@@ -18,5 +18,5 @@ jobs:
               run: npx playwright install --with-deps chromium
             - name: Clear Vite/Vitest cache
               run: rm -rf node_modules/.vite node_modules/.vitest
-            - name: Run tests
-              run: npm run test
+            - name: Run tests with coverage report
+              run: npm run test:coverage
