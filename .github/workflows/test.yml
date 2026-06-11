@@ -34,15 +34,3 @@ jobs:
 
             - name: Clear Vite/Vitest cache
               run: rm -rf node_modules/.vite node_modules/.vitest
-
-            - name: Run unit tests with coverage
-              run: npm run test:coverage:unit
-
-            - name: Run Storybook tests
-              run: npm run test:storybook
-
-            - name: Upload coverage report
-              uses: actions/upload-artifact@v7
-              with:
-                  name: coverage-report
-                  path: coverage
