@@ -14,7 +14,8 @@
         "build-storybook": "storybook build",
         "test": "vitest run",
         "test:unit": "vitest run --project unit",
-        "test:storybook": "rm -rf node_modules/.cache/storybook node_modules/.vite && vitest run --project storybook"
+        "test:storybook": "rm -rf node_modules/.cache/storybook node_modules/.vite && vitest run --project storybook",
+        "test:coverage": "vitest run --coverage"
     },
     "simple-git-hooks": {
         "pre-commit": "npm run check"

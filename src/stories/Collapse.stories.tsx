@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Provider } from "react-redux";
 import { createMockStore } from "./MockSlice";
 
-import { Collapse } from "../components/stateless/collapse/Collapse";
+import { Collapse } from "@/components/stateless/collapse/Collapse";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

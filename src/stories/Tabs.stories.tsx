@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { fn } from "storybook/test";
 
-import Tabs from "../components/stateless/tabs/Tabs";
-import { ItemList } from "../components/stateless/itemlist/ItemList";
-import { Panel } from "../components/stateless/panel/Panel";
+import Tabs from "@/components/stateless/tabs/Tabs";
+import { ItemList } from "@/components/stateless/itemlist/ItemList";
+import { Panel } from "@/components/stateless/panel/Panel";
 import { Provider } from "react-redux";
 import { createMockStore } from "./MockSlice";
 

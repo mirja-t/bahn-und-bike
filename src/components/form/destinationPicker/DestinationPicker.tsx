@@ -10,7 +10,7 @@ import {
     type ComboboxOption,
 } from "../../stateless/combobox/Combobox";
 import { debounce } from "../../../utils/utils";
-import { headers, VITE_API_URL } from "../../../config/config";
+import { headers, VITE_API_URL } from "@/config/config";
 import { useRef, useState } from "react";
 
 type Trainstation = {

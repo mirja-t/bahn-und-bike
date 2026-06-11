@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-
-import { ItemList } from "../components/stateless/itemlist/ItemList";
 import { Provider } from "react-redux";
-import { VelorouteIcon } from "../components/stateless/icons/VelorouteIcon";
-import { TrainIcon } from "../components/stateless/icons/TrainIcon";
 import { createMockStore } from "./MockSlice";
+
+import { ItemList } from "@/components/stateless/itemlist/ItemList";
+import { TrainIcon } from "@/components/stateless/icons/TrainIcon";
+import { VelorouteIcon } from "@/components/stateless/icons/VelorouteIcon";
 
 // Mock items data
 const mockItems = [

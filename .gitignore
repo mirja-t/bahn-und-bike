@@ -21,9 +21,6 @@ index.php
 # utils 
 /utils/treeData
 
-# config
-/src/config
-
 #database
 /api
 /api_dev

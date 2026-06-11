@@ -20,17 +20,41 @@ export default defineConfig({
         ],
     },
     test: {
+        coverage: {
+            provider: "v8",
+            reporter: ["text", "html", "json"],
+            reportsDirectory: "./coverage",
+
+            include: ["src/**/*.{ts,tsx}"],
+
+            exclude: [
+                "**/*.scss",
+                "**/*.css",
+                "**/*.module.scss",
+                "**/*.stories.*",
+                "**/*.test.*",
+                "**/*.spec.*",
+                "src/setupTests.js",
+                "src/main.tsx",
+                "src/vite-env.d.ts",
+                "**/__mocks__/**",
+            ],
+        },
         projects: [
             {
                 resolve: {
                     dedupe: ["react-router", "react-router-dom"],
                     alias: [
                         {
-                            find: /^(\.{1,2}\/)*config\/config$/,
+                            find: "@/config/config",
                             replacement: path.resolve(
                                 dirname,
                                 "src/__mocks__/config.ts",
                             ),
+                        },
+                        {
+                            find: "@",
+                            replacement: path.resolve(dirname, "src"),
                         },
                     ],
                 },
