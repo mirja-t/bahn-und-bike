@@ -3,7 +3,6 @@ import type { AppDispatch, RootState } from "./store";
 import { useDispatch } from "react-redux";
 import {
     setActiveSection,
-    setCurrentTrainroutes,
     setTrainroutesAlongVeloroute,
     setTrainstops,
 } from "./components/map/trainroutes/TrainroutesSlice";
@@ -87,7 +86,6 @@ export const appSlice = createSlice({
 
 export const resetAppStateThunk = () => {
     return (dispatch: AppDispatch) => {
-        dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setActiveVeloroute(null));

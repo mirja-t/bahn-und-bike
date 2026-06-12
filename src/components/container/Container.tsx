@@ -1,5 +1,5 @@
 import styles from "./container.module.scss";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -8,10 +8,13 @@ import {
     setActiveSection,
     setTrainroutesAlongVeloroute,
     selectStartPos,
-    loadTrainroutes,
-    selectCurrentTrainroutes,
-    setCurrentTrainroutes,
-    selectTrainrouteListLoading,
+    setTrainroutesLoading,
+    setTrainroutesError,
+    setTrainstops,
+    setIsDirect,
+    setTrainTravelDuration,
+    selectIsDirect,
+    selectTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     loadVeloroutes,
@@ -41,29 +44,65 @@ import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Collapse } from "../stateless/collapse/Collapse";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
-    const start = useSelector(selectStartPos);
     const veloroutes = useSelector(selectVelorouteList);
     const activeVeloroute = useSelector(selectActiveVeloroute);
-    const trainRoutes = useSelector(selectCurrentTrainroutes);
     const submitValue = useSelector(selectSubmitValue);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
-    const journeys = useSelector(selectCurrentTrainroutes);
-    const isLoading = useSelector(selectTrainrouteListLoading);
     const { t } = useTranslation();
+    const startPos = useSelector(selectStartPos);
+    const isDirect = useSelector(selectIsDirect);
+    const travelDuration = useSelector(selectTrainTravelDuration);
 
     const prevValue = useRef(0);
+
+    const {
+        data: trainroutesQueryData,
+        isLoading,
+        isFetching,
+        isError,
+    } = useTrainroutesQuery({
+        start: startPos,
+        value: travelDuration,
+        direct: isDirect,
+    });
+
+    useEffect(() => {
+        dispatch(setTrainroutesLoading(isFetching));
+    }, [isFetching, dispatch]);
+
+    useEffect(() => {
+        dispatch(setTrainroutesError(isError));
+    }, [isError, dispatch]);
+
+    useEffect(() => {
+        if (!trainroutesQueryData || !dispatch) return;
+        const { trainstops, currentTrainroutes } = trainroutesQueryData;
+        // used to create veloroute sections
+        dispatch(setTrainstops(trainstops));
+        const stopIds = [
+            ...new Set(
+                currentTrainroutes
+                    .flatMap((t) => t.routestops.map((s) => s.station_id))
+                    .filter((id) => id !== startPos),
+            ),
+        ];
+        if (stopIds.length > 0) {
+            dispatch(loadVeloroutes(stopIds));
+        }
+    }, [trainroutesQueryData, dispatch, startPos]);
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
             const stopIds = Array.from(
                 new Set(
-                    trainRoutes
+                    trainroutesQueryData?.currentTrainroutes
                         .map((route) =>
                             route.routestops.map((stop) => stop.station_id),
                         )
@@ -88,14 +127,14 @@ export const Container = () => {
     ) => {
         e.preventDefault();
         prevValue.current = value;
-        dispatch(setCurrentTrainroutes([]));
         dispatch(setActiveSection(null));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));
         dispatch(setActiveTab("trainlines"));
-        dispatch(loadTrainroutes({ start, value, direct }));
+        dispatch(setIsDirect(direct));
+        dispatch(setTrainTravelDuration(value));
         dispatch(setUserScale("reset"));
         dispatch(setSubmitValue(value));
     };
@@ -147,7 +186,7 @@ export const Container = () => {
                 <div className={styles.mapWrapper} ref={wrapperRef}>
                     <AnimatePresence>
                         {submitValue === 0 &&
-                            !journeys.length &&
+                            !trainroutesQueryData?.currentTrainroutes.length &&
                             !isLoading && (
                                 <motion.div
                                     className={styles.instructionsOverlay}

@@ -1,9 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "@/config/config";
 import type { RootState } from "../../../store";
-import { makeTrainRoutes } from "../../../utils/makeTrainRoutes";
 import { createNewRoute } from "../../../utils/createNewRoute";
-import { loadVeloroutes } from "../veloroutes/VeloroutesSlice";
 
 export type TrainstopAPIResponse = {
     station_id: number;
@@ -51,7 +49,9 @@ export type CurrentTrainroutes = CurrentTrainroute[];
 
 export interface TrainroutesState {
     startPos: number;
+    isDirect: boolean;
     travelInterval: number;
+    travelDuration: number;
     trainstops: number[];
     currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
@@ -65,53 +65,6 @@ export interface TrainroutesState {
     maxDistToNextStation: number;
     trainlineNames?: string[];
 }
-
-export const loadTrainroutes = createAsyncThunk<
-    CurrentTrainroutes,
-    { start: number; value: number; direct: boolean },
-    { state: RootState }
->("trainroutes/setTrainroutes", async ({ start, value, direct }, thunkAPI) => {
-    const connectionsQuery = direct
-        ? "trainstops/" + start
-        : "connections/" + start;
-    const connections: TrainstopsAPIResponse = await fetch(
-        `${VITE_API_URL}${connectionsQuery}`,
-        {
-            headers: headers,
-        },
-    ).then((response) => {
-        if (response.status !== 200) {
-            throw new Error("Bad Server Response");
-        }
-        return response.json();
-    });
-
-    // used to create veloroute sections
-    const trainstops = Object.values(connections)
-        .flat()
-        .map((stop) => stop.station_id);
-    thunkAPI.dispatch(setTrainstops(trainstops));
-    const currentTrainroutes = makeTrainRoutes(
-        connections,
-        start,
-        value * 30,
-        // direct,
-    );
-
-    // check costs of fetching all related veloroutes when no trainline is selected
-    const stopIds = [
-        ...new Set(
-            currentTrainroutes
-                .map((t) => t.routestops.map((s) => s.station_id))
-                .flat()
-                .filter((id) => id !== start),
-        ),
-    ];
-    if (stopIds.length > 0) {
-        thunkAPI.dispatch(loadVeloroutes(stopIds));
-    }
-    return currentTrainroutes;
-});
 
 export const loadTrainroutesAlongVeloroute = createAsyncThunk<
     CurrentTrainroutes,
@@ -160,7 +113,9 @@ export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
         startPos: 2975,
+        isDirect: true,
         travelInterval: 30,
+        travelDuration: 0,
         trainstops: [],
         currentTrainroutes: [],
         trainroutesLoading: false,
@@ -174,14 +129,6 @@ export const trainroutesSlice = createSlice({
         maxDistToNextStation: 2, // in km, default value, can be changed by user in VelorouteDetails
     } as TrainroutesState,
     reducers: {
-        setCurrentTrainroutes: (
-            state,
-            action: { payload: CurrentTrainroutes },
-        ) => {
-            state.currentTrainroutes = action.payload;
-            // Reset previewSection to avoid holding a stale reference
-            state.previewSection = null;
-        },
         setTrainstops: (state, action: { payload: number[] }) => {
             state.trainstops = action.payload;
         },
@@ -213,22 +160,21 @@ export const trainroutesSlice = createSlice({
         setStartPos: (state, action: { payload: number }) => {
             state.startPos = action.payload;
         },
+        setIsDirect: (state, action: { payload: boolean }) => {
+            state.isDirect = action.payload;
+        },
+        setTrainTravelDuration: (state, action: { payload: number }) => {
+            state.travelDuration = action.payload;
+        },
+        setTrainroutesLoading: (state, action: { payload: boolean }) => {
+            state.trainroutesLoading = action.payload;
+        },
+        setTrainroutesError: (state, action: { payload: boolean }) => {
+            state.trainroutesError = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(loadTrainroutes.pending, (state) => {
-                state.trainroutesLoading = true;
-                state.trainroutesError = false;
-            })
-            .addCase(loadTrainroutes.fulfilled, (state, action) => {
-                state.currentTrainroutes = action.payload;
-                state.trainroutesLoading = false;
-                state.trainroutesError = false;
-            })
-            .addCase(loadTrainroutes.rejected, (state) => {
-                state.trainroutesLoading = false;
-                state.trainroutesError = true;
-            })
             .addCase(loadTrainroutesAlongVeloroute.pending, (state) => {
                 state.trainroutesAlongVelorouteLoading = true;
                 state.trainroutesAlongVelorouteError = false;
@@ -261,6 +207,9 @@ export const selectTrainrouteListLoading = (state: RootState) =>
 export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
     state.trainroutes.trainroutesAlongVelorouteLoading;
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
+export const selectIsDirect = (state: RootState) => state.trainroutes.isDirect;
+export const selectTrainTravelDuration = (state: RootState) =>
+    state.trainroutes.travelDuration;
 export const selectCurrentTrainroutes = (state: RootState) =>
     state.trainroutes.currentTrainroutes;
 export const selectTrainroutesLoading = (state: RootState) =>
@@ -273,8 +222,11 @@ export const {
     setPreviewSection,
     setTrainroutesAlongVeloroute,
     setStartPos,
-    setCurrentTrainroutes,
+    setIsDirect,
+    setTrainTravelDuration,
     setTrainstops,
+    setTrainroutesLoading,
+    setTrainroutesError,
 } = trainroutesSlice.actions;
 
 export default trainroutesSlice.reducer;

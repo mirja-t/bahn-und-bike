@@ -2,11 +2,13 @@ import "./trainroutes.scss";
 import { memo } from "react";
 import { useSelector } from "react-redux";
 import {
-    selectCurrentTrainroutes,
     selectActiveSection,
     selectTrainroutesAlongVeloroute,
     selectActiveSpot,
     selectPreviewSection,
+    selectStartPos,
+    selectTrainTravelDuration,
+    selectIsDirect,
 } from "./TrainroutesSlice";
 import { selectActiveVelorouteStop } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
@@ -15,9 +17,9 @@ import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
 import { AnimatePresence, motion } from "framer-motion";
 import { selectAppZoom } from "../../../AppSlice";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 
 export const Trainroutes = memo(function Trainroutes() {
-    const journeys = useSelector(selectCurrentTrainroutes);
     const clickedSection = useSelector(selectActiveSection);
     const hoveredSection = useSelector(selectPreviewSection);
     const activeSection = hoveredSection || clickedSection;
@@ -27,6 +29,15 @@ export const Trainroutes = memo(function Trainroutes() {
         selectTrainroutesAlongVeloroute,
     );
     const appZoom = useSelector(selectAppZoom);
+    const startPos = useSelector(selectStartPos);
+    const isDirect = useSelector(selectIsDirect);
+    const travelDuration = useSelector(selectTrainTravelDuration);
+    const { data: trainroutesQueryData } = useTrainroutesQuery({
+        start: startPos,
+        value: travelDuration,
+        direct: isDirect,
+    });
+    const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
     const getClassName = (item: typeof activeSection) => {
         if (!activeSection && !trainlinesAlongVeloroute.length) {
@@ -37,7 +48,6 @@ export const Trainroutes = memo(function Trainroutes() {
             return "inactive";
         }
     };
-
     return (
         <svg
             id="routes"
@@ -47,7 +57,7 @@ export const Trainroutes = memo(function Trainroutes() {
             preserveAspectRatio="xMidYMid meet"
             xmlSpace="preserve"
         >
-            {journeys.map((item, idx) => (
+            {currentTrainroutes?.map((item, idx) => (
                 <Trainroute
                     key={idx}
                     className={getClassName(item)}
