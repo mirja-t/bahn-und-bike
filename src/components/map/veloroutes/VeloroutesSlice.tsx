@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { headers, VITE_API_URL } from "@/config/config";
-import {
-    setActiveSection,
-    loadTrainroutesAlongVeloroute,
-} from "../trainroutes/TrainroutesSlice";
+import { setActiveSection } from "../trainroutes/TrainroutesSlice";
 import {
     convertVelorouteStops,
     makeVeloRoute,
@@ -120,7 +117,7 @@ export const setVelorouteSectionActiveThunk = (idx: number) => {
     return (dispatch: AppDispatch) => {
         dispatch(setActiveVelorouteSection(idx));
         dispatch(setActiveSection(null));
-        dispatch(loadTrainroutesAlongVeloroute(idx));
+        // dispatch(loadTrainroutesAlongVeloroute(idx));
     };
 };
 
@@ -259,6 +256,34 @@ export const selectHoveredVelorouteSection = (state: RootState) =>
     state.veloroutes.hoveredVelorouteSection;
 export const selectMaxDistToNextStations = (state: RootState) =>
     state.veloroutes.maxDistToNextStation;
+export const selectActiveVelorouteSectionStartId = (state: RootState) => {
+    const activeSectionIdx = state.veloroutes.activeVelorouteSection;
+    const activeVeloroute = state.veloroutes.veloroute;
+    if (
+        activeSectionIdx === null ||
+        !activeVeloroute ||
+        !activeVeloroute.route[activeSectionIdx]
+    ) {
+        return null;
+    }
+    const leg = activeVeloroute.route[activeSectionIdx].leg;
+    console.log("active leg", leg);
+    return leg[0].trainstop;
+};
+export const selectActiveVelorouteSectionEndId = (state: RootState) => {
+    const activeSectionIdx = state.veloroutes.activeVelorouteSection;
+    const activeVeloroute = state.veloroutes.veloroute;
+    if (
+        activeSectionIdx === null ||
+        !activeVeloroute ||
+        !activeVeloroute.route[activeSectionIdx]
+    ) {
+        return null;
+    }
+    const leg = activeVeloroute.route[activeSectionIdx].leg;
+    console.log("active leg", leg);
+    return leg[leg.length - 1].trainstop;
+};
 
 export const {
     setActiveVeloroute,

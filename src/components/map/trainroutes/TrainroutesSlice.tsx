@@ -1,7 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { headers, VITE_API_URL } from "@/config/config";
+import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../../../store";
-import { createNewRoute } from "../../../utils/createNewRoute";
 
 export type TrainstopAPIResponse = {
     station_id: number;
@@ -66,49 +64,6 @@ export interface TrainroutesState {
     trainlineNames?: string[];
 }
 
-export const loadTrainroutesAlongVeloroute = createAsyncThunk<
-    CurrentTrainroutes,
-    number,
-    { state: RootState }
->("trainroutes/setTrainroutesAlongVeloroute", async (idx: number, thunkAPI) => {
-    const startdestination = thunkAPI.getState().trainroutes.startPos;
-    const activeVeloroute = thunkAPI.getState().veloroutes.veloroute;
-    const startId = activeVeloroute
-        ? activeVeloroute.route[idx].leg[0].trainstop
-        : undefined;
-    const endId = activeVeloroute
-        ? activeVeloroute.route[idx].leg[
-              activeVeloroute.route[idx].leg.length - 1
-          ].trainstop
-        : undefined;
-
-    const connections: CurrentTrainroutes = [];
-    const fetchConnection = async (id: number): Promise<CurrentTrainroute> => {
-        const connectionQuery = "connection/" + startdestination + "&" + id;
-        const connection = await fetch(`${VITE_API_URL}${connectionQuery}`, {
-            headers: headers,
-        }).then((response) => {
-            if (response.status !== 200) {
-                throw new Error("Bad Server Response");
-            }
-            return response.json();
-        });
-        const reversedConnection = [...connection].reverse();
-        const route = createNewRoute(reversedConnection[0], reversedConnection);
-        return route;
-    };
-    const seenIds = new Set<number>();
-    for (const id of [startId, endId]) {
-        if (!id || seenIds.has(id)) {
-            continue;
-        }
-        const route = await fetchConnection(id);
-        connections.push(route);
-        seenIds.add(id);
-    }
-    return connections;
-});
-
 export const trainroutesSlice = createSlice({
     name: "trainroutes",
     initialState: {
@@ -172,25 +127,6 @@ export const trainroutesSlice = createSlice({
         setTrainroutesError: (state, action: { payload: boolean }) => {
             state.trainroutesError = action.payload;
         },
-    },
-    extraReducers: (builder) => {
-        builder
-            .addCase(loadTrainroutesAlongVeloroute.pending, (state) => {
-                state.trainroutesAlongVelorouteLoading = true;
-                state.trainroutesAlongVelorouteError = false;
-            })
-            .addCase(
-                loadTrainroutesAlongVeloroute.fulfilled,
-                (state, action) => {
-                    state.trainroutesAlongVeloroute = action.payload;
-                    state.trainroutesAlongVelorouteLoading = false;
-                    state.trainroutesAlongVelorouteError = false;
-                },
-            )
-            .addCase(loadTrainroutesAlongVeloroute.rejected, (state) => {
-                state.trainroutesAlongVelorouteLoading = false;
-                state.trainroutesAlongVelorouteError = true;
-            });
     },
 });
 
