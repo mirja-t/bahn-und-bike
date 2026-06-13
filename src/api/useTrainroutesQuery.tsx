@@ -30,9 +30,13 @@ const fetchTrainroutes = async (queryParams: QueryParamsType) => {
         return res.json();
     });
     // used to create veloroute sections
-    const trainstops = Object.values(connections)
-        .flat()
-        .map((stop) => stop.station_id);
+    const trainstops = [
+        ...new Set(
+            Object.values(connections)
+                .flat()
+                .map((stop) => stop.station_id),
+        ),
+    ];
     const currentTrainroutes = makeTrainRoutes(connections, start, value * 30);
     return { trainstops, currentTrainroutes };
 };
