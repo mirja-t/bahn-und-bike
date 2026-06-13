@@ -267,7 +267,6 @@ export const selectActiveVelorouteSectionStartId = (state: RootState) => {
         return null;
     }
     const leg = activeVeloroute.route[activeSectionIdx].leg;
-    console.log("active leg", leg);
     return leg[0].trainstop;
 };
 export const selectActiveVelorouteSectionEndId = (state: RootState) => {
@@ -281,7 +280,6 @@ export const selectActiveVelorouteSectionEndId = (state: RootState) => {
         return null;
     }
     const leg = activeVeloroute.route[activeSectionIdx].leg;
-    console.log("active leg", leg);
     return leg[leg.length - 1].trainstop;
 };
 
