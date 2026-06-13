@@ -10,14 +10,12 @@ import {
     selectStartPos,
     setTrainroutesLoading,
     setTrainroutesError,
-    setTrainstops,
     setIsDirect,
     setTrainTravelDuration,
     selectIsDirect,
     selectTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
-    loadVeloroutes,
     selectActiveVeloroute,
     selectVelorouteList,
     setActiveVeloroute,
@@ -81,41 +79,13 @@ export const Container = () => {
         dispatch(setTrainroutesError(isError));
     }, [isError, dispatch]);
 
-    useEffect(() => {
-        if (!trainroutesQueryData || !dispatch) return;
-        const { trainstops, currentTrainroutes } = trainroutesQueryData;
-        // used to create veloroute sections
-        dispatch(setTrainstops(trainstops));
-        const stopIds = [
-            ...new Set(
-                currentTrainroutes
-                    .flatMap((t) => t.routestops.map((s) => s.station_id))
-                    .filter((id) => id !== startPos),
-            ),
-        ];
-        if (stopIds.length > 0) {
-            dispatch(loadVeloroutes(stopIds));
-        }
-    }, [trainroutesQueryData, dispatch, startPos]);
-
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
-            const stopIds = Array.from(
-                new Set(
-                    trainroutesQueryData?.currentTrainroutes
-                        .map((route) =>
-                            route.routestops.map((stop) => stop.station_id),
-                        )
-                        .flat()
-                        .filter((id) => id !== null && id !== undefined),
-                ),
-            );
             dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
             dispatch(setActiveVeloroute(null));
             dispatch(setActiveVelorouteSection(null));
             dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(loadVeloroutes(stopIds));
         }
         dispatch(setActiveTab(tabId));
     };

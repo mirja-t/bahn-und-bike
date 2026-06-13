@@ -6,7 +6,6 @@ import { useTranslation } from "../../utils/i18n";
 import {
     setActiveVelorouteSection,
     setActiveVeloroute,
-    loadVeloroutes,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -59,14 +58,12 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     };
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
-        const stopIds = line.routestops.map((stop) => stop.station_id);
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVeloroute(null));
         dispatch(setActiveVelorouteSection(null));
         // Clear any hover preview when a route is explicitly selected
         dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));
-        dispatch(loadVeloroutes(stopIds));
         fn();
     };
     if (!currentTrainroutes) {

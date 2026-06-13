@@ -55,39 +55,6 @@ export type VelorouteListItem = {
     gcs: string;
 };
 
-export const loadVeloroutes = createAsyncThunk<
-    VelorouteListItem[],
-    number[],
-    { state: RootState }
->("veloroutes/setVelorouteList", async (trainstations: number[], thunkAPI) => {
-    const state = thunkAPI.getState();
-    const startPosId = state.trainroutes.startPos;
-
-    const normalizedIds = Array.from(
-        new Set(trainstations.filter((id) => !!id && id !== startPosId)),
-    );
-
-    if (normalizedIds.length === 0) {
-        return [];
-    }
-
-    const veloroutes: VelorouteListItem[] = await fetch(
-        `${VITE_API_URL}veloroutes`,
-        {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify({ trainstations: normalizedIds }),
-        },
-    ).then((response) => {
-        if (response.status !== 200) {
-            throw new Error("Bad Server Response");
-        }
-        return response.json();
-    });
-
-    return veloroutes;
-});
-
 export const loadVeloroute = createAsyncThunk<
     Veloroute,
     { id: string },
@@ -212,19 +179,6 @@ export const veloroutesSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(loadVeloroutes.pending, (state) => {
-                state.velorouteListIsLoading = true;
-                state.veloroutesHasError = false;
-            })
-            .addCase(loadVeloroutes.fulfilled, (state, action) => {
-                state.velorouteList = action.payload;
-                state.velorouteListIsLoading = false;
-                state.veloroutesHasError = false;
-            })
-            .addCase(loadVeloroutes.rejected, (state) => {
-                state.velorouteListIsLoading = false;
-                state.veloroutesHasError = true;
-            })
             .addCase(loadVeloroute.pending, (state) => {
                 state.velorouteIsLoading = true;
                 state.velorouteHasError = false;

@@ -4,7 +4,6 @@ import { getTime } from "../../utils/getTime";
 import { selectLangCode, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectVelorouteList,
     selectActiveVeloroute,
     setActiveVelorouteSection,
     loadVeloroute,
@@ -12,7 +11,10 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
+    selectIsDirect,
+    selectStartPos,
     selectTrainroutesAlongVeloroute,
+    selectTrainTravelDuration,
     setActiveSpot,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
@@ -30,6 +32,8 @@ import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -137,14 +141,24 @@ const Section = ({ section }: SectionProps) => {
 };
 export const DestinationDetails = () => {
     const { t } = useTranslation();
+    const dispatch = useAppDispatch();
     const activeVeloroute = useSelector(selectActiveVeloroute);
     const activeSection = useSelector(selectActiveSection);
-    const veloroutes = useSelector(selectVelorouteList);
     const trainLinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
-
-    const dispatch = useAppDispatch();
+    const startPos = useSelector(selectStartPos);
+    const isDirect = useSelector(selectIsDirect);
+    const travelDuration = useSelector(selectTrainTravelDuration);
+    const { data: trainroutesQueryData } = useTrainroutesQuery({
+        start: startPos,
+        value: travelDuration,
+        direct: isDirect,
+    });
+    const { trainstops } = trainroutesQueryData || { trainstops: [] };
+    const { data: veloroutes } = useVeloroutesQuery({
+        stationIds: trainstops,
+    });
 
     const setVelorouteActive = (vroute: VelorouteListItem) => {
         if (vroute.len !== undefined) {
@@ -177,13 +191,17 @@ export const DestinationDetails = () => {
 
                     <section className="section veloroute-details">
                         <h5>{t("veloroutes")}</h5>
-                        {veloroutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
-                        <ItemList
-                            items={veloroutes}
-                            activeId={activeVeloroute?.id}
-                            onClick={setVelorouteActive}
-                            icon={<VelorouteIcon />}
-                        />
+                        {veloroutes && veloroutes.length < 1 && (
+                            <p>{`${t("nomatch")}`}</p>
+                        )}
+                        {veloroutes && (
+                            <ItemList
+                                items={veloroutes}
+                                activeId={activeVeloroute?.id}
+                                onClick={setVelorouteActive}
+                                icon={<VelorouteIcon />}
+                            />
+                        )}
                     </section>
                 </div>
             </div>
