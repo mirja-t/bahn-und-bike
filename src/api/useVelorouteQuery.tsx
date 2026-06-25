@@ -35,14 +35,13 @@ const fetchVeloroute = async (queryParams: VelorouteQueryParamsType) => {
 
 export function useVelorouteQuery(
     queryParams: VelorouteQueryParamsType,
-): UseQueryResult<Veloroute> {
+): UseQueryResult<Veloroute | null> {
     const id = queryParams?.id;
     const trainstops = queryParams?.trainstops;
     const maxDistToNextStation = queryParams?.maxDistToNextStation;
     return useQuery({
         queryKey: ["veloroute", id, trainstops, maxDistToNextStation],
-        queryFn: () => fetchVeloroute(queryParams),
-        enabled: !!queryParams && !!id,
+        queryFn: () => (id ? fetchVeloroute(queryParams) : null),
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });
