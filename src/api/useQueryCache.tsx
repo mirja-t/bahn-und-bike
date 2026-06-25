@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { useTrainroutesQuery } from "./useTrainroutesQuery";
 import {
+    selectActiveSection,
     selectIsDirect,
     selectStartPos,
     selectTrainTravelDuration,
@@ -11,6 +12,7 @@ import {
     selectActiveVelorouteSectionIdx,
     selectMaxDistToNextStation,
 } from "@/components/map/veloroutes/VeloroutesSlice";
+import { useVeloroutesQuery } from "./useVeloroutesQuery";
 
 export const useQueryCache = () => {
     const startPos = useSelector(selectStartPos);
@@ -27,11 +29,20 @@ export const useQueryCache = () => {
     const activeVelorouteSectionIdx = useSelector(
         selectActiveVelorouteSectionIdx,
     );
-    const trainstops = trainroutesQueryData?.trainstops;
+    const activeTrainroute = useSelector(selectActiveSection);
+    const trainstopsAll = trainroutesQueryData?.trainstops;
+    const trainstops = (
+        activeTrainroute
+            ? activeTrainroute.routestops.map((stop) => stop.station_id)
+            : trainstopsAll
+    )?.filter((stop) => stop !== startPos);
     const { data: activeVeloroute } = useVelorouteQuery({
         id: activeVelorouteId,
         trainstops: trainstops || [],
         maxDistToNextStation,
+    });
+    const { data: veloroutes } = useVeloroutesQuery({
+        stationIds: trainstops || [],
     });
     const activeVelorouteSection =
         activeVelorouteSectionIdx !== null && activeVelorouteId !== null
@@ -49,6 +60,7 @@ export const useQueryCache = () => {
               ].trainstop
             : null;
     return {
+        veloroutes,
         activeVeloroute,
         activeVelorouteSection,
         trainstops,

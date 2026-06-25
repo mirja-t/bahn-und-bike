@@ -58,7 +58,6 @@ export const setVelorouteSectionActiveThunk = (idx: number) => {
 };
 
 export interface VeloroutesState {
-    velorouteList: VelorouteListItem[];
     velorouteListIsLoading: boolean;
     activeVelorouteId: string | null;
     activeVelorouteSectionIdx: number | null;
@@ -80,7 +79,6 @@ export interface VeloroutesState {
 export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
-        velorouteList: [],
         velorouteListIsLoading: false,
         veloroutesHasError: false,
         activeVelorouteId: null,
@@ -116,14 +114,9 @@ export const veloroutesSlice = createSlice({
         ) => {
             state.activeVelorouteStop = action.payload;
         },
-        setVelorouteList: (state, action: { payload: VelorouteListItem[] }) => {
-            state.velorouteList = action.payload;
-        },
     },
 });
 
-export const selectVelorouteList = (state: RootState) =>
-    state.veloroutes.velorouteList;
 export const selectActiveVelorouteId = (state: RootState) =>
     state.veloroutes.activeVelorouteId;
 export const selectActiveVelorouteSectionIdx = (state: RootState) =>
@@ -143,7 +136,6 @@ export const {
     setActiveVelorouteSectionIdx,
     setHoveredVelorouteSectionIdx,
     setActiveVelorouteStop,
-    setVelorouteList,
     setMaxDistToNextStation,
 } = veloroutesSlice.actions;
 

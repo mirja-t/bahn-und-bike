@@ -8,7 +8,6 @@ import {
 import {
     setActiveVelorouteId,
     setActiveVelorouteSectionIdx,
-    setVelorouteList,
 } from "./components/map/veloroutes/VeloroutesSlice";
 
 export const Theme = {
@@ -88,7 +87,6 @@ export const resetAppStateThunk = () => {
         dispatch(setActiveSection(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveVelorouteId(null));
-        dispatch(setVelorouteList([]));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setAppScale(1));
         dispatch(setUserScale("reset"));

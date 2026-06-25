@@ -11,10 +11,7 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    selectIsDirect,
-    selectStartPos,
     selectTrainroutesAlongVeloroute,
-    selectTrainTravelDuration,
     setActiveSpot,
     setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
@@ -33,7 +30,7 @@ import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
-import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useQueryCache } from "@/api/useQueryCache";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -147,17 +144,9 @@ export const DestinationDetails = () => {
     const trainLinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
     );
-    const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
-    const { data: trainroutesQueryData } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
-    const { trainstops } = trainroutesQueryData || { trainstops: [] };
+    const { trainstops } = useQueryCache();
     const { data: veloroutes } = useVeloroutesQuery({
-        stationIds: trainstops,
+        stationIds: trainstops || [],
     });
 
     const setVelorouteId = (vroute: VelorouteListItem) => {
