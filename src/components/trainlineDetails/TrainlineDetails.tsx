@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    setActiveVelorouteSection,
-    setActiveVeloroute,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
@@ -59,8 +59,8 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
         dispatch(setTrainroutesAlongVeloroute([]));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
         // Clear any hover preview when a route is explicitly selected
         dispatch(setPreviewSection(null));
         dispatch(setActiveSection(line));

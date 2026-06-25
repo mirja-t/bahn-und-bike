@@ -16,10 +16,10 @@ import {
     selectTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
-    selectActiveVeloroute,
+    selectActiveVelorouteId,
     selectVelorouteList,
-    setActiveVeloroute,
-    setActiveVelorouteSection,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
     setVelorouteList,
 } from "../map/veloroutes/VeloroutesSlice";
 import { Map } from "../map/Map";
@@ -47,7 +47,7 @@ import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 export const Container = () => {
     const dispatch = useAppDispatch();
     const veloroutes = useSelector(selectVelorouteList);
-    const activeVeloroute = useSelector(selectActiveVeloroute);
+    const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const submitValue = useSelector(selectSubmitValue);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -83,8 +83,8 @@ export const Container = () => {
         if (tabId === "trainlines") {
             dispatch(setVelorouteList([]));
             dispatch(setActiveSection(null));
-            dispatch(setActiveVeloroute(null));
-            dispatch(setActiveVelorouteSection(null));
+            dispatch(setActiveVelorouteId(null));
+            dispatch(setActiveVelorouteSectionIdx(null));
             dispatch(setTrainroutesAlongVeloroute([]));
         }
         dispatch(setActiveTab(tabId));
@@ -98,8 +98,8 @@ export const Container = () => {
         e.preventDefault();
         prevValue.current = value;
         dispatch(setActiveSection(null));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setVelorouteList([]));
         dispatch(setActiveTab("trainlines"));
@@ -142,7 +142,7 @@ export const Container = () => {
                                 <Tabs.Tab
                                     id="leg"
                                     name={t("routelegs")}
-                                    disabled={!activeVeloroute}
+                                    disabled={!activeVelorouteId}
                                 >
                                     <VelorouteDetails />
                                     <VelorouteLegDetails />

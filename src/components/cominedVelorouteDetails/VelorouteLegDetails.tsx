@@ -1,8 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectActiveVeloroute,
-    selectActiveVelorouteSection,
     selectActiveVelorouteStop,
     setActiveVelorouteStop,
     type VelorouteStop,
@@ -12,16 +10,12 @@ import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesS
 import { useEffect, useState } from "react";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
+import { useQueryCache } from "@/api/useQueryCache";
 
 export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
-    const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute !== null
-            ? activeVeloroute.route[activeVelorouteSectionIdx]
-            : null;
+    const { activeVelorouteSection } = useQueryCache();
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const trainlinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
@@ -188,7 +182,7 @@ export const VelorouteLegDetails = () => {
             <hr />
             <div id="veloroute-details">
                 <div id="veloroute" className="details">
-                    {activeVelorouteSection !== null && (
+                    {!!activeVelorouteSection && (
                         <section className="veloroute-details veloroute-section-details">
                             <h5>{`${t("leg")}`}</h5>
                             <Box>

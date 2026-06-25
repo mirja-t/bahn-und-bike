@@ -8,7 +8,7 @@ import { headers, VITE_API_URL } from "@/config/config";
 import { convertVelorouteStops, makeVeloRoute } from "@/utils/makeVeloRoute";
 
 type QueryParams = {
-    id: string;
+    id: string | null;
     trainstops: number[];
     maxDistToNextStation: number;
 };
@@ -42,7 +42,7 @@ export function useVelorouteQuery(
     return useQuery({
         queryKey: ["veloroute", id, trainstops, maxDistToNextStation],
         queryFn: () => fetchVeloroute(queryParams),
-        enabled: queryParams !== null && !!id,
+        enabled: !!queryParams && !!id,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });

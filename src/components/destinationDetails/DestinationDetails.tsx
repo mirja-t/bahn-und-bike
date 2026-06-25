@@ -4,9 +4,9 @@ import { getTime } from "../../utils/getTime";
 import { selectLangCode, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectActiveVeloroute,
-    setActiveVelorouteSection,
-    loadVeloroute,
+    selectActiveVelorouteId,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
     type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
@@ -142,7 +142,7 @@ const Section = ({ section }: SectionProps) => {
 export const DestinationDetails = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
+    const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeSection = useSelector(selectActiveSection);
     const trainLinesAlongVeloroute = useSelector(
         selectTrainroutesAlongVeloroute,
@@ -160,11 +160,11 @@ export const DestinationDetails = () => {
         stationIds: trainstops,
     });
 
-    const setVelorouteActive = (vroute: VelorouteListItem) => {
-        if (vroute.len !== undefined) {
+    const setVelorouteId = (vroute: VelorouteListItem) => {
+        if (vroute !== undefined) {
             dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(setActiveVelorouteSection(null));
-            dispatch(loadVeloroute({ id: vroute.id }));
+            dispatch(setActiveVelorouteSectionIdx(null));
+            dispatch(setActiveVelorouteId(vroute.id));
         }
     };
 
@@ -197,8 +197,8 @@ export const DestinationDetails = () => {
                         {veloroutes && (
                             <ItemList
                                 items={veloroutes}
-                                activeId={activeVeloroute?.id}
-                                onClick={setVelorouteActive}
+                                activeId={activeVelorouteId || ""}
+                                onClick={setVelorouteId}
                                 icon={<VelorouteIcon />}
                             />
                         )}

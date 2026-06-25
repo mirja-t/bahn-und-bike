@@ -1,9 +1,8 @@
 import styles from "./veloroutes.module.scss";
 import { useSelector } from "react-redux";
 import {
-    selectActiveVeloroute,
-    selectActiveVelorouteSection,
-    selectHoveredVelorouteSection,
+    selectActiveVelorouteSectionIdx,
+    selectHoveredVelorouteSectionIdx,
     selectVeloroutesLoading,
     setVelorouteSectionActiveThunk,
     type Veloroute,
@@ -17,6 +16,7 @@ import {
     selectTrainroutesAlongVeloroute,
     selectTrainroutesLoading,
 } from "../trainroutes/TrainroutesSlice";
+import { useQueryCache } from "@/api/useQueryCache";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -69,9 +69,13 @@ const TrainstationVelorouteConnection = ({
 
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const hoveredVelorouteSection = useSelector(selectHoveredVelorouteSection);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const { activeVeloroute } = useQueryCache();
+    const hoveredVelorouteSectionIdx = useSelector(
+        selectHoveredVelorouteSectionIdx,
+    );
+    const activeVelorouteSectionIdx = useSelector(
+        selectActiveVelorouteSectionIdx,
+    );
     const activeVelorouteSection =
         activeVelorouteSectionIdx !== null && activeVeloroute
             ? activeVeloroute.route[activeVelorouteSectionIdx]
@@ -104,7 +108,7 @@ export const Veloroutes = () => {
                         path={path}
                         active={
                             idx === activeVelorouteSectionIdx ||
-                            idx === hoveredVelorouteSection
+                            idx === hoveredVelorouteSectionIdx
                         }
                         onClick={handleSectionClick}
                         className={styles.current}

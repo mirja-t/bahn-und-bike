@@ -50,8 +50,6 @@ export interface TrainroutesState {
     isDirect: boolean;
     travelInterval: number;
     travelDuration: number;
-    trainstops: number[];
-    currentTrainroutes: CurrentTrainroutes;
     trainroutesLoading: boolean;
     trainroutesError: boolean;
     activeSpot: Trainstop | null;
@@ -60,7 +58,6 @@ export interface TrainroutesState {
     trainroutesAlongVeloroute: CurrentTrainroute[];
     trainroutesAlongVelorouteLoading: boolean;
     trainroutesAlongVelorouteError: boolean;
-    maxDistToNextStation: number;
     trainlineNames?: string[];
 }
 
@@ -71,8 +68,6 @@ export const trainroutesSlice = createSlice({
         isDirect: true,
         travelInterval: 30,
         travelDuration: 0,
-        trainstops: [],
-        currentTrainroutes: [],
         trainroutesLoading: false,
         trainroutesError: false,
         activeSpot: null,
@@ -81,12 +76,8 @@ export const trainroutesSlice = createSlice({
         trainroutesAlongVeloroute: [],
         trainroutesAlongVelorouteLoading: false,
         trainroutesAlongVelorouteError: false,
-        maxDistToNextStation: 2, // in km, default value, can be changed by user in VelorouteDetails
     } as TrainroutesState,
     reducers: {
-        setTrainstops: (state, action: { payload: number[] }) => {
-            state.trainstops = action.payload;
-        },
         setActiveSpot: (state, action: { payload: Trainstop | null }) => {
             state.activeSpot = action.payload;
         },
@@ -146,8 +137,6 @@ export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectIsDirect = (state: RootState) => state.trainroutes.isDirect;
 export const selectTrainTravelDuration = (state: RootState) =>
     state.trainroutes.travelDuration;
-export const selectCurrentTrainroutes = (state: RootState) =>
-    state.trainroutes.currentTrainroutes;
 export const selectTrainroutesLoading = (state: RootState) =>
     state.trainroutes.trainroutesLoading ||
     state.trainroutes.trainroutesAlongVelorouteLoading;
@@ -160,7 +149,6 @@ export const {
     setStartPos,
     setIsDirect,
     setTrainTravelDuration,
-    setTrainstops,
     setTrainroutesLoading,
     setTrainroutesError,
 } = trainroutesSlice.actions;

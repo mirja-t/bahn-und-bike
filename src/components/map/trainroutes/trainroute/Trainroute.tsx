@@ -4,8 +4,8 @@ import {
     type CurrentTrainroute,
 } from "../TrainroutesSlice";
 import {
-    setActiveVeloroute,
-    setActiveVelorouteSection,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
 } from "../../veloroutes/VeloroutesSlice";
 import { Trainstop } from "../trainstop/Trainstop";
 import {
@@ -26,8 +26,8 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
 
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
         dispatch(setTrainroutesAlongVeloroute([]));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveSection(line));
         dispatch(setActiveTab("veloroutes"));
     };
