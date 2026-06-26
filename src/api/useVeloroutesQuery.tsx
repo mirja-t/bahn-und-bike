@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
-import type { VelorouteListItem } from "@/components/map/veloroutes/VeloroutesSlice";
+import { type VelorouteListItem } from "@/components/map/veloroutes/VeloroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
 import { useTrainroutesQuery } from "./useTrainroutesQuery";
+import { useSelector } from "react-redux";
+import { selectActiveSectionId } from "@/components/map/trainroutes/TrainroutesSlice";
 
 type QueryParams = {
     stationIds: number[];
@@ -32,11 +34,17 @@ const fetchVeloroutes = async (
 export function useVeloroutesQuery(): UseQueryResult<VelorouteListItem[]> {
     const { data } = useTrainroutesQuery();
     const trainstops = data?.trainstops || [];
-
+    const activeTrainrouteId = useSelector(selectActiveSectionId);
+    const activeTrainroute = data?.currentTrainroutes.find(
+        (section) => section.id === activeTrainrouteId,
+    );
+    const filteredTrainstops = activeTrainroute
+        ? activeTrainroute.routestops.map((stop) => stop.station_id)
+        : trainstops;
     return useQuery({
-        queryKey: ["veloroutes", trainstops],
-        queryFn: () => fetchVeloroutes({ stationIds: trainstops }),
-        enabled: trainstops.length > 0,
+        queryKey: ["veloroutes", filteredTrainstops],
+        queryFn: () => fetchVeloroutes({ stationIds: filteredTrainstops }),
+        enabled: filteredTrainstops.length > 0,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });
