@@ -7,6 +7,7 @@ import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDeta
 import {
     setActiveSectionId,
     setIsDirect,
+    setStartPos,
     setTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
@@ -65,6 +66,7 @@ export const Container = () => {
         e: React.SubmitEvent,
         value: number,
         direct = true,
+        startDestination: number,
     ) => {
         e.preventDefault();
         prevValue.current = value;
@@ -76,6 +78,7 @@ export const Container = () => {
         dispatch(setTrainTravelDuration(value));
         dispatch(setUserScale("reset"));
         dispatch(setSubmitValue(value));
+        dispatch(setStartPos(startDestination));
     };
 
     const handleTrainrouteSelect = () => {
