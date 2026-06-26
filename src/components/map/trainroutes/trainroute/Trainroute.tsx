@@ -1,8 +1,4 @@
-import {
-    setActiveSection,
-    setTrainroutesAlongVeloroute,
-    type CurrentTrainroute,
-} from "../TrainroutesSlice";
+import { setActiveSection, type CurrentTrainroute } from "../TrainroutesSlice";
 import {
     setActiveVelorouteId,
     setActiveVelorouteSectionIdx,
@@ -25,7 +21,6 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
     const appZoom = useSelector(selectAppZoom);
 
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
-        dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveSection(line));

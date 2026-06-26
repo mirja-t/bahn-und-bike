@@ -9,10 +9,8 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    selectTrainrouteListLoading,
     setActiveSection,
     setPreviewSection,
-    setTrainroutesAlongVeloroute,
     selectTrainTravelDuration,
     selectIsDirect,
     selectStartPos,
@@ -28,16 +26,16 @@ interface TrainlineDetailsProps {
 export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
-    const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
     const startPos = useSelector(selectStartPos);
     const isDirect = useSelector(selectIsDirect);
     const travelDuration = useSelector(selectTrainTravelDuration);
 
-    const { data: trainroutesQueryData } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
+        useTrainroutesQuery({
+            start: startPos,
+            value: travelDuration,
+            direct: isDirect,
+        });
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
     const dispatch = useAppDispatch();
@@ -58,7 +56,6 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     };
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
-        dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         // Clear any hover preview when a route is explicitly selected
@@ -73,10 +70,11 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
         <div id="trainline-details">
             <div id="trainline" className="details">
                 <section className="section">
-                    {currentTrainroutes?.length < 1 &&
-                        !trainlineListIsLoading && <p>{`${t("nomatch")}`}</p>}
+                    {currentTrainroutes?.length < 1 && !trainroutesLoading && (
+                        <p>{`${t("nomatch")}`}</p>
+                    )}
                     <ItemList
-                        loading={trainlineListIsLoading}
+                        loading={trainroutesLoading}
                         items={currentTrainroutes}
                         activeId={activeSection?.id}
                         onClick={handleTrainrouteClick}

@@ -73,9 +73,6 @@ export const trainroutesSlice = createSlice({
         activeSpot: null,
         activeSection: null,
         previewSection: null,
-        trainroutesAlongVeloroute: [],
-        trainroutesAlongVelorouteLoading: false,
-        trainroutesAlongVelorouteError: false,
     } as TrainroutesState,
     reducers: {
         setActiveSpot: (state, action: { payload: Trainstop | null }) => {
@@ -127,12 +124,6 @@ export const selectActiveSection = (state: RootState) =>
     state.trainroutes.activeSection;
 export const selectPreviewSection = (state: RootState) =>
     state.trainroutes.previewSection;
-export const selectTrainroutesAlongVeloroute = (state: RootState) =>
-    state.trainroutes.trainroutesAlongVeloroute;
-export const selectTrainrouteListLoading = (state: RootState) =>
-    state.trainroutes.trainroutesLoading;
-export const selectTrainroutesAlongVelorouteLoading = (state: RootState) =>
-    state.trainroutes.trainroutesAlongVelorouteLoading;
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectIsDirect = (state: RootState) => state.trainroutes.isDirect;
 export const selectTrainTravelDuration = (state: RootState) =>
@@ -145,7 +136,6 @@ export const {
     setActiveSpot,
     setActiveSection,
     setPreviewSection,
-    setTrainroutesAlongVeloroute,
     setStartPos,
     setIsDirect,
     setTrainTravelDuration,

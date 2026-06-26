@@ -6,21 +6,27 @@ import {
     type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesSlice";
 import { useEffect, useState } from "react";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
 import { useQueryCache } from "@/api/useQueryCache";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
+import { selectStartPos } from "../map/trainroutes/TrainroutesSlice";
 
 export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { activeVelorouteSection } = useQueryCache();
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const trainlinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
-    const [startStation, endStation] = trainlinesAlongVeloroute;
+    const startPos = useSelector(selectStartPos);
+    const { data: trainlinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery({
+            startdestination: startPos,
+            startId: activeVelorouteSection?.leg[0]?.trainstop ?? null,
+            endId: activeVelorouteSection?.leg.at(-1)?.trainstop ?? null,
+        });
+    const startStation = trainlinesAlongVeloroute?.at(0) ?? null;
+    const endStation = trainlinesAlongVeloroute?.at(1) ?? null;
     const [startVeloStop, endVeloStop] = [
         activeVelorouteSection?.leg.at(0) || null,
         activeVelorouteSection?.leg.at(-1) || null,

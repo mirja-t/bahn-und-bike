@@ -11,9 +11,8 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    selectTrainroutesAlongVeloroute,
+    selectStartPos,
     setActiveSpot,
-    setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
     type ResponseTrainLine,
     type Trainstop,
@@ -31,6 +30,7 @@ import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 import { useQueryCache } from "@/api/useQueryCache";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -141,28 +141,35 @@ export const DestinationDetails = () => {
     const dispatch = useAppDispatch();
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeSection = useSelector(selectActiveSection);
-    const trainLinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
-    const { trainstops } = useQueryCache();
+    const { trainstops, activeVelorouteSection } = useQueryCache();
     const { data: veloroutes } = useVeloroutesQuery({
         stationIds: trainstops || [],
     });
 
     const setVelorouteId = (vroute: VelorouteListItem) => {
         if (vroute !== undefined) {
-            dispatch(setTrainroutesAlongVeloroute([]));
             dispatch(setActiveVelorouteSectionIdx(null));
             dispatch(setActiveVelorouteId(vroute.id));
         }
     };
+    const velorouteSectionStartId =
+        activeVelorouteSection?.leg[0]?.trainstop ?? null;
+    const velorouteSectionEndId =
+        activeVelorouteSection?.leg.at(-1)?.trainstop ?? null;
+    const startPos = useSelector(selectStartPos);
+    const { data: trainLinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery({
+            startdestination: startPos,
+            startId: velorouteSectionStartId,
+            endId: velorouteSectionEndId,
+        });
 
     return (
         <div id="destination-details">
             <div id="destination" className="details">
                 <div className="train-details">
                     {activeSection && <Section section={activeSection} />}
-                    {trainLinesAlongVeloroute.length > 0 &&
+                    {trainLinesAlongVeloroute &&
                         trainLinesAlongVeloroute.map((trainline) => (
                             <Fragment key={trainline.id}>
                                 <Section section={trainline} />

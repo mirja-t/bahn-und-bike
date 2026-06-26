@@ -6,7 +6,6 @@ import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
     setActiveSection,
-    setTrainroutesAlongVeloroute,
     selectStartPos,
     setTrainroutesLoading,
     setTrainroutesError,
@@ -83,7 +82,6 @@ export const Container = () => {
             dispatch(setActiveSection(null));
             dispatch(setActiveVelorouteId(null));
             dispatch(setActiveVelorouteSectionIdx(null));
-            dispatch(setTrainroutesAlongVeloroute([]));
         }
         dispatch(setActiveTab(tabId));
     };
@@ -98,7 +96,6 @@ export const Container = () => {
         dispatch(setActiveSection(null));
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
-        dispatch(setTrainroutesAlongVeloroute([]));
         dispatch(setActiveTab("trainlines"));
         dispatch(setIsDirect(direct));
         dispatch(setTrainTravelDuration(value));

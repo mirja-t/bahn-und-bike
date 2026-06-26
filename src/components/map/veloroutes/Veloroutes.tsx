@@ -13,10 +13,11 @@ import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
 import {
-    selectTrainroutesAlongVeloroute,
+    selectStartPos,
     selectTrainroutesLoading,
 } from "../trainroutes/TrainroutesSlice";
 import { useQueryCache } from "@/api/useQueryCache";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -76,26 +77,27 @@ export const Veloroutes = () => {
     const activeVelorouteSectionIdx = useSelector(
         selectActiveVelorouteSectionIdx,
     );
-    const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute
-            ? activeVeloroute.route[activeVelorouteSectionIdx]
-            : null;
+    const handleSectionClick = (_: string, idx: number) => {
+        dispatch(setActiveTab("leg"));
+        dispatch(setVelorouteSectionActiveThunk(idx));
+    };
+
+    const startPos = useSelector(selectStartPos);
+    const { activeVelorouteSection } = useQueryCache();
+    const { data: trainlinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery({
+            startdestination: startPos,
+            startId: activeVelorouteSection?.leg[0]?.trainstop ?? null,
+            endId: activeVelorouteSection?.leg.at(-1)?.trainstop ?? null,
+        });
+    const firstStop = trainlinesAlongVeloroute?.[0] ?? null;
+    const lastStop = trainlinesAlongVeloroute?.[1] ?? null;
     const activeVRouteStops = {
         start: activeVelorouteSection ? activeVelorouteSection.leg[0] : null,
         end: activeVelorouteSection
             ? activeVelorouteSection.leg[activeVelorouteSection.leg.length - 1]
             : null,
     };
-
-    const handleSectionClick = (_: string, idx: number) => {
-        dispatch(setActiveTab("leg"));
-        dispatch(setVelorouteSectionActiveThunk(idx));
-    };
-
-    const trainlinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
-    const [firstStop, lastStop] = trainlinesAlongVeloroute;
 
     return (
         <g className={styles.veloroute}>
@@ -117,20 +119,24 @@ export const Veloroutes = () => {
             {activeVelorouteSection &&
                 activeVelorouteSection.leg[0].trainstop && (
                     <>
-                        <TrainstationVelorouteConnection
-                            trainstopCoordinates={firstStop?.firstStation}
-                            velorouteCoordinate={{
-                                x: activeVelorouteSection.leg[0].x,
-                                y: activeVelorouteSection.leg[0].y,
-                            }}
-                        />
-                        <TrainstationVelorouteConnection
-                            trainstopCoordinates={lastStop?.firstStation}
-                            velorouteCoordinate={{
-                                x: activeVelorouteSection.leg.at(-1)?.x,
-                                y: activeVelorouteSection.leg.at(-1)?.y,
-                            }}
-                        />
+                        {firstStop && (
+                            <TrainstationVelorouteConnection
+                                trainstopCoordinates={firstStop.firstStation}
+                                velorouteCoordinate={{
+                                    x: activeVelorouteSection.leg[0].x,
+                                    y: activeVelorouteSection.leg[0].y,
+                                }}
+                            />
+                        )}
+                        {lastStop && (
+                            <TrainstationVelorouteConnection
+                                trainstopCoordinates={lastStop.firstStation}
+                                velorouteCoordinate={{
+                                    x: activeVelorouteSection.leg.at(-1)?.x,
+                                    y: activeVelorouteSection.leg.at(-1)?.y,
+                                }}
+                            />
+                        )}
                     </>
                 )}
 

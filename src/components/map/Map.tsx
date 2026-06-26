@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
 import {
-    selectTrainrouteListLoading,
     selectStartPos,
     selectIsDirect,
     selectTrainTravelDuration,
@@ -35,7 +34,6 @@ export const Map = ({ value }: MapProps) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const wrapperSize = useResponsiveSize(mapWrapperEl);
     const resetKey = useSelector(selectResetKey);
-    const isLoading = useSelector(selectTrainrouteListLoading);
     const veloroutesLoading = useSelector(selectVeloroutesLoading);
     const appZoom = useSelector(selectAppZoom);
     const dispatch = useAppDispatch();
@@ -63,7 +61,12 @@ export const Map = ({ value }: MapProps) => {
         setCachedOffset({ x: 0, y: 0 });
     };
 
-    const zoom = useZoom(currentTrainroutes, Number(value), isLoading);
+    const { isLoading: trainroutesLoading } = useTrainroutesQuery({
+        start: startPos,
+        value: travelDuration,
+        direct: isDirect,
+    });
+    const zoom = useZoom(currentTrainroutes, Number(value), trainroutesLoading);
     const containerRatio =
         wrapperSize.width > 0 && wrapperSize.height > 0
             ? zoom.ratio / (wrapperSize.width / wrapperSize.height)
@@ -97,7 +100,7 @@ export const Map = ({ value }: MapProps) => {
     return (
         <div ref={setMapWrapperEl} className={styles.mapWrapper}>
             <AnimatePresence>
-                {(isLoading || veloroutesLoading) && (
+                {(trainroutesLoading || veloroutesLoading) && (
                     <motion.div className={styles.loading}>
                         <Loading />
                     </motion.div>
@@ -132,7 +135,7 @@ export const Map = ({ value }: MapProps) => {
                                     transform: `translate(${offset.x * 100}%, ${offset.y * 100}%)`,
                                 }}
                             >
-                                {!isLoading && <Trainroutes />}
+                                {!trainroutesLoading && <Trainroutes />}
                                 <Germany />
                             </div>
                         </div>
