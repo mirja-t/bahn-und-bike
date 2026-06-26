@@ -9,7 +9,6 @@ import {
 import { headers, VITE_API_URL } from "@/config/config";
 import { convertVelorouteStops, makeVeloRoute } from "@/utils/makeVeloRoute";
 import { useSelector } from "react-redux";
-import { selectActiveSectionId } from "@/components/map/trainroutes/TrainroutesSlice";
 import { useTrainroutesQuery } from "./useTrainroutesQuery";
 
 type QueryParams = {
@@ -40,21 +39,15 @@ const fetchVeloroute = async (queryParams: QueryParams) => {
 export function useVelorouteQuery(): UseQueryResult<Veloroute | null> {
     const id = useSelector(selectActiveVelorouteId);
     const maxDistToNextStation = useSelector(selectMaxDistToNextStation);
-    const activeTrainSectionId = useSelector(selectActiveSectionId);
     const { data: trainroutesData } = useTrainroutesQuery();
-    const currentTrainroutes = trainroutesData?.currentTrainroutes || [];
-    const activeTrainSection = currentTrainroutes.find(
-        (section) => section.id === activeTrainSectionId,
-    );
-    const activeTrainstops =
-        activeTrainSection?.routestops.map((stop) => stop.station_id) || [];
+    const trainstops = trainroutesData?.trainstops || [];
     return useQuery({
-        queryKey: ["veloroute", id, activeTrainstops, maxDistToNextStation],
+        queryKey: ["veloroute", id, trainstops, maxDistToNextStation],
         queryFn: () =>
             id
                 ? fetchVeloroute({
                       id,
-                      trainstops: activeTrainstops,
+                      trainstops,
                       maxDistToNextStation,
                   })
                 : null,
