@@ -33,9 +33,9 @@ export const Map = ({ value }: MapProps) => {
     const dispatch = useAppDispatch();
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [cachedOffset, setCachedOffset] = useState({ x: 0, y: 0 });
-    const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
+    const { data: trainroutesQueryData, isFetching: trainroutesLoading } =
         useTrainroutesQuery();
-    const { isLoading: veloroutesLoading } = useVeloroutesQuery();
+    const { isFetching: veloroutesLoading } = useVeloroutesQuery();
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
     const handleMapZoom = (dir: "+" | "-") => {
