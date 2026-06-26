@@ -11,7 +11,6 @@ import {
 } from "../map/veloroutes/VeloroutesSlice";
 import {
     selectActiveSection,
-    selectStartPos,
     setActiveSpot,
     type CurrentTrainroute,
     type ResponseTrainLine,
@@ -29,7 +28,6 @@ import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
-import { useQueryCache } from "@/api/useQueryCache";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 interface SectionProps {
     section: CurrentTrainroute;
@@ -141,10 +139,7 @@ export const DestinationDetails = () => {
     const dispatch = useAppDispatch();
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeSection = useSelector(selectActiveSection);
-    const { trainstops, activeVelorouteSection } = useQueryCache();
-    const { data: veloroutes } = useVeloroutesQuery({
-        stationIds: trainstops || [],
-    });
+    const { data: veloroutes } = useVeloroutesQuery();
 
     const setVelorouteId = (vroute: VelorouteListItem) => {
         if (vroute !== undefined) {
@@ -152,17 +147,8 @@ export const DestinationDetails = () => {
             dispatch(setActiveVelorouteId(vroute.id));
         }
     };
-    const velorouteSectionStartId =
-        activeVelorouteSection?.leg[0]?.trainstop ?? null;
-    const velorouteSectionEndId =
-        activeVelorouteSection?.leg.at(-1)?.trainstop ?? null;
-    const startPos = useSelector(selectStartPos);
     const { data: trainLinesAlongVeloroute } =
-        useTrainroutesAlongVelorouteSectionQuery({
-            startdestination: startPos,
-            startId: velorouteSectionStartId,
-            endId: velorouteSectionEndId,
-        });
+        useTrainroutesAlongVelorouteSectionQuery();
 
     return (
         <div id="destination-details">

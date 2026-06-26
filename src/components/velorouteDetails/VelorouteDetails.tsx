@@ -17,7 +17,7 @@ import {
     setMaxDistToNextStation,
 } from "../map/veloroutes/VeloroutesSlice";
 import { Box } from "../stateless/box/Box";
-import { useQueryCache } from "@/api/useQueryCache";
+import { useVelorouteQuery } from "@/api/useVelorouteQuery";
 
 export const VelorouteDetails = () => {
     const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ export const VelorouteDetails = () => {
     const activeVelorouteSectionIdx = useSelector(
         selectActiveVelorouteSectionIdx,
     );
-    const { activeVeloroute } = useQueryCache();
+    const { data: activeVeloroute } = useVelorouteQuery();
     const activeVelorouteSection =
         activeVelorouteSectionIdx !== null && activeVeloroute
             ? activeVeloroute.route[activeVelorouteSectionIdx]

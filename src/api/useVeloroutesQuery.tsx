@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { VelorouteListItem } from "@/components/map/veloroutes/VeloroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
+import { useTrainroutesQuery } from "./useTrainroutesQuery";
 
 type QueryParams = {
     stationIds: number[];
@@ -28,14 +29,14 @@ const fetchVeloroutes = async (
     return veloroutes;
 };
 
-export function useVeloroutesQuery(
-    queryParams: VeloroutesQueryParamsType,
-): UseQueryResult<VelorouteListItem[]> {
-    const stationIds = queryParams?.stationIds;
+export function useVeloroutesQuery(): UseQueryResult<VelorouteListItem[]> {
+    const { data } = useTrainroutesQuery();
+    const trainstops = data?.trainstops || [];
+
     return useQuery({
-        queryKey: ["veloroutes", stationIds],
-        queryFn: () => fetchVeloroutes(queryParams),
-        enabled: queryParams !== null && !!stationIds?.length,
+        queryKey: ["veloroutes", trainstops],
+        queryFn: () => fetchVeloroutes({ stationIds: trainstops }),
+        enabled: trainstops.length > 0,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });

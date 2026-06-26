@@ -9,22 +9,17 @@ import { ItemList } from "../stateless/itemlist/ItemList";
 import { useEffect, useState } from "react";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
-import { useQueryCache } from "@/api/useQueryCache";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
-import { selectStartPos } from "../map/trainroutes/TrainroutesSlice";
+import { useVelorouteQuery } from "@/api/useVelorouteQuery";
 
 export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { activeVelorouteSection } = useQueryCache();
+    const { data: activeVeloroute } = useVelorouteQuery();
+    const activeVelorouteSection = activeVeloroute?.route[0] || null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const startPos = useSelector(selectStartPos);
     const { data: trainlinesAlongVeloroute } =
-        useTrainroutesAlongVelorouteSectionQuery({
-            startdestination: startPos,
-            startId: activeVelorouteSection?.leg[0]?.trainstop ?? null,
-            endId: activeVelorouteSection?.leg.at(-1)?.trainstop ?? null,
-        });
+        useTrainroutesAlongVelorouteSectionQuery();
     const startStation = trainlinesAlongVeloroute?.at(0) ?? null;
     const endStation = trainlinesAlongVeloroute?.at(1) ?? null;
     const [startVeloStop, endVeloStop] = [

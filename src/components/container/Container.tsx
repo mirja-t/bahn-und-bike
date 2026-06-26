@@ -35,7 +35,7 @@ import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
-import { useQueryCache } from "@/api/useQueryCache";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
@@ -46,7 +46,7 @@ export const Container = () => {
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
     const { t } = useTranslation();
-    const { veloroutes } = useQueryCache();
+    const { data: veloroutes } = useVeloroutesQuery();
 
     const prevValue = useRef(0);
 

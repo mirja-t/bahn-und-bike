@@ -1,6 +1,7 @@
 import styles from "./veloroutes.module.scss";
 import { useSelector } from "react-redux";
 import {
+    selectActiveVelorouteId,
     selectActiveVelorouteSectionIdx,
     selectHoveredVelorouteSectionIdx,
     setVelorouteSectionActiveThunk,
@@ -11,11 +12,10 @@ import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
-import { selectStartPos } from "../trainroutes/TrainroutesSlice";
-import { useQueryCache } from "@/api/useQueryCache";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useVelorouteQuery } from "@/api/useVelorouteQuery";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -28,11 +28,8 @@ const TrainstationVelorouteConnection = ({
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
-    const { isLoading: trainroutesLoading, data } = useTrainroutesQuery();
-    const trainstops = data?.trainstops || [];
-    const { isLoading: veloroutesLoading } = useVeloroutesQuery({
-        stationIds: trainstops,
-    });
+    const { isLoading: trainroutesLoading } = useTrainroutesQuery();
+    const { isLoading: veloroutesLoading } = useVeloroutesQuery();
     const loading = trainroutesLoading || veloroutesLoading;
 
     if (
@@ -71,7 +68,7 @@ const TrainstationVelorouteConnection = ({
 
 export const Veloroutes = () => {
     const dispatch = useAppDispatch();
-    const { activeVeloroute } = useQueryCache();
+    const { data: activeVeloroute } = useVelorouteQuery();
     const hoveredVelorouteSectionIdx = useSelector(
         selectHoveredVelorouteSectionIdx,
     );
@@ -82,15 +79,13 @@ export const Veloroutes = () => {
         dispatch(setActiveTab("leg"));
         dispatch(setVelorouteSectionActiveThunk(idx));
     };
-
-    const startPos = useSelector(selectStartPos);
-    const { activeVelorouteSection } = useQueryCache();
+    const activeVelorouteId = useSelector(selectActiveVelorouteId);
+    const activeVelorouteSection =
+        activeVelorouteSectionIdx !== null && activeVelorouteId !== null
+            ? activeVeloroute?.route[activeVelorouteSectionIdx]
+            : null;
     const { data: trainlinesAlongVeloroute } =
-        useTrainroutesAlongVelorouteSectionQuery({
-            startdestination: startPos,
-            startId: activeVelorouteSection?.leg[0]?.trainstop ?? null,
-            endId: activeVelorouteSection?.leg.at(-1)?.trainstop ?? null,
-        });
+        useTrainroutesAlongVelorouteSectionQuery();
     const firstStop = trainlinesAlongVeloroute?.[0] ?? null;
     const lastStop = trainlinesAlongVeloroute?.[1] ?? null;
     const activeVRouteStops = {

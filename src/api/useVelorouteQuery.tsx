@@ -1,20 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
-import type {
-    Veloroute,
-    VeloroutesResponseStop,
+import {
+    selectActiveVelorouteId,
+    selectMaxDistToNextStation,
+    type Veloroute,
+    type VeloroutesResponseStop,
 } from "@/components/map/veloroutes/VeloroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
 import { convertVelorouteStops, makeVeloRoute } from "@/utils/makeVeloRoute";
+import { useSelector } from "react-redux";
+import { selectActiveSection } from "@/components/map/trainroutes/TrainroutesSlice";
 
 type QueryParams = {
     id: string | null;
     trainstops: number[];
     maxDistToNextStation: number;
 };
-export type VelorouteQueryParamsType = QueryParams | null;
 
-const fetchVeloroute = async (queryParams: VelorouteQueryParamsType) => {
+const fetchVeloroute = async (queryParams: QueryParams) => {
     if (!queryParams?.id) throw new Error("Missing query params");
     const { id, trainstops, maxDistToNextStation } = queryParams;
     const responseStops: VeloroutesResponseStop[] = await fetch(
@@ -33,15 +36,22 @@ const fetchVeloroute = async (queryParams: VelorouteQueryParamsType) => {
     );
 };
 
-export function useVelorouteQuery(
-    queryParams: VelorouteQueryParamsType,
-): UseQueryResult<Veloroute | null> {
-    const id = queryParams?.id;
-    const trainstops = queryParams?.trainstops;
-    const maxDistToNextStation = queryParams?.maxDistToNextStation;
+export function useVelorouteQuery(): UseQueryResult<Veloroute | null> {
+    const id = useSelector(selectActiveVelorouteId);
+    const maxDistToNextStation = useSelector(selectMaxDistToNextStation);
+    const activeTrainSection = useSelector(selectActiveSection);
+    const activeTrainstops =
+        activeTrainSection?.routestops.map((stop) => stop.station_id) || [];
     return useQuery({
-        queryKey: ["veloroute", id, trainstops, maxDistToNextStation],
-        queryFn: () => (id ? fetchVeloroute(queryParams) : null),
+        queryKey: ["veloroute", id, activeTrainstops, maxDistToNextStation],
+        queryFn: () =>
+            id
+                ? fetchVeloroute({
+                      id,
+                      trainstops: activeTrainstops,
+                      maxDistToNextStation,
+                  })
+                : null,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });

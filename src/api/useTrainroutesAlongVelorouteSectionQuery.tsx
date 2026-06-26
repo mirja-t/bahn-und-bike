@@ -1,21 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
-import type {
-    CurrentTrainroute,
-    CurrentTrainroutes,
+import {
+    selectStartPos,
+    type CurrentTrainroute,
+    type CurrentTrainroutes,
 } from "@/components/map/trainroutes/TrainroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
 import { createNewRoute } from "@/utils/createNewRoute";
+import { useSelector } from "react-redux";
+import { useVelorouteQuery } from "./useVelorouteQuery";
 
 type QueryParams = {
     startdestination: number;
     startId: number | null;
     endId: number | null;
 };
-export type TrainroutesAlongVelorouteSectionParamsType = QueryParams | null;
 
 const fetchTrainroutesAlongVelorouteSection = async (
-    queryParams: TrainroutesAlongVelorouteSectionParamsType,
+    queryParams: QueryParams,
 ): Promise<CurrentTrainroutes> => {
     if (!queryParams?.startdestination) throw new Error("Missing query params");
     const { startdestination, startId, endId } = queryParams;
@@ -40,19 +42,25 @@ const fetchTrainroutesAlongVelorouteSection = async (
     return connections;
 };
 
-export function useTrainroutesAlongVelorouteSectionQuery(
-    queryParams: TrainroutesAlongVelorouteSectionParamsType,
-): UseQueryResult<CurrentTrainroutes> {
-    const { startdestination, startId, endId } = queryParams ?? {};
+export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<CurrentTrainroutes> {
+    const startPos = useSelector(selectStartPos);
+    const { data: activeVelorouteData } = useVelorouteQuery();
+    const startId = activeVelorouteData?.route[0]?.leg[0]?.trainstop ?? null;
+    const endId = activeVelorouteData?.route[0]?.leg[1]?.trainstop ?? null;
     return useQuery({
         queryKey: [
             "trainroutesAlongVelorouteSection",
-            startdestination,
+            startPos,
             startId,
             endId,
         ],
-        queryFn: () => fetchTrainroutesAlongVelorouteSection(queryParams),
-        enabled: queryParams !== null && !!startdestination,
+        queryFn: () =>
+            fetchTrainroutesAlongVelorouteSection({
+                startdestination: startPos,
+                startId,
+                endId,
+            }),
+        enabled: !!startPos && !!startId && !!endId,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });
