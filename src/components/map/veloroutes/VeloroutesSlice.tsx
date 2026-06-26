@@ -57,14 +57,10 @@ export const setVelorouteSectionActiveThunk = (idx: number) => {
 };
 
 export interface VeloroutesState {
-    velorouteListIsLoading: boolean;
     activeVelorouteId: string | null;
     activeVelorouteSectionIdx: number | null;
     hoveredVelorouteSectionIdx: number | null;
     activeVelorouteStop: VelorouteStop | null;
-    velorouteIsLoading: boolean;
-    velorouteHasError: boolean;
-    veloroutesHasError: boolean;
     maxDistToNextStation: number;
 }
 /**
@@ -78,11 +74,7 @@ export interface VeloroutesState {
 export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
-        velorouteListIsLoading: false,
-        veloroutesHasError: false,
         activeVelorouteId: null,
-        velorouteIsLoading: false,
-        velorouteHasError: false,
         activeVelorouteSectionIdx: null,
         hoveredVelorouteSectionIdx: null,
         activeVelorouteStop: null,
@@ -122,9 +114,6 @@ export const selectActiveVelorouteSectionIdx = (state: RootState) =>
     state.veloroutes.activeVelorouteSectionIdx;
 export const selectActiveVelorouteStop = (state: RootState) =>
     state.veloroutes.activeVelorouteStop;
-export const selectVeloroutesLoading = (state: RootState) =>
-    state.veloroutes.velorouteIsLoading ||
-    state.veloroutes.velorouteListIsLoading;
 export const selectHoveredVelorouteSectionIdx = (state: RootState) =>
     state.veloroutes.hoveredVelorouteSectionIdx;
 export const selectMaxDistToNextStation = (state: RootState) =>

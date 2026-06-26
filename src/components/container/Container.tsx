@@ -1,5 +1,5 @@
 import styles from "./container.module.scss";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
@@ -7,8 +7,6 @@ import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDeta
 import {
     setActiveSection,
     selectStartPos,
-    setTrainroutesLoading,
-    setTrainroutesError,
     setIsDirect,
     setTrainTravelDuration,
     selectIsDirect,
@@ -58,24 +56,11 @@ export const Container = () => {
 
     const prevValue = useRef(0);
 
-    const {
-        data: trainroutesQueryData,
-        isLoading,
-        isFetching,
-        isError,
-    } = useTrainroutesQuery({
+    const { data: trainroutesQueryData, isLoading } = useTrainroutesQuery({
         start: startPos,
         value: travelDuration,
         direct: isDirect,
     });
-
-    useEffect(() => {
-        dispatch(setTrainroutesLoading(isFetching));
-    }, [isFetching, dispatch]);
-
-    useEffect(() => {
-        dispatch(setTrainroutesError(isError));
-    }, [isError, dispatch]);
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import {
     selectActiveVelorouteSectionIdx,
     selectHoveredVelorouteSectionIdx,
-    selectVeloroutesLoading,
     setVelorouteSectionActiveThunk,
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
@@ -13,11 +12,14 @@ import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
 import {
+    selectIsDirect,
     selectStartPos,
-    selectTrainroutesLoading,
+    selectTrainTravelDuration,
 } from "../trainroutes/TrainroutesSlice";
 import { useQueryCache } from "@/api/useQueryCache";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -30,8 +32,18 @@ const TrainstationVelorouteConnection = ({
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
-    const trainroutesLoading = useSelector(selectTrainroutesLoading);
-    const veloroutesLoading = useSelector(selectVeloroutesLoading);
+    const startPos = useSelector(selectStartPos);
+    const travelDuration = useSelector(selectTrainTravelDuration);
+    const isDirect = useSelector(selectIsDirect);
+    const { isLoading: trainroutesLoading, data } = useTrainroutesQuery({
+        start: startPos,
+        value: travelDuration,
+        direct: isDirect,
+    });
+    const trainstops = data?.trainstops || [];
+    const { isLoading: veloroutesLoading } = useVeloroutesQuery({
+        stationIds: trainstops,
+    });
     const loading = trainroutesLoading || veloroutesLoading;
 
     if (

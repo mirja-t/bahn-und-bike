@@ -19,10 +19,10 @@ import {
     setAppScale,
     selectAppZoom,
 } from "../../AppSlice";
-import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 import { useEffect, useRef, useState } from "react";
 import { useResponsiveSize } from "../../hooks/useResponsiveSize";
 import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 
 interface MapProps {
     value: number;
@@ -34,7 +34,6 @@ export const Map = ({ value }: MapProps) => {
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const wrapperSize = useResponsiveSize(mapWrapperEl);
     const resetKey = useSelector(selectResetKey);
-    const veloroutesLoading = useSelector(selectVeloroutesLoading);
     const appZoom = useSelector(selectAppZoom);
     const dispatch = useAppDispatch();
     const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -46,6 +45,10 @@ export const Map = ({ value }: MapProps) => {
         start: startPos,
         value: travelDuration,
         direct: isDirect,
+    });
+    const trainstops = trainroutesQueryData?.trainstops || [];
+    const { isLoading: veloroutesLoading } = useVeloroutesQuery({
+        stationIds: trainstops,
     });
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
