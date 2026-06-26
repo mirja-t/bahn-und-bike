@@ -2,11 +2,6 @@ import styles from "./map.module.scss";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
-import {
-    selectStartPos,
-    selectIsDirect,
-    selectTrainTravelDuration,
-} from "./trainroutes/TrainroutesSlice";
 import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
 import { AnimatePresence, motion } from "framer-motion";
@@ -38,14 +33,8 @@ export const Map = ({ value }: MapProps) => {
     const dispatch = useAppDispatch();
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [cachedOffset, setCachedOffset] = useState({ x: 0, y: 0 });
-    const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
-    const { data: trainroutesQueryData } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
+        useTrainroutesQuery();
     const trainstops = trainroutesQueryData?.trainstops || [];
     const { isLoading: veloroutesLoading } = useVeloroutesQuery({
         stationIds: trainstops,
@@ -64,11 +53,6 @@ export const Map = ({ value }: MapProps) => {
         setCachedOffset({ x: 0, y: 0 });
     };
 
-    const { isLoading: trainroutesLoading } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
     const zoom = useZoom(currentTrainroutes, Number(value), trainroutesLoading);
     const containerRatio =
         wrapperSize.width > 0 && wrapperSize.height > 0

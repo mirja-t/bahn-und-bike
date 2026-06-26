@@ -2,9 +2,7 @@ import { useSelector } from "react-redux";
 import { useTrainroutesQuery } from "./useTrainroutesQuery";
 import {
     selectActiveSection,
-    selectIsDirect,
     selectStartPos,
-    selectTrainTravelDuration,
 } from "@/components/map/trainroutes/TrainroutesSlice";
 import { useVelorouteQuery } from "./useVelorouteQuery";
 import {
@@ -16,13 +14,7 @@ import { useVeloroutesQuery } from "./useVeloroutesQuery";
 
 export const useQueryCache = () => {
     const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
-    const { data: trainroutesQueryData } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { data: trainroutesQueryData } = useTrainroutesQuery();
 
     const maxDistToNextStation = useSelector(selectMaxDistToNextStation);
     const activeVelorouteId = useSelector(selectActiveVelorouteId);

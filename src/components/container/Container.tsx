@@ -6,11 +6,8 @@ import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
     setActiveSection,
-    selectStartPos,
     setIsDirect,
     setTrainTravelDuration,
-    selectIsDirect,
-    selectTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
     selectActiveVelorouteId,
@@ -49,18 +46,11 @@ export const Container = () => {
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
     const { t } = useTranslation();
-    const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
     const { veloroutes } = useQueryCache();
 
     const prevValue = useRef(0);
 
-    const { data: trainroutesQueryData, isLoading } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { data: trainroutesQueryData, isLoading } = useTrainroutesQuery();
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {

@@ -11,11 +11,7 @@ import { selectAppZoom, setActiveTab, useAppDispatch } from "../../../AppSlice";
 import { VeloroutePath } from "./veloroutePath/veloroutePath";
 import { VelorouteStop } from "./velorouteStop/VelorouteStop";
 import { germanyBounds, SvgMapBuilder } from "../../../utils/svgMap";
-import {
-    selectIsDirect,
-    selectStartPos,
-    selectTrainTravelDuration,
-} from "../trainroutes/TrainroutesSlice";
+import { selectStartPos } from "../trainroutes/TrainroutesSlice";
 import { useQueryCache } from "@/api/useQueryCache";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
@@ -32,14 +28,7 @@ const TrainstationVelorouteConnection = ({
     velorouteCoordinate,
 }: TrainstationVelorouteConnectionProps) => {
     const appZoom = useSelector(selectAppZoom);
-    const startPos = useSelector(selectStartPos);
-    const travelDuration = useSelector(selectTrainTravelDuration);
-    const isDirect = useSelector(selectIsDirect);
-    const { isLoading: trainroutesLoading, data } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { isLoading: trainroutesLoading, data } = useTrainroutesQuery();
     const trainstops = data?.trainstops || [];
     const { isLoading: veloroutesLoading } = useVeloroutesQuery({
         stationIds: trainstops,

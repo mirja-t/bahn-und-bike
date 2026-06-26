@@ -6,8 +6,6 @@ import {
     selectActiveSpot,
     selectPreviewSection,
     selectStartPos,
-    selectTrainTravelDuration,
-    selectIsDirect,
 } from "./TrainroutesSlice";
 import { selectActiveVelorouteStop } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
@@ -28,13 +26,7 @@ export const Trainroutes = memo(function Trainroutes() {
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const appZoom = useSelector(selectAppZoom);
     const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
-    const { data: trainroutesQueryData } = useTrainroutesQuery({
-        start: startPos,
-        value: travelDuration,
-        direct: isDirect,
-    });
+    const { data: trainroutesQueryData } = useTrainroutesQuery();
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
     const { activeVelorouteSectionStartId, activeVelorouteSectionEndId } =
         useQueryCache();

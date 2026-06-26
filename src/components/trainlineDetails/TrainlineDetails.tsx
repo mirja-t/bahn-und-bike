@@ -11,9 +11,6 @@ import {
     selectActiveSection,
     setActiveSection,
     setPreviewSection,
-    selectTrainTravelDuration,
-    selectIsDirect,
-    selectStartPos,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
@@ -26,16 +23,9 @@ interface TrainlineDetailsProps {
 export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
     const activeSection = useSelector(selectActiveSection);
-    const startPos = useSelector(selectStartPos);
-    const isDirect = useSelector(selectIsDirect);
-    const travelDuration = useSelector(selectTrainTravelDuration);
 
     const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
-        useTrainroutesQuery({
-            start: startPos,
-            value: travelDuration,
-            direct: isDirect,
-        });
+        useTrainroutesQuery();
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
     const dispatch = useAppDispatch();
