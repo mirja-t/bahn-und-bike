@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { setActiveSection } from "../trainroutes/TrainroutesSlice";
+import { setActiveSectionId } from "../trainroutes/TrainroutesSlice";
 import type { AppDispatch, RootState } from "../../../store";
 
 export type VeloroutesResponseStop = {
@@ -52,7 +52,7 @@ export type VelorouteListItem = {
 export const setVelorouteSectionActiveThunk = (idx: number) => {
     return (dispatch: AppDispatch) => {
         dispatch(setActiveVelorouteSectionIdx(idx));
-        dispatch(setActiveSection(null));
+        dispatch(setActiveSectionId(null));
     };
 };
 

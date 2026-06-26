@@ -8,9 +8,9 @@ import {
     setActiveVelorouteSectionIdx,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
-    selectActiveSection,
-    setActiveSection,
-    setPreviewSection,
+    selectActiveSectionId,
+    setActiveSectionId,
+    setPreviewSectionId,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
@@ -22,7 +22,7 @@ interface TrainlineDetailsProps {
 }
 export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
-    const activeSection = useSelector(selectActiveSection);
+    const activeSectionId = useSelector(selectActiveSectionId);
 
     const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
         useTrainroutesQuery();
@@ -33,15 +33,15 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     useEffect(() => {
         return () => {
             // Ensure any hover preview is cleared when this component unmounts
-            dispatch(setPreviewSection(null));
+            dispatch(setPreviewSectionId(null));
         };
     }, [dispatch]);
 
     const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
         if (trainroute) {
-            dispatch(setPreviewSection(trainroute));
+            dispatch(setPreviewSectionId(trainroute.id));
         } else {
-            dispatch(setPreviewSection(null));
+            dispatch(setPreviewSectionId(null));
         }
     };
 
@@ -49,8 +49,8 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         // Clear any hover preview when a route is explicitly selected
-        dispatch(setPreviewSection(null));
-        dispatch(setActiveSection(line));
+        dispatch(setPreviewSectionId(null));
+        dispatch(setActiveSectionId(line.id));
         fn();
     };
     if (!currentTrainroutes) {
@@ -66,7 +66,7 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
                     <ItemList
                         loading={trainroutesLoading}
                         items={currentTrainroutes}
-                        activeId={activeSection?.id}
+                        activeId={activeSectionId || ""}
                         onClick={handleTrainrouteClick}
                         onHover={handleTrainrouteHover}
                         icon={<TrainIcon />}

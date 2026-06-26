@@ -51,8 +51,8 @@ export interface TrainroutesState {
     travelInterval: number;
     travelDuration: number;
     activeSpot: Trainstop | null;
-    activeSection: CurrentTrainroute | null;
-    previewSection: CurrentTrainroute | null;
+    activeSectionId: string | null;
+    previewSectionId: string | null;
     trainlineNames?: string[];
 }
 
@@ -64,28 +64,18 @@ export const trainroutesSlice = createSlice({
         travelInterval: 30,
         travelDuration: 0,
         activeSpot: null,
-        activeSection: null,
-        previewSection: null,
+        activeSectionId: null,
+        previewSectionId: null,
     } as TrainroutesState,
     reducers: {
         setActiveSpot: (state, action: { payload: Trainstop | null }) => {
             state.activeSpot = action.payload;
         },
-        setActiveSection: (
-            state,
-            action: { payload: CurrentTrainroute | null },
-        ) => {
-            state.activeSection = action.payload;
-            // When clearing the active section, also clear any preview
-            if (action.payload === null) {
-                state.previewSection = null;
-            }
+        setActiveSectionId: (state, action: { payload: string | null }) => {
+            state.activeSectionId = action.payload;
         },
-        setPreviewSection: (
-            state,
-            action: { payload: CurrentTrainroute | null },
-        ) => {
-            state.previewSection = action.payload;
+        setPreviewSectionId: (state, action: { payload: string | null }) => {
+            state.previewSectionId = action.payload;
         },
         setStartPos: (state, action: { payload: number }) => {
             state.startPos = action.payload;
@@ -101,10 +91,10 @@ export const trainroutesSlice = createSlice({
 
 export const selectActiveSpot = (state: RootState) =>
     state.trainroutes.activeSpot;
-export const selectActiveSection = (state: RootState) =>
-    state.trainroutes.activeSection;
-export const selectPreviewSection = (state: RootState) =>
-    state.trainroutes.previewSection;
+export const selectActiveSectionId = (state: RootState) =>
+    state.trainroutes.activeSectionId;
+export const selectPreviewSectionId = (state: RootState) =>
+    state.trainroutes.previewSectionId;
 export const selectStartPos = (state: RootState) => state.trainroutes.startPos;
 export const selectIsDirect = (state: RootState) => state.trainroutes.isDirect;
 export const selectTrainTravelDuration = (state: RootState) =>
@@ -112,8 +102,8 @@ export const selectTrainTravelDuration = (state: RootState) =>
 
 export const {
     setActiveSpot,
-    setActiveSection,
-    setPreviewSection,
+    setActiveSectionId,
+    setPreviewSectionId,
     setStartPos,
     setIsDirect,
     setTrainTravelDuration,

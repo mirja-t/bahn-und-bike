@@ -5,7 +5,7 @@ import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
-    setActiveSection,
+    setActiveSectionId,
     setIsDirect,
     setTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
@@ -54,7 +54,7 @@ export const Container = () => {
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
-            dispatch(setActiveSection(null));
+            dispatch(setActiveSectionId(null));
             dispatch(setActiveVelorouteId(null));
             dispatch(setActiveVelorouteSectionIdx(null));
         }
@@ -68,7 +68,7 @@ export const Container = () => {
     ) => {
         e.preventDefault();
         prevValue.current = value;
-        dispatch(setActiveSection(null));
+        dispatch(setActiveSectionId(null));
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveTab("trainlines"));

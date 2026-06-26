@@ -10,7 +10,7 @@ import {
     type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
-    selectActiveSection,
+    selectActiveSectionId,
     setActiveSpot,
     type CurrentTrainroute,
     type ResponseTrainLine,
@@ -29,6 +29,7 @@ import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -138,7 +139,12 @@ export const DestinationDetails = () => {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
-    const activeSection = useSelector(selectActiveSection);
+    const activeSectionId = useSelector(selectActiveSectionId);
+    const { data: trainroutesData } = useTrainroutesQuery();
+    const trainroutes = trainroutesData?.currentTrainroutes;
+    const activeSection = trainroutes?.find(
+        (section) => section.id === activeSectionId,
+    );
     const { data: veloroutes } = useVeloroutesQuery();
 
     const setVelorouteId = (vroute: VelorouteListItem) => {

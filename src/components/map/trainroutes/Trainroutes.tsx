@@ -2,9 +2,9 @@ import "./trainroutes.scss";
 import { memo } from "react";
 import { useSelector } from "react-redux";
 import {
-    selectActiveSection,
+    selectActiveSectionId,
     selectActiveSpot,
-    selectPreviewSection,
+    selectPreviewSectionId,
 } from "./TrainroutesSlice";
 import { selectActiveVelorouteStop } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
@@ -17,9 +17,9 @@ import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 
 export const Trainroutes = memo(function Trainroutes() {
-    const clickedSection = useSelector(selectActiveSection);
-    const hoveredSection = useSelector(selectPreviewSection);
-    const activeSection = hoveredSection || clickedSection;
+    const clickedSectionId = useSelector(selectActiveSectionId);
+    const hoveredSectionId = useSelector(selectPreviewSectionId);
+    const activeSectionId = hoveredSectionId || clickedSectionId;
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const appZoom = useSelector(selectAppZoom);
@@ -27,15 +27,18 @@ export const Trainroutes = memo(function Trainroutes() {
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
     const { data: trainlinesAlongVeloroute } =
         useTrainroutesAlongVelorouteSectionQuery();
+    const activeSection = currentTrainroutes?.find(
+        (section) => section.id === activeSectionId,
+    );
 
-    const getClassName = (item: typeof activeSection) => {
+    const getClassName = (id: typeof activeSectionId) => {
         if (
-            !activeSection &&
+            !activeSectionId &&
             !!trainlinesAlongVeloroute &&
             !trainlinesAlongVeloroute.length
         ) {
             return "init";
-        } else if (activeSection === item) {
+        } else if (activeSectionId === id) {
             return "active";
         } else {
             return "inactive";
@@ -53,7 +56,7 @@ export const Trainroutes = memo(function Trainroutes() {
             {currentTrainroutes?.map((item, idx) => (
                 <Trainroute
                     key={idx}
-                    className={getClassName(item)}
+                    className={getClassName(item.id)}
                     item={item}
                 />
             ))}

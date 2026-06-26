@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { AppDispatch, RootState } from "./store";
 import { useDispatch } from "react-redux";
 import {
-    setActiveSection,
+    setActiveSectionId,
     setTrainTravelDuration,
 } from "./components/map/trainroutes/TrainroutesSlice";
 import {
@@ -85,7 +85,7 @@ export const appSlice = createSlice({
 export const resetAppStateThunk = () => {
     return (dispatch: AppDispatch) => {
         dispatch(setTrainTravelDuration(0));
-        dispatch(setActiveSection(null));
+        dispatch(setActiveSectionId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveVelorouteId(null));
         dispatch(setAppScale(1));

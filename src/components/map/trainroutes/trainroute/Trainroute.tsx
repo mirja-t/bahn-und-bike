@@ -1,4 +1,7 @@
-import { setActiveSection, type CurrentTrainroute } from "../TrainroutesSlice";
+import {
+    setActiveSectionId,
+    type CurrentTrainroute,
+} from "../TrainroutesSlice";
 import {
     setActiveVelorouteId,
     setActiveVelorouteSectionIdx,
@@ -23,7 +26,7 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
         dispatch(setActiveVelorouteId(null));
         dispatch(setActiveVelorouteSectionIdx(null));
-        dispatch(setActiveSection(line));
+        dispatch(setActiveSectionId(line.id));
         dispatch(setActiveTab("veloroutes"));
     };
 
