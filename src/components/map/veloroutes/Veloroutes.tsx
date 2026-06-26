@@ -16,6 +16,7 @@ import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAl
 import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 import { useVelorouteQuery } from "@/api/useVelorouteQuery";
+import { setActiveSectionId } from "../trainroutes/TrainroutesSlice";
 
 interface TrainstationVelorouteConnectionProps {
     trainstopCoordinates: { lat: number; lon: number } | null;
@@ -78,6 +79,7 @@ export const Veloroutes = () => {
     const handleSectionClick = (_: string, idx: number) => {
         dispatch(setActiveTab("leg"));
         dispatch(setActiveVelorouteSectionIdx(idx));
+        dispatch(setActiveSectionId(null));
     };
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeVelorouteSection =

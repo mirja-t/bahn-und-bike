@@ -9,6 +9,7 @@ import { headers, VITE_API_URL } from "@/config/config";
 import { createNewRoute } from "@/utils/createNewRoute";
 import { useSelector } from "react-redux";
 import { useVelorouteQuery } from "./useVelorouteQuery";
+import { selectActiveVelorouteSectionIdx } from "@/components/map/veloroutes/VeloroutesSlice";
 
 type QueryParams = {
     startdestination: number;
@@ -45,8 +46,17 @@ const fetchTrainroutesAlongVelorouteSection = async (
 export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<CurrentTrainroutes> {
     const startPos = useSelector(selectStartPos);
     const { data: activeVelorouteData } = useVelorouteQuery();
-    const startId = activeVelorouteData?.route[0]?.leg[0]?.trainstop ?? null;
-    const endId = activeVelorouteData?.route[0]?.leg[1]?.trainstop ?? null;
+    const activeVelorouteSection = useSelector(selectActiveVelorouteSectionIdx);
+    const startId =
+        activeVelorouteData && activeVelorouteSection !== null
+            ? activeVelorouteData.route[activeVelorouteSection].leg.at(0)
+                  ?.trainstop
+            : null;
+    const endId =
+        activeVelorouteData && activeVelorouteSection !== null
+            ? activeVelorouteData.route[activeVelorouteSection].leg.at(-1)
+                  ?.trainstop
+            : null;
     return useQuery({
         queryKey: [
             "trainroutesAlongVelorouteSection",
@@ -57,10 +67,14 @@ export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<Curre
         queryFn: () =>
             fetchTrainroutesAlongVelorouteSection({
                 startdestination: startPos,
-                startId,
-                endId,
+                startId: startId || null,
+                endId: endId || null,
             }),
-        enabled: !!startPos && !!startId && !!endId,
+        enabled:
+            !!startPos &&
+            !!startId &&
+            !!endId &&
+            activeVelorouteSection !== null,
         keepPreviousData: true,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });
