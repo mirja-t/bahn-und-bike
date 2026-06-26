@@ -70,12 +70,7 @@ export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<Curre
                 startId: startId || null,
                 endId: endId || null,
             }),
-        enabled:
-            !!startPos &&
-            !!startId &&
-            !!endId &&
-            activeVelorouteSection !== null,
-        keepPreviousData: true,
+        enabled: !!startPos && activeVelorouteSection !== null,
         staleTime: 10 * 60 * 1000, // 10 minutes
     });
 }
