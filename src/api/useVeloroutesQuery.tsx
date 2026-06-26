@@ -13,14 +13,13 @@ const fetchVeloroutes = async (
 ): Promise<VelorouteListItem[]> => {
     if (!queryParams) throw new Error("Missing query params");
     const { stationIds } = queryParams;
-    const normalizedIds = Array.from(new Set(stationIds.filter((id) => !!id)));
-    if (normalizedIds.length === 0) return [];
+    if (stationIds.length === 0) return [];
     const veloroutes: VelorouteListItem[] = await fetch(
         `${VITE_API_URL}veloroutes`,
         {
             method: "POST",
             headers,
-            body: JSON.stringify({ trainstations: normalizedIds }),
+            body: JSON.stringify({ trainstations: stationIds }),
         },
     ).then((res) => {
         if (res.status !== 200) throw new Error("Bad Server Response");

@@ -49,11 +49,11 @@ export const useQueryCache = () => {
             ? activeVeloroute?.route[activeVelorouteSectionIdx]
             : null;
     const activeVelorouteSectionStartId =
-        !!activeVeloroute && !!activeVelorouteSectionIdx
+        activeVeloroute && activeVelorouteSectionIdx !== null
             ? activeVeloroute.route[activeVelorouteSectionIdx]?.leg[0].trainstop
             : null;
     const activeVelorouteSectionEndId =
-        !!activeVeloroute && !!activeVelorouteSectionIdx
+        activeVeloroute && activeVelorouteSectionIdx !== null
             ? activeVeloroute.route[activeVelorouteSectionIdx]?.leg[
                   activeVeloroute.route[activeVelorouteSectionIdx].leg.length -
                       1
