@@ -4,8 +4,8 @@ import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
     selectActiveVelorouteSectionIdx,
+    setActiveVelorouteSectionIdx,
     setHoveredVelorouteSectionIdx,
-    setVelorouteSectionActiveThunk,
 } from "../map/veloroutes/VeloroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
@@ -44,7 +44,7 @@ export const VelorouteDetails = () => {
         item: (typeof orderedListItems)[number] | null,
     ) => {
         if (item) {
-            dispatch(setVelorouteSectionActiveThunk(item.idx));
+            dispatch(setActiveVelorouteSectionIdx(item.idx));
         }
     };
     const hoverVelorouteSection = (

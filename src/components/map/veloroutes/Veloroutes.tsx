@@ -4,7 +4,7 @@ import {
     selectActiveVelorouteId,
     selectActiveVelorouteSectionIdx,
     selectHoveredVelorouteSectionIdx,
-    setVelorouteSectionActiveThunk,
+    setActiveVelorouteSectionIdx,
     type Veloroute,
     type VelorouteStop as VelorouteStopType,
 } from "./VeloroutesSlice";
@@ -77,7 +77,7 @@ export const Veloroutes = () => {
     );
     const handleSectionClick = (_: string, idx: number) => {
         dispatch(setActiveTab("leg"));
-        dispatch(setVelorouteSectionActiveThunk(idx));
+        dispatch(setActiveVelorouteSectionIdx(idx));
     };
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeVelorouteSection =
