@@ -25,18 +25,16 @@ export const Trainroutes = memo(function Trainroutes() {
     const appZoom = useSelector(selectAppZoom);
     const { data: trainroutesQueryData } = useTrainroutesQuery();
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
-    const { data: trainlinesAlongVeloroute } =
+    const { data: trainroutesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
+    const trainlinesAlongVeloroute =
+        trainroutesAlongVelorouteData?.connections || [];
     const activeSection = currentTrainroutes?.find(
         (section) => section.id === activeSectionId,
     );
 
     const getClassName = (id: typeof activeSectionId) => {
-        if (
-            !activeSectionId &&
-            !trainlinesAlongVeloroute &&
-            !trainlinesAlongVeloroute
-        ) {
+        if (!activeSectionId && !trainlinesAlongVeloroute?.length) {
             return "init";
         } else if (activeSectionId === id) {
             return "active";

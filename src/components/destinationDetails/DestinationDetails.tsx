@@ -153,16 +153,18 @@ export const DestinationDetails = () => {
             dispatch(setActiveVelorouteId(vroute.id));
         }
     };
-    const { data: trainLinesAlongVeloroute } =
+    const { data: trainLinesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
+    const trainlinesAlongVeloroute =
+        trainLinesAlongVelorouteData?.connections || [];
 
     return (
         <div id="destination-details">
             <div id="destination" className="details">
                 <div className="train-details">
                     {activeSection && <Section section={activeSection} />}
-                    {trainLinesAlongVeloroute &&
-                        trainLinesAlongVeloroute.map((trainline) => (
+                    {trainlinesAlongVeloroute &&
+                        trainlinesAlongVeloroute.map((trainline) => (
                             <Fragment key={trainline.id}>
                                 <Section section={trainline} />
                             </Fragment>

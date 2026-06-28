@@ -18,8 +18,10 @@ export const VelorouteLegDetails = () => {
     const { data: activeVeloroute } = useVelorouteQuery();
     const activeVelorouteSection = activeVeloroute?.route[0] || null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const { data: trainlinesAlongVeloroute } =
+    const { data: trainlinesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
+    const trainlinesAlongVeloroute =
+        trainlinesAlongVelorouteData?.connections || [];
     const startStation = trainlinesAlongVeloroute?.at(0) ?? null;
     const endStation = trainlinesAlongVeloroute?.at(1) ?? null;
     const [startVeloStop, endVeloStop] = [
