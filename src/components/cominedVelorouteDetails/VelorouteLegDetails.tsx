@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../utils/i18n";
 import {
+    selectActiveVelorouteSectionIdx,
     selectActiveVelorouteStop,
     setActiveVelorouteStop,
     type VelorouteStop,
@@ -16,7 +17,13 @@ export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { data: activeVeloroute } = useVelorouteQuery();
-    const activeVelorouteSection = activeVeloroute?.route[0] || null;
+    const activeVelorouteSectionIdx = useSelector(
+        selectActiveVelorouteSectionIdx,
+    );
+    const activeVelorouteSection =
+        activeVelorouteSectionIdx && activeVeloroute
+            ? activeVeloroute.route[activeVelorouteSectionIdx]
+            : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const { data: trainlinesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
@@ -187,7 +194,7 @@ export const VelorouteLegDetails = () => {
                 <div id="veloroute" className="details">
                     {!!activeVelorouteSection && (
                         <section className="veloroute-details veloroute-section-details">
-                            <h5>{`${t("leg")}`}</h5>
+                            <h6>{`${t("leg")}`}</h6>
                             <Box>
                                 {sectionHeadline(
                                     activeVelorouteSection.leg[0],
