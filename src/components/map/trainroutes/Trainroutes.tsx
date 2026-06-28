@@ -34,8 +34,8 @@ export const Trainroutes = memo(function Trainroutes() {
     const getClassName = (id: typeof activeSectionId) => {
         if (
             !activeSectionId &&
-            !!trainlinesAlongVeloroute &&
-            !trainlinesAlongVeloroute.length
+            !trainlinesAlongVeloroute &&
+            !trainlinesAlongVeloroute
         ) {
             return "init";
         } else if (activeSectionId === id) {
