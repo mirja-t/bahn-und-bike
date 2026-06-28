@@ -51,7 +51,8 @@ export const Container = () => {
 
     const prevValue = useRef(0);
 
-    const { data: trainroutesQueryData, isLoading } = useTrainroutesQuery();
+    const { data: trainroutesQueryData, isFetching: trainroutesFetching } =
+        useTrainroutesQuery();
 
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
@@ -129,7 +130,7 @@ export const Container = () => {
                     <AnimatePresence>
                         {submitValue === 0 &&
                             !trainroutesQueryData?.currentTrainroutes.length &&
-                            !isLoading && (
+                            !trainroutesFetching && (
                                 <motion.div
                                     className={styles.instructionsOverlay}
                                     initial={{ opacity: 0 }}
