@@ -306,6 +306,9 @@ export const mockedTrainroutes: CurrentTrainroute[] = [
         connection: null,
     },
 ];
+export const mockedTrainstops: number[] = mockedTrainroutes.flatMap((route) =>
+    route.routestops.map((stop) => stop.station_id),
+);
 
 export const mockedVeloroute = {
     id: "3",

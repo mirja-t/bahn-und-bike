@@ -16,7 +16,7 @@ type QueryParams = {
     value: number;
     direct: boolean;
 };
-const fetchTrainroutes = async (queryParams: QueryParams) => {
+export const fetchTrainroutes = async (queryParams: QueryParams) => {
     const start = queryParams?.start;
     const value = queryParams?.value;
     const direct = queryParams?.direct;
