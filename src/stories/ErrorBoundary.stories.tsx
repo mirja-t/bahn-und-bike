@@ -114,7 +114,7 @@ export const Default: Story = {
         ),
     },
 };
-
+/*
 // Error state with default fallback
 export const WithError: Story = {
     args: {
@@ -393,3 +393,4 @@ export const NestedBoundaries: Story = {
         </ErrorBoundary>
     ),
 };
+*/
