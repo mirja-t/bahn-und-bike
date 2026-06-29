@@ -41,9 +41,7 @@ export function useVelorouteQuery(): UseQueryResult<Veloroute | null> {
     const id = useSelector(selectActiveVelorouteId);
     const maxDistToNextStation = useSelector(selectMaxDistToNextStation);
     const { data: trainroutesData } = useTrainroutesQuery();
-    const trainstops = trainroutesData
-        ? trainroutesData.map(getTrainstopsArrayFromRoute).flat()
-        : [];
+    const trainstops = getTrainstopsArrayFromRoute(trainroutesData);
     return useQuery({
         queryKey: ["veloroute", id, trainstops, maxDistToNextStation],
         queryFn: () =>

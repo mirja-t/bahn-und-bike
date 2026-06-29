@@ -38,10 +38,8 @@ export function useVeloroutesQuery(): UseQueryResult<VelorouteListItem[]> {
     const { data: trainroutesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
     const trainstops = trainroutesAlongVelorouteData
-        ? trainroutesAlongVelorouteData.map(getTrainstopsArrayFromRoute).flat()
-        : trainroutesData
-          ? trainroutesData.map(getTrainstopsArrayFromRoute).flat()
-          : [];
+        ? getTrainstopsArrayFromRoute(trainroutesAlongVelorouteData)
+        : getTrainstopsArrayFromRoute(trainroutesData);
     const activeTrainrouteId = useSelector(selectActiveSectionId);
     const activeTrainroute = trainroutesData?.find(
         (section) => section.id === activeTrainrouteId,

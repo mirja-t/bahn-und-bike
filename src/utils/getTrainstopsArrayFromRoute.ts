@@ -1,10 +1,17 @@
-import type { CurrentTrainroute } from "@/components/map/trainroutes/TrainroutesSlice";
+import type { CurrentTrainroutes } from "@/components/map/trainroutes/TrainroutesSlice";
 
 export function getTrainstopsArrayFromRoute(
-    connection: CurrentTrainroute,
+    connections?: CurrentTrainroutes,
 ): number[] {
+    if (!connections || connections.length === 0) return [];
     const trainstops = [
-        ...new Set(connection.routestops.map((stop) => stop.station_id)),
+        ...new Set(
+            connections
+                .map((connection) =>
+                    connection.routestops.map((stop) => stop.station_id),
+                )
+                .flat(),
+        ),
     ];
     return trainstops;
 }
