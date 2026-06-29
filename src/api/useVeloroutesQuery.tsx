@@ -6,6 +6,7 @@ import { useTrainroutesQuery } from "./useTrainroutesQuery";
 import { useSelector } from "react-redux";
 import { selectActiveSectionId } from "@/components/map/trainroutes/TrainroutesSlice";
 import { useTrainroutesAlongVelorouteSectionQuery } from "./useTrainroutesAlongVelorouteSectionQuery";
+import { getTrainstopsArrayFromRoute } from "@/utils/getTrainstopsArrayFromRoute";
 
 type QueryParams = {
     stationIds: number[];
@@ -36,10 +37,11 @@ export function useVeloroutesQuery(): UseQueryResult<VelorouteListItem[]> {
     const { data: trainroutesData } = useTrainroutesQuery();
     const { data: trainroutesAlongVelorouteData } =
         useTrainroutesAlongVelorouteSectionQuery();
-    const trainstops =
-        trainroutesAlongVelorouteData?.trainstops ||
-        trainroutesData?.trainstops ||
-        [];
+    const trainstops = trainroutesAlongVelorouteData
+        ? trainroutesAlongVelorouteData.map(getTrainstopsArrayFromRoute).flat()
+        : trainroutesData?.trainstops
+          ? trainroutesData.trainstops
+          : [];
     const activeTrainrouteId = useSelector(selectActiveSectionId);
     const activeTrainroute = trainroutesData?.currentTrainroutes.find(
         (section) => section.id === activeTrainrouteId,

@@ -25,10 +25,8 @@ export const Trainroutes = memo(function Trainroutes() {
     const appZoom = useSelector(selectAppZoom);
     const { data: trainroutesQueryData } = useTrainroutesQuery();
     const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
-    const { data: trainroutesAlongVelorouteData } =
+    const { data: trainlinesAlongVeloroute } =
         useTrainroutesAlongVelorouteSectionQuery();
-    const trainlinesAlongVeloroute =
-        trainroutesAlongVelorouteData?.connections || [];
     const activeSection = currentTrainroutes?.find(
         (section) => section.id === activeSectionId,
     );

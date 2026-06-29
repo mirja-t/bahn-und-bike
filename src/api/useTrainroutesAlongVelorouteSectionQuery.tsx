@@ -20,7 +20,7 @@ type QueryParams = {
 
 const fetchTrainroutesAlongVelorouteSection = async (
     queryParams: QueryParams,
-): Promise<{ connections: CurrentTrainroutes; trainstops: number[] }> => {
+): Promise<CurrentTrainroutes> => {
     if (!queryParams?.startdestination) throw new Error("Missing query params");
     const { startdestination, startId, endId } = queryParams;
     const fetchConnection = async (
@@ -49,20 +49,10 @@ const fetchTrainroutesAlongVelorouteSection = async (
         connections.push(trainroute);
         seenIds.add(id);
     }
-    const trainstops = [
-        ...new Set(
-            connections
-                .flatMap((route) => route.routestops)
-                .map((stop) => stop.station_id),
-        ),
-    ];
-    return { connections, trainstops };
+    return connections;
 };
 
-export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<{
-    connections: CurrentTrainroutes;
-    trainstops: number[];
-}> {
+export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<CurrentTrainroutes> {
     const startPos = useSelector(selectStartPos);
     const { data: activeVelorouteData } = useVelorouteQuery();
     const activeVelorouteSection = useSelector(selectActiveVelorouteSectionIdx);

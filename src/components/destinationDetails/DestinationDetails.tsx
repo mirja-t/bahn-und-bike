@@ -153,10 +153,8 @@ export const DestinationDetails = () => {
             dispatch(setActiveVelorouteId(vroute.id));
         }
     };
-    const { data: trainLinesAlongVelorouteData } =
+    const { data: trainlinesAlongVeloroute } =
         useTrainroutesAlongVelorouteSectionQuery();
-    const trainlinesAlongVeloroute =
-        trainLinesAlongVelorouteData?.connections || [];
 
     return (
         <div id="destination-details">
