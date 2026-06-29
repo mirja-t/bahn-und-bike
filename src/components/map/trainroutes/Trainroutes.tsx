@@ -23,8 +23,7 @@ export const Trainroutes = memo(function Trainroutes() {
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
     const appZoom = useSelector(selectAppZoom);
-    const { data: trainroutesQueryData } = useTrainroutesQuery();
-    const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
+    const { data: currentTrainroutes } = useTrainroutesQuery();
     const { data: trainlinesAlongVeloroute } =
         useTrainroutesAlongVelorouteSectionQuery();
     const activeSection = currentTrainroutes?.find(

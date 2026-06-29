@@ -24,9 +24,8 @@ export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
     const activeSectionId = useSelector(selectActiveSectionId);
 
-    const { data: trainroutesQueryData, isLoading: trainroutesLoading } =
+    const { data: currentTrainroutes, isLoading: trainroutesLoading } =
         useTrainroutesQuery();
-    const currentTrainroutes = trainroutesQueryData?.currentTrainroutes;
 
     const dispatch = useAppDispatch();
 
