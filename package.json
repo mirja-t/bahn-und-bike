@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "mock": "vite --mode mock",
         "lint": "eslint .",
         "typecheck": "tsc -p tsconfig.app.json --noEmit",
         "check": "npm run typecheck && npm run lint",
@@ -64,5 +65,10 @@
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.54.0",
         "vite": "^7.2.4"
+    },
+    "msw": {
+        "workerDirectory": [
+            "public"
+        ]
     }
 }
