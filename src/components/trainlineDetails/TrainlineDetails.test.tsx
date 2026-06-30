@@ -4,7 +4,7 @@ import { expect, it, vi } from "vitest";
 import { renderWithProviders } from "@/__mocks__/renderWithProviders";
 import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 import { TrainlineDetails } from "./TrainlineDetails";
-import { mockedTrainroutes, mockedTrainstops } from "@/__mocks__/_testData";
+import { mockedTrainroutes } from "@/__mocks__/_testData";
 
 vi.mock("@/api/useTrainroutesQuery", () => ({
     useTrainroutesQuery: vi.fn(),
@@ -12,10 +12,7 @@ vi.mock("@/api/useTrainroutesQuery", () => ({
 
 it("renders trainroutes list", async () => {
     vi.mocked(useTrainroutesQuery).mockReturnValue({
-        data: {
-            currentTrainroutes: mockedTrainroutes,
-            trainstops: mockedTrainstops,
-        },
+        data: mockedTrainroutes,
         isLoading: false,
     } as ReturnType<typeof useTrainroutesQuery>);
 
