@@ -3,28 +3,32 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectActiveVeloroute,
-    selectActiveVelorouteSection,
-    setActiveVeloroute,
-    setHoveredVelorouteSection,
-    setVelorouteSectionActiveThunk,
+    selectActiveVelorouteSectionIdx,
+    setActiveVelorouteSectionIdx,
+    setHoveredVelorouteSectionIdx,
 } from "../map/veloroutes/VeloroutesSlice";
 import { PinIcon } from "../stateless/icons/PinIcon";
 import { VelorouteIcon } from "../stateless/icons/VelorouteIcon";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { ItemList } from "../stateless/itemlist/ItemList";
 import { RangeInput } from "../form/rangeinput/RangeInput";
-import { selectMaxDistToNextStations } from "../map/veloroutes/VeloroutesSlice";
+import {
+    selectMaxDistToNextStation,
+    setMaxDistToNextStation,
+} from "../map/veloroutes/VeloroutesSlice";
 import { Box } from "../stateless/box/Box";
+import { useVelorouteQuery } from "@/api/useVelorouteQuery";
 
 export const VelorouteDetails = () => {
     const dispatch = useAppDispatch();
 
     const { t } = useTranslation();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const activeVelorouteSectionIdx = useSelector(
+        selectActiveVelorouteSectionIdx,
+    );
+    const { data: activeVeloroute } = useVelorouteQuery();
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute !== null
+        activeVelorouteSectionIdx !== null && activeVeloroute
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
 
@@ -40,27 +44,27 @@ export const VelorouteDetails = () => {
         item: (typeof orderedListItems)[number] | null,
     ) => {
         if (item) {
-            dispatch(setVelorouteSectionActiveThunk(item.idx));
+            dispatch(setActiveVelorouteSectionIdx(item.idx));
         }
     };
     const hoverVelorouteSection = (
         item: (typeof orderedListItems)[number] | null,
     ) => {
         if (item) {
-            dispatch(setHoveredVelorouteSection(item.idx));
+            dispatch(setHoveredVelorouteSectionIdx(item.idx));
         } else {
-            dispatch(setHoveredVelorouteSection(null));
+            dispatch(setHoveredVelorouteSectionIdx(null));
         }
     };
 
-    const maxDistanceToStation = useSelector(selectMaxDistToNextStations);
+    const maxDistanceToStation = useSelector(selectMaxDistToNextStation);
     const handleMaxDistanceToStationRelease = (
         e:
             | React.MouseEvent<HTMLInputElement>
             | React.TouchEvent<HTMLInputElement>,
     ) => {
         const value = Number((e.target as HTMLInputElement).value);
-        dispatch(setActiveVeloroute({ maxDistToNextStation: value }));
+        dispatch(setMaxDistToNextStation(value));
     };
 
     return (

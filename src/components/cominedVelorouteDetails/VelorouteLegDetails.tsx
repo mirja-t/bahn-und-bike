@@ -1,32 +1,34 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectActiveVeloroute,
-    selectActiveVelorouteSection,
+    selectActiveVelorouteSectionIdx,
     selectActiveVelorouteStop,
     setActiveVelorouteStop,
     type VelorouteStop,
 } from "../map/veloroutes/VeloroutesSlice";
 import { ItemList } from "../stateless/itemlist/ItemList";
-import { selectTrainroutesAlongVeloroute } from "../map/trainroutes/TrainroutesSlice";
 import { useEffect, useState } from "react";
 import { Collapse } from "../stateless/collapse/Collapse";
 import { Box } from "../stateless/box/Box";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
+import { useVelorouteQuery } from "@/api/useVelorouteQuery";
 
 export const VelorouteLegDetails = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeVelorouteSectionIdx = useSelector(selectActiveVelorouteSection);
+    const { data: activeVeloroute } = useVelorouteQuery();
+    const activeVelorouteSectionIdx = useSelector(
+        selectActiveVelorouteSectionIdx,
+    );
     const activeVelorouteSection =
-        activeVelorouteSectionIdx !== null && activeVeloroute !== null
+        activeVelorouteSectionIdx && activeVeloroute
             ? activeVeloroute.route[activeVelorouteSectionIdx]
             : null;
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const trainlinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
-    const [startStation, endStation] = trainlinesAlongVeloroute;
+    const { data: trainlinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery();
+    const startStation = trainlinesAlongVeloroute?.at(0) ?? null;
+    const endStation = trainlinesAlongVeloroute?.at(1) ?? null;
     const [startVeloStop, endVeloStop] = [
         activeVelorouteSection?.leg.at(0) || null,
         activeVelorouteSection?.leg.at(-1) || null,
@@ -188,9 +190,9 @@ export const VelorouteLegDetails = () => {
             <hr />
             <div id="veloroute-details">
                 <div id="veloroute" className="details">
-                    {activeVelorouteSection !== null && (
+                    {!!activeVelorouteSection && (
                         <section className="veloroute-details veloroute-section-details">
-                            <h5>{`${t("leg")}`}</h5>
+                            <h6>{`${t("leg")}`}</h6>
                             <Box>
                                 {sectionHeadline(
                                     activeVelorouteSection.leg[0],

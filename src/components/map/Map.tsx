@@ -2,10 +2,6 @@ import styles from "./map.module.scss";
 import { useSelector } from "react-redux";
 import { useZoom } from "../../hooks/useZoom";
 import { useDrag } from "../../hooks/useDrag";
-import {
-    selectCurrentTrainroutes,
-    selectTrainrouteListLoading,
-} from "./trainroutes/TrainroutesSlice";
 import { Trainroutes } from "./trainroutes/Trainroutes";
 import { Germany } from "./germany/Germany";
 import { AnimatePresence, motion } from "framer-motion";
@@ -18,25 +14,28 @@ import {
     setAppScale,
     selectAppZoom,
 } from "../../AppSlice";
-import { selectVeloroutesLoading } from "./veloroutes/VeloroutesSlice";
 import { useEffect, useRef, useState } from "react";
 import { useResponsiveSize } from "../../hooks/useResponsiveSize";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 
 interface MapProps {
     value: number;
 }
 export const Map = ({ value }: MapProps) => {
-    const [mapWrapperEl, setMapWrapperEl] = useState<HTMLDivElement | null>(null);
+    const [mapWrapperEl, setMapWrapperEl] = useState<HTMLDivElement | null>(
+        null,
+    );
     const mapContainerRef = useRef<HTMLDivElement | null>(null);
     const wrapperSize = useResponsiveSize(mapWrapperEl);
     const resetKey = useSelector(selectResetKey);
-    const journeys = useSelector(selectCurrentTrainroutes);
-    const isLoading = useSelector(selectTrainrouteListLoading);
-    const veloroutesLoading = useSelector(selectVeloroutesLoading);
     const appZoom = useSelector(selectAppZoom);
     const dispatch = useAppDispatch();
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [cachedOffset, setCachedOffset] = useState({ x: 0, y: 0 });
+    const { data: currentTrainroutes, isFetching: trainroutesLoading } =
+        useTrainroutesQuery();
+    const { isFetching: veloroutesLoading } = useVeloroutesQuery();
 
     const handleMapZoom = (dir: "+" | "-") => {
         const factor = dir === "+" ? 2 : 0.5;
@@ -50,7 +49,7 @@ export const Map = ({ value }: MapProps) => {
         setCachedOffset({ x: 0, y: 0 });
     };
 
-    const zoom = useZoom(journeys, Number(value), isLoading);
+    const zoom = useZoom(currentTrainroutes, Number(value), trainroutesLoading);
     const containerRatio =
         wrapperSize.width > 0 && wrapperSize.height > 0
             ? zoom.ratio / (wrapperSize.width / wrapperSize.height)
@@ -82,12 +81,9 @@ export const Map = ({ value }: MapProps) => {
     }, [zoom]);
 
     return (
-        <div
-            ref={setMapWrapperEl}
-            className={styles.mapWrapper}
-        >
+        <div ref={setMapWrapperEl} className={styles.mapWrapper}>
             <AnimatePresence>
-                {(isLoading || veloroutesLoading) && (
+                {(trainroutesLoading || veloroutesLoading) && (
                     <motion.div className={styles.loading}>
                         <Loading />
                     </motion.div>
@@ -122,7 +118,7 @@ export const Map = ({ value }: MapProps) => {
                                     transform: `translate(${offset.x * 100}%, ${offset.y * 100}%)`,
                                 }}
                             >
-                                {!isLoading && <Trainroutes />}
+                                {!trainroutesLoading && <Trainroutes />}
                                 <Germany />
                             </div>
                         </div>

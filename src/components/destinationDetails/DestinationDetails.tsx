@@ -4,17 +4,14 @@ import { getTime } from "../../utils/getTime";
 import { selectLangCode, useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    selectVelorouteList,
-    selectActiveVeloroute,
-    setActiveVelorouteSection,
-    loadVeloroute,
+    selectActiveVelorouteId,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
     type VelorouteListItem,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
-    selectActiveSection,
-    selectTrainroutesAlongVeloroute,
+    selectActiveSectionId,
     setActiveSpot,
-    setTrainroutesAlongVeloroute,
     type CurrentTrainroute,
     type ResponseTrainLine,
     type Trainstop,
@@ -30,6 +27,9 @@ import { Fragment, useMemo } from "react";
 import { Loading } from "../stateless/loading/Loading";
 import { Error } from "../stateless/error/Error";
 import { Tooltip } from "../stateless/tooltip/Tooltip";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 interface SectionProps {
     section: CurrentTrainroute;
 }
@@ -137,30 +137,31 @@ const Section = ({ section }: SectionProps) => {
 };
 export const DestinationDetails = () => {
     const { t } = useTranslation();
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const activeSection = useSelector(selectActiveSection);
-    const veloroutes = useSelector(selectVelorouteList);
-    const trainLinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
-
     const dispatch = useAppDispatch();
+    const activeVelorouteId = useSelector(selectActiveVelorouteId);
+    const activeSectionId = useSelector(selectActiveSectionId);
+    const { data: currentTrainroutes } = useTrainroutesQuery();
+    const activeSection = currentTrainroutes?.find(
+        (section) => section.id === activeSectionId,
+    );
+    const { data: veloroutes } = useVeloroutesQuery();
 
-    const setVelorouteActive = (vroute: VelorouteListItem) => {
-        if (vroute.len !== undefined) {
-            dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(setActiveVelorouteSection(null));
-            dispatch(loadVeloroute({ id: vroute.id }));
+    const setVelorouteId = (vroute: VelorouteListItem) => {
+        if (vroute !== undefined) {
+            dispatch(setActiveVelorouteSectionIdx(null));
+            dispatch(setActiveVelorouteId(vroute.id));
         }
     };
+    const { data: trainlinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery();
 
     return (
         <div id="destination-details">
             <div id="destination" className="details">
                 <div className="train-details">
                     {activeSection && <Section section={activeSection} />}
-                    {trainLinesAlongVeloroute.length > 0 &&
-                        trainLinesAlongVeloroute.map((trainline) => (
+                    {trainlinesAlongVeloroute &&
+                        trainlinesAlongVeloroute.map((trainline) => (
                             <Fragment key={trainline.id}>
                                 <Section section={trainline} />
                             </Fragment>
@@ -177,13 +178,17 @@ export const DestinationDetails = () => {
 
                     <section className="section veloroute-details">
                         <h5>{t("veloroutes")}</h5>
-                        {veloroutes.length < 1 && <p>{`${t("nomatch")}`}</p>}
-                        <ItemList
-                            items={veloroutes}
-                            activeId={activeVeloroute?.id}
-                            onClick={setVelorouteActive}
-                            icon={<VelorouteIcon />}
-                        />
+                        {veloroutes && veloroutes.length < 1 && (
+                            <p>{`${t("nomatch")}`}</p>
+                        )}
+                        {veloroutes && (
+                            <ItemList
+                                items={veloroutes}
+                                activeId={activeVelorouteId || ""}
+                                onClick={setVelorouteId}
+                                icon={<VelorouteIcon />}
+                            />
+                        )}
                     </section>
                 </div>
             </div>

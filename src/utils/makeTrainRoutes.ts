@@ -126,7 +126,8 @@ export const makeTrainRoutes = (
                         typeof stop.stop_number === "number" &&
                         stop.stop_number !== null
                             ? idx
-                            : null,
+                            : null, // if stop_number is missing or null, the train passes through without stopping
+                    // position has to be added only to path
                 })),
             ); // forward direction
             const reversedStops = stops
@@ -382,7 +383,7 @@ export const makeTrainRoutes = (
                 .flat()
                 .filter(
                     (stop, idx, self) =>
-                        stop.stop_number !== null &&
+                        stop.stop_number !== null && // Only include stops where the train actually stops, not just passes through
                         self
                             .slice(0, idx)
                             .every((s) => s.station_id !== stop.station_id), // Filter out duplicate stops across trainlines, but keep duplicates within the same trainline (for transfers)

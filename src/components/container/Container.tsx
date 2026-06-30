@@ -5,21 +5,15 @@ import { DestinationDetails } from "../destinationDetails/DestinationDetails";
 import { VelorouteDetails } from "../velorouteDetails/VelorouteDetails";
 import { VelorouteLegDetails } from "../cominedVelorouteDetails/VelorouteLegDetails";
 import {
-    setActiveSection,
-    setTrainroutesAlongVeloroute,
-    selectStartPos,
-    loadTrainroutes,
-    selectCurrentTrainroutes,
-    setCurrentTrainroutes,
-    selectTrainrouteListLoading,
+    setActiveSectionId,
+    setIsDirect,
+    setStartPos,
+    setTrainTravelDuration,
 } from "../map/trainroutes/TrainroutesSlice";
 import {
-    loadVeloroutes,
-    selectActiveVeloroute,
-    selectVelorouteList,
-    setActiveVeloroute,
-    setActiveVelorouteSection,
-    setVelorouteList,
+    selectActiveVelorouteId,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
 } from "../map/veloroutes/VeloroutesSlice";
 import { Map } from "../map/Map";
 import {
@@ -41,42 +35,30 @@ import { Instructions } from "../instructions/Instructions";
 import LayoutWithSidebar from "../../layout/LayoutWithSidebar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Collapse } from "../stateless/collapse/Collapse";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useVeloroutesQuery } from "@/api/useVeloroutesQuery";
 
 export const Container = () => {
     const dispatch = useAppDispatch();
-    const start = useSelector(selectStartPos);
-    const veloroutes = useSelector(selectVelorouteList);
-    const activeVeloroute = useSelector(selectActiveVeloroute);
-    const trainRoutes = useSelector(selectCurrentTrainroutes);
+    const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const submitValue = useSelector(selectSubmitValue);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const sidebarRef = useRef<HTMLDivElement>(null);
     const { height: sidebarHeight } = useResponsiveSize(sidebarRef.current);
     const activeTabId = useSelector(selectActiveTab);
-    const journeys = useSelector(selectCurrentTrainroutes);
-    const isLoading = useSelector(selectTrainrouteListLoading);
     const { t } = useTranslation();
+    const { data: veloroutes } = useVeloroutesQuery();
 
     const prevValue = useRef(0);
 
+    const { data: currentTrainroutes, isFetching: trainroutesFetching } =
+        useTrainroutesQuery();
+
     const handleTabClick = (tabId: TabIds) => {
         if (tabId === "trainlines") {
-            const stopIds = Array.from(
-                new Set(
-                    trainRoutes
-                        .map((route) =>
-                            route.routestops.map((stop) => stop.station_id),
-                        )
-                        .flat()
-                        .filter((id) => id !== null && id !== undefined),
-                ),
-            );
-            dispatch(setVelorouteList([]));
-            dispatch(setActiveSection(null));
-            dispatch(setActiveVeloroute(null));
-            dispatch(setActiveVelorouteSection(null));
-            dispatch(setTrainroutesAlongVeloroute([]));
-            dispatch(loadVeloroutes(stopIds));
+            dispatch(setActiveSectionId(null));
+            dispatch(setActiveVelorouteId(null));
+            dispatch(setActiveVelorouteSectionIdx(null));
         }
         dispatch(setActiveTab(tabId));
     };
@@ -85,19 +67,19 @@ export const Container = () => {
         e: React.SubmitEvent,
         value: number,
         direct = true,
+        startDestination: number,
     ) => {
         e.preventDefault();
         prevValue.current = value;
-        dispatch(setCurrentTrainroutes([]));
-        dispatch(setActiveSection(null));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(setTrainroutesAlongVeloroute([]));
-        dispatch(setVelorouteList([]));
+        dispatch(setActiveSectionId(null));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
         dispatch(setActiveTab("trainlines"));
-        dispatch(loadTrainroutes({ start, value, direct }));
+        dispatch(setIsDirect(direct));
+        dispatch(setTrainTravelDuration(value));
         dispatch(setUserScale("reset"));
         dispatch(setSubmitValue(value));
+        dispatch(setStartPos(startDestination));
     };
 
     const handleTrainrouteSelect = () => {
@@ -126,14 +108,14 @@ export const Container = () => {
                                 <Tabs.Tab
                                     id="veloroutes"
                                     name={t("bikeroutes")}
-                                    disabled={veloroutes.length === 0}
+                                    disabled={veloroutes?.length === 0}
                                 >
                                     <DestinationDetails />
                                 </Tabs.Tab>
                                 <Tabs.Tab
                                     id="leg"
                                     name={t("routelegs")}
-                                    disabled={!activeVeloroute}
+                                    disabled={!activeVelorouteId}
                                 >
                                     <VelorouteDetails />
                                     <VelorouteLegDetails />
@@ -147,8 +129,8 @@ export const Container = () => {
                 <div className={styles.mapWrapper} ref={wrapperRef}>
                     <AnimatePresence>
                         {submitValue === 0 &&
-                            !journeys.length &&
-                            !isLoading && (
+                            !currentTrainroutes &&
+                            !trainroutesFetching && (
                                 <motion.div
                                     className={styles.instructionsOverlay}
                                     initial={{ opacity: 0 }}

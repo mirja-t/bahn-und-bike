@@ -1,12 +1,10 @@
 import {
-    setActiveSection,
-    setTrainroutesAlongVeloroute,
+    setActiveSectionId,
     type CurrentTrainroute,
 } from "../TrainroutesSlice";
 import {
-    loadVeloroutes,
-    setActiveVeloroute,
-    setActiveVelorouteSection,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
 } from "../../veloroutes/VeloroutesSlice";
 import { Trainstop } from "../trainstop/Trainstop";
 import {
@@ -26,12 +24,9 @@ export const Trainroute = ({ item, className }: TrainrouteProps) => {
     const appZoom = useSelector(selectAppZoom);
 
     const setAdditionalTrainlineActive = (line: CurrentTrainroute) => {
-        const stopIds = line.routestops.map((stop) => stop.station_id);
-        dispatch(setTrainroutesAlongVeloroute([]));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
-        dispatch(setActiveSection(line));
-        dispatch(loadVeloroutes(stopIds));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
+        dispatch(setActiveSectionId(line.id));
         dispatch(setActiveTab("veloroutes"));
     };
 
