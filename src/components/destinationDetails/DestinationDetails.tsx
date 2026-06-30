@@ -140,9 +140,8 @@ export const DestinationDetails = () => {
     const dispatch = useAppDispatch();
     const activeVelorouteId = useSelector(selectActiveVelorouteId);
     const activeSectionId = useSelector(selectActiveSectionId);
-    const { data: trainroutesData } = useTrainroutesQuery();
-    const trainroutes = trainroutesData?.currentTrainroutes;
-    const activeSection = trainroutes?.find(
+    const { data: currentTrainroutes } = useTrainroutesQuery();
+    const activeSection = currentTrainroutes?.find(
         (section) => section.id === activeSectionId,
     );
     const { data: veloroutes } = useVeloroutesQuery();
@@ -153,10 +152,8 @@ export const DestinationDetails = () => {
             dispatch(setActiveVelorouteId(vroute.id));
         }
     };
-    const { data: trainLinesAlongVelorouteData } =
+    const { data: trainlinesAlongVeloroute } =
         useTrainroutesAlongVelorouteSectionQuery();
-    const trainlinesAlongVeloroute =
-        trainLinesAlongVelorouteData?.connections || [];
 
     return (
         <div id="destination-details">

@@ -4,6 +4,7 @@ import {
     selectStartPos,
     type CurrentTrainroute,
     type CurrentTrainroutes,
+    type TrainstopAPIResponse,
 } from "@/components/map/trainroutes/TrainroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
 import { createNewRoute } from "@/utils/createNewRoute";
@@ -19,44 +20,39 @@ type QueryParams = {
 
 const fetchTrainroutesAlongVelorouteSection = async (
     queryParams: QueryParams,
-): Promise<{ connections: CurrentTrainroutes; trainstops: number[] }> => {
+): Promise<CurrentTrainroutes> => {
     if (!queryParams?.startdestination) throw new Error("Missing query params");
     const { startdestination, startId, endId } = queryParams;
-    const fetchConnection = async (id: number): Promise<CurrentTrainroute> => {
+    const fetchConnection = async (
+        id: number,
+    ): Promise<TrainstopAPIResponse[]> => {
         const connection = await fetch(
-            `${VITE_API_URL}connection/${startdestination}&${id}`,
+            `${VITE_API_URL}connection/${id}&${startdestination}`,
             { headers },
         ).then((res) => {
             if (res.status !== 200) throw new Error("Bad Server Response");
             return res.json();
         });
-        const reversedConnection = [...connection].reverse();
-        return createNewRoute(reversedConnection[0], reversedConnection);
+        return connection;
     };
     const connections: CurrentTrainroutes = [];
     const seenIds = new Set<number>();
     for (const id of [startId, endId]) {
         if (id === null || seenIds.has(id)) continue;
-        connections.push(await fetchConnection(id));
+        const connection = await fetchConnection(id);
+        const startStation =
+            connection.find((stop) => stop.station_id === id) || connection[0];
+        const trainroute: CurrentTrainroute = createNewRoute(
+            startStation,
+            connection,
+        );
+        connections.push(trainroute);
         seenIds.add(id);
     }
-    const trainstops = [
-        ...new Set(
-            Object.values(connections)
-                .flat()
-                .map((connection) =>
-                    connection.routestops.map((stop) => stop.station_id),
-                )
-                .flat(),
-        ),
-    ];
-    return { connections, trainstops };
+    return connections;
 };
 
-export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<{
-    connections: CurrentTrainroutes;
-    trainstops: number[];
-}> {
+export function useTrainroutesAlongVelorouteSectionQuery(): UseQueryResult<CurrentTrainroutes> {
     const startPos = useSelector(selectStartPos);
     const { data: activeVelorouteData } = useVelorouteQuery();
     const activeVelorouteSection = useSelector(selectActiveVelorouteSectionIdx);

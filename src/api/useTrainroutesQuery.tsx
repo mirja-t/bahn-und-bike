@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
 import {
     type TrainstopsAPIResponse,
-    type CurrentTrainroutes,
     selectIsDirect,
     selectTrainTravelDuration,
     selectStartPos,
+    type CurrentTrainroutes,
 } from "@/components/map/trainroutes/TrainroutesSlice";
 import { headers, VITE_API_URL } from "@/config/config";
 import { makeTrainRoutes } from "@/utils/makeTrainRoutes";
@@ -31,24 +31,11 @@ export const fetchTrainroutes = async (queryParams: QueryParams) => {
         if (res.status !== 200) throw new Error("Bad Server Response");
         return res.json();
     });
-    // used to create veloroute sections
-    const trainstops = [
-        ...new Set(
-            Object.values(connections)
-                .flat()
-                .map((stop) => stop.station_id),
-        ),
-    ];
     const currentTrainroutes = makeTrainRoutes(connections, start, value * 30);
-    return { trainstops, currentTrainroutes };
+    return currentTrainroutes;
 };
 
-export type TrainroutesQueryData = {
-    trainstops: number[];
-    currentTrainroutes: CurrentTrainroutes;
-};
-
-export function useTrainroutesQuery(): UseQueryResult<TrainroutesQueryData> {
+export function useTrainroutesQuery(): UseQueryResult<CurrentTrainroutes> {
     const start = useSelector(selectStartPos);
     const travelDuration = useSelector(selectTrainTravelDuration);
     const isDirect = useSelector(selectIsDirect);
