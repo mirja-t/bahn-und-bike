@@ -1,24 +1,25 @@
 // trainroutes.test.tsx
 import { screen, within } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { expect, it } from "vitest";
 import { renderWithProviders } from "@/__mocks__/renderWithProviders";
-import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 import { TrainlineDetails } from "./TrainlineDetails";
-import { mockedTrainroutes } from "@/__mocks__/_testData";
-
-vi.mock("@/api/useTrainroutesQuery", () => ({
-    useTrainroutesQuery: vi.fn(),
-}));
 
 it("renders trainroutes list", async () => {
-    vi.mocked(useTrainroutesQuery).mockReturnValue({
-        data: mockedTrainroutes,
-        isLoading: false,
-    } as ReturnType<typeof useTrainroutesQuery>);
-
-    renderWithProviders(<TrainlineDetails fn={() => {}} />);
+    renderWithProviders(<TrainlineDetails fn={() => {}} />, {
+        preloadedState: {
+            trainroutes: {
+                startPos: 2975,
+                isDirect: true,
+                travelInterval: 30,
+                travelDuration: 1,
+                activeSpot: null,
+                activeSectionId: null,
+                previewSectionId: null,
+            },
+        },
+    });
 
     const itemList = await screen.findByTestId("itemlist");
     const routeButtons = within(itemList).getAllByRole("button");
-    expect(routeButtons).toHaveLength(3);
+    expect(routeButtons).toHaveLength(2);
 });

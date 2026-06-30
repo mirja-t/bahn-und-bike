@@ -11,19 +11,37 @@ import { Spinner } from "./components/stateless/spinner/Spinner.tsx";
 
 const queryClient = new QueryClient();
 
-const root = document.getElementById("root") as HTMLElement;
-createRoot(root).render(
-    <StrictMode>
-        <ErrorBoundary>
-            <Suspense fallback={<Spinner />}>
-                <Provider store={store}>
-                    <QueryClientProvider client={queryClient}>
-                        <HashRouter>
-                            <App />
-                        </HashRouter>
-                    </QueryClientProvider>
-                </Provider>
-            </Suspense>
-        </ErrorBoundary>
-    </StrictMode>,
-);
+async function enableMocking() {
+    if (import.meta.env.VITE_ENABLE_MSW !== "true") {
+        return;
+    }
+    const { worker } = await import("./test/msw/browser");
+    await worker.start({
+        onUnhandledRequest: "bypass",
+        serviceWorker: {
+            url: "/mockServiceWorker.js",
+        },
+    });
+}
+
+async function bootstrap() {
+    await enableMocking();
+    const root = document.getElementById("root") as HTMLElement;
+    createRoot(root).render(
+        <StrictMode>
+            <ErrorBoundary>
+                <Suspense fallback={<Spinner />}>
+                    <Provider store={store}>
+                        <QueryClientProvider client={queryClient}>
+                            <HashRouter>
+                                <App />
+                            </HashRouter>
+                        </QueryClientProvider>
+                    </Provider>
+                </Suspense>
+            </ErrorBoundary>
+        </StrictMode>,
+    );
+}
+
+void bootstrap();

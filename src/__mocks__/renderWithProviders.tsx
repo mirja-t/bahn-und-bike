@@ -4,9 +4,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import type { ReactElement } from "react";
 import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
+import type { RootState } from "@/store";
 
-export function renderWithProviders(children: ReactElement) {
-    const mockStore = createMockStore();
+type RenderWithProvidersOptions = {
+    preloadedState?: Partial<RootState>;
+    route?: string;
+};
+
+export function renderWithProviders(
+    children: ReactElement,
+    options: RenderWithProvidersOptions = {},
+) {
+    const { preloadedState = {}, route = "/" } = options;
+    const mockStore = createMockStore(preloadedState);
     const queryClient = new QueryClient({
         defaultOptions: {
             queries: {
@@ -18,7 +29,9 @@ export function renderWithProviders(children: ReactElement) {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <Provider store={mockStore}>{children}</Provider>
+            <Provider store={mockStore}>
+                <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
+            </Provider>
         </QueryClientProvider>,
     );
 }

@@ -1,16 +1,7 @@
-import { Provider } from "react-redux";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-    fireEvent,
-    render,
-    screen,
-    waitFor,
-    within,
-} from "@testing-library/react";
-import { describe, expect, it, beforeEach, vi } from "vitest";
+import { fireEvent, screen, waitFor, within } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { Container } from "./Container";
-import { createMockStore } from "../../stories/MockSlice";
-import type { TrainstopsAPIResponse } from "../map/trainroutes/TrainroutesSlice";
+import { renderWithProviders } from "@/__mocks__/renderWithProviders";
 
 vi.mock("../../layout/LayoutWithSidebar", () => {
     const Main = ({ children }: { children: React.ReactNode }) => (
@@ -43,61 +34,8 @@ vi.mock("../map/Map", () => ({
 }));
 
 describe("Container search reset", () => {
-    const responseStops: TrainstopsAPIResponse = {
-        100: [
-            {
-                station_id: 2975,
-                station_name: "Berlin Hbf",
-                dur: 0,
-                lat: 52.525084,
-                lon: 13.369402,
-                name: "RE1",
-                stop_number: 0,
-                trainline_id: "100",
-                next_station_id: null,
-            },
-            {
-                station_id: 1234,
-                station_name: "Potsdam",
-                dur: 10,
-                lat: 52.390569,
-                lon: 13.064473,
-                name: "RE1",
-                stop_number: 1,
-                trainline_id: "100",
-                next_station_id: null,
-            },
-        ],
-    };
-    beforeEach(() => {
-        vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
-            const url = String(input);
-            if (url.includes("trainstops/") || url.includes("connections/")) {
-                return {
-                    status: 200,
-                    json: async () => responseStops,
-                } as Response;
-            }
-
-            return {
-                status: 200,
-                json: async () => [],
-            } as Response;
-        });
-    });
-
     const renderContainer = () => {
-        const mockStore = createMockStore();
-        const queryClient = new QueryClient({
-            defaultOptions: { queries: { retry: false } },
-        });
-        render(
-            <QueryClientProvider client={queryClient}>
-                <Provider store={mockStore}>
-                    <Container />
-                </Provider>
-            </QueryClientProvider>,
-        );
+        renderWithProviders(<Container />);
 
         const travelDurationForm = screen.getByRole("form");
         const durationSlider = within(travelDurationForm).getByRole("slider", {
