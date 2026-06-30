@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mockStops } from "./_testData";
+import { mockStops } from "../__mocks__/_testData";
 import { createNewRoute } from "./createNewRoute";
 
 const { parisStopSNCF, bruxellesStopSNCF, berlinStopSNCF } = mockStops;

@@ -1,4 +1,5 @@
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
     fireEvent,
     render,
@@ -87,10 +88,15 @@ describe("Container search reset", () => {
 
     const renderContainer = () => {
         const mockStore = createMockStore();
+        const queryClient = new QueryClient({
+            defaultOptions: { queries: { retry: false } },
+        });
         render(
-            <Provider store={mockStore}>
-                <Container />
-            </Provider>,
+            <QueryClientProvider client={queryClient}>
+                <Provider store={mockStore}>
+                    <Container />
+                </Provider>
+            </QueryClientProvider>,
         );
 
         const travelDurationForm = screen.getByRole("form");

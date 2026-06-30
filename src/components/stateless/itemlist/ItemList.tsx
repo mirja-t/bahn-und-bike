@@ -72,11 +72,17 @@ export const ItemList = <T,>({
         <>
             {loading && <Loading />}
             {variant === "orderedList" ? (
-                <ol className={`${styles.itemlist} ${styles[variant]}`}>
+                <ol
+                    data-testid="itemlist"
+                    className={`${styles.itemlist} ${styles[variant]}`}
+                >
                     {items.map((item, idx) => listItem(item, idx))}
                 </ol>
             ) : (
-                <ul className={`${styles.itemlist} ${styles[variant]}`}>
+                <ul
+                    data-testid="itemlist"
+                    className={`${styles.itemlist} ${styles[variant]}`}
+                >
                     {items.map((item, idx) => listItem(item, idx))}
                 </ul>
             )}

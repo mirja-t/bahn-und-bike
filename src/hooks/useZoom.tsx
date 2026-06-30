@@ -3,7 +3,7 @@ import { svgWidth, svgHeight } from "../utils/svgMap";
 import type { CurrentTrainroute } from "../components/map/trainroutes/TrainroutesSlice";
 
 export const useZoom = (
-    journeys: CurrentTrainroute[],
+    journeys: CurrentTrainroute[] | undefined,
     value: number,
     loading: boolean,
 ) => {
@@ -15,7 +15,7 @@ export const useZoom = (
     });
 
     useEffect(() => {
-        if (loading) return;
+        if (loading || !journeys) return;
         if (value === 0 || journeys.length === 0) {
             setZoom({
                 x: 0,

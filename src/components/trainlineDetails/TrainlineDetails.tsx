@@ -4,71 +4,68 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../AppSlice";
 import { useTranslation } from "../../utils/i18n";
 import {
-    setActiveVelorouteSection,
-    setActiveVeloroute,
-    loadVeloroutes,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
 } from "../map/veloroutes/VeloroutesSlice";
 import {
-    selectActiveSection,
-    selectCurrentTrainroutes,
-    selectTrainrouteListLoading,
-    setActiveSection,
-    setPreviewSection,
-    setTrainroutesAlongVeloroute,
+    selectActiveSectionId,
+    setActiveSectionId,
+    setPreviewSectionId,
     type CurrentTrainroute,
 } from "../map/trainroutes/TrainroutesSlice";
 import { TrainIcon } from "../stateless/icons/TrainIcon";
 import { ItemList } from "../stateless/itemlist/ItemList";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
 
 interface TrainlineDetailsProps {
     fn: () => void;
 }
 export const TrainlineDetails = ({ fn }: TrainlineDetailsProps) => {
     const { t } = useTranslation();
-    const activeSection = useSelector(selectActiveSection);
-    const trainRoutes = useSelector(selectCurrentTrainroutes);
-    const trainlineListIsLoading = useSelector(selectTrainrouteListLoading);
+    const activeSectionId = useSelector(selectActiveSectionId);
+
+    const { data: currentTrainroutes, isLoading: trainroutesLoading } =
+        useTrainroutesQuery();
 
     const dispatch = useAppDispatch();
 
     useEffect(() => {
         return () => {
             // Ensure any hover preview is cleared when this component unmounts
-            dispatch(setPreviewSection(null));
+            dispatch(setPreviewSectionId(null));
         };
     }, [dispatch]);
 
     const handleTrainrouteHover = (trainroute: CurrentTrainroute | null) => {
         if (trainroute) {
-            dispatch(setPreviewSection(trainroute));
+            dispatch(setPreviewSectionId(trainroute.id));
         } else {
-            dispatch(setPreviewSection(null));
+            dispatch(setPreviewSectionId(null));
         }
     };
 
     const handleTrainrouteClick = (line: CurrentTrainroute) => {
-        const stopIds = line.routestops.map((stop) => stop.station_id);
-        dispatch(setTrainroutesAlongVeloroute([]));
-        dispatch(setActiveVeloroute(null));
-        dispatch(setActiveVelorouteSection(null));
+        dispatch(setActiveVelorouteId(null));
+        dispatch(setActiveVelorouteSectionIdx(null));
         // Clear any hover preview when a route is explicitly selected
-        dispatch(setPreviewSection(null));
-        dispatch(setActiveSection(line));
-        dispatch(loadVeloroutes(stopIds));
+        dispatch(setPreviewSectionId(null));
+        dispatch(setActiveSectionId(line.id));
         fn();
     };
-
+    if (!currentTrainroutes) {
+        return null;
+    }
     return (
         <div id="trainline-details">
             <div id="trainline" className="details">
                 <section className="section">
-                    {trainRoutes.length < 1 && !trainlineListIsLoading && (
+                    {currentTrainroutes?.length < 1 && !trainroutesLoading && (
                         <p>{`${t("nomatch")}`}</p>
                     )}
                     <ItemList
-                        loading={trainlineListIsLoading}
-                        items={trainRoutes}
-                        activeId={activeSection?.id}
+                        loading={trainroutesLoading}
+                        items={currentTrainroutes}
+                        activeId={activeSectionId || ""}
                         onClick={handleTrainrouteClick}
                         onHover={handleTrainrouteHover}
                         icon={<TrainIcon />}

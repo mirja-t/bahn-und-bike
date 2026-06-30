@@ -7,12 +7,14 @@ import { DestinationPicker } from "./destinationPicker/DestinationPicker";
 import { useSelector } from "react-redux";
 import { selectLangCode, selectSubmitValue } from "../../AppSlice";
 import { getTime } from "../../utils/getTime";
+import { selectStartPos } from "../map/trainroutes/TrainroutesSlice";
 
 interface TravelDurationProps {
     handleSubmit: (
         e: React.SubmitEvent<HTMLFormElement>,
         value: number,
         direct: boolean,
+        startDestination: number,
     ) => void;
 }
 export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
@@ -25,6 +27,13 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
     // const handleCheckboxChange = () => {
     //     setDirect((prev) => !prev);
     // };
+    const startPos = useSelector(selectStartPos);
+    const [startDestination, setStartDestination] = useState<number>(startPos);
+    const handleDestinationChange = (value: number | null) => {
+        if (value !== null) {
+            setStartDestination(value);
+        }
+    };
 
     const handleInputChange = ({
         target,
@@ -50,9 +59,9 @@ export const TravelDuration = ({ handleSubmit }: TravelDurationProps) => {
         <form
             className={styles.travelduration}
             name="travel duration form"
-            onSubmit={(e) => handleSubmit(e, value, direct)}
+            onSubmit={(e) => handleSubmit(e, value, direct, startDestination)}
         >
-            <DestinationPicker />
+            <DestinationPicker onChange={handleDestinationChange} />
             {/* <CheckBox
                 checked={direct}
                 handleCheckboxChange={handleCheckboxChange}

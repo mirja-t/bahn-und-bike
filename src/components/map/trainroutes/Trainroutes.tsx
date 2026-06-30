@@ -2,11 +2,9 @@ import "./trainroutes.scss";
 import { memo } from "react";
 import { useSelector } from "react-redux";
 import {
-    selectCurrentTrainroutes,
-    selectActiveSection,
-    selectTrainroutesAlongVeloroute,
+    selectActiveSectionId,
     selectActiveSpot,
-    selectPreviewSection,
+    selectPreviewSectionId,
 } from "./TrainroutesSlice";
 import { selectActiveVelorouteStop } from "../veloroutes/VeloroutesSlice";
 import { Trainroute } from "./trainroute/Trainroute";
@@ -15,29 +13,32 @@ import { Label } from "../label/Label";
 import { svgWidth, svgHeight } from "../../../utils/svgMap";
 import { AnimatePresence, motion } from "framer-motion";
 import { selectAppZoom } from "../../../AppSlice";
+import { useTrainroutesQuery } from "@/api/useTrainroutesQuery";
+import { useTrainroutesAlongVelorouteSectionQuery } from "@/api/useTrainroutesAlongVelorouteSectionQuery";
 
 export const Trainroutes = memo(function Trainroutes() {
-    const journeys = useSelector(selectCurrentTrainroutes);
-    const clickedSection = useSelector(selectActiveSection);
-    const hoveredSection = useSelector(selectPreviewSection);
-    const activeSection = hoveredSection || clickedSection;
+    const clickedSectionId = useSelector(selectActiveSectionId);
+    const hoveredSectionId = useSelector(selectPreviewSectionId);
+    const activeSectionId = hoveredSectionId || clickedSectionId;
     const activeSpot = useSelector(selectActiveSpot);
     const activeVelorouteStop = useSelector(selectActiveVelorouteStop);
-    const trainlinesAlongVeloroute = useSelector(
-        selectTrainroutesAlongVeloroute,
-    );
     const appZoom = useSelector(selectAppZoom);
+    const { data: currentTrainroutes } = useTrainroutesQuery();
+    const { data: trainlinesAlongVeloroute } =
+        useTrainroutesAlongVelorouteSectionQuery();
+    const activeSection = currentTrainroutes?.find(
+        (section) => section.id === activeSectionId,
+    );
 
-    const getClassName = (item: typeof activeSection) => {
-        if (!activeSection && !trainlinesAlongVeloroute.length) {
+    const getClassName = (id: typeof activeSectionId) => {
+        if (!activeSectionId && !trainlinesAlongVeloroute?.length) {
             return "init";
-        } else if (activeSection === item) {
+        } else if (activeSectionId === id) {
             return "active";
         } else {
             return "inactive";
         }
     };
-
     return (
         <svg
             id="routes"
@@ -47,15 +48,15 @@ export const Trainroutes = memo(function Trainroutes() {
             preserveAspectRatio="xMidYMid meet"
             xmlSpace="preserve"
         >
-            {journeys.map((item, idx) => (
+            {currentTrainroutes?.map((item, idx) => (
                 <Trainroute
                     key={idx}
-                    className={getClassName(item)}
+                    className={getClassName(item.id)}
                     item={item}
                 />
             ))}
 
-            {trainlinesAlongVeloroute.map((item, idx) => (
+            {trainlinesAlongVeloroute?.map((item, idx) => (
                 <Trainroute
                     key={idx}
                     className="active trainlinesAlongVeloroute"

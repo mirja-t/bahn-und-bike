@@ -1,9 +1,5 @@
-import {
-    selectStartPos,
-    setStartPos,
-} from "../../map/trainroutes/TrainroutesSlice";
+import { selectStartPos } from "../../map/trainroutes/TrainroutesSlice";
 import { useTranslation } from "../../../utils/i18n";
-import { useAppDispatch } from "../../../AppSlice";
 import { useSelector } from "react-redux";
 import {
     Combobox,
@@ -49,9 +45,11 @@ const presetOptions: ComboboxOption<number>[] = [
     { label: "Hameln", value: 513416 },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
-export const DestinationPicker = () => {
+interface DesinationPickerType {
+    onChange: (value: number | null) => void;
+}
+export const DestinationPicker = ({ onChange }: DesinationPickerType) => {
     const { t } = useTranslation();
-    const dispatch = useAppDispatch();
     const startPos = useSelector(selectStartPos);
 
     const [options, setOptions] =
@@ -59,7 +57,7 @@ export const DestinationPicker = () => {
 
     const handleStartChange = (value: ComboboxOption<number> | null) => {
         if (value) {
-            dispatch(setStartPos(value.value));
+            onChange(value.value);
             setOptions(() => {
                 const valueExistsInPreset = presetOptions.some(
                     (option) => option.value === value.value,

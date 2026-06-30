@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { mockedTrainroutes } from "./_testData";
+import { mockedTrainroutes } from "../__mocks__/_testData";
 import { getLongestDistance } from "./getLongestDistance";
 
 it("returns the highest sum of the subtractions of end positions with avarage start position", () => {

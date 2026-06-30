@@ -1,15 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { headers, VITE_API_URL } from "@/config/config";
-import {
-    setActiveSection,
-    loadTrainroutesAlongVeloroute,
-} from "../trainroutes/TrainroutesSlice";
-import {
-    convertVelorouteStops,
-    makeVeloRoute,
-    makeVelorouteLegs,
-} from "../../../utils/makeVeloRoute";
-import type { AppDispatch, RootState } from "../../../store";
+import { createSlice } from "@reduxjs/toolkit";
+import type { RootState } from "../../../store";
 
 export type VeloroutesResponseStop = {
     name: string;
@@ -58,82 +48,11 @@ export type VelorouteListItem = {
     gcs: string;
 };
 
-export const loadVeloroutes = createAsyncThunk<
-    VelorouteListItem[],
-    number[],
-    { state: RootState }
->("veloroutes/setVelorouteList", async (trainstations: number[], thunkAPI) => {
-    const state = thunkAPI.getState();
-    const startPosId = state.trainroutes.startPos;
-
-    const normalizedIds = Array.from(
-        new Set(trainstations.filter((id) => !!id && id !== startPosId)),
-    );
-
-    if (normalizedIds.length === 0) {
-        return [];
-    }
-
-    const veloroutes: VelorouteListItem[] = await fetch(
-        `${VITE_API_URL}veloroutes`,
-        {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify({ trainstations: normalizedIds }),
-        },
-    ).then((response) => {
-        if (response.status !== 200) {
-            throw new Error("Bad Server Response");
-        }
-        return response.json();
-    });
-
-    return veloroutes;
-});
-
-export const loadVeloroute = createAsyncThunk<
-    Veloroute,
-    { id: string },
-    { state: RootState }
->("veloroutes/setVeloroute", async ({ id }, thunkAPI) => {
-    const velorouteQuery = "veloroute/" + id;
-    const responseStops: VeloroutesResponseStop[] = await fetch(
-        `${VITE_API_URL}${velorouteQuery}`,
-        {
-            headers: headers,
-        },
-    ).then((response) => response.json());
-    const trainstops = thunkAPI.getState().trainroutes.trainstops;
-    const maxDistToNextStation =
-        thunkAPI.getState().trainroutes.maxDistToNextStation;
-    const velorouteStops = convertVelorouteStops(responseStops, trainstops);
-    const activeVeloroute = makeVeloRoute(
-        velorouteStops,
-        maxDistToNextStation,
-        id,
-        responseStops[0].name,
-    );
-    return activeVeloroute;
-});
-
-export const setVelorouteSectionActiveThunk = (idx: number) => {
-    return (dispatch: AppDispatch) => {
-        dispatch(setActiveVelorouteSection(idx));
-        dispatch(setActiveSection(null));
-        dispatch(loadTrainroutesAlongVeloroute(idx));
-    };
-};
-
 export interface VeloroutesState {
-    velorouteList: VelorouteListItem[];
-    velorouteListIsLoading: boolean;
-    veloroute: Veloroute | null;
-    activeVelorouteSection: number | null;
-    hoveredVelorouteSection: number | null;
+    activeVelorouteId: string | null;
+    activeVelorouteSectionIdx: number | null;
+    hoveredVelorouteSectionIdx: number | null;
     activeVelorouteStop: VelorouteStop | null;
-    velorouteIsLoading: boolean;
-    velorouteHasError: boolean;
-    veloroutesHasError: boolean;
     maxDistToNextStation: number;
 }
 /**
@@ -147,61 +66,30 @@ export interface VeloroutesState {
 export const veloroutesSlice = createSlice({
     name: "veloroutes",
     initialState: {
-        velorouteList: [],
-        velorouteListIsLoading: false,
-        veloroutesHasError: false,
-        veloroute: null,
-        velorouteIsLoading: false,
-        velorouteHasError: false,
-        activeVelorouteSection: null,
-        hoveredVelorouteSection: null,
+        activeVelorouteId: null,
+        activeVelorouteSectionIdx: null,
+        hoveredVelorouteSectionIdx: null,
         activeVelorouteStop: null,
         maxDistToNextStation: 2,
     } as VeloroutesState,
     reducers: {
-        setActiveVeloroute: (
-            state,
-            action: { payload: { maxDistToNextStation: number } | null },
-        ) => {
-            if (action.payload === null || !state.veloroute) {
-                state.veloroute = null;
-                return;
-            }
-            state.velorouteIsLoading = true;
-            state.activeVelorouteSection = null;
-            const { maxDistToNextStation } = action.payload;
-            state.maxDistToNextStation = maxDistToNextStation;
-            // obtain original stops from legs by filtering out duplicates at leg joints
-            const veloroutestops: VelorouteStop[] =
-                state.veloroute.route.flatMap((route, routeIdx) =>
-                    route.leg.filter((_, stopIdx) => {
-                        if (routeIdx > 0 && stopIdx === 0) {
-                            return false;
-                        }
-                        return true;
-                    }),
-                );
-            const legs = makeVelorouteLegs(
-                veloroutestops,
-                maxDistToNextStation,
-            );
-            state.veloroute = {
-                ...state.veloroute,
-                route: legs,
-            };
-            state.velorouteIsLoading = false;
+        setMaxDistToNextStation: (state, action: { payload: number }) => {
+            state.maxDistToNextStation = action.payload;
         },
-        setActiveVelorouteSection: (
+        setActiveVelorouteId: (state, action: { payload: string | null }) => {
+            state.activeVelorouteId = action.payload;
+        },
+        setActiveVelorouteSectionIdx: (
             state,
             action: { payload: number | null },
         ) => {
-            state.activeVelorouteSection = action.payload;
+            state.activeVelorouteSectionIdx = action.payload;
         },
-        setHoveredVelorouteSection: (
+        setHoveredVelorouteSectionIdx: (
             state,
             action: { payload: number | null },
         ) => {
-            state.hoveredVelorouteSection = action.payload;
+            state.hoveredVelorouteSectionIdx = action.payload;
         },
         setActiveVelorouteStop: (
             state,
@@ -209,63 +97,26 @@ export const veloroutesSlice = createSlice({
         ) => {
             state.activeVelorouteStop = action.payload;
         },
-        setVelorouteList: (state, action: { payload: VelorouteListItem[] }) => {
-            state.velorouteList = action.payload;
-        },
-    },
-    extraReducers(builder) {
-        builder
-            .addCase(loadVeloroutes.pending, (state) => {
-                state.velorouteListIsLoading = true;
-                state.veloroutesHasError = false;
-            })
-            .addCase(loadVeloroutes.fulfilled, (state, action) => {
-                state.velorouteList = action.payload;
-                state.velorouteListIsLoading = false;
-                state.veloroutesHasError = false;
-            })
-            .addCase(loadVeloroutes.rejected, (state) => {
-                state.velorouteListIsLoading = false;
-                state.veloroutesHasError = true;
-            })
-            .addCase(loadVeloroute.pending, (state) => {
-                state.velorouteIsLoading = true;
-                state.velorouteHasError = false;
-            })
-            .addCase(loadVeloroute.fulfilled, (state, action) => {
-                state.veloroute = { ...state.veloroute, ...action.payload };
-                state.velorouteIsLoading = false;
-                state.velorouteHasError = false;
-            })
-            .addCase(loadVeloroute.rejected, (state) => {
-                state.velorouteIsLoading = false;
-                state.velorouteHasError = true;
-            });
     },
 });
 
-export const selectVelorouteList = (state: RootState) =>
-    state.veloroutes.velorouteList;
-export const selectActiveVeloroute = (state: RootState) =>
-    state.veloroutes.veloroute;
-export const selectActiveVelorouteSection = (state: RootState) =>
-    state.veloroutes.activeVelorouteSection;
+export const selectActiveVelorouteId = (state: RootState) =>
+    state.veloroutes.activeVelorouteId;
+export const selectActiveVelorouteSectionIdx = (state: RootState) =>
+    state.veloroutes.activeVelorouteSectionIdx;
 export const selectActiveVelorouteStop = (state: RootState) =>
     state.veloroutes.activeVelorouteStop;
-export const selectVeloroutesLoading = (state: RootState) =>
-    state.veloroutes.velorouteIsLoading ||
-    state.veloroutes.velorouteListIsLoading;
-export const selectHoveredVelorouteSection = (state: RootState) =>
-    state.veloroutes.hoveredVelorouteSection;
-export const selectMaxDistToNextStations = (state: RootState) =>
+export const selectHoveredVelorouteSectionIdx = (state: RootState) =>
+    state.veloroutes.hoveredVelorouteSectionIdx;
+export const selectMaxDistToNextStation = (state: RootState) =>
     state.veloroutes.maxDistToNextStation;
 
 export const {
-    setActiveVeloroute,
-    setActiveVelorouteSection,
-    setHoveredVelorouteSection,
+    setActiveVelorouteId,
+    setActiveVelorouteSectionIdx,
+    setHoveredVelorouteSectionIdx,
     setActiveVelorouteStop,
-    setVelorouteList,
+    setMaxDistToNextStation,
 } = veloroutesSlice.actions;
 
 export default veloroutesSlice.reducer;

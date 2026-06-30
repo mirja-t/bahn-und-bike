@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
 import ErrorBoundary from "../components/stateless/errorBoundary/ErrorBoundary";
 
 /**
@@ -24,14 +23,15 @@ import ErrorBoundary from "../components/stateless/errorBoundary/ErrorBoundary";
  */
 
 // Component that throws an error for testing
-const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
-    if (shouldThrow) {
-        throw new Error("This is a test error for the ErrorBoundary!");
-    }
-    return <div>This component is working fine!</div>;
-};
+// const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
+//     if (shouldThrow) {
+//         throw new Error("This is a test error for the ErrorBoundary!");
+//     }
+//     return <div>This component is working fine!</div>;
+// };
 
 // Component that throws an error after some interaction
+/*
 const ConditionalError = () => {
     const [shouldThrow, setShouldThrow] = useState(false);
 
@@ -49,7 +49,7 @@ const ConditionalError = () => {
         </div>
     );
 };
-
+*/
 const meta = {
     title: "Stateless/ErrorBoundary",
     component: ErrorBoundary,
@@ -114,7 +114,7 @@ export const Default: Story = {
         ),
     },
 };
-
+/*
 // Error state with default fallback
 export const WithError: Story = {
     args: {
@@ -393,3 +393,4 @@ export const NestedBoundaries: Story = {
         </ErrorBoundary>
     ),
 };
+*/

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import {
     setActiveVelorouteStop,
     type VelorouteStop as VelorouteStopType,
-    setVelorouteSectionActiveThunk,
+    setActiveVelorouteSectionIdx,
 } from "../VeloroutesSlice";
 import { selectAppZoom, useAppDispatch } from "../../../../AppSlice";
 import { MapPinIcon } from "../../../stateless/icons/MapPinIcon";
@@ -34,7 +34,7 @@ export const VelorouteStop = ({
         dispatch(setActiveVelorouteStop(null));
     };
     const handleClick = () => {
-        dispatch(setVelorouteSectionActiveThunk(sectionIdx));
+        dispatch(setActiveVelorouteSectionIdx(sectionIdx));
     };
 
     return (

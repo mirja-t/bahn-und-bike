@@ -1,7 +1,7 @@
 import { expect, it, describe } from "vitest";
 import { makeTrainRoutes } from "./makeTrainRoutes";
 import type { TrainstopsAPIResponse } from "../components/map/trainroutes/TrainroutesSlice";
-import { mockStops } from "./_testData";
+import { mockStops } from "../__mocks__/_testData";
 
 const {
     parisStopSNCF,
